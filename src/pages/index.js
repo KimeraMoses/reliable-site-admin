@@ -1,8 +1,6 @@
 import { lazy } from 'react';
 
 const pages = [
-  { path: '/', Component: lazy(() => import('./Home/Home.page')) },
-
   {
     path: '/under-maintenance',
     Component: lazy(() => import('./under-maintenance/UnderMaintenance.page')),
@@ -57,6 +55,10 @@ export const dashboardPages = [
   {
     path: '/dashboard/about',
     Component: lazy(() => import('./Dashboard/About/About.page')),
+  },
+  {
+    path: '/dashboard/editor',
+    Component: lazy(() => import('./Dashboard/Editor/Editor.page')),
   },
 ];
 

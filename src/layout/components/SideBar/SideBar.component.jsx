@@ -8,7 +8,7 @@ export function SideBar() {
     <div className="sidebar bg-custom-secondary" style={{ width: '300px' }}>
       <ul className="p-0">
         {Data.pages.dashboard.sidebar.map((name) => (
-          <SideLinks name={name} path={name} />
+          <SideLinks key={name} name={name} path={name} />
         ))}
       </ul>
     </div>

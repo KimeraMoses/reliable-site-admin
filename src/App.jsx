@@ -1,7 +1,11 @@
 import React, { Suspense } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from 'react-router-dom';
 import pages, { Error404, dashboardPages } from 'pages';
-// import Error404 from 'pages/error-404/Error404.page';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import './App.scss';
@@ -12,6 +16,7 @@ function App() {
       <Suspense fallback={<>Loading...</>}>
         <Router>
           <Routes>
+            <Route path="/" element={<Navigate replace to="/dashboard" />} />
             {pages.map(({ path, Component }) => (
               <Route key={path} path={path} element={<Component />} exact />
             ))}
