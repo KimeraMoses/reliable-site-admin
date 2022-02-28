@@ -60,7 +60,7 @@ function EditorPage() {
               },
               link: {
                 options: ['link'],
-                popupClassName: 'demo-popup-custom',
+                popupClassName: 'ep__container-link',
                 link: {
                   icon: '/icon/dashboard/link.svg',
                   className: 'demo-option-custom',

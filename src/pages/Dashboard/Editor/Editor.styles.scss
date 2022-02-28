@@ -57,5 +57,18 @@
       border-top: 1px dashed #323248;
       color: #474761;
     }
+
+    &-link {
+      height: auto;
+      background: #151521;
+      box-shadow: 3px 3px 5px #2a2a35;
+      border: 1px solid #2a2a35;
+      .rdw-link-modal-label {
+        color: #ffffff;
+      }
+      .rdw-link-modal-target-option {
+        color: #ffffff;
+      }
+    }
   }
 }
