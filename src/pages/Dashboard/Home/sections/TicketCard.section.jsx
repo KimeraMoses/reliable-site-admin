@@ -1,6 +1,30 @@
 import React from 'react';
-
+import { PieChart, Pie, Cell } from 'recharts';
 import './TicketCard.styles.scss';
+
+// Sample data
+const d1 = [
+  { name: 'Un-Assigned', value: 40 },
+  { name: 'Assigned', value: 60 },
+];
+
+// Sample data
+const d2 = [
+  { name: 'Un-Assigned', value: 25 },
+  { name: 'Assigned', value: 75 },
+];
+
+// Sample data
+const d3 = [
+  { name: 'Un-Assigned', value: 0 },
+  { name: 'Assigned', value: 100 },
+];
+
+// Sample data
+const d4 = [
+  { name: 'Un-Assigned', value: 0 },
+  { name: 'Assigned', value: 100 },
+];
 
 export function TicketCard() {
   return (
@@ -49,7 +73,60 @@ export function TicketCard() {
           </div>
         </div>
         <div className="ticket-card__inner-right" style={{ color: '#FFFFFF' }}>
-          chart
+          <PieChart width={250} height={250}>
+            <Pie
+              data={d1}
+              dataKey="value"
+              stroke="none"
+              outerRadius={120}
+              innerRadius={104}
+              endAngle={450}
+              startAngle={80}
+              paddingAngle={-10}
+            >
+              <Cell fill="#151521" />
+              <Cell fill="#0BB783" cornerRadius={10} />
+            </Pie>
+            <Pie
+              data={d2}
+              dataKey="value"
+              stroke="none"
+              outerRadius={94}
+              innerRadius={78}
+              endAngle={450}
+              startAngle={80}
+              paddingAngle={-10}
+            >
+              <Cell fill="#151521" />
+              <Cell fill="#3699FF" cornerRadius={10} />
+            </Pie>
+            <Pie
+              data={d3}
+              dataKey="value"
+              stroke="none"
+              outerRadius={68}
+              innerRadius={52}
+              endAngle={450}
+              startAngle={80}
+              paddingAngle={-10}
+            >
+              <Cell fill="#151521" />
+              <Cell fill="#F64E60" cornerRadius={10} />
+            </Pie>
+            <Pie
+              data={d4}
+              dataKey="value"
+              stroke="none"
+              outerRadius={42}
+              innerRadius={26}
+              endAngle={450}
+              startAngle={80}
+              paddingAngle={-10}
+            >
+              <Cell fill="#151521" />
+              <Cell fill="#8950FC" cornerRadius={10} />
+            </Pie>
+          </PieChart>
         </div>
       </div>
     </div>

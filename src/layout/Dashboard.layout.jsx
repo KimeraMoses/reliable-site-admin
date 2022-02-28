@@ -4,11 +4,11 @@ import { SideBar, TopBar } from './components';
 
 export function DashboardLayout({ children, hide }) {
   return (
-    <div className="w-full md:h-screen">
+    <div className="w-full md:min-h-screen">
       <TopBar hide={hide} />
       <div className="flex">
         {!hide && (
-          <div className="col-auto">
+          <div className="col-auto bg-[#1e1e2d]">
             <SideBar />
           </div>
         )}

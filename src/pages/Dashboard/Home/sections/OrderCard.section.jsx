@@ -1,6 +1,44 @@
 import React from 'react';
-
+import { LineChart, Line } from 'recharts';
 import './OrderCard.styles.scss';
+
+const data = [
+  {
+    name: '25-Feb',
+    all: 50,
+    complete: 80,
+  },
+  {
+    name: '26-Feb',
+    all: 30,
+    complete: 20,
+  },
+  {
+    name: '28-Feb',
+    all: 90,
+    complete: 50,
+  },
+  {
+    name: '01-Mar',
+    all: 30,
+    complete: 20,
+  },
+  {
+    name: '02-Mar',
+    all: 85,
+    complete: 50,
+  },
+  {
+    name: '02-Mar',
+    all: 25,
+    complete: 30,
+  },
+  {
+    name: '02-Mar',
+    all: 90,
+    complete: 50,
+  },
+];
 
 export function OrderCard() {
   return (
@@ -11,7 +49,29 @@ export function OrderCard() {
           All & Completed Orders Of Last Month
         </p>
       </div>
-      <div className="order__chart">chart</div>
+      <div className="order__chart">
+        <LineChart
+          width={500}
+          height={150}
+          data={data}
+          margin={{ top: 0, right: -5, bottom: 0, left: -5 }}
+        >
+          <Line
+            type="monotone"
+            dataKey="all"
+            stroke="#3699FF"
+            strokeWidth={3}
+            dot={false}
+          />
+          <Line
+            type="monotone"
+            dataKey="complete"
+            stroke="#0BB783"
+            strokeWidth={3}
+            dot={false}
+          />
+        </LineChart>
+      </div>
       <div className="order__card">
         <div
           className="order__card-inner"

@@ -1,6 +1,44 @@
 import React from 'react';
-
+import { LineChart, Line } from 'recharts';
 import './IncomeCard.styles.scss';
+
+const data = [
+  {
+    name: '25-Feb',
+    income: 50,
+    refunds: 80,
+  },
+  {
+    name: '26-Feb',
+    income: 30,
+    refunds: 20,
+  },
+  {
+    name: '28-Feb',
+    income: 90,
+    refunds: 50,
+  },
+  {
+    name: '01-Mar',
+    income: 30,
+    refunds: 20,
+  },
+  {
+    name: '02-Mar',
+    income: 85,
+    refunds: 50,
+  },
+  {
+    name: '02-Mar',
+    income: 25,
+    refunds: 30,
+  },
+  {
+    name: '02-Mar',
+    income: 90,
+    refunds: 50,
+  },
+];
 
 export function IncomeCard() {
   return (
@@ -9,7 +47,29 @@ export function IncomeCard() {
         <h3 className="income__header-heading">Income Overview</h3>
         <p className="income__header-text">Income & Refunds Of Last Month</p>
       </div>
-      <div className="income__chart">chart</div>
+      <div className="income__chart">
+        <LineChart
+          width={500}
+          height={150}
+          data={data}
+          margin={{ top: 0, right: -5, bottom: 0, left: -5 }}
+        >
+          <Line
+            type="monotone"
+            dataKey="income"
+            stroke="#FFA800"
+            strokeWidth={3}
+            dot={false}
+          />
+          <Line
+            type="monotone"
+            dataKey="refunds"
+            stroke="#F64E60"
+            strokeWidth={3}
+            dot={false}
+          />
+        </LineChart>
+      </div>
       <div className="income__card">
         <div
           className="income__card-inner"

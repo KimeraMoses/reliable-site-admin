@@ -2,7 +2,7 @@ import React from 'react';
 
 function UserTop() {
   return (
-    <div className="flex items-center cursor-pointer">
+    <div className="flex items-center cursor-pointer mr-4">
       <div className="h-12 w-12 border-yellow-500 ">
         <img src="/icon/user.svg" alt="" className="h-full w-full" />
       </div>
