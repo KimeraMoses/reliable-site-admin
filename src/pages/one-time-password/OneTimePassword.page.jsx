@@ -36,16 +36,16 @@ function OneTimePassword() {
               />
             </div>
 
-            <div className="flex mt-4 md:mt-5 ">
+            <div className="flex mt-4 md:mt-5">
               <button
                 type="submit"
-                className="bg-blue-900/[.3] w-full mb-2 rounded-md h-14 text-blue-500 hover:bg-blue-900/[.1] ease-in duration-200"
+                className="bg-blue-900/[.3] w-full mb-2 rounded-md h-12 text-blue-500 hover:bg-blue-900/[.1] ease-in duration-200"
               >
                 {Data.pages.otp.cancelButton}
               </button>
               <button
                 type="submit"
-                className="custom-blue-bg w-full h-12 rounded-md h-14 text-white font-light ml-2 hover:bg-sky-600/[.8] ease-in duration-200"
+                className="bg-blue-500 hover:bg-blue-700 w-full h-12 rounded-md text-white font-light ml-2 ease-in duration-200"
               >
                 {Data.pages.otp.submitButton}
               </button>

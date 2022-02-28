@@ -116,7 +116,7 @@ function SignUp() {
       <div className=" bg-custom-secondary rounded-lg p-4 md:p-5 ">
         <div className="text-center">
           <h2 className="text-md text-2xl text-white font-normal">
-            Create An Account
+            Create An Admin Account
           </h2>
           <p className="custom-text-light mb-4">
             Fill The Form Below In Order To Create Your Account
@@ -199,12 +199,6 @@ function SignUp() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            {/* <div className="flex">
-              <span className="w-1/4 bg-red"></span>
-              <span className="w-1/4 bg-red"></span>
-              <span className="w-1/4 bg-red"></span>
-              <span className="w-1/4 bg-red"></span>
-            </div> */}
             {errors.password && (
               <span className="text-red-600 mt-2 flex">{errors.password}</span>
             )}
@@ -218,7 +212,6 @@ function SignUp() {
                 Confirm Password
               </label>
             </div>
-
             <input
               type="password"
               className="w-full h-14 bg-custom-main rounded-md placeholder:text-gray-400 text-gray-400 px-3 placeholder:text-sm placeholder:font-light focus:outline-none"
@@ -233,156 +226,10 @@ function SignUp() {
               </span>
             )}
           </div>
-
           <div className="mb-8">
             <div className="flex justify-between">
               <label
-                htmlFor="brand"
-                className="form-label text-white font-light text-sm"
-              >
-                Brand
-              </label>
-            </div>
-            <input
-              type="text"
-              className="w-full h-14 bg-custom-main rounded-md placeholder:text-gray-400 text-gray-400 px-3 placeholder:text-sm placeholder:font-light focus:outline-none"
-              id="brand"
-              placeholder="Mind 2 Matter"
-              value={brand}
-              onChange={(e) => setBrand(e.target.value)}
-            />
-            {errors.brand && (
-              <span className="text-red-600 mt-2 flex">{errors.brand}</span>
-            )}
-          </div>
-          <div className="mb-8">
-            <div className="flex justify-between">
-              <label
-                htmlFor="address1"
-                className="form-label text-white font-light text-sm"
-              >
-                Address 1
-              </label>
-            </div>
-            <input
-              type="text"
-              className="w-full h-14 bg-custom-main rounded-md placeholder:text-gray-400 text-gray-400 px-3 placeholder:text-sm placeholder:font-light focus:outline-none"
-              id="address1"
-              placeholder="8546 West Philmont Rd"
-              value={address1}
-              onChange={(e) => setAddress1(e.target.value)}
-            />
-            {errors.address1 && (
-              <span className="text-red-600 mt-2 flex">{errors.address1}</span>
-            )}
-          </div>
-          <div className="mb-8">
-            <div className="flex justify-between">
-              <label
-                htmlFor="address2"
-                className="form-label text-white font-light text-sm"
-              >
-                Address 2
-              </label>
-            </div>
-            <input
-              type="text"
-              className="w-full h-14 bg-custom-main rounded-md placeholder:text-gray-400 text-gray-400 px-3 placeholder:text-sm placeholder:font-light focus:outline-none"
-              id="address2"
-              placeholder="Brooklyn"
-              value={address2}
-              onChange={(e) => setAddress2(e.target.value)}
-            />
-            {errors.address2 && (
-              <span className="text-red-600 mt-2 flex">{errors.address2}</span>
-            )}
-          </div>
-          <div className="flex justify-between mb-8">
-            <div className="mr-2">
-              <label
-                htmlFor="city"
-                className="form-label text-white font-light text-sm"
-              >
-                City
-              </label>
-              <input
-                type="text"
-                className="w-full h-14 bg-custom-main rounded-md placeholder:text-gray-400 text-gray-400 px-3 placeholder:text-sm placeholder:font-light focus:outline-none"
-                id="city"
-                placeholder="New York"
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-              />
-              {errors.city && (
-                <span className="text-red-600 mt-2 flex">{errors.city}</span>
-              )}
-            </div>
-            <div className="ml-2">
-              <label
-                htmlFor="city"
-                className="form-label text-white font-light text-sm"
-              >
-                State
-              </label>
-              <input
-                type="text"
-                className="w-full h-14 bg-custom-main rounded-md placeholder:text-gray-400 text-gray-400 px-3 placeholder:text-sm placeholder:font-light focus:outline-none"
-                id="state"
-                placeholder="NY"
-                value={stateProv}
-                onChange={(e) => setStateProv(e.target.value)}
-              />
-              {errors.stateProv && (
-                <span className="text-red-600 mt-2 flex">
-                  {errors.stateProv}
-                </span>
-              )}
-            </div>
-          </div>
-          <div className="flex justify-between mb-3">
-            <div className="mr-2">
-              <label
-                htmlFor="country"
-                className="form-label text-white font-light text-sm"
-              >
-                Country
-              </label>
-              <input
-                type="text"
-                className="w-full h-14 bg-custom-main rounded-md placeholder:text-gray-400 text-gray-400 px-3 placeholder:text-sm placeholder:font-light focus:outline-none"
-                id="country"
-                placeholder="United States of America"
-                value={country}
-                onChange={(e) => setCountry(e.target.value)}
-              />
-              {errors.country && (
-                <span className="text-red-600 mt-2 flex">{errors.country}</span>
-              )}
-            </div>
-            <div className="ml-2">
-              <label
-                htmlFor="city"
-                className="form-label text-white font-light text-sm"
-              >
-                ZIP Code
-              </label>
-              <input
-                type="number"
-                className="w-full h-14 bg-custom-main rounded-md placeholder:text-gray-400 text-gray-400 px-3 placeholder:text-sm placeholder:font-light focus:outline-none"
-                id="zipCode"
-                placeholder="11216"
-                value={zipCode}
-                onChange={(e) => setZipCode(e.target.value)}
-              />
-              {errors.zipCode && (
-                <span className="text-red-600 mt-2 flex">{errors.zipCode}</span>
-              )}
-            </div>
-          </div>
-          <div className="mb-8">
-            <div className="flex justify-between">
-              <label
-                htmlFor="zipCode"
+                htmlFor="status"
                 className="form-label text-white font-light text-sm"
               >
                 Status
