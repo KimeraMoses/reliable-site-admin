@@ -6,7 +6,7 @@ import './Home.styles.scss';
 function Home() {
   return (
     <DashboardLayout>
-      <div className="bg-black/[.2] p-4 md:px-6 dashboard">
+      <div className="p-4 md:px-6 dashboard">
         <TicketCard />
         <OrderCard />
         <div />
