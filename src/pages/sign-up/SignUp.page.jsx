@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
 import Data from '../../db.json';
-// import {Link} from 'react-router-dom'
 
 function SignUp() {
   const [username, setUsername] = useState('');
@@ -98,7 +97,7 @@ function SignUp() {
       error = true;
     }
     if (ipAddress === '') {
-      registerErrorsObject.ipAddress = 'Please Enter Status ';
+      registerErrorsObject.ipAddress = 'Please Enter IP Address ';
       error = true;
     }
 
@@ -224,27 +223,6 @@ function SignUp() {
               <span className="text-red-600 mt-2 flex">
                 {errors.confirmPassword}
               </span>
-            )}
-          </div>
-          <div className="mb-8">
-            <div className="flex justify-between">
-              <label
-                htmlFor="status"
-                className="form-label text-white font-light text-sm"
-              >
-                Status
-              </label>
-            </div>
-            <input
-              type="text"
-              className="w-full h-14 bg-custom-main rounded-md placeholder:text-gray-400 text-gray-400 px-3 placeholder:text-sm placeholder:font-light focus:outline-none"
-              id="status"
-              placeholder="Enabled"
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-            />
-            {errors.status && (
-              <span className="text-red-600 mt-2 flex">{errors.status}</span>
             )}
           </div>
           <div className="mb-8">
