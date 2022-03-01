@@ -16,10 +16,11 @@
   &__card {
     padding: 20px;
     display: flex;
+    gap: 20px;
     flex-direction: row;
     justify-content: space-between;
     &-inner {
-      width: 220px;
+      width: 100%;
       height: 100px;
       // background: #212e48 0% 0% no-repeat padding-box;
       border-radius: 8px;

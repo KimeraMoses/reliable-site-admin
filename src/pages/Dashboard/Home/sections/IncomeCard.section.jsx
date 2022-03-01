@@ -1,5 +1,5 @@
 import React from 'react';
-import { LineChart, Line } from 'recharts';
+import { LineChart, Line, ResponsiveContainer } from 'recharts';
 import './IncomeCard.styles.scss';
 
 const data = [
@@ -48,27 +48,29 @@ export function IncomeCard() {
         <p className="income__header-text">Income & Refunds Of Last Month</p>
       </div>
       <div className="income__chart">
-        <LineChart
-          width={500}
-          height={150}
-          data={data}
-          margin={{ top: 0, right: -5, bottom: 0, left: -5 }}
-        >
-          <Line
-            type="monotone"
-            dataKey="income"
-            stroke="#FFA800"
-            strokeWidth={3}
-            dot={false}
-          />
-          <Line
-            type="monotone"
-            dataKey="refunds"
-            stroke="#F64E60"
-            strokeWidth={3}
-            dot={false}
-          />
-        </LineChart>
+        <ResponsiveContainer width="100%" height={150}>
+          <LineChart
+            width={500}
+            height={150}
+            data={data}
+            margin={{ top: 0, right: -5, bottom: 0, left: -5 }}
+          >
+            <Line
+              type="monotone"
+              dataKey="income"
+              stroke="#FFA800"
+              strokeWidth={3}
+              dot={false}
+            />
+            <Line
+              type="monotone"
+              dataKey="refunds"
+              stroke="#F64E60"
+              strokeWidth={3}
+              dot={false}
+            />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
       <div className="income__card">
         <div

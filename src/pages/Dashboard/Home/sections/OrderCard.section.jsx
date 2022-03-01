@@ -1,5 +1,5 @@
 import React from 'react';
-import { LineChart, Line } from 'recharts';
+import { LineChart, Line, ResponsiveContainer } from 'recharts';
 import './OrderCard.styles.scss';
 
 const data = [
@@ -50,27 +50,29 @@ export function OrderCard() {
         </p>
       </div>
       <div className="order__chart">
-        <LineChart
-          width={500}
-          height={150}
-          data={data}
-          margin={{ top: 0, right: -5, bottom: 0, left: -5 }}
-        >
-          <Line
-            type="monotone"
-            dataKey="all"
-            stroke="#3699FF"
-            strokeWidth={3}
-            dot={false}
-          />
-          <Line
-            type="monotone"
-            dataKey="complete"
-            stroke="#0BB783"
-            strokeWidth={3}
-            dot={false}
-          />
-        </LineChart>
+        <ResponsiveContainer width="100%" height={150}>
+          <LineChart
+            width={500}
+            height={150}
+            data={data}
+            margin={{ top: 0, right: -5, bottom: 0, left: -5 }}
+          >
+            <Line
+              type="monotone"
+              dataKey="all"
+              stroke="#3699FF"
+              strokeWidth={3}
+              dot={false}
+            />
+            <Line
+              type="monotone"
+              dataKey="complete"
+              stroke="#0BB783"
+              strokeWidth={3}
+              dot={false}
+            />
+          </LineChart>
+        </ResponsiveContainer>
       </div>
       <div className="order__card">
         <div
