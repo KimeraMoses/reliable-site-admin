@@ -16,13 +16,26 @@ function App() {
       <Suspense fallback={<>Loading...</>}>
         <Router>
           <Routes>
-            <Route path="/" element={<Navigate replace to="/dashboard" />} />
+            <Route
+              path="/admin"
+              element={<Navigate replace to="/admin/dashboard" />}
+            />
             {pages.map(({ path, Component }) => (
-              <Route key={path} path={path} element={<Component />} exact />
+              <Route
+                key={path}
+                path={`/admin${path}`}
+                element={<Component />}
+                exact
+              />
             ))}
-            <Route path="/dashboard">
+            <Route path="/admin/dashboard">
               {dashboardPages.map(({ path, Component }) => (
-                <Route key={path} path={path} element={<Component />} exact />
+                <Route
+                  key={path}
+                  path={`/admin${path}`}
+                  element={<Component />}
+                  exact
+                />
               ))}
             </Route>
             <Route element={Error404} />
