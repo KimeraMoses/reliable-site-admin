@@ -41,10 +41,10 @@ const pages = [
     path: '/account-suspended',
     Component: lazy(() => import('./account-suspended/AccountSuspended.page')),
   },
-  {
-    path: '/sign-in',
-    Component: lazy(() => import('./sign-in/SignIn.page')),
-  },
+  // {
+  //   path: '/sign-in',
+  //   Component: lazy(() => import('./sign-in/SignIn.page')),
+  // },
 ];
 
 export const dashboardPages = [
