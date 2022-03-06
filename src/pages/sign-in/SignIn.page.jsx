@@ -23,17 +23,23 @@ function SignIn() {
 
   const LoginHandler = async (e) => {
     e.preventDefault();
-    if (values.userName.length < 1) {
-      return setError("A user name is required to login");
-    }
     if (values.password.length < 6) {
       return setError("Password must be atleast 6 characters");
     }
 
     try {
       setError("");
-      await dispatch(login(values.userName, values.password));
-      setValues({ password: "", userName: "" });
+      await dispatch(login(values.username, values.password));
+      setValues({ password: "", username: "" });
+      toast.success("You have logged in successfuly", {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
     } catch (error) {
       toast.error("Failed to Login", {
         position: "top-center",
@@ -117,7 +123,7 @@ function SignIn() {
                     type="submit"
                     className="bg-blue-500 hover:bg-blue-700 ease-in duration-200 text-white w-full mb-2 rounded-md h-14"
                   >
-                     {isLoading? "Logging in...": Data.pages.login.loginButton}
+                    {isLoading ? "Logging in..." : Data.pages.login.loginButton}
                   </button>
                 </div>
               </form>

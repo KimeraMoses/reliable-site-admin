@@ -380,3 +380,121 @@ export const AutoAuthenticate = (dispatch) => {
   const timer = expireDate.getTime() - todaysDate.getTime();
   logOutTimer(dispatch, timer);
 };
+
+
+export const maintenanceStatus = (token) => {
+  return async (dispatch) => {
+    dispatch(checkMaintenancePending())
+    const response = await fetch(
+      `${process.env.REACT_APP_BASEURL}/api/v1/admin/admin/maintenancemode`,
+      {
+        method: "GET",
+        headers: new Headers({
+          "admin-api-key": process.env.REACT_APP_ADMIN_APIKEY,
+          "tenant": "admin",
+        }),
+      }
+    );
+    if (!response.ok) {
+      const error = await response.json();
+      console.log("Maintenance mode error",error);
+      dispatch(checkMaintenanceFail(error));
+    }
+
+    const res = await response.json();
+    console.log("Maintenance mode data", res)
+    dispatch(checkMaintenanceSuccess(res))
+  };
+};
+
+
+
+export const checkMultiFactorAuth = (userId ) => {
+  return async (dispatch) => {
+    dispatch(check2FAuthPending())
+    const response = await fetch(
+      `${process.env.REACT_APP_BASEURL}/api/mfauthenticator/getcurrentstatusoftwofactorauthentication`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          userId
+        }),
+        headers: new Headers({
+          "Content-type": "application/json",
+          "admin-api-key": process.env.REACT_APP_ADMIN_APIKEY,
+          "tenant": "admin",
+        }),
+      }
+    );
+    if (!response.ok) {
+      const error = await response.json();
+      console.log("MFA error", error);
+      dispatch(check2FAuthFail(error));
+    }
+
+    const res = await response.json();
+    console.log("MFA data",res)
+    dispatch(check2FAuthSuccess())
+  };
+};
+
+
+export const Enable2Authfactor = (userId, flag ) => {
+  return async (dispatch) => {
+    // dispatch(enable2AuthPending())
+    const response = await fetch(
+      `${process.env.REACT_APP_BASEURL}/api/mfauthenticator/getcurrentstatusoftwofactorauthentication`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          userId,
+          flag
+        }),
+        headers: new Headers({
+          "Content-type": "application/json",
+          "admin-api-key": process.env.REACT_APP_ADMIN_APIKEY,
+          "tenant": "admin",
+        }),
+      }
+    );
+    if (!response.ok) {
+      const error = await response.json();
+      console.log("MFA error", error);
+      // dispatch(enable2AuthFail(error));
+    }
+
+    const res = await response.json();
+    console.log("MFA data",res)
+    // dispatch(enable2AuthSuccess())
+  };
+};
+
+export const confirmOtp = (userId, otp ) => {
+  return async (dispatch) => {
+    // dispatch(confirmOtpPending())
+    const response = await fetch(
+      `${process.env.REACT_APP_BASEURL}/api/mfauthenticator/validate-mfa`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          userId,
+          otp
+        }),
+        headers: new Headers({
+          "Content-type": "application/json",
+          "admin-api-key": process.env.REACT_APP_ADMIN_APIKEY,
+          "tenant": "admin",
+        }),
+      }
+    );
+    if (!response.ok) {
+      const error = await response.json();
+      console.log("Confirm otp error", error);
+      // dispatch(confirmOtpFail(error));
+    }
+
+    const res = await response.json();
+    console.log("Confirm otp data",res)
+    // dispatch(confirmOtpSuccess())
+  };
+};
