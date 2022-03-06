@@ -8,6 +8,7 @@ import {
   initAuthenticationSuccess,
   logout,
 } from "store/Slices/authSlice";
+import { check2FAuthFail, check2FAuthPending, check2FAuthSuccess, checkMaintenanceFail, checkMaintenancePending, checkMaintenanceSuccess } from "store/Slices/settingSlice";
 import {
   UserRegistrationFail,
   UserRegistrationPending,
