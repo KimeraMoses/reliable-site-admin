@@ -366,20 +366,16 @@ export const AutoAuthenticate = (dispatch) => {
     return;
   }
   UserToken = JSON.parse(AuthToken);
-  let expireDate = new Date(UserToken.refreshTokenExpiryTime);
-  let todaysDate = new Date();
-  if (todaysDate > expireDate) {
-    return dispatch(logout());
-  }
+  
   let data = {
     token: UserToken.token,
     user: JSON.parse(CurrentUser),
   };
-  // validateToken(UserToken)
+  
   dispatch(autoAuthenticationSuccess(data));
 
-  const timer = expireDate.getTime() - todaysDate.getTime();
-  logOutTimer(dispatch, timer);
+  // const timer = expireDate.getTime() - todaysDate.getTime();
+  // logOutTimer(dispatch, timer);
 };
 
 
@@ -398,12 +394,12 @@ export const maintenanceStatus = (token) => {
     );
     if (!response.ok) {
       const error = await response.json();
-      console.log("Maintenance mode error",error);
+      // console.log("Maintenance mode error",error);
       dispatch(checkMaintenanceFail(error));
     }
 
     const res = await response.json();
-    console.log("Maintenance mode data", res)
+    // console.log("Maintenance mode data", res)
     dispatch(checkMaintenanceSuccess(res))
   };
 };
@@ -429,12 +425,12 @@ export const checkMultiFactorAuth = (userId ) => {
     );
     if (!response.ok) {
       const error = await response.json();
-      console.log("MFA error", error);
+      // console.log("MFA error", error);
       dispatch(check2FAuthFail(error));
     }
 
     const res = await response.json();
-    console.log("MFA data",res)
+    // console.log("MFA data",res)
     dispatch(check2FAuthSuccess())
   };
 };
