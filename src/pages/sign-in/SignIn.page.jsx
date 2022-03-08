@@ -1,29 +1,94 @@
-import React, { useState } from "react";
 import { Alert } from "react-bootstrap";
-import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { login } from "store/Actions/AuthActions";
-import Data from "../../db.json";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import { getUserProfile } from "store/Actions/AuthActions";
+import Data from "../../db.json";
+import { messageNotifications } from "store";
+import {
+  initAuthenticationFail,
+  initAuthenticationPending,
+  initAuthenticationSuccess,
+} from "store/Slices/authSlice";
+import { accountSuspended } from "store/Slices/settingSlice";
 
 function SignIn() {
-  const isLoading = useSelector((state) => state.auth.isLoading);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [values, setValues] = useState({
-    userName: "",
+    email: "",
     password: "",
+    username: "",
   });
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-
   const handleChange = (event) => {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
     setError("");
   };
+  let has2faEnabled = false;
+  const login = (userName, password) => {
+    return async (dispatch) => {
+      dispatch(initAuthenticationPending());
+      const response = await fetch(
+        `${process.env.REACT_APP_BASEURL}/api/tokens`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            userName,
+            password,
+          }),
+          headers: new Headers({
+            "Content-type": "application/json",
+            "admin-api-key": process.env.REACT_APP_ADMIN_APIKEY,
+            tenant: "admin",
+          }),
+        }
+      );
+      if (!response.ok) {
+        const error = await response.json();
+        if (error.exception === "User Not Found.") {
+          setError("User Not found, Please check your credentials");
+        }
+        if (error.exception.includes("User Not Active")) {
+          has2faEnabled = true;
+          localStorage.setItem("Account-Suspended", true);
+          dispatch(accountSuspended());
+          navigate("/admin/account-suspended");
+
+          toast.error(
+            "Account has been suspended, Please contact administration",
+            {
+              ...messageNotifications,
+            }
+          );
+        }
+        dispatch(initAuthenticationFail(error));
+      }
+      const res = await response.json();
+      if (res.messages[0]) {
+        has2faEnabled = true;
+        navigate("/admin/one-time-password");
+        localStorage.setItem("userId", res.messages[1]);
+        localStorage.setItem("userEmail", res.messages[2]);
+        toast.success("Please verify otp to login", {
+          ...messageNotifications,
+        });
+      }
+      localStorage.removeItem("Account-Suspended");
+      dispatch(initAuthenticationSuccess(res.data));
+      dispatch(getUserProfile(res.data.token));
+      localStorage.setItem("AuthToken", JSON.stringify(res.data));
+    };
+  };
 
   const LoginHandler = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     if (values.password.length < 6) {
+      setIsLoading(false);
       return setError("Password must be atleast 6 characters");
     }
 
@@ -32,24 +97,16 @@ function SignIn() {
       await dispatch(login(values.username, values.password));
       setValues({ password: "", username: "" });
       toast.success("You have logged in successfuly", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
+        ...messageNotifications,
       });
-    } catch (error) {
-      toast.error("Failed to Login", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      setIsLoading(false);
+    } catch (err) {
+      setIsLoading(false);
+      if (!has2faEnabled) {
+        toast.error("Failed to Login", {
+          ...messageNotifications,
+        });
+      }
     }
   };
 
@@ -73,7 +130,7 @@ function SignIn() {
                 <p className="custom-text-light">
                   New here?{" "}
                   <span className="text-blue-400">
-                    <Link to="/admin/sign-up">Click Here</Link>{" "}
+                    <Link to="/admin/sign-up?brandId=2341">Click Here</Link>{" "}
                   </span>
                   to create an account.
                 </p>
@@ -88,8 +145,8 @@ function SignIn() {
                   </label>
                   <input
                     type="text"
-                    name="userName"
-                    value={values.userName}
+                    name="username"
+                    value={values.username}
                     onChange={handleChange}
                     className="w-full h-12 bg-custom-main rounded-md text-gray-300 placeholder:text-gray-400 placeholder:text-sm px-3  placeholder:font-light focus:outline-none"
                     id="userName"
@@ -104,9 +161,12 @@ function SignIn() {
                     >
                       {Data.pages.login.password}
                     </label>
-                    <span className="text-blue-400 font-light text-sm cursor-pointer">
-                      {Data.pages.login.forgotPassword}
-                    </span>
+                    <Link
+                      to="/admin/forgot-password"
+                      className="text-blue-400 font-light text-sm cursor-pointer"
+                    >
+                      {Data.pages.login.ForgotPassword}
+                    </Link>
                   </div>
                   <input
                     type="password"

@@ -1,23 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { toast } from "react-toastify";
-import { useDispatch, useSelector } from 'react-redux';
-import { signup } from 'store/Actions/AuthActions';
-import Data from '../../db.json';
+import { useDispatch } from "react-redux";
+import { signup } from "store/Actions/AuthActions";
+import Data from "../../db.json";
+import { useNavigate } from "react-router-dom";
+import { messageNotifications } from "store";
 
 function SignUp() {
-  const isLoading = useSelector(state=>state.reg.isLoading)
+  const [isLoading, setIsLoading] = useState(false)
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [values, setValues] = useState({
     username: "",
     fullName: "",
     emailAddress: "",
     password: "",
     confirmPassword: "",
-    address1: "",
-    address2: "",
-    city: "",
-    stateProv: "",
-    zipCode: "",
     ipAddress: "",
   });
 
@@ -27,12 +25,6 @@ function SignUp() {
     emailAddress: "",
     password: "",
     confirmPassword: "",
-    address1: "",
-    address2: "",
-    city: "",
-    stateProv: "",
-    country: "",
-    zipCode: "",
     ipAddress: "",
   };
   const [errors, setErrors] = useState(registerErrorsOb);
@@ -47,86 +39,56 @@ function SignUp() {
     e.preventDefault();
     const registerErrorsObject = { ...registerErrorsOb };
     if (values.username === "") {
+      setIsLoading(false);
       registerErrorsObject.username = "Please Enter Username";
-      
     }
     if (values.fullName === "") {
+      setIsLoading(false);
       registerErrorsObject.fullName = "Please Enter Full Name";
-      
     }
     if (values.emailAddress === "") {
+      setIsLoading(false);
       registerErrorsObject.emailAddress = "Enter Email";
-      
     }
     if (values.password === "") {
+      setIsLoading(false);
       registerErrorsObject.password = "Please Enter Password";
-      
     }
     if (values.confirmPassword !== values.password) {
+      setIsLoading(false);
       registerErrorsObject.confirmPassword = "Password Should Match";
-      
     }
-    if (values.address1 === "") {
-      registerErrorsObject.address1 = "Please Enter Address 1 ";
-      
-    }
-    if (values.address2 === "") {
-      registerErrorsObject.address2 = "Please Enter Address 2";
-      
-    }
-    if (values.city === "") {
-      registerErrorsObject.city = "Please Enter City ";
-      
-    }
-    if (values.stateProv === "") {
-      registerErrorsObject.stateProv = "Please Enter State ";
-      
-    }
-    if (values.country === "") {
-      registerErrorsObject.country = "Please Enter Country ";
-      
-    }
-    if (values.stateProv === "") {
-      registerErrorsObject.stateProv = "Please Enter State ";
-      
-    }
-    if (values.zipCode === "") {
-      registerErrorsObject.zipCode = "Please Enter Zip Code ";
-      
-    }
+
     if (values.ipAddress === "") {
+      setIsLoading(false);
       registerErrorsObject.ipAddress = "Please Enter Status ";
-      
     }
-   setErrors(registerErrorsObject);
+    setErrors(registerErrorsObject);
     try {
       setErrors("");
-      await dispatch(signup(values.email, values.password));
-      toast.success("Account Created Successfully", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      await dispatch(
+        signup(
+          values.username,
+          values.password,
+          values.confirmPassword,
+          values.emailAddress,
+          values.fullName,
+          "1",
+          values.ipAddress
+        )
+      );
+      toast.success("Account Created Successfully", {...messageNotifications });
+      navigate("/admin/sign-in");
+      setIsLoading(false);
     } catch (error) {
-      toast.error("Failed to Login", {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
+      setIsLoading(false);
+      toast.error("Failed to Login", {...messageNotifications});
+
     }
   };
 
-
   return (
-    <div className="w-screen mx-auto my-5 " style={{ maxWidth: '536px' }}>
+    <div className="w-screen mx-auto my-5 " style={{ maxWidth: "536px" }}>
       <div className="col mx-4 md:mx-auto mb-5">
         <img src="/icon/logo.svg" className="h-20 w-20 mx-auto" alt="" />
       </div>
@@ -274,7 +236,9 @@ function SignUp() {
             type="submit"
             className="bg-blue-500 hover:bg-blue-700 text-white w-full mb-2 rounded-md h-14 hover:bg-sky-600/[.8] ease-in duration-200"
           >
-            {isLoading? "Creating account...": Data.pages.register.createAccountBtn}
+            {isLoading
+              ? "Creating account..."
+              : Data.pages.register.createAccountBtn}
           </button>
         </form>
       </div>
