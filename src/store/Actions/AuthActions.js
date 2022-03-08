@@ -62,35 +62,35 @@ export const getUserProfile = (token) => {
   };
 };
 
-export const login = (email, userName, password) => {
-  return async (dispatch) => {
-    dispatch(initAuthenticationPending());
-    const response = await fetch(
-      `${process.env.REACT_APP_BASEURL}/api/tokens`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          userName,
-          email,
-          password,
-        }),
-        headers: new Headers({
-          "Content-type": "application/json",
-          "admin-api-key": process.env.REACT_APP_ADMIN_APIKEY,
-          tenant: "admin",
-        }),
-      }
-    );
-    if (!response.ok) {
-      const error = await response.json();
-      dispatch(initAuthenticationFail(error));
-    }
-    const res = await response.json();
-    dispatch(initAuthenticationSuccess(res.data));
-    dispatch(getUserProfile(res.data.token));
-    localStorage.setItem("AuthToken", JSON.stringify(res.data));
-  };
-};
+// export const login = (email, userName, password) => {
+//   return async (dispatch) => {
+//     dispatch(initAuthenticationPending());
+//     const response = await fetch(
+//       `${process.env.REACT_APP_BASEURL}/api/tokens`,
+//       {
+//         method: "POST",
+//         body: JSON.stringify({
+//           userName,
+//           email,
+//           password,
+//         }),
+//         headers: new Headers({
+//           "Content-type": "application/json",
+//           "admin-api-key": process.env.REACT_APP_ADMIN_APIKEY,
+//           tenant: "admin",
+//         }),
+//       }
+//     );
+//     if (!response.ok) {
+//       const error = await response.json();
+//       dispatch(initAuthenticationFail(error));
+//     }
+//     const res = await response.json();
+//     dispatch(initAuthenticationSuccess(res.data));
+//     dispatch(getUserProfile(res.data.token));
+//     localStorage.setItem("AuthToken", JSON.stringify(res.data));
+//   };
+// };
 
 export const loginbyOtp = (email, userName, otpCode) => {
   return async (dispatch) => {

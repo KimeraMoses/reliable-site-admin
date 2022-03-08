@@ -82,7 +82,7 @@ function SignUp() {
       setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
-      toast.error("Failed to Login", {...messageNotifications});
+      toast.error("Error. Check all fields and try again", {...messageNotifications});
 
     }
   };
