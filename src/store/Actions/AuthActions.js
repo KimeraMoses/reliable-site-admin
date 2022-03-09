@@ -19,18 +19,22 @@ import {
   verificationFail,
   verificationPending,
   verificationSuccess,
-} from "store/Slices/authSlice";
+} from 'store/Slices/authSlice';
 import {
   accountSuspended,
   checkMaintenanceFail,
   checkMaintenancePending,
   checkMaintenanceSuccess,
-} from "store/Slices/settingSlice";
+} from 'store/Slices/settingSlice';
 import {
   UserRegistrationFail,
   UserRegistrationPending,
   UserRegistrationSuccess,
-} from "store/Slices/userRegistrationSlice";
+} from 'store/Slices/userRegistrationSlice';
+
+export const SaveTokenInLocalStorage = (dispatch, userDetails) => {
+  localStorage.setItem('CurrentUser', JSON.stringify(userDetails));
+};
 
 export const getUserProfile = (token) => {
   return async (dispatch) => {
@@ -38,11 +42,11 @@ export const getUserProfile = (token) => {
     const response = await fetch(
       `${process.env.REACT_APP_BASEURL}/api/identity/profile`,
       {
-        method: "GET",
+        method: 'GET',
         headers: new Headers({
-          "Content-type": "application/json",
-          "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
-          tenant: "admin",
+          'Content-type': 'application/json',
+          'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
+          tenant: 'admin',
           Authorization: `Bearer ${token}`,
         }),
       }
@@ -98,16 +102,16 @@ export const loginbyOtp = (email, userName, otpCode) => {
     const response = await fetch(
       `${process.env.REACT_APP_BASEURL}/api/tokens/gettokenbyotp`,
       {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify({
           userName,
           email,
           otpCode,
         }),
         headers: new Headers({
-          "Content-type": "application/json",
-          "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
-          tenant: "admin",
+          'Content-type': 'application/json',
+          'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
+          tenant: 'admin',
         }),
       }
     );
@@ -118,11 +122,9 @@ export const loginbyOtp = (email, userName, otpCode) => {
     const res = await response.json();
     dispatch(initAuthenticationSuccess(res.data));
     dispatch(getUserProfile(res.data.token));
-    localStorage.setItem("AuthToken", JSON.stringify(res.data));
+    localStorage.setItem('AuthToken', JSON.stringify(res.data));
   };
 };
-
-
 
 export const signup = (
   userName,
@@ -131,7 +133,7 @@ export const signup = (
   email,
   fullName,
   status,
-  IpAddress,
+  IpAddress
 ) => {
   return async (dispatch) => {
     dispatch(UserRegistrationPending());
@@ -142,12 +144,12 @@ export const signup = (
       email,
       fullName,
       status,
-      IpAddress,
-    )
+      IpAddress
+    );
     const response = await fetch(
       `${process.env.REACT_APP_BASEURL}/api/identity/register-admin`,
       {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify({
           userName,
           password,
@@ -158,28 +160,28 @@ export const signup = (
           IpAddress,
         }),
         headers: new Headers({
-          "Content-type": "application/json",
-          "admin-api-key": process.env.REACT_APP_ADMIN_APIKEY,
-          tenant: "admin",
+          'Content-type': 'application/json',
+          'admin-api-key': process.env.REACT_APP_ADMIN_APIKEY,
+          tenant: 'admin',
         }),
       }
     );
 
     if (!response.ok) {
       const error = await response.json();
-      let message = "";
-      if (error.message === "Email already in use") {
-        message = "Account with the same email already exits";
+      let message = '';
+      if (error.message === 'Email already in use') {
+        message = 'Account with the same email already exits';
       } else {
         message =
-          "Failed to create account, Please check your connection and try again";
+          'Failed to create account, Please check your connection and try again';
       }
       dispatch(UserRegistrationFail(message));
-      console.log("Ac error", error)
+      console.log('Ac error', error);
     }
     const data = await response.json();
     dispatch(UserRegistrationSuccess(data));
-    console.log("Ac data", data)
+    console.log('Ac data', data);
   };
 };
 
@@ -189,14 +191,14 @@ export const forgotPassword = (email) => {
     const response = await fetch(
       `${process.env.REACT_APP_BASEURL}/api/identity/forgot-password`,
       {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify({
           email,
         }),
         headers: new Headers({
-          "Content-type": "application/json",
-          "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
-          tenant: "admin",
+          'Content-type': 'application/json',
+          'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
+          tenant: 'admin',
         }),
       }
     );
@@ -215,7 +217,7 @@ export const passwordReset = (email, password, confirmPassword, token) => {
     const response = await fetch(
       `${process.env.REACT_APP_BASEURL}/api/identity/reset-password`,
       {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify({
           email,
           password,
@@ -223,9 +225,9 @@ export const passwordReset = (email, password, confirmPassword, token) => {
           token,
         }),
         headers: new Headers({
-          "Content-type": "application/json",
-          tenant: "admin",
-          "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
+          'Content-type': 'application/json',
+          tenant: 'admin',
+          'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
         }),
       }
     );
@@ -246,9 +248,9 @@ export const validateEmailToken = (userId, code) => {
         process.env.REACT_APP_BASEURL
       }/api/identity/confirm-email?userId=${userId}&code=${code.trim()}&tenant=admin`,
       {
-        method: "GET",
+        method: 'GET',
         headers: new Headers({
-          "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
+          'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
         }),
       }
     );
@@ -262,14 +264,14 @@ export const validateEmailToken = (userId, code) => {
 };
 
 export const AutoAuthenticate = (dispatch) => {
-  const AuthToken = localStorage.getItem("AuthToken");
-  const CurrentUser = localStorage.getItem("CurrentUser");
-  const suspended = localStorage.getItem("Account-Suspended");
+  const AuthToken = localStorage.getItem('AuthToken');
+  const CurrentUser = localStorage.getItem('CurrentUser');
+  const suspended = localStorage.getItem('Account-Suspended');
 
-  if (!!suspended) {
+  if (suspended) {
     dispatch(accountSuspended());
   }
-  let UserToken = "";
+  let UserToken = '';
   if (!AuthToken) {
     dispatch(logout());
     return;
@@ -293,10 +295,10 @@ export const maintenanceStatus = (token) => {
     const response = await fetch(
       `${process.env.REACT_APP_BASEURL}/api/v1/admin/admin/maintenancemode`,
       {
-        method: "GET",
+        method: 'GET',
         headers: new Headers({
-          "admin-api-key": process.env.REACT_APP_ADMIN_APIKEY,
-          tenant: "admin",
+          'admin-api-key': process.env.REACT_APP_ADMIN_APIKEY,
+          tenant: 'admin',
         }),
       }
     );
@@ -316,15 +318,15 @@ export const confirmOtp = (userId, otp) => {
     const response = await fetch(
       `${process.env.REACT_APP_BASEURL}/api/mfauthenticator/validate-mfa`,
       {
-        method: "POST",
+        method: 'POST',
         body: JSON.stringify({
           userId,
           otp,
         }),
         headers: new Headers({
-          "Content-type": "application/json",
-          "admin-api-key": process.env.REACT_APP_ADMIN_APIKEY,
-          tenant: "admin",
+          'Content-type': 'application/json',
+          'admin-api-key': process.env.REACT_APP_ADMIN_APIKEY,
+          tenant: 'admin',
         }),
       }
     );
@@ -336,8 +338,4 @@ export const confirmOtp = (userId, otp) => {
     const res = await response.json();
     dispatch(confirmOtpSuccess(res));
   };
-};
-
-export const SaveTokenInLocalStorage = (dispatch, userDetails) => {
-  localStorage.setItem("CurrentUser", JSON.stringify(userDetails));
 };

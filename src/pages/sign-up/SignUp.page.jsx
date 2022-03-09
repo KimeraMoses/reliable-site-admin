@@ -1,94 +1,117 @@
-import React, { useState } from "react";
-import { toast } from "react-toastify";
-import { useDispatch } from "react-redux";
-import { signup } from "store/Actions/AuthActions";
-import Data from "../../db.json";
-import { useNavigate } from "react-router-dom";
-import { messageNotifications } from "store";
+import React, { useState } from 'react';
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
+import { signup } from 'store/Actions/AuthActions';
+import { useNavigate } from 'react-router-dom';
+import { messageNotifications } from 'store';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
+
+import Data from '../../db.json';
+
+const initialValues = {
+  username: '',
+  fullName: '',
+  emailAddress: '',
+  password: '',
+  confirmPassword: '',
+  ipAddress: '',
+};
+
+const SignUpSchema = Yup.object().shape({
+  username: Yup.string().required('Username is required.'),
+  fullName: Yup.string().required('Full Name is required.'),
+  emailAddress: Yup.string()
+    .required('Email Address is required.')
+    .email('Please enter a valid email.'),
+  password: Yup.string()
+    .required('password is required.')
+    .min(6, 'Password must be atleast 6 characters'),
+  confirmPassword: Yup.string()
+    .required('Confirm Password is required.')
+    .min(6, 'Password must be atleast 6 characters')
+    .oneOf(
+      [Yup.ref('password'), null],
+      'Confirm Password must matches with Password'
+    ),
+  ipAddress: Yup.string().required('IP Address is required.'),
+});
+
+const fields = [
+  { name: 'username', label: 'Username', placeholder: 'paul123456' },
+  { name: 'fullName', label: 'Full Name', placeholder: 'Paul Elliot' },
+  { name: 'emailAddress', label: 'Email Address', placeholder: 'paul@abz.com' },
+  { name: 'password', label: 'Password', placeholder: '**********' },
+  {
+    name: 'confirmPassword',
+    label: 'Confirm Password',
+    placeholder: '**********',
+  },
+  { name: 'ipAddress', label: 'IP Address', placeholder: '253.205.121.39' },
+];
 
 function SignUp() {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [values, setValues] = useState({
-    username: "",
-    fullName: "",
-    emailAddress: "",
-    password: "",
-    confirmPassword: "",
-    ipAddress: "",
+    username: '',
+    fullName: '',
+    emailAddress: '',
+    password: '',
+    confirmPassword: '',
+    ipAddress: '',
   });
 
   const registerErrorsOb = {
-    username: "",
-    fullName: "",
-    emailAddress: "",
-    password: "",
-    confirmPassword: "",
-    ipAddress: "",
+    username: '',
+    fullName: '',
+    emailAddress: '',
+    password: '',
+    confirmPassword: '',
+    ipAddress: '',
   };
   const [errors, setErrors] = useState(registerErrorsOb);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
     setValues({ ...values, [name]: value });
-    setErrors({ ...errors, [name]: "" });
+    setErrors({ ...errors, [name]: '' });
   };
 
   const registerForm = async (e) => {
     e.preventDefault();
     const registerErrorsObject = { ...registerErrorsOb };
-    if (values.username === "") {
+    if (values.username === '') {
       setIsLoading(false);
-      registerErrorsObject.username = "Please Enter Username";
+      registerErrorsObject.username = 'Please Enter Username';
     }
-    if (values.fullName === "") {
+    if (values.fullName === '') {
       setIsLoading(false);
-      registerErrorsObject.fullName = "Please Enter Full Name";
+      registerErrorsObject.fullName = 'Please Enter Full Name';
     }
-    if (values.emailAddress === "") {
+    if (values.emailAddress === '') {
       setIsLoading(false);
-      registerErrorsObject.emailAddress = "Enter Email";
+      registerErrorsObject.emailAddress = 'Enter Email';
     }
-    if (values.password === "") {
+    if (values.password === '') {
       setIsLoading(false);
-      registerErrorsObject.password = "Please Enter Password";
+      registerErrorsObject.password = 'Please Enter Password';
     }
     if (values.confirmPassword !== values.password) {
       setIsLoading(false);
-      registerErrorsObject.confirmPassword = "Password Should Match";
+      registerErrorsObject.confirmPassword = 'Password Should Match';
     }
 
-    if (values.ipAddress === "") {
+    if (values.ipAddress === '') {
       setIsLoading(false);
-      registerErrorsObject.ipAddress = "Please Enter Status ";
+      registerErrorsObject.ipAddress = 'Please Enter Status ';
     }
     setErrors(registerErrorsObject);
-    try {
-      setErrors("");
-      await dispatch(
-        signup(
-          values.username,
-          values.password,
-          values.confirmPassword,
-          values.emailAddress,
-          values.fullName,
-          "1",
-          values.ipAddress
-        )
-      );
-      toast.success("Account Created Successfully", {...messageNotifications });
-      navigate("/admin/sign-in");
-      setIsLoading(false);
-    } catch (error) {
-      setIsLoading(false);
-      toast.error("Error. Check all fields and try again", {...messageNotifications});
-
-    }
   };
 
   return (
-    <div className="w-screen mx-auto my-5 " style={{ maxWidth: "536px" }}>
+    <div className="w-screen mx-auto my-5 " style={{ maxWidth: '536px' }}>
       <div className="col mx-4 md:mx-auto mb-5">
         <img src="/icon/logo.svg" className="h-20 w-20 mx-auto" alt="" />
       </div>
@@ -101,146 +124,79 @@ function SignUp() {
             Fill The Form Below In Order To Create Your Account
           </p>
         </div>
-        <form onSubmit={registerForm}>
-          <div className="mt-4 mb-3">
-            <label
-              htmlFor="exampleInputEmail1"
-              className="form-label text-white font-light text-sm"
-            >
-              Username
-            </label>
-            <input
-              type="text"
-              className="w-full h-12 bg-custom-main rounded-md placeholder:text-gray-400 text-gray-400   placeholder:text-sm px-3  placeholder:font-light focus:outline-none"
-              id="exampleInputEmail1"
-              placeholder="Paul Elliott"
-              value={values.username}
-              name="username"
-              onChange={handleChange}
-            />
-            {errors.username && (
-              <span className="text-red-600 mt-2 flex">{errors.username}</span>
-            )}
-          </div>
-          <div className="mt-4 mb-3">
-            <label
-              htmlFor="fullName"
-              className="form-label text-white font-light text-sm"
-            >
-              Full Name
-            </label>
-            <input
-              type="text"
-              className="w-full h-12 bg-custom-main rounded-md placeholder:text-gray-400 text-gray-400  placeholder:text-sm px-3  placeholder:font-light focus:outline-none"
-              id="fullName"
-              placeholder="Paul Elliott"
-              value={values.fullName}
-              name="fullName"
-              onChange={handleChange}
-            />
-            {errors.fullName && (
-              <span className="text-red-600 mt-2 flex">{errors.fullName}</span>
-            )}
-          </div>
-          <div className="mt-4 mb-3">
-            <label
-              htmlFor="fullName"
-              className="form-label text-white font-light text-sm"
-            >
-              Email address
-            </label>
-            <input
-              type="email"
-              className="w-full h-12 bg-custom-main rounded-md placeholder:text-gray-400 text-gray-400  placeholder:text-sm px-3  placeholder:font-light focus:outline-none"
-              id="fullName"
-              placeholder="Paul.Elliott@fakemail.com"
-              value={values.emailAddress}
-              name="emailAddress"
-              onChange={handleChange}
-            />
-            {errors.emailAddress && (
-              <span className="text-red-600 mt-2 flex">
-                {errors.emailAddress}
-              </span>
-            )}
-          </div>
-          <div className="mb-8">
-            <div className="flex justify-between">
-              <label
-                htmlFor="exampleInputPassword1"
-                className="form-label text-white font-light text-sm"
+        <Formik
+          initialValues={initialValues}
+          validationSchema={SignUpSchema}
+          onSubmit={(values) => {
+            try {
+              setIsLoading(true);
+              dispatch(
+                signup(
+                  values.username,
+                  values.password,
+                  values.confirmPassword,
+                  values.emailAddress,
+                  values.fullName,
+                  '1',
+                  values.ipAddress
+                )
+              );
+              toast.success('Account Created Successfully', {
+                ...messageNotifications,
+              });
+              setIsLoading(false);
+              navigate('/admin/sign-in');
+            } catch (error) {
+              setIsLoading(false);
+              toast.error('Error. Check all fields and try again', {
+                ...messageNotifications,
+              });
+            }
+            console.log(values);
+          }}
+        >
+          {({ errors, touched }) => (
+            <Form>
+              {fields.map((field) => {
+                return (
+                  <div className="mt-4 mb-3" key={field?.name}>
+                    <label
+                      htmlFor={field?.name}
+                      className="form-label text-white font-light text-sm"
+                    >
+                      {field?.label}
+                    </label>
+                    <Field
+                      type={
+                        field?.name === 'password' ||
+                        field?.name === 'confirmPassword'
+                          ? 'password'
+                          : 'text'
+                      }
+                      className="w-full h-12 bg-custom-main rounded-md placeholder:text-gray-400 text-gray-400 placeholder:text-sm px-3 placeholder:font-light focus:outline-none"
+                      id={field?.name}
+                      name={field?.name}
+                      placeholder={field?.placeholder}
+                    />
+                    {errors[field?.name] && touched[field?.name] ? (
+                      <div className="text-red-600 text-sm">
+                        {errors[field?.name]}
+                      </div>
+                    ) : null}
+                  </div>
+                );
+              })}
+              <button
+                type="submit"
+                className="mt-4 bg-blue-500 hover:bg-blue-700 text-white w-full mb-2 rounded-md h-14 hover:bg-sky-600/[.8] ease-in duration-200"
               >
-                Password
-              </label>
-            </div>
-            <input
-              type="password"
-              className="w-full h-14 bg-custom-main rounded-md placeholder:text-gray-400 text-gray-400 px-3 placeholder:text-sm placeholder:font-light focus:outline-none"
-              id="exampleInputPassword1"
-              placeholder="**********"
-              name="password"
-              value={values.password}
-              onChange={handleChange}
-            />
-            {errors.password && (
-              <span className="text-red-600 mt-2 flex">{errors.password}</span>
-            )}
-          </div>
-          <div className="mb-8">
-            <div className="flex justify-between">
-              <label
-                htmlFor="confirmPassword"
-                className="form-label text-white font-light text-sm"
-              >
-                Confirm Password
-              </label>
-            </div>
-            <input
-              type="password"
-              className="w-full h-14 bg-custom-main rounded-md placeholder:text-gray-400 text-gray-400 px-3 placeholder:text-sm placeholder:font-light focus:outline-none"
-              id="confirmPassword"
-              placeholder="**********"
-              value={values.confirmPassword}
-              name="confirmPassword"
-              onChange={handleChange}
-            />
-            {errors.confirmPassword && (
-              <span className="text-red-600 mt-2 flex">
-                {errors.confirmPassword}
-              </span>
-            )}
-          </div>
-          <div className="mb-8">
-            <div className="flex justify-between">
-              <label
-                htmlFor="ipAddress"
-                className="form-label text-white font-light text-sm"
-              >
-                IP Address
-              </label>
-            </div>
-            <input
-              type="text"
-              className="w-full h-14 bg-custom-main rounded-md placeholder:text-gray-400 text-gray-400 px-3 placeholder:text-sm placeholder:font-light focus:outline-none"
-              id="ipAddress"
-              placeholder="253.205.121.39"
-              value={values.ipAddress}
-              name="ipAddress"
-              onChange={handleChange}
-            />
-            {errors.ipAddress && (
-              <span className="text-red-600 mt-2 flex">{errors.ipAddress}</span>
-            )}
-          </div>
-          <button
-            type="submit"
-            className="bg-blue-500 hover:bg-blue-700 text-white w-full mb-2 rounded-md h-14 hover:bg-sky-600/[.8] ease-in duration-200"
-          >
-            {isLoading
-              ? "Creating account..."
-              : Data.pages.register.createAccountBtn}
-          </button>
-        </form>
+                {isLoading
+                  ? 'Creating account...'
+                  : Data.pages.register.createAccountBtn}
+              </button>
+            </Form>
+          )}
+        </Formik>
       </div>
     </div>
   );
