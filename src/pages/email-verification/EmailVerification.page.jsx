@@ -4,7 +4,6 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { messageNotifications } from 'store';
 import { validateEmailToken } from 'store/Actions/AuthActions';
-// import {Link} from 'react-router-dom'
 import Data from '../../db.json';
 
 function EmailVerification() {

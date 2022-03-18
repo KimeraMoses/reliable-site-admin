@@ -1,47 +1,56 @@
-import React, { Suspense, useEffect } from 'react';
-import { ToastContainer } from 'react-toastify';
+import React, { Suspense, useEffect, useRef } from "react";
+import { ToastContainer } from "react-toastify";
+import IdleTimer from "react-idle-timer";
 import {
   BrowserRouter as Router,
   Navigate,
   Route,
   Routes,
-} from 'react-router-dom';
-import pages, { Error404, dashboardPages } from 'pages';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'react-toastify/dist/ReactToastify.css';
+} from "react-router-dom";
+import pages, { Error404, dashboardPages } from "pages";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "react-toastify/dist/ReactToastify.css";
 
-import './App.scss';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  AutoAuthenticate,
-  // checkMultiFactorAuth,
-  maintenanceStatus,
-} from 'store/Actions/AuthActions';
+import "./App.scss";
+import { useDispatch, useSelector } from "react-redux";
+import { AutoAuthenticate, maintenanceStatus } from "store/Actions/AuthActions";
+import { initiateLockScreen } from "store/Slices/settingSlice";
 
-const SignIn = React.lazy(() => import('pages/sign-in/SignIn.page'));
-const SignUp = React.lazy(() => import('pages/sign-up/SignUp.page'));
+const SignIn = React.lazy(() => import("pages/sign-in/SignIn.page"));
+const SignUp = React.lazy(() => import("pages/sign-up/SignUp.page"));
 const ResetPassword = React.lazy(() =>
-  import('pages/reset-password/ResetPassword.page')
+  import("pages/reset-password/ResetPassword.page")
 );
 const ForgotPassword = React.lazy(() =>
-  import('pages/forgot-password/ForgotPassword.page')
+  import("pages/forgot-password/ForgotPassword.page")
 );
 const EmailVerification = React.lazy(() =>
-  import('pages/email-verification/EmailVerification.page')
+  import("pages/email-verification/EmailVerification.page")
 );
 const ConfirmOtp = React.lazy(() =>
-  import('pages/one-time-password/OneTimePassword.page')
+  import("pages/one-time-password/OneTimePassword.page")
 );
 const UnderMaintenance = React.lazy(() =>
-  import('pages/under-maintenance/UnderMaintenance.page')
+  import("pages/under-maintenance/UnderMaintenance.page")
 );
 const SuspendedAccount = React.lazy(() =>
-  import('pages/account-suspended/AccountSuspended.page')
+  import("pages/account-suspended/AccountSuspended.page")
+);
+const LockScreen = React.lazy(() =>
+  import("pages/lock-screen/LockScreen.page")
 );
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
   const { maintenance, suspended } = useSelector((state) => state.settings);
+  const isIdle = useSelector((state) => state.settings.isIdle);
+  const Timeout = 1000 * 900;
+  const idleTimer = useRef(null);
+
+  const OnIdle = () => {
+    dispatch(initiateLockScreen());
+  };
+
   const dispatch = useDispatch();
   useEffect(() => {
     AutoAuthenticate(dispatch);
@@ -50,11 +59,17 @@ function App() {
 
   return (
     <div className="App bg-custom-main flex items-center content-center">
+      <IdleTimer ref={idleTimer} onIdle={OnIdle} timeout={Timeout} />
       <ToastContainer />
       <Suspense fallback={<>Loading...</>}>
         <Router>
           <Routes>
             <Route path="/" element={<Navigate to="/admin/sign-in" />} />
+            <Route path="/admin/sign-up" element={isLoggedIn?<SignUp />:<Navigate to="/admin/sign-in" /> } />
+            <Route
+              path="/admin/lock-screen"
+              element={isIdle ? <LockScreen /> : <Navigate to={-1} />}
+            />
             <Route path="/admin" element={<Navigate to="/admin/sign-in" />} />
             <Route
               path="/admin/account-suspended"
@@ -138,12 +153,6 @@ function App() {
                 )
               }
             />
-            <Route
-              path="/admin/sign-up"
-              element={
-                isLoggedIn ? <Navigate to="/admin/dashboard" /> : <SignUp />
-              }
-            />
             {pages.map(({ path, Component }) => (
               <Route
                 key={path}
@@ -158,10 +167,12 @@ function App() {
                   key={path}
                   path={`/admin${path}`}
                   element={
-                    suspended ? (
-                      <Navigate to="/admin/account-suspended" />
-                    ) : maintenance ? (
+                    maintenance ? (
                       <Navigate to="/admin/under-maintenance" />
+                    ) : isIdle ? (
+                      <Navigate to="/admin/lock-screen" />
+                    ) : suspended ? (
+                      <Navigate to="/admin/account-suspended" />
                     ) : !isLoggedIn ? (
                       <Navigate to="/admin/sign-in" />
                     ) : (

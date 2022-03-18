@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Alert } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -46,38 +45,6 @@ function ResetPassword() {
   const query = useQuery();
   const token = query.get('resetToken');
 
-  const [error, setError] = useState('');
-  const [values, setValues] = useState({
-    password: '',
-    confirmPassword: '',
-  });
-
-  const handleOnChange = (event) => {
-    setError('');
-    const { name, value } = event.target;
-    setValues({ ...values, [name]: value });
-  };
-
-  const passwordResetSubmitHandler = async (e) => {
-    e.preventDefault();
-    if (values.password.length < 1) {
-      setIsLoading(false);
-      return setError('Please enter password');
-    }
-    if (values.password.length < 6) {
-      setIsLoading(false);
-      return setError('Password must be atleast 6 characters');
-    }
-    if (values.confirmPassword.length < 1) {
-      setIsLoading(false);
-      return setError('Please confirm new password');
-    }
-    if (values.password !== values.confirmPassword) {
-      setIsLoading(false);
-      return setError('Passwords do not match');
-    }
-  };
-
   return (
     <div className="h-screen w-full flex items-center justify-content-center">
       <div className="col" style={{ maxWidth: '536px' }}>
@@ -86,7 +53,6 @@ function ResetPassword() {
         </div>
         <div className="col mx-4 md:mx-auto bg-custom-secondary rounded-lg p-8">
           <div className="text-center">
-            {error && <Alert variant="danger">{error}</Alert>}
             <h2 className="text-md text-2xl text-white font-normal">
               {Data.pages.resetPassword.title}
             </h2>
@@ -97,11 +63,10 @@ function ResetPassword() {
           <Formik
             initialValues={initialValues}
             validationSchema={ResetPasswordSchema}
-            onSubmit={async (values) => {
+            onSubmit={async (values,{ resetForm }) => {
               const userEmail = localStorage.getItem('userEmail');
               try {
                 setIsLoading(true);
-                setError('');
                 await dispatch(
                   passwordReset(
                     userEmail,
@@ -111,7 +76,7 @@ function ResetPassword() {
                   )
                 );
                 setIsLoading(false);
-                setValues({ values: '' });
+                resetForm()
                 navigate('/admin/sign-in');
                 toast.success('Password changed successfully', {
                   ...messageNotifications,

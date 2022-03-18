@@ -1,12 +1,123 @@
-import React from 'react';
+import UserName from "layout/components/navbar/UserProfileCard/UserName";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { messageNotifications } from "store";
+import { useCookies } from "react-cookie";
+import {
+  getUserProfile,
+  SaveTokenInLocalStorage,
+} from "store/Actions/AuthActions";
+import {
+  initAuthenticationFail,
+  initAuthenticationPending,
+  initAuthenticationSuccess,
+} from "store/Slices/authSlice";
+import { accountSuspended, closeLockScreen } from "store/Slices/settingSlice";
+import "../../layout/components/navbar/UserTop.css";
 
 function LockScreen() {
+  const user = useSelector((state) => state.auth.user);
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [cookies] = useCookies();
+  const isTrustDevice = cookies.admin_days ? true : false;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const onChangeHandler = (e) => {
+    setPassword(e.target.value);
+  };
+
+  let has2faEnabled = false;
+  const login = (userName, password, TrustDevice) => {
+    console.log(userName, password);
+    return async (dispatch) => {
+      dispatch(initAuthenticationPending());
+      const response = await fetch(
+        `${process.env.REACT_APP_BASEURL}/api/tokens`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            userName,
+            password,
+            TrustDevice,
+          }),
+          headers: new Headers({
+            "Content-type": "application/json",
+            "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
+            tenant: "admin",
+          }),
+        }
+      );
+      if (!response.ok) {
+        const error = await response.json();
+        dispatch(initAuthenticationFail(error));
+        if (error.exception.includes("User Not Active")) {
+          has2faEnabled = true;
+          localStorage.setItem("Account-Suspended", true);
+          dispatch(accountSuspended());
+          navigate("/admin/account-suspended");
+
+          toast.error(
+            "Account has been suspended, Please contact administration",
+            {
+              ...messageNotifications,
+            }
+          );
+        }
+        if (error.exception.includes("Provided Credentials are invalid.")) {
+          has2faEnabled = true;
+          toast.error("Invalid Credentials, Please enter correct password", {
+            ...messageNotifications,
+          });
+        }
+      }
+      const res = await response.json();
+      if (res.messages[0]) {
+        has2faEnabled = true;
+        navigate("/admin/one-time-password");
+        localStorage.setItem("userId", res.messages[1]);
+        localStorage.setItem("userEmail", res.messages[2]);
+        toast.success("Please verify otp to login", {
+          ...messageNotifications,
+        });
+      }
+      localStorage.removeItem("Account-Suspended");
+      dispatch(initAuthenticationSuccess(res.data));
+      dispatch(closeLockScreen());
+      dispatch(getUserProfile(res.data.token));
+      SaveTokenInLocalStorage(res.data);
+    };
+  };
+
+  const LoginHandler = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    const userName = user && user.userName;
+    try {
+      await dispatch(login(userName, password, isTrustDevice));
+      toast.success("You have logged in successfuly", {
+        ...messageNotifications,
+      });
+      setIsLoading(false);
+      setPassword("");
+    } catch (err) {
+      setIsLoading(false);
+      if (!has2faEnabled) {
+        toast.error("Failed to Login", {
+          ...messageNotifications,
+        });
+      }
+    }
+  };
+
   return (
     <div className="d-flex w-screen py-20 md:py-2 md:h-screen">
       <div className="col-md-6 my-auto px-5  md:p-20">
-        <div style={{ maxWidth: '668px' }} className="mx-auto">
+        <div style={{ maxWidth: "668px" }} className="mx-auto">
           <div className="">
-            <img src="icon/logo.svg" alt="" className="w-20 h-20" />
+            <img src="/icon/logo.svg" alt="" className="w-20 h-20" />
             <h3 className="text-4xl text-white font-normal mt-5">
               Lock Screen
             </h3>
@@ -16,16 +127,22 @@ function LockScreen() {
               erat.
             </p>
           </div>
-          <div className="flex items-center mb-5">
-            <div className=" mr-4">
-              <img
-                src="/icon/user.svg"
-                alt="asa"
-                className="h-24 w-24 rounded-ful"
-              />{' '}
+          <div className="flex mb-5">
+            <div className="h-12 w-12 rounded-lg border-2 border-[#3699FF] p-2 userName mr-4">
+              {user && user.imageUrl && user.imageUrl.length > 0 ? (
+                <img
+                  src={user && user.imageUrl}
+                  alt={user && user.userName}
+                  className="h-full w-full"
+                />
+              ) : (
+                <UserName />
+              )}
             </div>
             <div>
-              <h3 className="text-sm text-white">Welcome back, Paul</h3>
+              <h3 className="text-sm text-white">
+                Welcome back, {user && user.fullName}
+              </h3>
               <p className=" text-base custom-text-light">
                 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
                 diam nonumy eirmod tempor invidunt.
@@ -33,18 +150,22 @@ function LockScreen() {
             </div>
           </div>
           <div className="col-md-8">
-            <input
-              type="email"
-              className="w-full h-12 mb-3  bg-custom-secondary rounded-md text-gray-300 placeholder:text-gray-400 placeholder:text-sm px-3  placeholder:font-light"
-              id="enterPassword"
-              placeholder="Enter Password"
-            />
-            <button
-              type="button"
-              className="w-full h-12 custom-blue-bg ease-in duration-200 rounded-lg text-white bg-blue-500 hover:bg-blue-700"
-            >
-              Sign In
-            </button>
+            <form onSubmit={LoginHandler}>
+              <input
+                type="password"
+                name="password"
+                onChange={onChangeHandler}
+                className="w-full h-12 mb-3  bg-custom-secondary rounded-md text-gray-300 placeholder:text-gray-400 placeholder:text-sm px-3  placeholder:font-light"
+                id="enterPassword"
+                placeholder="Enter Password"
+              />
+              <button
+                type="submit"
+                className="w-full h-12 custom-blue-bg ease-in duration-200 rounded-lg text-white bg-blue-500 hover:bg-blue-700"
+              >
+                {isLoading ? "Logging In..." : "Sign In"}
+              </button>
+            </form>
           </div>
         </div>
       </div>
