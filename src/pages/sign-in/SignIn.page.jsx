@@ -82,7 +82,7 @@ function SignIn() {
         has2faEnabled = true;
         navigate("/admin/one-time-password");
         localStorage.setItem("userId", res.messages[1]);
-        localStorage.setItem("userEmail", res.messages[2]);
+        localStorage.setItem("userName", res.messages[3]);
         toast.success("Please verify otp to login", {
           ...messageNotifications,
         });

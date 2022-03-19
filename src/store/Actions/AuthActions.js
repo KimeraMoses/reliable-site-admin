@@ -269,7 +269,7 @@ export const trustedDays = () => {
 };
 
 
-export const loginbyOtp = (email, otpCode) => {
+export const loginbyOtp = (userName, otpCode) => {
   return async (dispatch) => {
     dispatch(initAuthenticationPending());
     const response = await fetch(
@@ -277,7 +277,7 @@ export const loginbyOtp = (email, otpCode) => {
       {
         method: "POST",
         body: JSON.stringify({
-          email,
+          userName,
           otpCode,
         }),
         headers: new Headers({
@@ -323,8 +323,8 @@ export const confirmOtp = (userId, otp) => {
     }
     const res = await response.json();
     dispatch(confirmOtpSuccess(res));
-    const userEmail = localStorage.getItem("userEmail");
-    dispatch(loginbyOtp(userEmail, otp));
+    const username = localStorage.getItem("userName");
+    dispatch(loginbyOtp(username, otp));
   };
 };
 
@@ -353,71 +353,8 @@ export const disableConfirmOtp = (userId, otp, isRemember) => {
     }
     const res = await response.json();
     dispatch(confirmOtpSuccess(res));
-    const userEmail = localStorage.getItem("userEmail");
-    dispatch(loginbyOtp(userEmail, otp));
+    const username = localStorage.getItem("userName");
+    dispatch(loginbyOtp(username, otp));
   };
 };
 
-
-// export const confirmOtp = (userId, otp) => {
-//   return async (dispatch) => {
-//     console.log(userId, otp)
-//     dispatch(confirmOtpPending());
-//     const response = await fetch(
-//       `${process.env.REACT_APP_BASEURL}/api/mfauthenticator/validate-mfa`,
-//       {
-//         method: "POST",
-//         body: JSON.stringify({
-//           userId,
-//           otp,
-//         }),
-//         headers: new Headers({
-//           "Content-type": "application/json",
-//           "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
-//           tenant: "admin",
-//         }),
-//       }
-//     );
-//     if (!response.ok) {
-//       const error = await response.json();
-//       dispatch(confirmOtpFail(error));
-//     }
-
-//     const res = await response.json();
-//     dispatch(confirmOtpSuccess(res));
-//     const userEmail = localStorage.getItem("userEmail");
-//     dispatch(loginbyOtp(userEmail, otp));
-//   };
-// };
-
-
-// export const disableConfirmOtp = (userId, otp, isRemember) => {
-//   return async (dispatch) => {
-//     dispatch(confirmOtpPending());
-//     const response = await fetch(
-//       `${process.env.REACT_APP_BASEURL}/api/mfauthenticator/removetwofactorauthentication`,
-//       {
-//         method: "POST",
-//         body: JSON.stringify({
-//           userId,
-//           otp,
-//           isRemember,
-//         }),
-//         headers: new Headers({
-//           "Content-type": "application/json",
-//           "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
-//           tenant: "admin",
-//         }),
-//       }
-//     );
-//     if (!response.ok) {
-//       const error = await response.json();
-//       dispatch(confirmOtpFail(error));
-//     }
-
-//     const res = await response.json();
-//     dispatch(confirmOtpSuccess(res));
-//     const userEmail = localStorage.getItem("userEmail");
-//     dispatch(loginbyOtp(userEmail, otp));
-//   };
-// };
