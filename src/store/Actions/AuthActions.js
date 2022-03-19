@@ -68,35 +68,6 @@ export const getUserProfile = (token) => {
   };
 };
 
-export const loginbyOtp = (email, userName, otpCode) => {
-  return async (dispatch) => {
-    dispatch(initAuthenticationPending());
-    const response = await fetch(
-      `${process.env.REACT_APP_BASEURL}/api/tokens/gettokenbyotp`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          userName,
-          email,
-          otpCode,
-        }),
-        headers: new Headers({
-          "Content-type": "application/json",
-          "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
-          tenant: "admin",
-        }),
-      }
-    );
-    if (!response.ok) {
-      const error = await response.json();
-      dispatch(initAuthenticationFail(error));
-    }
-    const res = await response.json();
-    dispatch(initAuthenticationSuccess(res.data));
-    dispatch(getUserProfile(res.data.token));
-    localStorage.setItem("AuthToken", JSON.stringify(res.data));
-  };
-};
 
 export const signup = (
   userName,
@@ -298,6 +269,36 @@ export const trustedDays = () => {
 };
 
 
+export const loginbyOtp = (email, otpCode) => {
+  return async (dispatch) => {
+    dispatch(initAuthenticationPending());
+    const response = await fetch(
+      `${process.env.REACT_APP_BASEURL}/api/tokens/gettokenbyotp`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          email,
+          otpCode,
+        }),
+        headers: new Headers({
+          "Content-type": "application/json",
+          "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
+          tenant: "admin",
+        }),
+      }
+    );
+    if (!response.ok) {
+      const error = await response.json();
+      dispatch(initAuthenticationFail(error));
+    }
+    const res = await response.json();
+    dispatch(initAuthenticationSuccess(res.data));
+    dispatch(getUserProfile(res.data.token));
+    localStorage.setItem("AuthToken", JSON.stringify(res.data));
+  };
+};
+
+
 export const confirmOtp = (userId, otp) => {
   return async (dispatch) => {
     dispatch(confirmOtpPending());
@@ -320,11 +321,10 @@ export const confirmOtp = (userId, otp) => {
       const error = await response.json();
       dispatch(confirmOtpFail(error));
     }
-
     const res = await response.json();
     dispatch(confirmOtpSuccess(res));
     const userEmail = localStorage.getItem("userEmail");
-    dispatch(loginbyOtp(userEmail, userEmail, otp));
+    dispatch(loginbyOtp(userEmail, otp));
   };
 };
 
@@ -351,10 +351,73 @@ export const disableConfirmOtp = (userId, otp, isRemember) => {
       const error = await response.json();
       dispatch(confirmOtpFail(error));
     }
-
     const res = await response.json();
     dispatch(confirmOtpSuccess(res));
     const userEmail = localStorage.getItem("userEmail");
-    dispatch(loginbyOtp(userEmail, userEmail, otp));
+    dispatch(loginbyOtp(userEmail, otp));
   };
 };
+
+
+// export const confirmOtp = (userId, otp) => {
+//   return async (dispatch) => {
+//     console.log(userId, otp)
+//     dispatch(confirmOtpPending());
+//     const response = await fetch(
+//       `${process.env.REACT_APP_BASEURL}/api/mfauthenticator/validate-mfa`,
+//       {
+//         method: "POST",
+//         body: JSON.stringify({
+//           userId,
+//           otp,
+//         }),
+//         headers: new Headers({
+//           "Content-type": "application/json",
+//           "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
+//           tenant: "admin",
+//         }),
+//       }
+//     );
+//     if (!response.ok) {
+//       const error = await response.json();
+//       dispatch(confirmOtpFail(error));
+//     }
+
+//     const res = await response.json();
+//     dispatch(confirmOtpSuccess(res));
+//     const userEmail = localStorage.getItem("userEmail");
+//     dispatch(loginbyOtp(userEmail, otp));
+//   };
+// };
+
+
+// export const disableConfirmOtp = (userId, otp, isRemember) => {
+//   return async (dispatch) => {
+//     dispatch(confirmOtpPending());
+//     const response = await fetch(
+//       `${process.env.REACT_APP_BASEURL}/api/mfauthenticator/removetwofactorauthentication`,
+//       {
+//         method: "POST",
+//         body: JSON.stringify({
+//           userId,
+//           otp,
+//           isRemember,
+//         }),
+//         headers: new Headers({
+//           "Content-type": "application/json",
+//           "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
+//           tenant: "admin",
+//         }),
+//       }
+//     );
+//     if (!response.ok) {
+//       const error = await response.json();
+//       dispatch(confirmOtpFail(error));
+//     }
+
+//     const res = await response.json();
+//     dispatch(confirmOtpSuccess(res));
+//     const userEmail = localStorage.getItem("userEmail");
+//     dispatch(loginbyOtp(userEmail, otp));
+//   };
+// };

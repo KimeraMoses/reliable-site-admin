@@ -9,7 +9,6 @@ import { messageNotifications } from "store";
 import {
   confirmOtp,
   disableConfirmOtp,
-  loginbyOtp,
   trustedDays,
 } from "store/Actions/AuthActions";
 import Data from "../../db.json";
@@ -55,8 +54,7 @@ function OneTimePassword() {
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={async (values, { resetForm }) => {
-              const userId = localStorage.getItem("userId__client");
-              const userEmail = localStorage.getItem("userEmail_client");
+              const userId = localStorage.getItem("userId");
               setIsLoading(true);
               try {
                 await dispatch(
@@ -64,8 +62,7 @@ function OneTimePassword() {
                     ? disableConfirmOtp(
                         userId,
                         values?.otp,
-                        ischecked,
-                        days && days.trustDeviceinDays
+                        ischecked
                       )
                     : confirmOtp(userId, values?.otp)
                 );
@@ -79,7 +76,6 @@ function OneTimePassword() {
                 }
                 setIsLoading(false);
                 resetForm();
-                dispatch(loginbyOtp(userEmail, userEmail, values?.otp));
               } catch (err) {
                 toast.error("Failed to Verify OTP", {
                   ...messageNotifications,
@@ -121,7 +117,7 @@ function OneTimePassword() {
                   <div className="flex mt-4 md:mt-5">
                     <button
                       type="button"
-                      onClick={() => navigate("/client/sign-in")}
+                      onClick={() => navigate("/admin/sign-in")}
                       className="bg-blue-900/[.3] w-full mb-2 rounded-md h-12 text-blue-500 hover:bg-blue-900/[.1] ease-in duration-200"
                     >
                       {Data.pages.otp.cancelButton}

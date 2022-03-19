@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { messageNotifications } from "store";
-import { useCookies } from "react-cookie";
 import {
   getUserProfile,
   SaveTokenInLocalStorage,
@@ -21,8 +20,7 @@ function LockScreen() {
   const user = useSelector((state) => state.auth.user);
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [cookies] = useCookies();
-  const isTrustDevice = cookies.admin_days ? true : false;
+  const isTrustDevice =  true;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const onChangeHandler = (e) => {
@@ -31,7 +29,6 @@ function LockScreen() {
 
   let has2faEnabled = false;
   const login = (userName, password, TrustDevice) => {
-    console.log(userName, password);
     return async (dispatch) => {
       dispatch(initAuthenticationPending());
       const response = await fetch(
