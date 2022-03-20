@@ -199,11 +199,11 @@ export const validateEmailToken = (userId, code) => {
 export const AutoAuthenticate = (dispatch) => {
   const AuthToken = localStorage.getItem("AuthToken");
   const CurrentUser = localStorage.getItem("CurrentUser");
-  const suspended = localStorage.getItem("Account-Suspended");
+  // const suspended = localStorage.getItem("Account-Suspended");
 
-  if (suspended) {
-    dispatch(accountSuspended());
-  }
+  // if (suspended) {
+  //   dispatch(accountSuspended());
+  // }
   let UserToken = "";
   if (!AuthToken) {
     dispatch(logout());

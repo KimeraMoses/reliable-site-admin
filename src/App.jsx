@@ -13,7 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import "./App.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { AutoAuthenticate, maintenanceStatus } from "store/Actions/AuthActions";
+import { AutoAuthenticate, maintenanceStatus, trustedDays } from "store/Actions/AuthActions";
 import { initiateLockScreen } from "store/Slices/settingSlice";
 
 const SignIn = React.lazy(() => import("pages/sign-in/SignIn.page"));
@@ -55,6 +55,7 @@ function App() {
   useEffect(() => {
     AutoAuthenticate(dispatch);
     dispatch(maintenanceStatus());
+    // dispatch(trustedDays())
   }, [dispatch]);
 
   return (

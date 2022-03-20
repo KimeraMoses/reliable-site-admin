@@ -64,7 +64,7 @@ function SignIn() {
         }
         if (error.exception.includes("User Not Active")) {
           has2faEnabled = true;
-          localStorage.setItem("Account-Suspended", true);
+          // localStorage.setItem("Account-Suspended", true);
           dispatch(accountSuspended());
           navigate("/admin/account-suspended");
 
@@ -87,7 +87,7 @@ function SignIn() {
           ...messageNotifications,
         });
       }
-      localStorage.removeItem("Account-Suspended");
+      // localStorage.removeItem("Account-Suspended");
       dispatch(initAuthenticationSuccess(res.data));
       dispatch(getUserProfile(res.data.token));
       localStorage.setItem("AuthToken", JSON.stringify(res.data));
