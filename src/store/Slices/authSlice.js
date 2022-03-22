@@ -9,6 +9,7 @@ const initialState = {
   message: null,
   updateStatus: '',
   isLoading: false,
+  authUri: "",
 };
 
 export const authSlice = createSlice({
@@ -61,6 +62,17 @@ export const authSlice = createSlice({
     },
     forgotPasswordPending(state) {
       state.isLoading = true;
+    },
+    fetchAuthentorUriPending(state) {
+      state.isLoading = true;
+    },
+    fetchAuthentorUriSuccess(state, { payload }) {
+      state.isLoading = false;
+      state.authUri = payload;
+    },
+    fetchAuthentorUriFail(state, { payload }) {
+      state.isLoading = false;
+      state.message = payload;
     },
     forgotPasswordSuccess(state) {
       state.isLoading = false;
@@ -121,6 +133,9 @@ export const {
   confirmOtpPending,
   confirmOtpSuccess,
   confirmOtpFail,
+  fetchAuthentorUriPending,
+  fetchAuthentorUriSuccess,
+  fetchAuthentorUriFail,
   logout,
 } = actions;
 

@@ -6,6 +6,9 @@ import {
   confirmOtpFail,
   confirmOtpPending,
   confirmOtpSuccess,
+  fetchAuthentorUriFail,
+  fetchAuthentorUriPending,
+  fetchAuthentorUriSuccess,
   forgotPasswordFail,
   forgotPasswordPending,
   forgotPasswordSuccess,
@@ -21,7 +24,6 @@ import {
   verificationSuccess,
 } from "store/Slices/authSlice";
 import {
-  accountSuspended,
   checkMaintenanceFail,
   checkMaintenancePending,
   checkMaintenanceSuccess,
@@ -67,7 +69,6 @@ export const getUserProfile = (token) => {
     SaveTokenInLocalStorage(dispatch, res.data);
   };
 };
-
 
 export const signup = (
   userName,
@@ -268,7 +269,6 @@ export const trustedDays = () => {
   };
 };
 
-
 export const loginbyOtp = (userName, otpCode) => {
   return async (dispatch) => {
     dispatch(initAuthenticationPending());
@@ -297,7 +297,6 @@ export const loginbyOtp = (userName, otpCode) => {
     localStorage.setItem("AuthToken", JSON.stringify(res.data));
   };
 };
-
 
 export const confirmOtp = (userId, otp) => {
   return async (dispatch) => {
@@ -358,3 +357,30 @@ export const disableConfirmOtp = (userId, otp, isRemember) => {
   };
 };
 
+export const GetMFAUri = (userId) => {
+  return async (dispatch) => {
+    dispatch(fetchAuthentorUriPending());
+    const response = await fetch(
+      `${process.env.REACT_APP_BASEURL}/api/mfauthenticator/get-mfa-key`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          userId,
+        }),
+        headers: new Headers({
+          "Content-type": "application/json",
+          "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
+          tenant: "admin",
+        }),
+      }
+    );
+    if (!response.ok) {
+      const error = await response.json();
+      dispatch(fetchAuthentorUriFail(error));
+      console.log("ZFa err", error);
+    }
+    const res = await response.json();
+    dispatch(fetchAuthentorUriSuccess(res.authenticatorUri));
+    console.log("2Fa", res);
+  };
+};
