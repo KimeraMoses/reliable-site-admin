@@ -377,10 +377,8 @@ export const GetMFAUri = (userId) => {
     if (!response.ok) {
       const error = await response.json();
       dispatch(fetchAuthentorUriFail(error));
-      console.log("ZFa err", error);
     }
     const res = await response.json();
     dispatch(fetchAuthentorUriSuccess(res.authenticatorUri));
-    console.log("2Fa", res);
   };
 };
