@@ -83,9 +83,15 @@ function SignIn() {
         navigate("/admin/one-time-password");
         localStorage.setItem("userId", res.messages[1]);
         localStorage.setItem("userName", res.messages[3]);
-        toast.success("Please verify otp to login", {
-          ...messageNotifications,
-        });
+        if (res.messages[4] === "true") {
+          toast.success("Please enter the 6 figure code from you MFA App", {
+            ...messageNotifications,
+          });
+        } else {
+          toast.success("Please verify otp to login", {
+            ...messageNotifications,
+          });
+        }
       }
       // localStorage.removeItem("Account-Suspended");
       dispatch(initAuthenticationSuccess(res.data));
