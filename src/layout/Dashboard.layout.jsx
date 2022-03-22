@@ -4,11 +4,14 @@ import { element, bool } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 import { SideBar, TopBar } from './components';
 import Data from '../db.json';
+import { GetMFAUri } from 'store/Actions/AuthActions';
+import { useDispatch, useSelector } from 'react-redux';
 
 export function DashboardLayout({ children, hide }) {
   const [active, setActive] = useState('');
-
+  const user = useSelector((state) => state.auth.user);
   const { pathname } = useLocation();
+  const dispatch = useDispatch()
 
   const lessThanDesktop = useMediaQuery({
     query: '(max-width: 900px)',
@@ -21,6 +24,10 @@ export function DashboardLayout({ children, hide }) {
     });
     setActive(activeLink[0]);
   }, [pathname]);
+
+  // useEffect(() => {
+  //   dispatch(GetMFAUri(user && user.id));
+  // }, [user, dispatch]);
 
   const toggleSide = () => {
     setHideSide((state) => !state);

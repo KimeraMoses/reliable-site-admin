@@ -17,7 +17,9 @@ const initialValues = {
 };
 
 const SignUpSchema = Yup.object().shape({
-  username: Yup.string().required("Username is required."),
+  username: Yup.string()
+    .required("Username is required.")
+    .min(6, "UserName must be atleast 6 characters"),
   fullName: Yup.string().required("Full Name is required."),
   emailAddress: Yup.string()
     .required("Email Address is required.")
@@ -58,8 +60,7 @@ function SignUp() {
       });
       const data = await res.json();
       setIpAddress(data.ip);
-    } catch (error) {
-    }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -98,9 +99,12 @@ function SignUp() {
                   ipAddress
                 )
               );
-              toast.success("Account Created Successfully, Pending email verification", {
-                ...messageNotifications,
-              });
+              toast.success(
+                "Account Created Successfully, Pending email verification",
+                {
+                  ...messageNotifications,
+                }
+              );
               resetForm();
               setIsLoading(false);
             } catch (error) {

@@ -8,6 +8,7 @@ import { messageNotifications } from "store";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import {
+  ChangeMfaStatus,
   initAuthenticationFail,
   initAuthenticationPending,
   initAuthenticationSuccess,
@@ -34,11 +35,11 @@ function SignIn() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [ cookies] = useCookies();
-  const isTrustDevice = cookies.admin_days? true: false
-  const refRecaptcha = useRef()
+  const [cookies] = useCookies();
+  const isTrustDevice = cookies.admin_days ? true : false;
+  const refRecaptcha = useRef();
   let has2faEnabled = false;
-  const login = (userName, password,TrustDevice) => {
+  const login = (userName, password, TrustDevice) => {
     return async (dispatch) => {
       dispatch(initAuthenticationPending());
       const response = await fetch(
@@ -48,7 +49,7 @@ function SignIn() {
           body: JSON.stringify({
             userName,
             password,
-            TrustDevice
+            TrustDevice,
           }),
           headers: new Headers({
             "Content-type": "application/json",
@@ -84,6 +85,7 @@ function SignIn() {
         localStorage.setItem("userId", res.messages[1]);
         localStorage.setItem("userName", res.messages[3]);
         if (res.messages[4] === "true") {
+          dispatch(ChangeMfaStatus());
           toast.success("Please enter the 6 figure code from you MFA App", {
             ...messageNotifications,
           });
@@ -121,15 +123,17 @@ function SignIn() {
               <Formik
                 initialValues={initialValues}
                 validationSchema={SignInSchema}
-                onSubmit={ async (values, { resetForm }) => {
+                onSubmit={async (values, { resetForm }) => {
                   setIsLoading(true);
                   try {
-                    await dispatch(login(values.username, values.password, isTrustDevice));
+                    await dispatch(
+                      login(values.username, values.password, isTrustDevice)
+                    );
                     toast.success("You have logged in successfuly", {
                       ...messageNotifications,
                     });
                     setIsLoading(false);
-                    resetForm()
+                    resetForm();
                   } catch (err) {
                     setIsLoading(false);
                     if (!has2faEnabled) {
@@ -190,7 +194,7 @@ function SignIn() {
                       ) : null}
                     </div>
                     <div className="mt-4 md:mt-5 ">
-                    <Recaptcha refRecaptcha={refRecaptcha} />
+                      <Recaptcha refRecaptcha={refRecaptcha} />
                       <button
                         type="submit"
                         className="bg-blue-500 hover:bg-blue-700 ease-in duration-200 text-white w-full mb-2 rounded-md h-14"

@@ -49,6 +49,7 @@ function App() {
 
   const OnIdle = () => {
     dispatch(initiateLockScreen());
+  
   };
 
   const dispatch = useDispatch();
@@ -58,6 +59,7 @@ function App() {
     // dispatch(trustedDays())
   }, [dispatch]);
 
+
   return (
     <div className="App bg-custom-main flex items-center content-center">
       <IdleTimer ref={idleTimer} onIdle={OnIdle} timeout={Timeout} />
@@ -66,7 +68,7 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<Navigate to="/admin/sign-in" />} />
-            <Route path="/admin/sign-up" element={isLoggedIn?<SignUp />:<Navigate to="/admin/sign-in" /> } />
+            <Route path="/admin/sign-up" element={!isLoggedIn?<SignUp />:<Navigate to="/admin/sign-in" /> } />
             <Route
               path="/admin/lock-screen"
               element={isIdle ? <LockScreen /> : <Navigate to={-1} />}

@@ -10,6 +10,7 @@ import {
   confirmOtp,
   disableConfirmOtp,
   trustedDays,
+  validateMFA,
 } from "store/Actions/AuthActions";
 import Data from "../../db.json";
 import "./OneTimePassword.css";
@@ -23,6 +24,7 @@ const validationSchema = Yup.object().shape({
 
 function OneTimePassword() {
   const days = useSelector((state) => state.settings.settings);
+  const hasMFA = useSelector((state) => state.auth.hasMFA);
   const [isLoading, setIsLoading] = useState(false);
   const [ischecked, setIsChecked] = useState(false);
   const dispatch = useDispatch();
@@ -48,7 +50,9 @@ function OneTimePassword() {
             <h2 className="text-md text-2xl text-white font-normal">
               {Data.pages.otp.header}
             </h2>
-            <p className="custom-text-light">{Data.pages.otp.subTitle}</p>
+            <p className="custom-text-light">
+              {hasMFA ? "Enter The OTP On your MFA App" : Data.pages.otp.subTitle}
+            </p>
           </div>
           <Formik
             initialValues={initialValues}
@@ -59,11 +63,9 @@ function OneTimePassword() {
               try {
                 await dispatch(
                   ischecked
-                    ? disableConfirmOtp(
-                        userId,
-                        values?.otp,
-                        ischecked
-                      )
+                    ? disableConfirmOtp(userId, values?.otp, ischecked)
+                    : hasMFA
+                    ? validateMFA(userId, values?.otp, ischecked)
                     : confirmOtp(userId, values?.otp)
                 );
                 toast.success("Otp verified Successfully", {

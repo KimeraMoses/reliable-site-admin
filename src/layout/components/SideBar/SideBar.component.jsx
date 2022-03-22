@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 
 export function SideBar({ hideSide }) {
   const authenticatorUri = useSelector((state) => state.auth.authUri);
+  console.log(authenticatorUri)
   return (
     <div
       className={`sidebar bg-custom-secondary transition-all pt-[20px] ${

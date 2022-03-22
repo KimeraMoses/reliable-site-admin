@@ -240,7 +240,6 @@ export const maintenanceStatus = (token) => {
       const error = await response.json();
       dispatch(checkMaintenanceFail(error));
     }
-
     const res = await response.json();
     dispatch(checkMaintenanceSuccess(res));
   };
@@ -263,7 +262,6 @@ export const trustedDays = () => {
       const error = await response.json();
       dispatch(fetchSettingsFail(error));
     }
-
     const res = await response.json();
     dispatch(fetchSettingsSuccess(res.data));
   };
@@ -324,6 +322,36 @@ export const confirmOtp = (userId, otp) => {
     dispatch(confirmOtpSuccess(res));
     const username = localStorage.getItem("userName");
     dispatch(loginbyOtp(username, otp));
+  };
+};
+
+export const validateMFA = (userId, code, isRemember) => {
+  return async (dispatch) => {
+    dispatch(initAuthenticationPending());
+    const response = await fetch(
+      `${process.env.REACT_APP_BASEURL}/api/mfauthenticator/validate-mfa`,
+      {
+        method: "POST",
+        body: JSON.stringify({
+          userId,
+          code,
+          isRemember,
+        }),
+        headers: new Headers({
+          "Content-type": "application/json",
+          "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
+          tenant: "admin",
+        }),
+      }
+    );
+    if (!response.ok) {
+      const error = await response.json();
+      dispatch(initAuthenticationFail(error));
+    }
+    const res = await response.json();
+    dispatch(initAuthenticationSuccess(res.tokenResponse));
+    dispatch(getUserProfile(res.tokenResponse.token));
+    localStorage.setItem("AuthToken", JSON.stringify(res.tokenResponse));
   };
 };
 

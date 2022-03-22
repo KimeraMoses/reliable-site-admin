@@ -1,20 +1,21 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   user: {},
   token: null,
   rToken: null,
   isLoggedIn: false,
-  status: '',
+  status: "",
   message: null,
-  updateStatus: '',
+  updateStatus: "",
   isLoading: false,
   authUri: "",
+  hasMFA: false,
 };
 
 export const authSlice = createSlice({
   initialState,
-  name: 'authSlice',
+  name: "authSlice",
   reducers: {
     autoAuthenticationSuccess(state, { payload }) {
       state.user = payload.user;
@@ -102,12 +103,16 @@ export const authSlice = createSlice({
       state.isLoading = false;
       state.message = payload;
     },
+    ChangeMfaStatus(state) {
+      state.hasMFA = true;
+    },
     logout(state) {
       state.user = {};
       state.token = null;
       state.isLoggedIn = false;
-      localStorage.removeItem('AuthToken');
-      localStorage.removeItem('CurrentUser');
+      localStorage.removeItem("AuthToken");
+      localStorage.removeItem("CurrentUser");
+      state.hasMFA = false;
     },
   },
 });
@@ -136,6 +141,7 @@ export const {
   fetchAuthentorUriPending,
   fetchAuthentorUriSuccess,
   fetchAuthentorUriFail,
+  ChangeMfaStatus,
   logout,
 } = actions;
 
