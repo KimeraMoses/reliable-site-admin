@@ -1,6 +1,7 @@
 import React from 'react';
 import { LineChart, Line, ResponsiveContainer } from 'recharts';
-import './IncomeCard.styles.scss';
+import { useTranslation } from 'react-i18next';
+import './style.scss';
 
 const data = [
   {
@@ -40,14 +41,15 @@ const data = [
   },
 ];
 
-export function IncomeCard() {
+export function IncomeOverview() {
+  const { t } = useTranslation('/IncomeOverview/ns');
   return (
-    <div className="income">
-      <div className="income__header">
-        <h3 className="income__header-heading">Income Overview</h3>
-        <p className="income__header-text">Income & Refunds Of Last Month</p>
+    <div className="income-overview">
+      <div className="income-overview__header">
+        <h3 className="income-overview__header-heading">{t('title')}</h3>
+        <p className="income-overview__header-text">{t('desc')}</p>
       </div>
-      <div className="income__chart">
+      <div className="income-overview__chart">
         <ResponsiveContainer width="100%" height={150}>
           <LineChart
             width={500}
@@ -72,27 +74,33 @@ export function IncomeCard() {
           </LineChart>
         </ResponsiveContainer>
       </div>
-      <div className="income__card">
+      <div className="income-overview__card">
         <div
-          className="income__card-inner"
+          className="income-overview__card-inner"
           style={{ background: '#392F28 0% 0% no-repeat padding-box' }}
         >
-          <div className="income__card-inner-icon">
+          <div className="income-overview__card-inner-icon">
             <img src="/icon/coin-yellow.svg" alt="" />
           </div>
-          <div className="income__card-inner-text" style={{ color: '#FFA800' }}>
-            Your Income
+          <div
+            className="income-overview__card-inner-text"
+            style={{ color: '#FFA800' }}
+          >
+            {t('yi')}
           </div>
         </div>
         <div
-          className="income__card-inner"
+          className="income-overview__card-inner"
           style={{ background: '#3A2434 0% 0% no-repeat padding-box' }}
         >
-          <div className="income__card-inner-icon">
+          <div className="income-overview__card-inner-icon">
             <img src="/icon/coin-red.svg" alt="" />
           </div>
-          <div className="income__card-inner-text" style={{ color: '#F64E60' }}>
-            Your Refunds
+          <div
+            className="income-overview__card-inner-text"
+            style={{ color: '#F64E60' }}
+          >
+            {t('yr')}
           </div>
         </div>
       </div>
