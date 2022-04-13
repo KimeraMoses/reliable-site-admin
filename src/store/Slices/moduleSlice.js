@@ -11,14 +11,13 @@ const settingSlice = createSlice({
     getAppLevelModules: (state, { payload }) => {
       state.appModules = payload;
     },
-    fetchSettingsFail: (state, { payload }) => {
-      state.isLoading = false;
-      state.message = payload;
+    getUserLevelModules: (state, { payload }) => {
+      state.userModules = payload;
     },
   },
 });
 
 const { reducer, actions } = settingSlice;
 
-export const { getAppLevelModules } = actions;
+export const { getAppLevelModules, getUserLevelModules } = actions;
 export default reducer;

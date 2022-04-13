@@ -17,7 +17,7 @@ import { accountSuspended } from 'store/Slices/settingSlice';
 import Data from '../../db.json';
 import Recaptcha from 'pages/Google-Recaptcha/Recaptcha';
 import { useCookies } from 'react-cookie';
-import { getAppModules } from 'store/Actions/moduleActions';
+import { getAppModules, getUserModules } from 'store/Actions/moduleActions';
 
 const initialValues = {
   username: '',
@@ -98,9 +98,11 @@ function SignIn() {
       }
       // localStorage.removeItem("Account-Suspended");
       dispatch(initAuthenticationSuccess(res.data));
+      console.log(res.data);
       dispatch(getUserProfile(res.data.token));
-      dispatch(getAppModules(res.data.token));
       localStorage.setItem('AuthToken', JSON.stringify(res.data));
+      dispatch(getAppModules());
+      dispatch(getUserModules());
     };
   };
 
