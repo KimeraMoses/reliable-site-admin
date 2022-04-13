@@ -1,7 +1,8 @@
 import React from 'react';
 import { DashboardLayout } from 'layout';
 import { useMediaQuery } from 'react-responsive';
-import { TicketCard, OrderCard, IncomeCard, ForecastCard } from './sections';
+import { IncomeCard, ForecastCard } from './sections';
+import { Tickets, Orders } from 'modules';
 import './Home.styles.scss';
 
 function Home() {
@@ -12,8 +13,9 @@ function Home() {
   return (
     <DashboardLayout>
       <div className="p-4 md:px-6 dashboard">
-        <TicketCard />
-        <OrderCard />
+        {/* <TicketCard /> */}
+        <Tickets />
+        <Orders />
         {isDesktopOrLaptop && <div />}
         <IncomeCard />
         <ForecastCard />

@@ -1,6 +1,7 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { PieChart, Pie, Cell } from 'recharts';
-import './TicketCard.styles.scss';
+import './style.scss';
 
 // Sample data
 const d1 = [
@@ -26,12 +27,13 @@ const d4 = [
   { name: 'Assigned', value: 100 },
 ];
 
-export function TicketCard() {
+export function Tickets() {
+  const { t } = useTranslation('/Tickets/ns');
   return (
     <div className="ticket-card">
       <div className="ticket-card__header">
-        <h3 className="ticket-card__header-heading">Tickets</h3>
-        <p className="ticket-card__header-text">Tickets Assigned To You</p>
+        <h3 className="ticket-card__header-heading">{t('heading')}</h3>
+        <p className="ticket-card__header-text">{t('desc')}</p>
       </div>
       <div className="ticket-card__inner">
         <div className="ticket-card__inner-left">

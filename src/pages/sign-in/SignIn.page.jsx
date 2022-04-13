@@ -1,38 +1,39 @@
-import { Alert } from "react-bootstrap";
-import React, { useRef, useState } from "react";
-import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { getUserProfile } from "store/Actions/AuthActions";
-import { messageNotifications } from "store";
-import { Formik, Form, Field } from "formik";
-import * as Yup from "yup";
+import { Alert } from 'react-bootstrap';
+import React, { useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { getUserProfile } from 'store/Actions/AuthActions';
+import { messageNotifications } from 'store';
+import { Formik, Form, Field } from 'formik';
+import * as Yup from 'yup';
 import {
   ChangeMfaStatus,
   initAuthenticationFail,
   initAuthenticationPending,
   initAuthenticationSuccess,
-} from "store/Slices/authSlice";
-import { accountSuspended } from "store/Slices/settingSlice";
-import Data from "../../db.json";
-import Recaptcha from "pages/Google-Recaptcha/Recaptcha";
-import { useCookies } from "react-cookie";
+} from 'store/Slices/authSlice';
+import { accountSuspended } from 'store/Slices/settingSlice';
+import Data from '../../db.json';
+import Recaptcha from 'pages/Google-Recaptcha/Recaptcha';
+import { useCookies } from 'react-cookie';
+import { getAppModules } from 'store/Actions/moduleActions';
 
 const initialValues = {
-  username: "",
-  password: "",
+  username: '',
+  password: '',
 };
 
 const SignInSchema = Yup.object().shape({
-  username: Yup.string().required("Username is required."),
+  username: Yup.string().required('Username is required.'),
   password: Yup.string()
-    .min(6, "Password must be atleast 6 characters")
-    .required("Password is required"),
+    .min(6, 'Password must be atleast 6 characters')
+    .required('Password is required'),
 });
 
 function SignIn() {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [cookies] = useCookies();
@@ -45,32 +46,32 @@ function SignIn() {
       const response = await fetch(
         `${process.env.REACT_APP_BASEURL}/api/tokens`,
         {
-          method: "POST",
+          method: 'POST',
           body: JSON.stringify({
             userName,
             password,
             TrustDevice,
           }),
           headers: new Headers({
-            "Content-type": "application/json",
-            "admin-api-key": process.env.REACT_APP_ADMIN_APIKEY,
-            tenant: "admin",
+            'Content-type': 'application/json',
+            'admin-api-key': process.env.REACT_APP_ADMIN_APIKEY,
+            tenant: 'admin',
           }),
         }
       );
       if (!response.ok) {
         const error = await response.json();
-        if (error.exception === "User Not Found.") {
-          setError("User Not found, Please check your credentials");
+        if (error.exception === 'User Not Found.') {
+          setError('User Not found, Please check your credentials');
         }
-        if (error.exception.includes("User Not Active")) {
+        if (error.exception.includes('User Not Active')) {
           has2faEnabled = true;
           // localStorage.setItem("Account-Suspended", true);
           dispatch(accountSuspended());
-          navigate("/admin/account-suspended");
+          navigate('/admin/account-suspended');
 
           toast.error(
-            "Account has been suspended, Please contact administration",
+            'Account has been suspended, Please contact administration',
             {
               ...messageNotifications,
             }
@@ -81,16 +82,16 @@ function SignIn() {
       const res = await response.json();
       if (res.messages[0]) {
         has2faEnabled = true;
-        navigate("/admin/one-time-password");
-        localStorage.setItem("userId", res.messages[1]);
-        localStorage.setItem("userName", res.messages[3]);
-        if (res.messages[4] === "true") {
+        navigate('/admin/one-time-password');
+        localStorage.setItem('userId', res.messages[1]);
+        localStorage.setItem('userName', res.messages[3]);
+        if (res.messages[4] === 'true') {
           dispatch(ChangeMfaStatus());
-          toast.success("Please enter the 6 figure code from you MFA App", {
+          toast.success('Please enter the 6 figure code from you MFA App', {
             ...messageNotifications,
           });
         } else {
-          toast.success("Please verify otp to login", {
+          toast.success('Please verify otp to login', {
             ...messageNotifications,
           });
         }
@@ -98,7 +99,8 @@ function SignIn() {
       // localStorage.removeItem("Account-Suspended");
       dispatch(initAuthenticationSuccess(res.data));
       dispatch(getUserProfile(res.data.token));
-      localStorage.setItem("AuthToken", JSON.stringify(res.data));
+      dispatch(getAppModules(res.data.token));
+      localStorage.setItem('AuthToken', JSON.stringify(res.data));
     };
   };
 
@@ -106,13 +108,13 @@ function SignIn() {
     <div>
       <div className="h-screen flex items-center ">
         <div className="w-screen flex items-center justify-center">
-          <div className="col" style={{ maxWidth: "536px" }}>
+          <div className="col" style={{ maxWidth: '536px' }}>
             <div className="flex items-center justify-center mb-5">
               <img src="/icon/logo.svg" alt="" className="h-20 w-20" />
             </div>
             <div
               className="col mx-4 md:mx-auto bg-custom-secondary rounded-lg p-4 md:p-5"
-              style={{ maxWidth: "536px" }}
+              style={{ maxWidth: '536px' }}
             >
               <div className="text-center">
                 {error && <Alert variant="danger">{error}</Alert>}
@@ -129,7 +131,7 @@ function SignIn() {
                     await dispatch(
                       login(values.username, values.password, isTrustDevice)
                     );
-                    toast.success("You have logged in successfuly", {
+                    toast.success('You have logged in successfuly', {
                       ...messageNotifications,
                     });
                     setIsLoading(false);
@@ -137,7 +139,7 @@ function SignIn() {
                   } catch (err) {
                     setIsLoading(false);
                     if (!has2faEnabled) {
-                      toast.error("Failed to Login", {
+                      toast.error('Failed to Login', {
                         ...messageNotifications,
                       });
                     }
@@ -200,7 +202,7 @@ function SignIn() {
                         className="bg-blue-500 hover:bg-blue-700 ease-in duration-200 text-white w-full mb-2 rounded-md h-14"
                       >
                         {isLoading
-                          ? "Logging in..."
+                          ? 'Logging in...'
                           : Data.pages.login.loginButton}
                       </button>
                     </div>

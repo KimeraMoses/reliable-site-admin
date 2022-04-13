@@ -1,43 +1,44 @@
-import React, { Suspense, useEffect, useRef } from "react";
-import { ToastContainer } from "react-toastify";
-import IdleTimer from "react-idle-timer";
+import React, { Suspense, useEffect, useRef } from 'react';
+import { ToastContainer } from 'react-toastify';
+import IdleTimer from 'react-idle-timer';
 import {
   BrowserRouter as Router,
   Navigate,
   Route,
   Routes,
-} from "react-router-dom";
-import pages, { Error404, dashboardPages } from "pages";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "react-toastify/dist/ReactToastify.css";
+} from 'react-router-dom';
+import pages, { Error404, dashboardPages } from 'pages';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.css';
 
-import "./App.scss";
-import { useDispatch, useSelector } from "react-redux";
-import { AutoAuthenticate, maintenanceStatus } from "store/Actions/AuthActions";
-import { initiateLockScreen } from "store/Slices/settingSlice";
+import './App.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { AutoAuthenticate, maintenanceStatus } from 'store/Actions/AuthActions';
+import { getAppModules } from 'store/Actions/moduleActions';
+import { initiateLockScreen } from 'store/Slices/settingSlice';
 
-const SignIn = React.lazy(() => import("pages/sign-in/SignIn.page"));
-const SignUp = React.lazy(() => import("pages/sign-up/SignUp.page"));
+const SignIn = React.lazy(() => import('pages/sign-in/SignIn.page'));
+const SignUp = React.lazy(() => import('pages/sign-up/SignUp.page'));
 const ResetPassword = React.lazy(() =>
-  import("pages/reset-password/ResetPassword.page")
+  import('pages/reset-password/ResetPassword.page')
 );
 const ForgotPassword = React.lazy(() =>
-  import("pages/forgot-password/ForgotPassword.page")
+  import('pages/forgot-password/ForgotPassword.page')
 );
 const EmailVerification = React.lazy(() =>
-  import("pages/email-verification/EmailVerification.page")
+  import('pages/email-verification/EmailVerification.page')
 );
 const ConfirmOtp = React.lazy(() =>
-  import("pages/one-time-password/OneTimePassword.page")
+  import('pages/one-time-password/OneTimePassword.page')
 );
 const UnderMaintenance = React.lazy(() =>
-  import("pages/under-maintenance/UnderMaintenance.page")
+  import('pages/under-maintenance/UnderMaintenance.page')
 );
 const SuspendedAccount = React.lazy(() =>
-  import("pages/account-suspended/AccountSuspended.page")
+  import('pages/account-suspended/AccountSuspended.page')
 );
 const LockScreen = React.lazy(() =>
-  import("pages/lock-screen/LockScreen.page")
+  import('pages/lock-screen/LockScreen.page')
 );
 
 function App() {
@@ -49,7 +50,6 @@ function App() {
 
   const OnIdle = () => {
     dispatch(initiateLockScreen());
-  
   };
 
   const dispatch = useDispatch();
@@ -59,7 +59,6 @@ function App() {
     // dispatch(trustedDays())
   }, [dispatch]);
 
-
   return (
     <div className="App bg-custom-main flex items-center content-center">
       <IdleTimer ref={idleTimer} onIdle={OnIdle} timeout={Timeout} />
@@ -68,7 +67,12 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<Navigate to="/admin/sign-in" />} />
-            <Route path="/admin/sign-up" element={!isLoggedIn?<SignUp />:<Navigate to="/admin/sign-in" /> } />
+            <Route
+              path="/admin/sign-up"
+              element={
+                !isLoggedIn ? <SignUp /> : <Navigate to="/admin/sign-in" />
+              }
+            />
             <Route
               path="/admin/lock-screen"
               element={isIdle ? <LockScreen /> : <Navigate to={-1} />}
