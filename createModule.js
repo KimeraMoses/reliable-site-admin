@@ -20,12 +20,13 @@ try {
     // Create Module JSX
     fs.writeFileSync(
       `${moduleFolder}/component.jsx`,
-      `import { useTranslation } from 'react-i18next'; \n
-      \n
-      export const ${process.argv[2]} = () => { \n
-        const { t } = useTranslation('/${process.argv[2]}/ns');
-        <div className="${process.argv[2].toLowerCase()}">{t('title')}</div>; \n
-      };`
+      `import { useTranslation } from 'react-i18next';
+
+export const ${process.argv[2]} = () => {
+  const { t } = useTranslation('/${process.argv[2]}/ns');
+  return <div className="${process.argv[2].toLowerCase()}">{t('title')}</div>;
+};
+`
     );
     console.log(
       `Module JSX Create at: /src/modules/${process.argv[2]}/component.jsx`
@@ -45,6 +46,18 @@ try {
     fs.writeFileSync(`${moduleFolder}/service.js`, '');
     console.log(
       `Module Service Create at: /src/modules/${process.argv[2]}/service.js`
+    );
+    // Exporting Module Component from src/modules/index.js
+    // In that way module will be accessible using import { ModuleName } from 'modules';
+    const indexFile = `${__dirname}/src/modules/index.js`;
+    fs.appendFile(
+      indexFile,
+      `\nexport { ${process.argv[2]} } from './${process.argv[2]}/component.jsx'`,
+      (err) => {
+        if (err) {
+          console.log(err);
+        }
+      }
     );
   } else {
     console.error(
