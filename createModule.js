@@ -9,7 +9,9 @@ try {
     // Create Locale File
     fs.writeFileSync(
       `${enFolder}/ns.json`,
-      `{ "title": "${process.argv[2]}" }`
+      `{
+  "title": "${process.argv[2]}"
+}`
     );
     console.log(
       `Translation File Create at: /public/locales/en/${process.argv[2]}/ns.json`
@@ -21,6 +23,7 @@ try {
     fs.writeFileSync(
       `${moduleFolder}/component.jsx`,
       `import { useTranslation } from 'react-i18next';
+import './styles.scss';
 
 export const ${process.argv[2]} = () => {
   const { t } = useTranslation('/${process.argv[2]}/ns');
@@ -35,9 +38,9 @@ export const ${process.argv[2]} = () => {
     fs.writeFileSync(
       `${moduleFolder}/style.scss`,
       // Adding color red indication to alert user of checking style file
-      `.${process.argv[2].toLowerCase()} { \n
-        color: red; \n
-      }`
+      `.${process.argv[2].toLowerCase()} {
+  color: red;
+}`
     );
     console.log(
       `Module SCSS Create at: /src/modules/${process.argv[2]}/style.scss`
@@ -52,7 +55,7 @@ export const ${process.argv[2]} = () => {
     const indexFile = `${__dirname}/src/modules/index.js`;
     fs.appendFile(
       indexFile,
-      `\nexport { ${process.argv[2]} } from './${process.argv[2]}/component.jsx'`,
+      `export { ${process.argv[2]} } from './${process.argv[2]}/component.jsx';\n`,
       (err) => {
         if (err) {
           console.log(err);
