@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { element, bool } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 import { SideBar, TopBar } from './components';
-import Data from '../db.json';
+import { sidebarData } from './components/SideBar/data';
 import { GetMFAUri } from 'store/Actions/AuthActions';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -11,7 +11,7 @@ export function DashboardLayout({ children, hide }) {
   const [active, setActive] = useState('');
   const user = useSelector((state) => state.auth.user);
   const { pathname } = useLocation();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
 
   const lessThanDesktop = useMediaQuery({
     query: '(max-width: 900px)',
@@ -19,7 +19,7 @@ export function DashboardLayout({ children, hide }) {
   const [hideSide, setHideSide] = useState(!!lessThanDesktop);
 
   useEffect(() => {
-    const activeLink = Data.pages.dashboard.sidebar.filter((sideItem) => {
+    const activeLink = sidebarData.filter((sideItem) => {
       return sideItem.path === pathname;
     });
     setActive(activeLink[0]);

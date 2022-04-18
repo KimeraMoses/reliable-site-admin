@@ -1,7 +1,6 @@
 import React from 'react';
 import { DashboardLayout } from 'layout';
 import { useMediaQuery } from 'react-responsive';
-import { ForecastCard } from './sections';
 import { Tickets, Orders, IncomeOverview, IncomeForecast } from 'modules';
 import './Home.styles.scss';
 

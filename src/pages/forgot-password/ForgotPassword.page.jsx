@@ -1,4 +1,4 @@
-import React, { useState,useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -6,8 +6,8 @@ import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { messageNotifications } from 'store';
 import { forgotPassword } from 'store/Actions/AuthActions';
-import Data from '../../db.json';
 import Recaptcha from 'pages/Google-Recaptcha/Recaptcha';
+import { useTranslation } from 'react-i18next';
 
 const initialValues = {
   email: '',
@@ -21,10 +21,10 @@ const validationSchema = Yup.object().shape({
 
 function ForgotPassword() {
   const [isLoading, setIsLoading] = useState(false);
-  const refRecaptcha = useRef()
+  const refRecaptcha = useRef();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const { t } = useTranslation('/ForgotPasswordPage/ns');
   return (
     <div className="h-screen w-full flex items-center justify-content-center">
       <div className="col" style={{ maxWidth: '536px' }}>
@@ -34,11 +34,9 @@ function ForgotPassword() {
         <div className="col mx-4 md:mx-auto bg-custom-secondary rounded-lg p-8 ">
           <div className="text-center">
             <h2 className="text-md text-2xl text-white font-normal">
-              {Data.pages.forgotPassword.title}
+              {t('title')}
             </h2>
-            <p className="custom-text-light">
-              {Data.pages.forgotPassword.subTitle}
-            </p>
+            <p className="custom-text-light">{t('subTitle')}</p>
           </div>
           <Formik
             initialValues={initialValues}
@@ -71,35 +69,33 @@ function ForgotPassword() {
                       htmlFor="forgotPassword"
                       className="form-label text-white font-light text-sm"
                     >
-                      {Data.pages.forgotPassword.emailAddress}
+                      {t('emailAddress')}
                     </label>
                     <Field
                       id="forgotPassword"
                       type="email"
                       name="email"
                       className="w-full h-12 bg-custom-main rounded-md placeholder:text-gray-400 text-gray-400 focus:outline-none placeholder:text-sm px-3  placeholder:font-light"
-                      placeholder={Data.pages.forgotPassword.placeholder}
+                      placeholder={t('placeholder')}
                     />
                     {errors.email && touched.email ? (
                       <div className="text-red-600 text-sm">{errors.email}</div>
                     ) : null}
                   </div>
                   <div className="flex mt-4 md:mt-5">
-                  <Recaptcha refRecaptcha={refRecaptcha} />
+                    <Recaptcha refRecaptcha={refRecaptcha} />
                     <button
                       type="button"
                       className="bg-blue-900/[.3] w-full mb-2 rounded-md h-12 text-blue-500 hover:bg-blue-900/[.1] ease-in duration-200"
                       onClick={() => navigate('/admin/sign-in')}
                     >
-                      {Data.pages.forgotPassword.cancelBtn}
+                      {t('cancelBtn')}
                     </button>
                     <button
                       type="submit"
                       className="bg-blue-500 hover:bg-blue-700 w-full h-12 rounded-md text-white font-light ml-2 ease-in duration-200"
                     >
-                      {isLoading
-                        ? 'Sending...'
-                        : Data.pages.forgotPassword.submitBtn}
+                      {isLoading ? t('Sending') : t('submitBtn')}
                     </button>
                   </div>
                 </Form>

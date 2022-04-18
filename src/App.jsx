@@ -79,6 +79,7 @@ function App() {
               path="/admin/lock-screen"
               element={isIdle ? <LockScreen /> : <Navigate to={-1} />}
             />
+
             <Route path="/admin" element={<Navigate to="/admin/sign-in" />} />
             <Route
               path="/admin/account-suspended"
@@ -90,6 +91,7 @@ function App() {
                 )
               }
             />
+
             <Route
               path="/admin/verify-email/:userId"
               element={
@@ -102,6 +104,7 @@ function App() {
                 )
               }
             />
+
             <Route
               path="/admin/reset-password"
               element={

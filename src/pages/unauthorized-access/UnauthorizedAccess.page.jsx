@@ -1,29 +1,26 @@
 import React from 'react';
-import Data from '../../db.json';
+import { useTranslation } from 'react-i18next';
 
 function UnauthorizedAccess() {
+  const { t } = useTranslation('/UnauthorizedAccessPage/ns');
   return (
     <div className="d-flex h-screen ">
       <div className="col-md-6 my-auto p-10 md:p-20">
         <div>
           <img
             src="/icon/logo.svg"
-            alt={Data.pages.accountSuspended.title}
+            alt={t('suspendedTitle')}
             className="w-20 h-20"
           />
-          <h3 className="text-4xl text-white font-normal mt-5">
-            {Data.pages.unAuth.title}
-          </h3>
+          <h3 className="text-4xl text-white font-normal mt-5">{t('title')}</h3>
           <p className="custom-text-light border-b-1 border-indigo-900 mb-5 text-base border-dashed-bottom pb-5">
-            {Data.pages.unAuth.description1}
+            {t('description1')}
           </p>
         </div>
         <div>
-          <h3 className="text-sm text-white text-base">
-            {Data.pages.unAuth.subTitle}
-          </h3>
+          <h3 className="text-sm text-white text-base">{t('subTitle')}</h3>
           <p className="custom-text-light border-b-1 border-indigo-900 mb-5 text-base">
-            {Data.pages.unAuth.description2}
+            {t('description2')}
           </p>
         </div>
         <div className="countdown text-4xl text-white">

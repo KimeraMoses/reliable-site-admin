@@ -14,10 +14,10 @@ import {
   initAuthenticationSuccess,
 } from 'store/Slices/authSlice';
 import { accountSuspended } from 'store/Slices/settingSlice';
-import Data from '../../db.json';
 import Recaptcha from 'pages/Google-Recaptcha/Recaptcha';
 import { useCookies } from 'react-cookie';
 import { getAppModules, getUserModules } from 'store/Actions/moduleActions';
+import { useTranslation } from 'react-i18next';
 
 const initialValues = {
   username: '',
@@ -32,6 +32,8 @@ const SignInSchema = Yup.object().shape({
 });
 
 function SignIn() {
+  const { t } = useTranslation('/LoginPage/ns');
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -121,7 +123,7 @@ function SignIn() {
               <div className="text-center">
                 {error && <Alert variant="danger">{error}</Alert>}
                 <h2 className="text-md text-2xl text-white font-normal mb-2">
-                  {Data.pages.login.title}
+                  {t('title')}
                 </h2>
               </div>
               <Formik
@@ -155,13 +157,13 @@ function SignIn() {
                         htmlFor="username"
                         className="form-label text-white font-light text-sm"
                       >
-                        {Data.pages.login.username}
+                        {t('username')}
                       </label>
                       <Field
                         name="username"
                         className="w-full h-12 bg-custom-main rounded-md text-gray-300 placeholder:text-gray-400 placeholder:text-sm px-3  placeholder:font-light focus:outline-none"
                         id="username"
-                        placeholder={Data.pages.login.placeholder}
+                        placeholder={t('placeholder')}
                       />
                       {errors.username && touched.username ? (
                         <div className="text-red-600 text-sm">
@@ -175,13 +177,13 @@ function SignIn() {
                           htmlFor="exampleInputPassword1"
                           className="form-label text-white font-light text-sm"
                         >
-                          {Data.pages.login.password}
+                          {t('password')}
                         </label>
                         <Link
                           to="/admin/forgot-password"
                           className="text-blue-400 font-light text-sm cursor-pointer"
                         >
-                          {Data.pages.login.ForgotPassword}
+                          {t('ForgotPassword')}
                         </Link>
                       </div>
                       <Field
@@ -203,9 +205,7 @@ function SignIn() {
                         type="submit"
                         className="bg-blue-500 hover:bg-blue-700 ease-in duration-200 text-white w-full mb-2 rounded-md h-14"
                       >
-                        {isLoading
-                          ? 'Logging in...'
-                          : Data.pages.login.loginButton}
+                        {isLoading ? t('loggin-in') : t('loginButton')}
                       </button>
                     </div>
                   </Form>

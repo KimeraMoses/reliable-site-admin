@@ -1,26 +1,27 @@
-import UserName from "layout/components/navbar/UserProfileCard/UserName";
-import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import { messageNotifications } from "store";
+import UserName from 'layout/components/navbar/UserProfileCard/UserName';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
+import { messageNotifications } from 'store';
 import {
   getUserProfile,
   SaveTokenInLocalStorage,
-} from "store/Actions/AuthActions";
+} from 'store/Actions/AuthActions';
 import {
   initAuthenticationFail,
   initAuthenticationPending,
   initAuthenticationSuccess,
-} from "store/Slices/authSlice";
-import { accountSuspended, closeLockScreen } from "store/Slices/settingSlice";
-import "../../layout/components/navbar/UserTop.css";
+} from 'store/Slices/authSlice';
+import { accountSuspended, closeLockScreen } from 'store/Slices/settingSlice';
+import '../../layout/components/navbar/UserTop.css';
 
 function LockScreen() {
   const user = useSelector((state) => state.auth.user);
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const isTrustDevice =  true;
+  const isTrustDevice = true;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const onChangeHandler = (e) => {
@@ -34,38 +35,38 @@ function LockScreen() {
       const response = await fetch(
         `${process.env.REACT_APP_BASEURL}/api/tokens`,
         {
-          method: "POST",
+          method: 'POST',
           body: JSON.stringify({
             userName,
             password,
             TrustDevice,
           }),
           headers: new Headers({
-            "Content-type": "application/json",
-            "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
-            tenant: "admin",
+            'Content-type': 'application/json',
+            'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
+            tenant: 'admin',
           }),
         }
       );
       if (!response.ok) {
         const error = await response.json();
         dispatch(initAuthenticationFail(error));
-        if (error.exception.includes("User Not Active")) {
+        if (error.exception.includes('User Not Active')) {
           has2faEnabled = true;
-          localStorage.setItem("Account-Suspended", true);
+          localStorage.setItem('Account-Suspended', true);
           dispatch(accountSuspended());
-          navigate("/admin/account-suspended");
+          navigate('/admin/account-suspended');
 
           toast.error(
-            "Account has been suspended, Please contact administration",
+            'Account has been suspended, Please contact administration',
             {
               ...messageNotifications,
             }
           );
         }
-        if (error.exception.includes("Provided Credentials are invalid.")) {
+        if (error.exception.includes('Provided Credentials are invalid.')) {
           has2faEnabled = true;
-          toast.error("Invalid Credentials, Please enter correct password", {
+          toast.error('Invalid Credentials, Please enter correct password', {
             ...messageNotifications,
           });
         }
@@ -73,14 +74,14 @@ function LockScreen() {
       const res = await response.json();
       if (res.messages[0]) {
         has2faEnabled = true;
-        navigate("/admin/one-time-password");
-        localStorage.setItem("userId", res.messages[1]);
-        localStorage.setItem("userEmail", res.messages[2]);
-        toast.success("Please verify otp to login", {
+        navigate('/admin/one-time-password');
+        localStorage.setItem('userId', res.messages[1]);
+        localStorage.setItem('userEmail', res.messages[2]);
+        toast.success('Please verify otp to login', {
           ...messageNotifications,
         });
       }
-      localStorage.removeItem("Account-Suspended");
+      localStorage.removeItem('Account-Suspended');
       dispatch(initAuthenticationSuccess(res.data));
       dispatch(closeLockScreen());
       dispatch(getUserProfile(res.data.token));
@@ -94,34 +95,32 @@ function LockScreen() {
     const userName = user && user.userName;
     try {
       await dispatch(login(userName, password, isTrustDevice));
-      toast.success("You have logged in successfuly", {
+      toast.success('You have logged in successfuly', {
         ...messageNotifications,
       });
       setIsLoading(false);
-      setPassword("");
+      setPassword('');
     } catch (err) {
       setIsLoading(false);
       if (!has2faEnabled) {
-        toast.error("Failed to Login", {
+        toast.error('Failed to Login', {
           ...messageNotifications,
         });
       }
     }
   };
-
+  const { t } = useTranslation('/LockScreenPage/ns');
   return (
     <div className="d-flex w-screen py-20 md:py-2 md:h-screen">
       <div className="col-md-6 my-auto px-5  md:p-20">
-        <div style={{ maxWidth: "668px" }} className="mx-auto">
+        <div style={{ maxWidth: '668px' }} className="mx-auto">
           <div className="">
             <img src="/icon/logo.svg" alt="" className="w-20 h-20" />
             <h3 className="text-4xl text-white font-normal mt-5">
-              Lock Screen
+              {t('title')}
             </h3>
             <p className=" mb-5 custom-text-light text-base border-dashed-bottom pb-5">
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-              nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-              erat.
+              {t('desc')}
             </p>
           </div>
           <div className="flex mb-5">
@@ -138,12 +137,9 @@ function LockScreen() {
             </div>
             <div>
               <h3 className="text-sm text-white">
-                Welcome back, {user && user.fullName}
+                {t('Welcome')} {user && user.fullName}
               </h3>
-              <p className=" text-base custom-text-light">
-                Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                diam nonumy eirmod tempor invidunt.
-              </p>
+              <p className=" text-base custom-text-light">{t('WelcomeTxt')}</p>
             </div>
           </div>
           <div className="col-md-8">
@@ -161,7 +157,7 @@ function LockScreen() {
                 disabled={password.length < 6}
                 className="w-full h-12 custom-blue-bg ease-in duration-200 rounded-lg text-white bg-blue-500 hover:bg-blue-700"
               >
-                {isLoading ? "Logging In..." : "Sign In"}
+                {isLoading ? t('Logging In...') : t('Sign In')}
               </button>
             </form>
           </div>

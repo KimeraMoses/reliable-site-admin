@@ -4,7 +4,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { messageNotifications } from 'store';
 import { validateEmailToken } from 'store/Actions/AuthActions';
-import Data from '../../db.json';
+import { useTranslation } from 'react-i18next';
 
 function EmailVerification() {
   const dispatch = useDispatch();
@@ -33,6 +33,8 @@ function EmailVerification() {
     }
   };
 
+  const { t } = useTranslation('/EmailVerificationPage/ns');
+
   return (
     <div className="h-screen w-full flex  items-center justify-content-center">
       <div className="col " style={{ maxWidth: '536px' }}>
@@ -42,19 +44,15 @@ function EmailVerification() {
         <div className="bg-custom-secondary  col mx-4 md:mx-auto  rounded-lg p-4 md:p-5">
           <div className="text-center">
             <h2 className="text-md text-2xl text-white font-normal">
-              {Data.pages.emailVerification.title}
+              {t('title')}
             </h2>
-            <p className="custom-text-light">
-              {Data.pages.emailVerification.subTitle}
-            </p>
+            <p className="custom-text-light">{t('subTitle')}</p>
             <button
               type="submit"
               onClick={emailVerificationHandler}
               className="bg-blue-500 hover:bg-blue-700 ease-in duration-200 mt-4 w-full h-12 rounded-md text-white font-light"
             >
-              {isLoading
-                ? 'Verifying...'
-                : Data.pages.emailVerification.verifyBtn}
+              {isLoading ? t('Verifying') : t('verifyBtn')}
             </button>
           </div>
         </div>

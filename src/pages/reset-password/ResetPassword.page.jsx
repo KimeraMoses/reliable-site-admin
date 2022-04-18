@@ -6,7 +6,7 @@ import { messageNotifications } from 'store';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import { passwordReset } from 'store/Actions/AuthActions';
-import Data from '../../db.json';
+import { useTranslation } from 'react-i18next';
 
 const initialValues = {
   password: '',
@@ -45,6 +45,8 @@ function ResetPassword() {
   const query = useQuery();
   const token = query.get('resetToken');
 
+  const { t } = useTranslation('/ResetPasswordPage/ns');
+
   return (
     <div className="h-screen w-full flex items-center justify-content-center">
       <div className="col" style={{ maxWidth: '536px' }}>
@@ -54,16 +56,14 @@ function ResetPassword() {
         <div className="col mx-4 md:mx-auto bg-custom-secondary rounded-lg p-8">
           <div className="text-center">
             <h2 className="text-md text-2xl text-white font-normal">
-              {Data.pages.resetPassword.title}
+              {t('title')}
             </h2>
-            <p className="custom-text-light">
-              {Data.pages.resetPassword.subTitle}
-            </p>
+            <p className="custom-text-light">{t('subTitle')}</p>
           </div>
           <Formik
             initialValues={initialValues}
             validationSchema={ResetPasswordSchema}
-            onSubmit={async (values,{ resetForm }) => {
+            onSubmit={async (values, { resetForm }) => {
               const userEmail = localStorage.getItem('userEmail');
               try {
                 setIsLoading(true);
@@ -76,7 +76,7 @@ function ResetPassword() {
                   )
                 );
                 setIsLoading(false);
-                resetForm()
+                resetForm();
                 navigate('/admin/sign-in');
                 toast.success('Password changed successfully', {
                   ...messageNotifications,
@@ -121,15 +121,13 @@ function ResetPassword() {
                     onClick={() => navigate('/admin/sign-in')}
                     className="bg-blue-900/[.3] w-full mb-2 rounded-md h-12 text-blue-500 hover:bg-blue-900/[.1] ease-in duration-200"
                   >
-                    {Data.pages.resetPassword.cancelBtn}
+                    {t('cancelBtn')}
                   </button>
                   <button
                     type="submit"
                     className="bg-blue-500 hover:bg-blue-700 w-full h-12 rounded-md text-white font-light ml-2 ease-in duration-200"
                   >
-                    {isLoading
-                      ? 'Resetting...'
-                      : Data.pages.resetPassword.submitBtn}
+                    {isLoading ? t('reset') : t('submitBtn')}
                   </button>
                 </div>
               </Form>

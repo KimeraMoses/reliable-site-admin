@@ -1,21 +1,21 @@
-import React from "react";
-import Data from "../../../db.json";
-import SideLinks from "./SideLinks.component";
-import QRCode from "react-qr-code";
-import "./SideBar.styles.scss";
-import { useSelector } from "react-redux";
+import React from 'react';
+import SideLinks from './SideLinks.component';
+import QRCode from 'react-qr-code';
+import './SideBar.styles.scss';
+import { useSelector } from 'react-redux';
+import { sidebarData } from './data';
 
 export function SideBar({ hideSide }) {
   const authenticatorUri = useSelector((state) => state.auth.authUri);
-  console.log(authenticatorUri)
+  console.log(authenticatorUri);
   return (
     <div
       className={`sidebar bg-custom-secondary transition-all pt-[20px] ${
-        hideSide ? "w-[95px]" : "w-[300px]"
+        hideSide ? 'w-[95px]' : 'w-[300px]'
       }`}
     >
       <ul className="p-0">
-        {Data.pages.dashboard.sidebar.map(({ name, path, icon }) => (
+        {sidebarData.map(({ name, path, icon }) => (
           <SideLinks name={name} path={path} icon={icon} hideSide={hideSide} />
         ))}
       </ul>

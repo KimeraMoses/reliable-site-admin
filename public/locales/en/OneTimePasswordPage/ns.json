@@ -1,0 +1,12 @@
+{
+  "header": "One Time Pin",
+  "subTitle": "Enter The OTP Sent To Your Email Address",
+  "placeholder": "Enter One Time Pin",
+  "submitButton": "Submit",
+  "cancelButton": "Cancel",
+  "enterOTP": "Enter The OTP On your MFA App",
+  "verify": "verifying...",
+  "success": "Otp verified Successfully",
+  "failed": "Failed to Verify OTP",
+  "trust": "Trust this device for "
+}
