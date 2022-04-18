@@ -1,0 +1,21 @@
+.modal {
+  // BG Setting
+  .modal-content {
+    background: #1e1e2d;
+    border-radius: 8px;
+  }
+
+  &__bg {
+    color: #fff;
+    background: #1e1e2d;
+    border-radius: 8px;
+    padding: 32px;
+  }
+
+  &__divider {
+    border-top: 1px dashed #323248;
+    height: 0px;
+    margin-top: 32px;
+    margin-bottom: 32px;
+  }
+}

@@ -5,6 +5,11 @@ export const sidebarData = [
     icon: '/icon/dashboard/menu/dashboard.svg',
   },
   {
+    name: 'Admin Users',
+    path: '/admin/dashboard/users',
+    icon: '/icon/dashboard/menu/knowledge.svg',
+  },
+  {
     name: 'Billing',
     path: '/admin/dashboard/billing',
     icon: '/icon/dashboard/menu/billing.svg',

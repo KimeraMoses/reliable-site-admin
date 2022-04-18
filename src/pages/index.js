@@ -26,6 +26,10 @@ export const dashboardPages = [
     path: '/dashboard/editor',
     Component: lazy(() => import('./Dashboard/Editor/Editor.page')),
   },
+  {
+    path: '/dashboard/users',
+    Component: lazy(() => import('./Dashboard/Users/Users.page')),
+  },
 ];
 
 export default pages;
