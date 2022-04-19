@@ -15,8 +15,11 @@ const columns = [
   {
     title: 'STATUS',
     dataIndex: 'status',
-    width: 500,
-    render: (text) => <div className="on-site__status">{text}</div>,
+    render: (text, record) => (
+      <div className="on-site__status">
+        {text} {record?.name}
+      </div>
+    ),
   },
   {
     title: 'TOTAL',
