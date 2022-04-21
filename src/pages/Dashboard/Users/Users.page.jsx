@@ -1,6 +1,14 @@
 import { DashboardLayout } from 'layout';
 import { Table } from 'components';
+import { Select } from 'antd';
+import './Users.styles.scss';
+import { useState } from 'react';
 // import './Home.styles.scss';
+
+const { Option } = Select;
+function handleChange(value) {
+  console.log(`selected ${value}`);
+}
 
 // Columns for table
 const columns = [
@@ -10,14 +18,26 @@ const columns = [
   },
   {
     title: 'CLIENT',
-    dataIndex: 'name',
+    dataIndex: 'client',
+    render: (text, record) => (
+      <div className="user__client">
+        <img src={record?.client_img} /> {text}
+      </div>
+    ),
+    width: 170,
   },
   {
     title: 'STATUS',
     dataIndex: 'status',
-    render: (text, record) => (
-      <div className="on-site__status">
-        {text} {record?.name}
+    render: (text) => (
+      <div
+        className={`user__status
+        ${text === 'pending' ? 'user__status-pending' : ''}
+        ${text === 'completed' ? 'user__status-completed' : ''}
+         ${text === 'cancelled' ? 'user__status-cancelled' : ''}
+        `}
+      >
+        {text}
       </div>
     ),
   },
@@ -27,11 +47,29 @@ const columns = [
   },
   {
     title: 'DATE ADDED',
-    dataIndex: 'last_check_in',
+    dataIndex: 'date_added',
   },
   {
     title: 'DATE MODIFIED',
-    dataIndex: 'last_check_out',
+    dataIndex: 'date_modified',
+  },
+  {
+    title: 'Action',
+    dataIndex: 'action',
+    render: (text) => (
+      <Select
+        defaultValue={text}
+        style={{ width: 120 }}
+        onChange={handleChange}
+        className="user__select"
+        dropdownClassName="user__dropdown"
+      >
+        <Option value="jack">Jack</Option>
+        <Option value="lucy">Lucy</Option>
+        <Option value="Yiminghe">yiminghe</Option>
+      </Select>
+    ),
+    // width: 150,
   },
 ];
 
@@ -40,11 +78,13 @@ for (let i = 0; i < 50; i += 1) {
   data.push({
     key: i,
     uid: Number(`0${i}54${i}`),
-    name: `Paul Elliott ${i}`,
-    status: 'Currently Checked In',
+    client_img: '/img/google-icon.png',
+    client: `Paul Elliott ${i}`,
+    status: 'cancelled',
     total: '200.00USD',
-    last_check_in: `Mar 5th, 2022 at 01:00:${i} PM`,
-    last_check_out: 'Mar 5th, 2022 at 01:00:00 PM',
+    date_added: `05/02/2022`,
+    date_modified: '05/02/2022',
+    action: 'Actions',
   });
 }
 
