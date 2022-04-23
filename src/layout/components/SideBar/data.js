@@ -1,37 +1,47 @@
+import {
+  Dashboard,
+  Billing,
+  Knowledge,
+  Reports,
+  Settings,
+  Support,
+  Users,
+} from 'icons';
+
 export const sidebarData = [
   {
     name: 'Dashboard',
     path: '/admin/dashboard',
-    icon: '/icon/dashboard/menu/dashboard.svg',
-  },
-  {
-    name: 'Admin Users',
-    path: '/admin/dashboard/users',
-    icon: '/icon/dashboard/menu/knowledge.svg',
+    icon: (fill) => <Dashboard fill={fill} />,
   },
   {
     name: 'Billing',
     path: '/admin/dashboard/billing',
-    icon: '/icon/dashboard/menu/billing.svg',
+    icon: (fill) => <Billing fill={fill} />,
   },
   {
     name: 'Support',
     path: '/admin/dashboard/support',
-    icon: '/icon/dashboard/menu/support.svg',
+    icon: (fill) => <Support fill={fill} />,
   },
   {
     name: 'Knowledge Base',
     path: '/admin/dashboard/knowledge-base',
-    icon: '/icon/dashboard/menu/knowledge.svg',
+    icon: (fill) => <Knowledge fill={fill} />,
   },
   {
     name: 'Reports',
     path: '/admin/dashboard/reports',
-    icon: '/icon/dashboard/menu/reports.svg',
+    icon: (fill) => <Reports fill={fill} />,
+  },
+  {
+    name: 'Admin Users',
+    path: '/admin/dashboard/users',
+    icon: (fill) => <Users fill={fill} />,
   },
   {
     name: 'Settings',
     path: '/admin/dashboard/settings',
-    icon: '/icon/dashboard/menu/settings.svg',
+    icon: (fill) => <Settings fill={fill} />,
   },
 ];
