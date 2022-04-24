@@ -1,8 +1,25 @@
 import { DashboardLayout } from 'layout';
-import { useState } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import { UsersList, UsersGroups } from './subpages';
 import './Users.styles.scss';
 
 function Users() {
-  return <DashboardLayout>Sam</DashboardLayout>;
+  return (
+    <DashboardLayout>
+      <div className="users">
+        <div className="users__inner">
+          <Routes>
+            {/* TODO: Change to /users/list */}
+            <Route
+              path="/"
+              element={<Navigate to="/admin/dashboard/users/groups" />}
+            />
+            <Route path="list" element={<UsersList />} />
+            <Route path="groups" element={<UsersGroups />} />
+          </Routes>
+        </div>
+      </div>
+    </DashboardLayout>
+  );
 }
 export default Users;

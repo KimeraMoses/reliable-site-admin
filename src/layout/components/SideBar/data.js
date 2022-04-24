@@ -38,6 +38,10 @@ export const sidebarData = [
     name: 'Admin Users',
     path: '/admin/dashboard/users',
     icon: (fill) => <Users fill={fill} />,
+    subLinks: [
+      { name: 'Admin Users List', path: '/admin/dashboard/users/list' },
+      { name: 'Admin Users Groups', path: '/admin/dashboard/users/groups' },
+    ],
   },
   {
     name: 'Settings',
