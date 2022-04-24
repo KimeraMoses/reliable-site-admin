@@ -1,6 +1,6 @@
 import { DashboardLayout } from 'layout';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import { UsersList, UsersGroups } from './subpages';
+import { UsersList, UsersGroups } from './pages';
 import './Users.styles.scss';
 
 function Users() {

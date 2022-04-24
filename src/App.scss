@@ -4,6 +4,7 @@
 body {
   font-family: 'Poppins', sans-serif !important;
   background: #151521;
+  caret-color: #92928f;
 }
 
 /* Custom bg and colors  */
@@ -47,3 +48,15 @@ body {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.ant-switch {
+  background-color: #151521;
+  border-color: #151521;
+  color: #92928f;
+}
+
+.ant-switch-checked {
+  background-color: #3699ff;
+  border-color: #3699ff;
+  color: #fff;
+}
