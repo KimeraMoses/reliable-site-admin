@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import './Table.styles.scss';
 
-export const Table = ({ columns, data, fieldToFilter = 'name' }) => {
+export const Table = ({ columns, data, fieldToFilter = 'name', btnData }) => {
   const [filtered, setFiltered] = useState([]);
   const [search, setSearch] = useState('');
 
@@ -30,9 +30,17 @@ export const Table = ({ columns, data, fieldToFilter = 'name' }) => {
         </div>
         {/* Button */}
         <div>
-          <Button type="primary" className="custom-table__btn">
-            Add New Group
-          </Button>
+          {btnData?.text && btnData?.onClick ? (
+            <Button
+              type="primary"
+              className="custom-table__btn"
+              onClick={btnData?.onClick}
+            >
+              {btnData.text}
+            </Button>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
       {/* Header End */}

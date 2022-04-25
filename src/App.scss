@@ -59,4 +59,13 @@ body {
   background-color: #3699ff;
   border-color: #3699ff;
   color: #fff;
+  &:focus {
+    border-color: #3699ff;
+    box-shadow: unset;
+  }
+}
+
+.error {
+  color: #ff0000;
+  margin-top: 8px;
 }
