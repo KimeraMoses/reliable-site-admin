@@ -6,18 +6,14 @@ import './Users.styles.scss';
 function Users() {
   return (
     <DashboardLayout>
-      <div className="users">
-        <div className="users__inner">
-          <Routes>
-            <Route
-              path="/"
-              element={<Navigate to="/admin/dashboard/users/list" />}
-            />
-            <Route path="list" element={<UsersList />} />
-            <Route path="groups" element={<UsersGroups />} />
-          </Routes>
-        </div>
-      </div>
+      <Routes>
+        <Route
+          path="/"
+          element={<Navigate to="/admin/dashboard/users/list" />}
+        />
+        <Route path="list/*" element={<UsersList />} />
+        <Route path="groups" element={<UsersGroups />} />
+      </Routes>
     </DashboardLayout>
   );
 }

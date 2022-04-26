@@ -130,71 +130,95 @@ export const UsersGroups = () => {
   ];
 
   return (
-    <div className="users-groups">
-      <Modal
-        show={showAdd}
-        setShow={setShowAdd}
-        heading="Add New Group"
-        submitText="Configure Permission"
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        fields={addFields}
-        handleSubmit={(values) => {
-          setPermissionsInit(values);
-          setShowAdd(false);
-          setShowPermissions(true);
-        }}
-      />
-      <Modal
-        show={showPermissions}
-        setShow={setShowPermissions}
-        heading="Configure Permissions"
-        submitText="Create New Group"
-        cancelButtonText="Back"
-        handleCancel={() => {
-          setShowPermissions(false);
-          setShowAdd(true);
-        }}
-        initialValues={{
-          ...permissionsInit,
-          module1: { create: false, read: false, update: false, delete: false },
-          module2: { create: false, read: false, update: false, delete: false },
-          module3: { create: false, read: false, update: false, delete: false },
-          module4: { create: false, read: false, update: false, delete: false },
-        }}
-        fields={add2Fields}
-        handleSubmit={(values) => {
-          console.log(values);
-        }}
-      />
-      <Modal show={editModal} setShow={setEditModal} heading="Edit Group" />
-      <Modal
-        show={deleteModal}
-        setShow={setDeleteModal}
-        heading="Delete Group"
-        customBody={
-          <div>
-            <p style={{ marginBottom: '32px' }}>
-              Are you sure you wish to delete this group? Deleting this group
-              will move all users to the default group.
-            </p>
-          </div>
-        }
-        fields={[]}
-        validationSchema={Yup.object().shape({})}
-        initialValues={{}}
-        submitText="Delete Group"
-        handleSubmit={(values) => {
-          console.log('Submitting');
-          console.log(values);
-        }}
-      />
-      <Table
-        columns={columns}
-        data={data}
-        fieldToFilter="name"
-        btnData={{ text: 'Add New Group', onClick: () => setShowAdd(true) }}
-      />
+    <div className="users">
+      <div className="users__inner">
+        <div className="users-groups">
+          <Modal
+            show={showAdd}
+            setShow={setShowAdd}
+            heading="Add New Group"
+            submitText="Configure Permission"
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            fields={addFields}
+            handleSubmit={(values) => {
+              setPermissionsInit(values);
+              setShowAdd(false);
+              setShowPermissions(true);
+            }}
+          />
+          <Modal
+            show={showPermissions}
+            setShow={setShowPermissions}
+            heading="Configure Permissions"
+            submitText="Create New Group"
+            cancelButtonText="Back"
+            handleCancel={() => {
+              setShowPermissions(false);
+              setShowAdd(true);
+            }}
+            initialValues={{
+              ...permissionsInit,
+              module1: {
+                create: false,
+                read: false,
+                update: false,
+                delete: false,
+              },
+              module2: {
+                create: false,
+                read: false,
+                update: false,
+                delete: false,
+              },
+              module3: {
+                create: false,
+                read: false,
+                update: false,
+                delete: false,
+              },
+              module4: {
+                create: false,
+                read: false,
+                update: false,
+                delete: false,
+              },
+            }}
+            fields={add2Fields}
+            handleSubmit={(values) => {
+              console.log(values);
+            }}
+          />
+          <Modal show={editModal} setShow={setEditModal} heading="Edit Group" />
+          <Modal
+            show={deleteModal}
+            setShow={setDeleteModal}
+            heading="Delete Group"
+            customBody={
+              <div>
+                <p style={{ marginBottom: '32px' }}>
+                  Are you sure you wish to delete this group? Deleting this
+                  group will move all users to the default group.
+                </p>
+              </div>
+            }
+            fields={[]}
+            validationSchema={Yup.object().shape({})}
+            initialValues={{}}
+            submitText="Delete Group"
+            handleSubmit={(values) => {
+              console.log('Submitting');
+              console.log(values);
+            }}
+          />
+          <Table
+            columns={columns}
+            data={data}
+            fieldToFilter="name"
+            btnData={{ text: 'Add New Group', onClick: () => setShowAdd(true) }}
+          />
+        </div>
+      </div>
     </div>
   );
 };

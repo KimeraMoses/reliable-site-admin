@@ -32,20 +32,22 @@ export function DashboardLayout({ children, hide }) {
     setActive(activeLink[0]);
 
     // Set Sublink
-    if (activeLink[0]?.subLinks?.length) {
+    if (activeLink?.length && activeLink[0]?.subLinks?.length) {
       const activeSubLink = activeLink[0].subLinks.filter((subItem) => {
         const { path } = subItem;
         return pathname.includes(path);
       });
-
-      const activeInnerSubLink = activeSubLink[0]?.subLinks?.filter(
-        ({ path }) => {
-          const trimmedPathname = path.substring(0, path.lastIndexOf('/'));
-          return pathname.includes(trimmedPathname);
-        }
-      );
       setActiveSub(activeSubLink[0]);
-      setActiveInnerSub(activeInnerSubLink[0]);
+
+      if (activeSubLink?.length && activeSubLink[0]?.subLinks?.length) {
+        const activeInnerSubLink = activeSubLink[0]?.subLinks?.filter(
+          ({ path }) => {
+            const trimmedPathname = path.substring(0, path.lastIndexOf('/'));
+            return pathname.includes(trimmedPathname);
+          }
+        );
+        setActiveInnerSub(activeInnerSubLink[0]);
+      }
     }
 
     // Set Inner Sublink
