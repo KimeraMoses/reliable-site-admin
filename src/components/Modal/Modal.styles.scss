@@ -3,28 +3,6 @@
     max-width: 800px;
   }
 
-  .ant-checkbox-checked {
-    &:hover {
-      border-radius: 4px;
-    }
-    .ant-checkbox-inner {
-      background: #3699ff;
-      border-radius: 4px;
-      &:hover {
-        border-radius: 4px;
-      }
-    }
-  }
-  .ant-checkbox-inner {
-    background: #2b2b40;
-    outline: none;
-    border: none;
-    border-radius: 4px;
-    &:hover {
-      border-radius: 4px;
-    }
-  }
-
   .modal__bg {
     padding: 0px;
   }

@@ -4,12 +4,19 @@ import {
   UserProfileCard,
   SubUsers,
   Navigation,
+  // Overview
   AssignedTickets,
   PastEmails,
+  // User Permissions
+  UserPermissions,
+  // API Keys
+  APIKeys,
+  // Settings
+  Settings,
 } from './sections';
 
 export const AdminDetails = () => {
-  const [active, setActive] = useState('Overview');
+  const [active, setActive] = useState('SETTINGS');
 
   const links = [
     { label: 'Overview', onClick: () => setActive('Overview') },
@@ -39,6 +46,9 @@ export const AdminDetails = () => {
           ) : (
             <></>
           )}
+          {active === 'User Permissions' ? <UserPermissions /> : <></>}
+          {active === 'API Keys' ? <APIKeys /> : <></>}
+          {active === 'SETTINGS' ? <Settings /> : <></>}
         </div>
       </div>
     </div>

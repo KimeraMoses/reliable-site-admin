@@ -4,7 +4,26 @@ import { useEffect, useState } from 'react';
 
 import './Table.styles.scss';
 
-export const Table = ({ columns, data, fieldToFilter = 'name', btnData }) => {
+// Methods to Select Rows
+// const rowSelectionMethods = {
+//   onChange: (selectedRowKeys, selectedRows) => {
+//     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+//   },
+//   getCheckboxProps: (record) => ({
+//     disabled: record.name === 'Disabled User', // Column configuration not to be checked
+//     name: record.name,
+//   }),
+// };
+
+export const Table = ({
+  columns,
+  data,
+  fieldToFilter = 'name',
+  btnData,
+  pagination,
+  rowSelection,
+  customFilterSort,
+}) => {
   const [filtered, setFiltered] = useState([]);
   const [search, setSearch] = useState('');
 
@@ -18,15 +37,19 @@ export const Table = ({ columns, data, fieldToFilter = 'name', btnData }) => {
   return (
     <div className="custom-table">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between custom-table__top-row">
         {/* Input */}
         <div>
-          <Input
-            placeholder="Search Here"
-            prefix={<Search />}
-            className="custom-table__input"
-            onChange={(e) => setSearch(e.target.value)}
-          />
+          {customFilterSort ? (
+            customFilterSort
+          ) : (
+            <Input
+              placeholder="Search Here"
+              prefix={<Search />}
+              className="custom-table__input"
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          )}
         </div>
         {/* Button */}
         <div>
@@ -49,7 +72,12 @@ export const Table = ({ columns, data, fieldToFilter = 'name', btnData }) => {
         <AntTable
           columns={columns}
           dataSource={filtered || data}
-          pagination={{ position: ['bottomLeft'], showSizeChanger: false }}
+          pagination={
+            pagination !== undefined && pagination !== null
+              ? pagination
+              : { position: ['bottomLeft'], showSizeChanger: false }
+          }
+          rowSelection={rowSelection}
         />
       </div>
       {/* Table End */}
