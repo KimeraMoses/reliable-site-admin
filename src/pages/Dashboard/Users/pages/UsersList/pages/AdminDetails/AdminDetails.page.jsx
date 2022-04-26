@@ -13,6 +13,8 @@ import {
   APIKeys,
   // Settings
   Settings,
+  LoginSessions,
+  Logs,
 } from './sections';
 
 export const AdminDetails = () => {
@@ -49,6 +51,14 @@ export const AdminDetails = () => {
           {active === 'User Permissions' ? <UserPermissions /> : <></>}
           {active === 'API Keys' ? <APIKeys /> : <></>}
           {active === 'SETTINGS' ? <Settings /> : <></>}
+          {active === 'EVENT LOGS' ? (
+            <>
+              <LoginSessions />
+              <Logs />
+            </>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </div>

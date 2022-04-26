@@ -115,7 +115,7 @@ export const APIKeys = () => {
   return (
     <div className="mt-[20px] bg-[#1E1E2D] rounded-[8px]">
       <h6 className="text-white text-[16px] px-[32px] pt-[32px]">API Keys</h6>
-      <hr className="border-dashed border-t-[1px] border-[#323248] mt-[32px] mb-[32px]" />
+      <div className="border-dashed border-t-[1px] h-[0px] border-[#323248] mt-[32px] mb-[32px]" />
       <div className="api-keys__table">
         <Table
           data={data}

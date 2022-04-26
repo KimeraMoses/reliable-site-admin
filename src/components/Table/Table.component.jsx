@@ -28,10 +28,12 @@ export const Table = ({
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    const filteredData = data.filter((item) => {
-      return item[fieldToFilter].toLowerCase().includes(search.toLowerCase());
-    });
-    setFiltered(filteredData);
+    if (fieldToFilter) {
+      const filteredData = data.filter((item) => {
+        return item[fieldToFilter].toLowerCase().includes(search.toLowerCase());
+      });
+      setFiltered(filteredData);
+    }
   }, [data, fieldToFilter, search]);
 
   return (

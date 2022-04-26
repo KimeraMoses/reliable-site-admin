@@ -11,7 +11,7 @@ export const UserPermissions = () => {
   return (
     <div className="mt-[20px] p-[32px] bg-[#1E1E2D] rounded-[8px]">
       <h6 className="text-white text-[16px]">User Permissions</h6>
-      <hr className="border-dashed border-t-[1px] border-[#323248] mt-[32px] mb-[32px]" />
+      <div className="border-dashed border-t-[1px] h-[0px] border-[#323248] mt-[32px] mb-[32px]" />
       {modules?.map((module, index) => (
         <div key={module?.id}>
           <div className="flex items-center justify-between">
@@ -35,7 +35,7 @@ export const UserPermissions = () => {
             </div>
           </div>
           {modules?.length > index + 1 ? (
-            <hr className="border-dashed border-t-[1px] border-[#323248] mt-[32px] mb-[32px]" />
+            <div className="border-dashed border-t-[1px] h-[0px] border-[#323248] mt-[32px] mb-[32px]" />
           ) : (
             <></>
           )}
