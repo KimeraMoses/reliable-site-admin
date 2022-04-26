@@ -9,10 +9,9 @@ function Users() {
       <div className="users">
         <div className="users__inner">
           <Routes>
-            {/* TODO: Change to /users/list */}
             <Route
               path="/"
-              element={<Navigate to="/admin/dashboard/users/groups" />}
+              element={<Navigate to="/admin/dashboard/users/list" />}
             />
             <Route path="list" element={<UsersList />} />
             <Route path="groups" element={<UsersGroups />} />

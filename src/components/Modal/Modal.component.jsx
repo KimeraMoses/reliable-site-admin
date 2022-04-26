@@ -188,6 +188,31 @@ export function Modal({
                                       );
                                     }}
                                   </Field>
+                                ) : name === 'password' ? (
+                                  <div className="modal__form-el-password">
+                                    <Field
+                                      type="password"
+                                      name={name}
+                                      placeholder={placeholder}
+                                      className="modal__form-el-field"
+                                      key={name}
+                                    />
+                                    <div className="modal__form-el-password-strength">
+                                      <div className="modal__form-el-password-strength-box" />
+                                      <div className="modal__form-el-password-strength-box" />
+                                      <div className="modal__form-el-password-strength-box" />
+                                      <div className="modal__form-el-password-strength-box" />
+                                    </div>
+                                    <div className="modal__form-el-password-strength-text">
+                                      Use 8 or more characters with a mix of
+                                      letters, numbers & symbols.
+                                    </div>
+                                    {touched[name] && errors[name] && (
+                                      <div className="error">
+                                        {errors[name]}
+                                      </div>
+                                    )}
+                                  </div>
                                 ) : (
                                   <>
                                     <Field

@@ -35,6 +35,7 @@ export function TopBar({ hide = false, hideSide, toggleSide }) {
             {active?.subLinks.map((link) => (
               <Link
                 to={link?.path}
+                key={link?.path}
                 className={`${
                   pathname.includes(link?.path)
                     ? 'bg-[#1b1b2b] text-[#3699FF]'
