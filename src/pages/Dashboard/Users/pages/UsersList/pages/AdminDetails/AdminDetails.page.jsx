@@ -18,7 +18,7 @@ import {
 } from './sections';
 
 export const AdminDetails = () => {
-  const [active, setActive] = useState('SETTINGS');
+  const [active, setActive] = useState('Overview');
 
   const links = [
     { label: 'Overview', onClick: () => setActive('Overview') },

@@ -75,7 +75,7 @@ export const UsersGroups = () => {
   const [permissionsInit, setPermissionsInit] = useState(false);
   const [showPermissions, setShowPermissions] = useState(false);
   const [editModal, setEditModal] = useState(false);
-  const [deleteModal, setDeleteModal] = useState(true);
+  const [deleteModal, setDeleteModal] = useState(false);
 
   const columns = [
     {
