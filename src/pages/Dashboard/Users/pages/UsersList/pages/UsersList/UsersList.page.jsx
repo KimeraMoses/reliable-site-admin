@@ -22,8 +22,11 @@ const addValidationSchema = Yup.object().shape({
   fullName: Yup.string().required('Full name is required'),
   email: Yup.string().email('Email is invalid').required('Email is required'),
   password: Yup.string()
-    .min(6, 'Password must be at least 6 characters')
-    .required('Password is required'),
+    .required('Password is required')
+    .matches(
+      /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
+      'Please use 8 or more characters with a mix of letters, numbers & symbols'
+    ),
   confirmPassword: Yup.string()
     .oneOf([Yup.ref('password'), null], 'Passwords must match')
     .required('Confirm Password is required'),

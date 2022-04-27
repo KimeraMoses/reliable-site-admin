@@ -1,6 +1,7 @@
 import { Modal as BSModal } from 'react-bootstrap';
 import { Formik, Form, Field } from 'formik';
-import { object, string } from 'yup';
+import { object } from 'yup';
+import { passwordStrength } from 'check-password-strength';
 import './Modal.styles.scss';
 import { Switch, Checkbox } from 'antd';
 import { Fragment } from 'react';
@@ -50,7 +51,7 @@ export function Modal({
               handleSubmit(values);
             }}
           >
-            {({ errors, touched }) => {
+            {({ errors, touched, values }) => {
               return (
                 <Form>
                   {customBody ? (
@@ -59,6 +60,9 @@ export function Modal({
                     <div className="modal__form">
                       {fields.map(
                         ({ type, name, placeholder, title }, index) => {
+                          const strength = values?.password
+                            ? passwordStrength(values?.password)?.value
+                            : 'Password Not Entered Yet!';
                           return (
                             <Fragment key={name}>
                               <div className="modal__form-el" key={name}>
@@ -198,10 +202,46 @@ export function Modal({
                                       key={name}
                                     />
                                     <div className="modal__form-el-password-strength">
-                                      <div className="modal__form-el-password-strength-box" />
-                                      <div className="modal__form-el-password-strength-box" />
-                                      <div className="modal__form-el-password-strength-box" />
-                                      <div className="modal__form-el-password-strength-box" />
+                                      <div
+                                        className={`modal__form-el-password-strength-box transition-all ${
+                                          strength === 'Too weak'
+                                            ? 'bg-red-600'
+                                            : strength === 'Weak'
+                                            ? 'bg-yellow-600'
+                                            : strength === 'Medium'
+                                            ? 'bg-blue-600'
+                                            : strength === 'Strong'
+                                            ? 'bg-green-600'
+                                            : 'bg-[#323248]'
+                                        }`}
+                                      />
+                                      <div
+                                        className={`modal__form-el-password-strength-box transition-all ${
+                                          strength === 'Weak'
+                                            ? 'bg-yellow-600'
+                                            : strength === 'Medium'
+                                            ? 'bg-blue-600'
+                                            : strength === 'Strong'
+                                            ? 'bg-green-600'
+                                            : 'bg-[#323248]'
+                                        }`}
+                                      />
+                                      <div
+                                        className={`modal__form-el-password-strength-box transition-all ${
+                                          strength === 'Medium'
+                                            ? 'bg-blue-600'
+                                            : strength === 'Strong'
+                                            ? 'bg-green-600'
+                                            : 'bg-[#323248]'
+                                        }`}
+                                      />
+                                      <div
+                                        className={`modal__form-el-password-strength-box transition-all ${
+                                          strength === 'Strong'
+                                            ? 'bg-green-600'
+                                            : 'bg-[#323248]'
+                                        }`}
+                                      />
                                     </div>
                                     <div className="modal__form-el-password-strength-text">
                                       Use 8 or more characters with a mix of
