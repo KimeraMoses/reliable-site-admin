@@ -1,20 +1,6 @@
-import { DashboardLayout } from 'layout';
-import { Navigate, Route, Routes } from 'react-router-dom';
-import { UsersList, UsersGroups } from './pages';
-import './Users.styles.scss';
+import { Users as UsersModule } from 'modules';
 
 function Users() {
-  return (
-    <DashboardLayout>
-      <Routes>
-        <Route
-          path="/"
-          element={<Navigate to="/admin/dashboard/users/list" />}
-        />
-        <Route path="list/*" element={<UsersList />} />
-        <Route path="groups" element={<UsersGroups />} />
-      </Routes>
-    </DashboardLayout>
-  );
+  return <UsersModule />;
 }
 export default Users;
