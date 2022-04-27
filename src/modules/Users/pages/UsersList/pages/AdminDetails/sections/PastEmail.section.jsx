@@ -1,4 +1,5 @@
 import { Next } from 'icons';
+import { useTranslation } from 'react-i18next';
 
 const Email = ({
   title = 'Email Title',
@@ -26,9 +27,11 @@ const Email = ({
 };
 
 export const PastEmails = () => {
+  const { t } = useTranslation('/Users/ns');
+
   return (
     <div className="mt-4 p-[32px] bg-[#1E1E2D] rounded-[8px]">
-      <h6 className="text-white mb-[32px]">Past Emails</h6>
+      <h6 className="text-white mb-[32px]">{t('pastEmails')}</h6>
 
       <div className="flex flex-col gap-[16px] justify-center">
         <Email />

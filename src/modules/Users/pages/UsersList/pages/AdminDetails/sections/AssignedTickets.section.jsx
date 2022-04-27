@@ -1,4 +1,5 @@
 import { Next, Ticket as TicketIcon } from 'icons';
+import { useTranslation } from 'react-i18next';
 
 const Ticket = ({
   title = 'Ticket Title',
@@ -33,9 +34,11 @@ const Ticket = ({
 };
 
 export const AssignedTickets = () => {
+  const { t } = useTranslation('Users/ns');
+
   return (
     <div className="mt-4 p-[32px] bg-[#1E1E2D] rounded-lg">
-      <h6 className="text-white mb-[32px]">Support Tickets</h6>
+      <h6 className="text-white mb-[32px]">{t('supportTickets')}</h6>
 
       <div className="flex flex-col gap-[16px] justify-center">
         <Ticket />

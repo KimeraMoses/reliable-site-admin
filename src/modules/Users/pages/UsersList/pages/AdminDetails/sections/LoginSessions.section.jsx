@@ -3,19 +3,22 @@ import { Down } from 'icons';
 import { Table } from 'components';
 import './APIKeys.styles.scss';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const LoginSessions = () => {
   const [selectedSort, setSelectedSort] = useState('1 Hr');
   const [data, setData] = useState([]);
 
+  const { t } = useTranslation('Users/ns');
+
   const columns = [
     {
-      title: 'Location',
+      title: t('location'),
       dataIndex: 'location',
       key: 'location',
     },
     {
-      title: 'Status',
+      title: t('status'),
       key: 'status',
       dataIndex: 'status',
       render: (status) => (
@@ -25,17 +28,17 @@ export const LoginSessions = () => {
       ),
     },
     {
-      title: 'Device',
+      title: t('device'),
       key: 'device',
       dataIndex: 'device',
     },
     {
-      title: 'IP Address',
+      title: t('ipAddressShort'),
       key: 'ipAddress',
       dataIndex: 'ipAddress',
     },
     {
-      title: 'Time',
+      title: t('time'),
       key: 'time',
       dataIndex: 'time',
     },
@@ -70,7 +73,7 @@ export const LoginSessions = () => {
   return (
     <div className="mt-[20px] bg-[#1E1E2D] rounded-[8px]">
       <h6 className="text-white text-[16px] px-[32px] pt-[32px]">
-        Login Session
+        {t('loginSessions')}
       </h6>
       <div className="border-dashed border-t-[1px] h-[0px] border-[#323248] mt-[32px] mb-[32px]" />
       <div className="api-keys__table pb-[30px]">
@@ -78,7 +81,7 @@ export const LoginSessions = () => {
           data={data}
           columns={columns}
           fieldToFilter={'location'}
-          btnData={{ text: 'View All', onClick: () => {} }}
+          btnData={{ text: t('viewAll'), onClick: () => {} }}
           pagination={false}
           customFilterSort={
             <>

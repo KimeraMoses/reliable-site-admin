@@ -3,19 +3,22 @@ import { Copy, Down, Dropdown as DropdownIcon } from 'icons';
 import { Table } from 'components';
 import './APIKeys.styles.scss';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const APIKeys = () => {
   const [selectedSort, setSelectedSort] = useState('label');
   const [data, setData] = useState([]);
 
+  const { t } = useTranslation('/Users/ns');
+
   const columns = [
     {
-      title: 'Label',
+      title: t('label'),
       dataIndex: 'label',
       key: 'label',
     },
     {
-      title: 'API Key',
+      title: t('apiKey'),
       dataIndex: 'apiKey',
       key: 'apiKey',
       render: (text) => {
@@ -30,12 +33,12 @@ export const APIKeys = () => {
       },
     },
     {
-      title: 'Created',
+      title: t('createDate'),
       key: 'createdAt',
       dataIndex: 'createdAt',
     },
     {
-      title: 'Status',
+      title: t('status'),
       key: 'status',
       dataIndex: 'status',
       render: (status) => (
@@ -45,7 +48,7 @@ export const APIKeys = () => {
       ),
     },
     {
-      title: 'Actions',
+      title: t('actions'),
       key: 'actions',
       render: () => (
         <Dropdown
@@ -63,7 +66,7 @@ export const APIKeys = () => {
           trigger={['click']}
         >
           <Button type="primary" className="custom-table__table-dropdown-btn">
-            <div>Actions</div>
+            <div>{t('actions')}</div>
             <div>
               <DropdownIcon />
             </div>
@@ -120,7 +123,7 @@ export const APIKeys = () => {
         <Table
           data={data}
           columns={columns}
-          btnData={{ text: 'Add API Key', onClick: () => {} }}
+          btnData={{ text: t('addAPIKey'), onClick: () => {} }}
           fieldToFilter="label"
           pagination={false}
           rowSelection={rowSelection}
@@ -136,7 +139,7 @@ export const APIKeys = () => {
                 {columns?.map((el) => {
                   return (
                     <Select.Option key={el?.key} value={el?.key}>
-                      SORT BY : {el?.title}
+                      {t('sortBy')} {el?.title}
                     </Select.Option>
                   );
                 })}

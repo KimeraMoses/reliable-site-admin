@@ -1,7 +1,10 @@
 import { Formik, Form, Field } from 'formik';
 import { Switch } from 'antd';
+import { useTranslation } from 'react-i18next';
 
 export const Settings = () => {
+  const { t } = useTranslation('/Users/ns');
+
   const initialValues = {
     adminStatus: true,
     reqPerIP: 20,
@@ -13,30 +16,32 @@ export const Settings = () => {
   };
 
   const fields = [
-    { label: 'Admin Status', name: 'adminStatus', type: 'switch' },
+    { label: t('adminStatus'), name: 'adminStatus', type: 'switch' },
     { label: 'Request Per IP Override', name: 'reqPerIP', type: 'input' },
     {
-      label: 'IP Restriction Interval Override In Seconds',
+      label: t('IPRestrictionOverride'),
       name: 'IPRestrictionOverride',
       type: 'input',
     },
-    { label: 'API Key Limit Override', name: 'apiKeyLimit', type: 'input' },
+    { label: t('apiKeyLimit'), name: 'apiKeyLimit', type: 'input' },
     {
-      label: 'API Key Interval Override In seconds',
+      label: t('apiKeyInterval'),
       name: 'apiKeyInterval',
       type: 'input',
     },
     {
-      label: 'Restrict Access To IP Address',
+      label: t('ipAddress'),
       name: 'ipAddress',
       type: 'input',
     },
-    { label: 'Extend Suspension Date', name: 'suspensionDate', type: 'input' },
+    { label: t('suspensionDate'), name: 'suspensionDate', type: 'input' },
   ];
 
   return (
     <div className="bg-[#1E1E2D] mt-[20px] rounded-[8px]">
-      <h6 className="text-white text-[16px] px-[32px] pt-[32px]">Settings</h6>
+      <h6 className="text-white text-[16px] px-[32px] pt-[32px]">
+        {t('settings')}
+      </h6>
       <div className="border-dashed border-t-[1px] h-[0px] border-[#323248] mt-[32px] mb-[32px]" />
       {/* FORM ROW */}
       <Formik
@@ -108,13 +113,13 @@ export const Settings = () => {
               type="button"
               className="bg-[#323248] text-white rounded-[8px] py-[12px] px-[24px]"
             >
-              Discard
+              {t('discard')}
             </button>
             <button
               type="submit"
               className="bg-[#3699FF] text-white rounded-[8px] py-[12px] px-[24px]"
             >
-              Save Changes
+              {t('saveChanges')}
             </button>
           </div>
         </Form>

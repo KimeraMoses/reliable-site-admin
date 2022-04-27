@@ -1,20 +1,24 @@
-const userInfo = {
-  name: 'Paul.Elliott',
-  img: 'https://via.placeholder.com/100',
-  designation: 'Aministrator',
-  details: [
-    { title: 'Account ID', value: 'ID-45453423' },
-    { title: 'Billing Email', value: 'info@mind2matter.com' },
-    {
-      title: 'Billing Address',
-      value: '101 Collin Street, Melbourne 3000, Australia',
-    },
-    { title: 'Language', value: 'English' },
-    { title: 'Upcoming Invoice', value: '54238-8693' },
-  ],
-};
+import { useTranslation } from 'react-i18next';
 
 export const UserProfileCard = () => {
+  const { t } = useTranslation('Users/ns');
+
+  const userInfo = {
+    name: 'Paul.Elliott',
+    img: 'https://via.placeholder.com/100',
+    designation: 'Aministrator',
+    details: [
+      { title: t('accountID'), value: 'ID-45453423' },
+      { title: t('billingEmail'), value: 'info@mind2matter.com' },
+      {
+        title: t('billingAddress'),
+        value: '101 Collin Street, Melbourne 3000, Australia',
+      },
+      { title: t('language'), value: 'English' },
+      { title: t('upcomingInvoice'), value: '54238-8693' },
+    ],
+  };
+
   return (
     <div className="bg-[#1E1E2D] rounded-lg admin-details__user-card">
       {/* IMAGE + NAME */}
@@ -39,7 +43,7 @@ export const UserProfileCard = () => {
       <div className="admin-details__user-card-details px-8">
         {/* FIRST ROW WITH EDIT BUTTON */}
         <div className="flex justify-between items-center">
-          <h6 className="text-white text-[16px] mb-0">Details</h6>
+          <h6 className="text-white text-[16px] mb-0">{t('details')}</h6>
           <button className="bg-[#212E48] rounded-lg px-4 py-2 text-[#3699FF] mb-0">
             Edit
           </button>

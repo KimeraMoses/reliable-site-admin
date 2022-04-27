@@ -4,6 +4,7 @@ import { Dropdown as DropdownIcon } from 'icons';
 import { Modal, Table } from 'components';
 import './UsersGroups.styles.scss';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const data = [];
 for (let i = 0; i < 100; i++) {
@@ -55,48 +56,6 @@ const addValidationSchema = Yup.object().shape({
   makeDefault: Yup.boolean().required('This field is required!'),
 });
 
-const addFields = [
-  {
-    type: 'input',
-    name: 'name',
-    placeholder: 'Group Name',
-    title: 'Name',
-  },
-  {
-    type: 'switch',
-    name: 'status',
-    title: 'Status',
-  },
-  {
-    type: 'switch',
-    name: 'makeDefault',
-    title: 'Make Default Group',
-  },
-];
-
-const add2Fields = [
-  {
-    type: 'crud',
-    name: 'module1',
-    title: 'Module 1',
-  },
-  {
-    type: 'crud',
-    name: 'module2',
-    title: 'Module 2',
-  },
-  {
-    type: 'crud',
-    name: 'module3',
-    title: 'Module 3',
-  },
-  {
-    type: 'crud',
-    name: 'module4',
-    title: 'Module 4',
-  },
-];
-
 export const UsersGroups = () => {
   const [showAdd, setShowAdd] = useState(false);
   const [permissionsInit, setPermissionsInit] = useState(false);
@@ -108,21 +67,65 @@ export const UsersGroups = () => {
   });
   const [deleteModal, setDeleteModal] = useState(false);
 
+  const { t } = useTranslation('/Users/ns');
+
+  const addFields = [
+    {
+      type: 'input',
+      name: 'name',
+      placeholder: 'Group Name',
+      title: t('name'),
+    },
+    {
+      type: 'switch',
+      name: 'status',
+      title: t('status'),
+    },
+    {
+      type: 'switch',
+      name: 'makeDefault',
+      title: t('makeDefault'),
+    },
+  ];
+
+  const add2Fields = [
+    {
+      type: 'crud',
+      name: 'module1',
+      title: 'Module 1',
+    },
+    {
+      type: 'crud',
+      name: 'module2',
+      title: 'Module 2',
+    },
+    {
+      type: 'crud',
+      name: 'module3',
+      title: 'Module 3',
+    },
+    {
+      type: 'crud',
+      name: 'module4',
+      title: 'Module 4',
+    },
+  ];
+
   const columns = [
     {
-      title: 'Group Name',
+      title: t('name'),
       dataIndex: 'name',
       key: 'name',
       width: '20%',
     },
     {
-      title: 'Number of Admin Users',
+      title: t('numberOfUsers'),
       dataIndex: 'numberOfUsers',
       key: 'numberOfUsers',
       width: '20%',
     },
     {
-      title: 'Status',
+      title: t('status'),
       dataIndex: 'status',
       key: 'status',
       width: '20%',
@@ -131,14 +134,14 @@ export const UsersGroups = () => {
       },
     },
     {
-      title: 'Created Date',
+      title: t('createDate'),
       key: 'createdAt',
       dataIndex: 'createdAt',
       width: '20%',
     },
     {
-      title: 'Action',
-      key: 'action',
+      title: t('actions'),
+      key: 'actions',
       width: '20%',
       render: (text, record) => (
         <Dropdown
@@ -151,14 +154,14 @@ export const UsersGroups = () => {
               <Button
                 onClick={() => setEditModal({ show: true, values: record })}
               >
-                Edit Group Settings
+                {t('editSettings')}
               </Button>
               <Button
                 onClick={() =>
                   setEditPermissions({ show: true, values: record })
                 }
               >
-                Edit Group Permissions
+                {t('editPermissions')}
               </Button>
               <Button onClick={() => setDeleteModal(true)}>Delete Group</Button>
             </>
@@ -166,7 +169,7 @@ export const UsersGroups = () => {
           trigger={['click']}
         >
           <Button type="primary" className="custom-table__table-dropdown-btn">
-            <div>Actions</div>
+            <div>{t('actions')}</div>
             <div>
               <DropdownIcon />
             </div>
@@ -184,8 +187,8 @@ export const UsersGroups = () => {
           <Modal
             show={showAdd}
             setShow={setShowAdd}
-            heading="Add New Group"
-            submitText="Configure Permission"
+            heading={t('addGroup')}
+            submitText={t('configurePermissions')}
             initialValues={initialAddValues}
             validationSchema={addValidationSchema}
             fields={addFields}
@@ -199,8 +202,8 @@ export const UsersGroups = () => {
           <Modal
             show={showPermissions}
             setShow={setShowPermissions}
-            heading="Configure Permissions"
-            submitText="Create New Group"
+            heading={t('configurePermissions')}
+            submitText={t('createGroup')}
             cancelButtonText="Back"
             handleCancel={() => {
               setShowPermissions(false);
@@ -216,8 +219,8 @@ export const UsersGroups = () => {
           <Modal
             show={editPermissions?.show}
             setShow={setShowPermissions}
-            heading="Configure Permissions"
-            submitText="Edit Permissions"
+            heading={t('configurePermissions')}
+            submitText={t('editPermissionsShort')}
             initialValues={editPermissions?.values}
             fields={add2Fields}
             handleSubmit={(values) => {
@@ -233,7 +236,7 @@ export const UsersGroups = () => {
             initialValues={editModal?.values}
             fields={addFields}
             setShow={setEditModal}
-            heading="Edit Group"
+            heading={t('editGroup')}
             handleSubmit={(values) => {
               console.log(values);
             }}
@@ -245,19 +248,16 @@ export const UsersGroups = () => {
           <Modal
             show={deleteModal}
             setShow={setDeleteModal}
-            heading="Delete Group"
+            heading={t('deleteGroup')}
             customBody={
               <div>
-                <p style={{ marginBottom: '32px' }}>
-                  Are you sure you wish to delete this group? Deleting this
-                  group will move all users to the default group.
-                </p>
+                <p style={{ marginBottom: '32px' }}>{t('deleteWarning')}</p>
               </div>
             }
             fields={[]}
             validationSchema={Yup.object().shape({})}
             initialValues={{}}
-            submitText="Delete Group"
+            submitText={t('deleteGroup')}
             handleSubmit={(values) => {
               console.log('Submitting');
               console.log(values);
@@ -267,7 +267,7 @@ export const UsersGroups = () => {
             columns={columns}
             data={data}
             fieldToFilter="name"
-            btnData={{ text: 'Add New Group', onClick: () => setShowAdd(true) }}
+            btnData={{ text: t('addGroup'), onClick: () => setShowAdd(true) }}
           />
         </div>
       </div>

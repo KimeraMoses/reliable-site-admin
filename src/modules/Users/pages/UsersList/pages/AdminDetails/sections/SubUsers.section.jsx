@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 const subUsers = [
   {
     name: 'Paul.Elliott',
@@ -22,9 +24,11 @@ const subUsers = [
 ];
 
 export const SubUsers = () => {
+  const { t } = useTranslation('/Users/ns');
+
   return (
     <div className="bg-[#1E1E2D] rounded-lg admin-details__user-card px-8">
-      <h6 className="text-white text-base mb-8">Sub Users</h6>
+      <h6 className="text-white text-base mb-8">{t('Sub Users')}</h6>
       <div className="flex flex-col gap-4">
         {subUsers.map(({ name, email, image }) => {
           return (

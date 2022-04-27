@@ -16,16 +16,22 @@ import {
   LoginSessions,
   Logs,
 } from './sections';
+import { useTranslation } from 'react-i18next';
 
 export const AdminDetails = () => {
-  const [active, setActive] = useState('Overview');
+  const { t } = useTranslation('/Users/ns');
+
+  const [active, setActive] = useState(t('overview'));
 
   const links = [
-    { label: 'Overview', onClick: () => setActive('Overview') },
-    { label: 'User Permissions', onClick: () => setActive('User Permissions') },
-    { label: 'API Keys', onClick: () => setActive('API Keys') },
-    { label: 'SETTINGS', onClick: () => setActive('SETTINGS') },
-    { label: 'EVENT LOGS', onClick: () => setActive('EVENT LOGS') },
+    { label: t('overview'), onClick: () => setActive(t('overview')) },
+    {
+      label: t('userPermissions'),
+      onClick: () => setActive(t('userPermissions')),
+    },
+    { label: t('apiKeys'), onClick: () => setActive(t('apiKeys')) },
+    { label: t('settings'), onClick: () => setActive(t('settings')) },
+    { label: t('eventLogs'), onClick: () => setActive(t('eventLogs')) },
   ];
 
   return (
@@ -40,7 +46,7 @@ export const AdminDetails = () => {
         </div>
         <div className="admin-details__right">
           <Navigation active={active} links={links} />
-          {active === 'Overview' ? (
+          {active === t('overview') ? (
             <>
               <AssignedTickets />
               <PastEmails />
@@ -48,10 +54,10 @@ export const AdminDetails = () => {
           ) : (
             <></>
           )}
-          {active === 'User Permissions' ? <UserPermissions /> : <></>}
-          {active === 'API Keys' ? <APIKeys /> : <></>}
-          {active === 'SETTINGS' ? <Settings /> : <></>}
-          {active === 'EVENT LOGS' ? (
+          {active === t('userPermissions') ? <UserPermissions /> : <></>}
+          {active === t('apiKeys') ? <APIKeys /> : <></>}
+          {active === t('settings') ? <Settings /> : <></>}
+          {active === t('eventLogs') ? (
             <>
               <LoginSessions />
               <Logs />

@@ -3,14 +3,17 @@ import { Down } from 'icons';
 import { Table } from 'components';
 import './APIKeys.styles.scss';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export const Logs = () => {
   const [selectedFilter, setSelectedFilter] = useState('status');
   const [data, setData] = useState([]);
 
+  const { t } = useTranslation('/Users/ns');
+
   const columns = [
     {
-      title: 'Status',
+      title: t('status'),
       key: 'status',
       dataIndex: 'status',
       render: (status) => (
@@ -20,12 +23,12 @@ export const Logs = () => {
       ),
     },
     {
-      title: 'URL',
+      title: t('url'),
       key: 'url',
       dataIndex: 'url',
     },
     {
-      title: 'Request Date',
+      title: t('reqDate'),
       key: 'reqDate',
       dataIndex: 'reqDate',
     },
@@ -53,14 +56,16 @@ export const Logs = () => {
 
   return (
     <div className="mt-[20px] bg-[#1E1E2D] rounded-[8px]">
-      <h6 className="text-white text-[16px] px-[32px] pt-[32px]">Logs</h6>
+      <h6 className="text-white text-[16px] px-[32px] pt-[32px]">
+        {t('logs')}
+      </h6>
       <div className="border-dashed border-t-[1px] h-[0px] border-[#323248] mt-[32px] mb-[32px]" />
       <div className="api-keys__table pb-[30px]">
         <Table
           data={data}
           columns={columns}
           fieldToFilter={'status'}
-          btnData={{ text: 'Download Report', onClick: () => {} }}
+          btnData={{ text: t('downloadReport'), onClick: () => {} }}
           pagination={false}
           customFilterSort={
             <>
@@ -73,7 +78,7 @@ export const Logs = () => {
               >
                 {columns?.map((el) => (
                   <Select.Option value={el?.key} key={el?.key}>
-                    Filter By : {el?.title}
+                    {t('filterBy')} {el?.title}
                   </Select.Option>
                 ))}
               </Select>
