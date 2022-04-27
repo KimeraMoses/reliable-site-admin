@@ -80,7 +80,7 @@
       }
       &-overlay {
         display: flex;
-        width: 140px;
+        min-width: 140px;
         flex-direction: column;
         background: #232333;
         padding: 15px 0px;
