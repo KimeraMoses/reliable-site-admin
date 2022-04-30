@@ -1,11 +1,13 @@
-import { Button, Dropdown } from 'antd';
+import { Button } from 'antd';
 import * as Yup from 'yup';
-import { Dropdown as DropdownIcon } from 'icons';
 import { Modal, Table } from 'components';
 import './UsersList.styles.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { getUsers } from 'store';
+import { checkModule } from 'lib/checkModule';
 
 const initialAddValues = {
   username: '',
@@ -43,17 +45,6 @@ export const UsersList = () => {
   const { t } = useTranslation('/Users/ns');
 
   const navigate = useNavigate();
-
-  const data = [];
-  for (let i = 0; i < 100; i++) {
-    data.push({
-      key: i,
-      name: `Edward King ${i}`,
-      email: `Paul.Elliot${i}@Fakemail.com`,
-      companyName: `Mind2Matter ${i}`,
-      createdAt: '05/02/2022',
-    });
-  }
 
   const addFields = [
     {
@@ -130,40 +121,40 @@ export const UsersList = () => {
       key: 'createdAt',
       dataIndex: 'createdAt',
     },
-    {
-      title: t('actions'),
-      key: 'actions',
-      render: () => (
-        <Dropdown
-          overlayClassName="custom-table__table-dropdown-overlay"
-          className="custom-table__table-dropdown"
-          destroyPopupOnHide
-          placement="bottomRight"
-          overlay={
-            <>
-              {/* TODO: Replace with UID */}
-              <Button
-                onClick={() =>
-                  navigate('/admin/dashboard/users/list/admin-details/123')
-                }
-              >
-                {t('view')}
-              </Button>
-              <Button>{t('edit')}</Button>
-            </>
-          }
-          trigger={['click']}
-        >
-          <Button type="primary" className="custom-table__table-dropdown-btn">
-            <div>{t('actions')}</div>
-            <div>
-              <DropdownIcon />
-            </div>
-          </Button>
-        </Dropdown>
-      ),
-    },
   ];
+
+  // Users Logic Start
+  const { loading, users } = useSelector((state) => state?.users);
+  const { userModules } = useSelector((state) => state?.modules);
+  const { permissions } = checkModule({
+    module: 'Users',
+    modules: userModules,
+  });
+  const [tableUsers, setTableUsers] = useState([]);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    (async () => {
+      await dispatch(getUsers());
+    })();
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (users.length) {
+      let usersData = [];
+      users.forEach((user) => {
+        usersData.push({
+          key: user?.id,
+          name: user?.fullName,
+          email: user?.email,
+          // TODO: Check with back-end dev for these two fields
+          companyName: user?.companyName ? user?.companyName : 'N/A',
+          createdAt: user?.createdAt ? user?.createdAt : 'N/A',
+        });
+      });
+      setTableUsers(usersData);
+    }
+  }, [users]);
+  // Users Logic End
 
   return (
     <div className="users">
@@ -182,14 +173,34 @@ export const UsersList = () => {
             }}
           />
           <Modal show={editModal} setShow={setEditModal} heading="Edit Group" />
+
           <Table
             columns={columns}
-            data={data}
+            data={tableUsers}
+            permissions={permissions}
             fieldToFilter="name"
             btnData={{
               text: t('addAdminUser'),
               onClick: () => setShowAdd(true),
             }}
+            loading={loading}
+            viewAction={(record) => {
+              return (
+                <>
+                  {' '}
+                  {/* TODO: Replace with UID */}
+                  <Button
+                    onClick={() =>
+                      navigate('/admin/dashboard/users/list/admin-details/123')
+                    }
+                  >
+                    {t('view')}
+                  </Button>
+                </>
+              );
+            }}
+            deleteAction={(record) => <Button>Delete</Button>}
+            t={t}
           />
         </div>
       </div>

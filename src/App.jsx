@@ -1,5 +1,4 @@
 import React, { Suspense, useEffect, useRef } from 'react';
-import { ToastContainer } from 'react-toastify';
 import IdleTimer from 'react-idle-timer';
 import {
   BrowserRouter as Router,
@@ -64,7 +63,6 @@ function App() {
   return (
     <div className="App bg-custom-main flex items-center content-center">
       <IdleTimer ref={idleTimer} onIdle={OnIdle} timeout={Timeout} />
-      <ToastContainer />
       <Suspense fallback={<>Loading...</>}>
         <Router>
           <Routes>
