@@ -9,7 +9,7 @@ i18n
   .use(Backend)
   .init({
     fallbackLng: 'en',
-    debug: true,
+    // debug: true,
 
     // have a common namespace used around the full app
     ns: ['translations'],

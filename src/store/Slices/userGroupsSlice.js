@@ -1,18 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  appModules: [],
-  userModules: [],
+  userGroups: {},
 };
 const settingSlice = createSlice({
-  name: 'moduleManagement',
+  name: 'userGroups',
   initialState,
   reducers: {
-    getAppLevelModules: (state, { payload }) => {
-      state.appModules = payload;
-    },
-    getUserLevelModules: (state, { payload }) => {
-      state.userModules = payload;
+    getGroups: (state, { payload }) => {
+      state.userGroups = payload;
     },
   },
 });
