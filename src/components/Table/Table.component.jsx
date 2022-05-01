@@ -58,7 +58,7 @@ export const Table = ({
       dataViewer = filtered.length ? filtered : data;
     }
     setDataSource(dataViewer);
-  }, [data]);
+  }, [data, filtered, permissions]);
   // Only Add Actions if there are Update & Delete permissions
   useEffect(() => {
     if (permissions !== undefined && permissions !== null) {

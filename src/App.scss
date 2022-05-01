@@ -67,6 +67,10 @@ body {
     box-shadow: unset;
   }
 }
+.ant-switch-loading,
+.ant-switch-disabled {
+  opacity: 0.8;
+}
 
 // CHECKBOX
 .ant-checkbox-indeterminate {
@@ -109,6 +113,9 @@ body {
   &:hover {
     border-radius: 4px;
   }
+}
+.ant-checkbox-disabled .ant-checkbox-inner {
+  background: #5a5a6cbd;
 }
 
 // SELECT

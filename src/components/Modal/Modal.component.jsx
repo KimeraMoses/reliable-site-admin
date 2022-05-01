@@ -3,7 +3,7 @@ import { Formik, Form, Field } from 'formik';
 import { object } from 'yup';
 import { passwordStrength } from 'check-password-strength';
 import './Modal.styles.scss';
-import { Switch, Checkbox } from 'antd';
+import { Switch, Checkbox, Button } from 'antd';
 import { Fragment } from 'react';
 
 const demoFields = [];
@@ -23,12 +23,12 @@ export function Modal({
   cancelButtonText = 'Cancel',
   handleCancel,
   customBody,
+  loading,
   handleSubmit = (values) => console.log(values),
 }) {
   const handleClose = () => {
     setShow(false);
   };
-
   const isCrud = fields?.map((field) => field?.type === 'crud');
   return (
     <BSModal
@@ -47,6 +47,7 @@ export function Modal({
           <Formik
             initialValues={initialValues}
             validationSchema={validationSchema}
+            enableReinitialize
             onSubmit={(values) => {
               handleSubmit(values);
             }}
@@ -111,26 +112,32 @@ export function Modal({
                                       meta,
                                       form: { setFieldValue },
                                     }) => {
+                                      console.log(field);
+                                      // console.log(field);
                                       const nestedValues = [
                                         {
-                                          name: 'create',
+                                          name: 'Create',
                                           title: 'Create',
-                                          value: field?.value?.create,
+                                          value:
+                                            field?.value?.permissions?.Create,
                                         },
                                         {
-                                          name: 'read',
+                                          name: 'Read',
                                           title: 'Read',
-                                          value: field?.value?.read,
+                                          value:
+                                            field?.value?.permissions?.View,
                                         },
                                         {
-                                          name: 'update',
+                                          name: 'Update',
                                           title: 'Update',
-                                          value: field?.value?.update,
+                                          value:
+                                            field?.value?.permissions?.Update,
                                         },
                                         {
-                                          name: 'delete',
+                                          name: 'Delete',
                                           title: 'Delete',
-                                          value: field?.value?.delete,
+                                          value:
+                                            field?.value?.permissions?.Remove,
                                         },
                                       ];
                                       return (
@@ -144,14 +151,16 @@ export function Modal({
                                                 onChange={(e) => {
                                                   setFieldValue(field?.name, {
                                                     ...field?.value,
-                                                    all: e.target.checked,
-                                                    create: e.target.checked,
-                                                    read: e.target.checked,
-                                                    update: e.target.checked,
-                                                    delete: e.target.checked,
+                                                    permissions: {
+                                                      All: e.target.checked,
+                                                      Create: e.target.checked,
+                                                      Read: e.target.checked,
+                                                      Update: e.target.checked,
+                                                      Delete: e.target.checked,
+                                                    },
                                                   });
                                                 }}
-                                                checked={field?.value?.all}
+                                                checked={field?.value?.All}
                                               >
                                                 <p className="modal__form-el-checkbox-container-label">
                                                   All
@@ -171,9 +180,11 @@ export function Modal({
                                                             field?.name,
                                                             {
                                                               ...field?.value,
-                                                              [name]:
-                                                                e.target
-                                                                  .checked,
+                                                              permissions: {
+                                                                [name]:
+                                                                  e.target
+                                                                    .checked,
+                                                              },
                                                             }
                                                           )
                                                         }
@@ -289,12 +300,13 @@ export function Modal({
                     >
                       {cancelButtonText}
                     </button>
-                    <button
-                      type="submit"
+                    <Button
+                      htmlType="submit"
+                      loading={loading}
                       className="modal__buttons-btn modal__buttons-btn-primary"
                     >
                       {submitText}
-                    </button>
+                    </Button>
                   </div>
                 </Form>
               );

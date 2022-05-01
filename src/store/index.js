@@ -4,6 +4,7 @@ import regReducer from './Slices/userRegistrationSlice';
 import settingReducer from './Slices/settingSlice';
 import moduleReducer from './Slices/moduleSlice';
 import usersReducer from './Slices/usersSlice';
+import userGroupsReducer from './Slices/userGroupsSlice';
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     settings: settingReducer,
     modules: moduleReducer,
     users: usersReducer,
+    userGroups: userGroupsReducer,
   },
 });
 
