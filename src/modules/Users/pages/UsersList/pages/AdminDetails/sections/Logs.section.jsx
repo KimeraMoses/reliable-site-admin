@@ -4,12 +4,20 @@ import { Table } from 'components';
 import './APIKeys.styles.scss';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { checkModule } from 'lib/checkModule';
 
 export const Logs = () => {
   const [selectedFilter, setSelectedFilter] = useState('status');
   const [data, setData] = useState([]);
 
   const { t } = useTranslation('/Users/ns');
+
+  const { userModules } = useSelector((state) => state?.modules);
+  const { permissions } = checkModule({
+    module: 'Users',
+    modules: userModules,
+  });
 
   const columns = [
     {
@@ -65,8 +73,10 @@ export const Logs = () => {
           data={data}
           columns={columns}
           fieldToFilter={'status'}
+          t={t}
           btnData={{ text: t('downloadReport'), onClick: () => {} }}
           pagination={false}
+          permissions={permissions}
           customFilterSort={
             <>
               <Select

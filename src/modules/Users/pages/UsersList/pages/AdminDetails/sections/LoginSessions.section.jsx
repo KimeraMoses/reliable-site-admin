@@ -4,12 +4,20 @@ import { Table } from 'components';
 import './APIKeys.styles.scss';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { checkModule } from 'lib/checkModule';
 
 export const LoginSessions = () => {
   const [selectedSort, setSelectedSort] = useState('1 Hr');
   const [data, setData] = useState([]);
 
   const { t } = useTranslation('Users/ns');
+
+  const { userModules } = useSelector((state) => state?.modules);
+  const { permissions } = checkModule({
+    module: 'Users',
+    modules: userModules,
+  });
 
   const columns = [
     {
@@ -83,6 +91,8 @@ export const LoginSessions = () => {
           fieldToFilter={'location'}
           btnData={{ text: t('viewAll'), onClick: () => {} }}
           pagination={false}
+          permissions={permissions}
+          t={t}
           customFilterSort={
             <>
               <Select

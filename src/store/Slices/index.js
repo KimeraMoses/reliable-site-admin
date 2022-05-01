@@ -1,4 +1,8 @@
-export { getUsers as getUsersDispatch, setUserLoading } from './usersSlice';
+export {
+  getUsers as getUsersDispatch,
+  setUserLoading,
+  getUser,
+} from './usersSlice';
 export {
   getUserGroups as getUserGroupsDispatch,
   setUserGroupsLoading,

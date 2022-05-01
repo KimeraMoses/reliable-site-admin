@@ -4,12 +4,20 @@ import { Table } from 'components';
 import './APIKeys.styles.scss';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSelector } from 'react-redux';
+import { checkModule } from 'lib/checkModule';
 
 export const APIKeys = () => {
   const [selectedSort, setSelectedSort] = useState('label');
   const [data, setData] = useState([]);
 
   const { t } = useTranslation('/Users/ns');
+
+  const { userModules } = useSelector((state) => state?.modules);
+  const { permissions } = checkModule({
+    module: 'Users',
+    modules: userModules,
+  });
 
   const columns = [
     {
@@ -127,6 +135,8 @@ export const APIKeys = () => {
           fieldToFilter="label"
           pagination={false}
           rowSelection={rowSelection}
+          permissions={permissions}
+          t={t}
           customFilterSort={
             <>
               <Select

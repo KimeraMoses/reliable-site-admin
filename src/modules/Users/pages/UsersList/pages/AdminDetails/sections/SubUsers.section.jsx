@@ -30,9 +30,9 @@ export const SubUsers = () => {
     <div className="bg-[#1E1E2D] rounded-lg admin-details__user-card px-8">
       <h6 className="text-white text-base mb-8">{t('Sub Users')}</h6>
       <div className="flex flex-col gap-4">
-        {subUsers.map(({ name, email, image }) => {
+        {subUsers.map(({ name, email, image }, index) => {
           return (
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1" key={index}>
               <div className="flex gap-3 items-center">
                 <div className="bg-[#171723] flex items-center justify-center w-[47px] h-[47px] rounded-lg p-[4px]">
                   <img

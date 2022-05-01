@@ -5,6 +5,7 @@ export const Navigation = ({ links, active }) => {
         {links.map((link) => (
           <div
             onClick={link?.onClick}
+            key={link?.label}
             className={`text-[14px] ${
               active === link?.label ? 'text-[#3699FF]' : 'text-[#6D6D80]'
             } uppercase cursor-pointer transition-all hover:text-[#3699FF]`}

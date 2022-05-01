@@ -144,6 +144,7 @@ export const UsersList = () => {
       users.forEach((user) => {
         usersData.push({
           key: user?.id,
+          id: user?.id,
           name: user?.fullName,
           email: user?.email,
           // TODO: Check with back-end dev for these two fields
@@ -191,7 +192,9 @@ export const UsersList = () => {
                   {/* TODO: Replace with UID */}
                   <Button
                     onClick={() =>
-                      navigate('/admin/dashboard/users/list/admin-details/123')
+                      navigate(
+                        `/admin/dashboard/users/list/admin-details/${record?.id}`
+                      )
                     }
                   >
                     {t('view')}
@@ -199,7 +202,7 @@ export const UsersList = () => {
                 </>
               );
             }}
-            deleteAction={(record) => <Button>Delete</Button>}
+            deleteAction={(record) => <Button>Edit</Button>}
             t={t}
           />
         </div>
