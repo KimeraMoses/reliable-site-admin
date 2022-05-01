@@ -53,7 +53,7 @@ export const UserProfileCard = () => {
         <div className="admin-details__user-card-details-detail flex flex-col gap-4">
           {userInfo?.details?.map(({ title, value }) => {
             return (
-              <div className="flex flex-col gap-1">
+              <div className="flex flex-col gap-1" key={title}>
                 <div className="text-white text-sm">{title}</div>
                 <div className="text-[#92928F] text-sm">{value}</div>
               </div>

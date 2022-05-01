@@ -79,7 +79,6 @@ export function Modal({
                                       : permission;
                                   }
                                 );
-                                console.log(newPermissions);
                                 setPermissionsState(newPermissions);
                               }}
                               checked={Create && View && Update && Remove}

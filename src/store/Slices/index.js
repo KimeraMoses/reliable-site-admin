@@ -2,6 +2,7 @@ export {
   getUsers as getUsersDispatch,
   setUserLoading,
   getUser,
+  getUserModule,
 } from './usersSlice';
 export {
   getUserGroups as getUserGroupsDispatch,

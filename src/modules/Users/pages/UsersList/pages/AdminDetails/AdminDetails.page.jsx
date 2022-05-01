@@ -21,6 +21,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Spin } from 'antd';
 import { useParams } from 'react-router-dom';
 import { getUserById } from 'store';
+import { getUserModulesById } from 'store';
 
 export const AdminDetails = () => {
   const { t } = useTranslation('/Users/ns');
@@ -44,13 +45,17 @@ export const AdminDetails = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getUserById(id));
+    dispatch(getUserModulesById(id));
   }, []);
 
   return (
     <div className="users">
-      <div className="admin-details">
+      <div className="admin-details min-w-[60vh]">
         {loading || user === null ? (
-          <Spin size="large" />
+          <Spin
+            size="large"
+            style={{ gridColumn: '1/3', alignSelf: 'center' }}
+          />
         ) : (
           <>
             <div className="admin-details__left">

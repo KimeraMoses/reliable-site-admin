@@ -1,4 +1,9 @@
-export { getUsers, getUserById } from './usersActions';
+export {
+  getUsers,
+  getUserById,
+  editUserPermissions,
+  getUserModulesById,
+} from './usersActions';
 export {
   getUserGroups,
   getGroupPermissions,
