@@ -7,7 +7,12 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkModule } from 'lib/checkModule';
 import { getGroupPermissions, getUserGroups } from 'store';
-import { AddGroup, AddPermissions, EditPermissions } from './sections';
+import {
+  AddGroup,
+  AddPermissions,
+  EditGroup,
+  EditPermissions,
+} from './sections';
 import { deleteGroup } from 'store';
 
 export const UsersGroups = () => {
@@ -123,18 +128,11 @@ export const UsersGroups = () => {
             t={t}
           />
           {/* Edit Modal */}
-          <Modal
-            show={editModal?.show}
-            initialValues={editModal?.values}
-            // fields={addFields}
-            setShow={setEditModal}
-            heading={t('editGroup')}
-            handleSubmit={(values) => {
-              console.log(values);
-            }}
-            handleCancel={() => {
-              setEditModal({ show: false, values: {} });
-            }}
+          <EditGroup
+            editModal={editModal}
+            setEditModal={setEditModal}
+            t={t}
+            loading={loading}
           />
           {/* Delete Modal */}
           <Modal
@@ -165,7 +163,12 @@ export const UsersGroups = () => {
             editAction={(record) => (
               <>
                 <Button
-                  onClick={() => setEditModal({ show: true, values: record })}
+                  onClick={() =>
+                    setEditModal({
+                      show: true,
+                      values: record,
+                    })
+                  }
                 >
                   {t('editSettings')}
                 </Button>

@@ -5,4 +5,5 @@ export {
   editGroupPermissions,
   addGroup,
   deleteGroup,
+  updateGroup,
 } from './userGroups';

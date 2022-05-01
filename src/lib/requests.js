@@ -65,6 +65,11 @@ export const deleteAdminGroup = (id) => ({
   url: `/api/admingroups/${id}`,
   config: adminGroupsConfig('Delete'),
 });
+// Update Group By ID
+export const updateAdminGroup = (id) => ({
+  url: `/api/admingroups/${id}`,
+  config: adminGroupsConfig('Update'),
+});
 
 // Admin Group Module Management
 const AdminGroupModuleManagement = 'AdminGroupModuleManagement';

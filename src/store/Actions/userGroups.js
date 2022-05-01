@@ -7,6 +7,7 @@ import {
   getAdminGroupPermissions,
   getAdminGroupsConfig,
   getError,
+  updateAdminGroup,
   updateAdminGroupPermission,
 } from 'lib';
 import {
@@ -89,7 +90,11 @@ export const addGroup = (groupData) => async (dispatch, getState) => {
   dispatch(setUserGroupsLoading(true));
   try {
     const { url, config } = createAdminGroup();
-    const res = await axios.post(url, groupData, config);
+    const addData = {
+      ...groupData,
+      tenant: 'Admin',
+    };
+    const res = await axios.post(url, addData, config);
     const getConfig = getAdminGroupById(res?.data?.data);
     const userGroup = await axios.get(getConfig?.url, getConfig?.config);
     dispatch(getGroup(userGroup?.data?.data));
@@ -97,6 +102,31 @@ export const addGroup = (groupData) => async (dispatch, getState) => {
       ...getState().userGroups.userGroups,
       userGroup?.data?.data,
     ];
+    dispatch(getUserGroups(newGroups));
+    dispatch(setUserGroupsLoading(false));
+  } catch (e) {
+    toast.error(getError(e));
+    dispatch(setUserGroupsLoading(false));
+  }
+};
+
+// Update a group
+export const updateGroup = (group) => async (dispatch, getState) => {
+  dispatch(setUserGroupsLoading(true));
+  try {
+    const { url, config } = updateAdminGroup(group?.id);
+    const updateData = {
+      ...group,
+      tenant: 'Admin',
+    };
+    const res = await axios.put(url, updateData, config);
+    const getConfig = getAdminGroupById(res?.data?.data);
+    const userGroup = await axios.get(getConfig?.url, getConfig?.config);
+    const updatedGroups = getState().userGroups.userGroups.filter((group) => {
+      return group?.id !== userGroup?.data?.data?.id;
+    });
+    const newGroups = [userGroup?.data?.data, ...updatedGroups];
+    console.log(newGroups);
     dispatch(getUserGroups(newGroups));
     dispatch(setUserGroupsLoading(false));
   } catch (e) {
