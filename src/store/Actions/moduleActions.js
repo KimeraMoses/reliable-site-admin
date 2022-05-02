@@ -1,81 +1,63 @@
 import {
+  getError,
+  axios,
+  getAppModulesConfig,
+  getUserModulesConfig,
+  getProfile,
+} from 'lib';
+import { toast } from 'react-toastify';
+import {
   getAppLevelModules,
   getUserLevelModules,
+  setModuleLoading,
 } from 'store/Slices/moduleSlice';
+
+let token = '';
+const AuthToken = localStorage.getItem('AuthToken');
+if (AuthToken) {
+  token = JSON.parse(AuthToken)?.token;
+}
 
 export const getAppModules = () => {
   return async (dispatch) => {
-    const AuthToken = localStorage.getItem('AuthToken');
-    const { token } = await JSON.parse(AuthToken);
+    setModuleLoading(true);
     if (token) {
-      const response = await fetch(
-        `${process.env.REACT_APP_BASEURL}/api/modulemanagement/getmodulebytenant/admin`,
-        {
-          method: 'GET',
-          headers: new Headers({
-            'Content-type': 'application/json',
-            'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
-            tenant: 'admin',
-            Authorization: `Bearer ${token}`,
-          }),
-        }
-      );
-      if (!response.ok) {
-        const error = await response.json();
-        console.log(error);
+      try {
+        const { url, config } = getAppModulesConfig();
+        const res = await axios.get(url, config);
+        dispatch(getAppLevelModules(res?.data?.data));
+        setModuleLoading(false);
+      } catch (e) {
+        toast.error(getError(e));
+        setModuleLoading(false);
       }
-      const res = await response.json();
-      dispatch(getAppLevelModules(res));
-    } else {
-      console.info('Not Authorized to get Modules');
     }
   };
 };
 
 export const getUserModules = () => {
   return async (dispatch) => {
-    const AuthToken = localStorage.getItem('AuthToken');
-    const { token } = JSON.parse(AuthToken);
+    setModuleLoading(true);
     // Get User Profile
-    if (token) {
-      const userRes = await fetch(
-        `${process.env.REACT_APP_BASEURL}/api/identity/profile`,
-        {
-          method: 'GET',
-          headers: new Headers({
-            'Content-type': 'application/json',
-            'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
-            tenant: 'admin',
-            Authorization: `Bearer ${token}`,
-          }),
-        }
-      );
-      const userData = await userRes.json();
-      const userId = userData.data.id;
-
+    try {
+      const { url, config } = getProfile();
+      const userRes = await axios.get(url, config);
+      const userId = userRes?.data?.data?.id;
+      // Get User Level Modules if UserID exists
       if (userId) {
-        const response = await fetch(
-          `${process.env.REACT_APP_BASEURL}/api/usermodulemanagement/getmodulebyuser/${userId}`,
-          {
-            method: 'GET',
-            headers: new Headers({
-              'Content-type': 'application/json',
-              'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
-              userId: userId,
-              tenant: 'admin',
-              Authorization: `Bearer ${token}`,
-            }),
-          }
-        );
-        if (!response.ok) {
-          const error = await response.json();
-          console.log(error);
+        try {
+          const { url, config } = getUserModulesConfig(userId);
+          const moduleRes = await axios.get(url, config);
+          dispatch(getUserLevelModules(moduleRes?.data?.data));
+          setModuleLoading(false);
+        } catch (e) {
+          toast.error(getError(e));
+          setModuleLoading(false);
         }
-        const res = await response.json();
-        dispatch(getUserLevelModules(res));
-      } else {
-        console.info('Not Authorized for User Level Modules');
       }
+    } catch (e) {
+      toast.error(getError(e));
+      setModuleLoading(false);
     }
   };
 };

@@ -3,6 +3,8 @@ import authReducer from './Slices/authSlice';
 import regReducer from './Slices/userRegistrationSlice';
 import settingReducer from './Slices/settingSlice';
 import moduleReducer from './Slices/moduleSlice';
+import usersReducer from './Slices/usersSlice';
+import userGroupsReducer from './Slices/userGroupsSlice';
 
 const store = configureStore({
   reducer: {
@@ -10,6 +12,8 @@ const store = configureStore({
     reg: regReducer,
     settings: settingReducer,
     modules: moduleReducer,
+    users: usersReducer,
+    userGroups: userGroupsReducer,
   },
 });
 
@@ -23,3 +27,5 @@ export const messageNotifications = {
   draggable: true,
   progress: undefined,
 };
+export * from './Actions';
+export * from './Slices';

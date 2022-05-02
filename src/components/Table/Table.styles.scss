@@ -1,191 +1,167 @@
-@import '../../styles/mixins.scss';
-
 .custom-table {
-  background: #1e1e2d;
-  border-radius: 8px;
-  padding: 40px;
-  &__el {
-    div.ant-table {
+  // Input in Header
+  &__input {
+    background: #171723;
+    padding: 14px;
+    border-radius: 8px;
+    border-color: #171723;
+    min-width: 300px;
+    // Prefix Icon
+    .ant-input-prefix {
+      margin-right: 12px;
+    }
+    // Input
+    input {
+      background: #171723;
+      color: #92928f;
+
+      &::placeholder {
+        color: #92928f;
+      }
+    }
+  }
+
+  // Button
+  &__btn {
+    padding-left: 32px;
+    padding-right: 32px;
+    min-height: 50px;
+    border-radius: 8px;
+    background: #3699ff;
+  }
+
+  // Table
+  &__table {
+    margin-top: 42px;
+
+    // For Both Header & Body
+    .ant-table-thead > tr > th,
+    .ant-table-tbody > tr > td {
       background: #1e1e2d;
-      color: #ffffff !important;
+      border-bottom: 1px dashed #474761;
+      font-family: Poppins;
+    }
+
+    // Table Header
+    .ant-table-thead > tr > th {
+      text-transform: uppercase;
+      color: #474761;
+      font-size: 12px;
+    }
+
+    // Table Body
+    .ant-table-tbody > tr > td {
+      color: #fff;
       font-size: 14px;
     }
-
-    .ant-table-cell {
-      padding: 16px 16px;
-      border-bottom: 1px dashed #474761;
-    }
-    .ant-table-cell.ant-table-cell-row-hover {
-      background: #474761 !important;
-    }
-    th.ant-table-cell {
-      color: #474761;
-      text-transform: uppercase;
-      font-size: 12px;
-      background: #1e1e2d;
+    // Table Body Hover Effects
+    .ant-table-tbody > tr.ant-table-row:hover > td,
+    .ant-table-tbody > tr > td.ant-table-cell-row-hover {
+      background: #383854;
     }
 
-    // Table pagination styles
-    .ant-pagination-item {
-      display: none;
-    }
-    .ant-pagination-jump-next {
-      display: none;
-    }
-    .ant-pagination {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      @include moreThanDesktop() {
-        grid-template-columns: repeat(12, 1fr);
+    // Action Buttons (Dropdown)
+    &-dropdown {
+      &-btn {
+        color: #fff;
+        text-transform: uppercase;
+        background: #323248;
+        border-color: #323248;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        border-radius: 4px;
+        &:hover,
+        &:active,
+        &:focus {
+          background: #323248;
+          border-color: #323248;
+        }
       }
-      margin-top: 100px;
-      .ant-pagination-total-text {
-        grid-column: 1/3;
-        font: normal normal medium 16px/21px Roboto;
-        letter-spacing: 0px;
-        color: #000000;
-      }
-      .ant-pagination-prev {
-        grid-column: 11 / 12;
-        justify-items: end;
-        display: inline-grid;
-        margin-right: 5px;
-      }
-      .ant-pagination-next {
-        grid-column: 12 / 13;
-        justify-items: center;
-        display: inline-grid;
-        margin-left: 5px;
-      }
-      .ant-pagination-jump-prev {
-        display: none;
-      }
-      .ant-pagination-disabled {
-        svg {
-          path {
-            stroke: #8c8c8c;
+      &-overlay {
+        display: flex;
+        min-width: 140px;
+        flex-direction: column;
+        background: #232333;
+        padding: 15px 0px;
+        button {
+          border: none;
+          color: #616166;
+          text-align: left;
+
+          &:hover {
+            background: rgb(39, 39, 58);
+            color: #fff;
           }
         }
       }
     }
-  }
 
-  .custom-table__filters {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 0px 0px 40px 0px;
-    flex-direction: column;
-    @include moreThanDesktop() {
-      flex-direction: row;
-    }
-    .custom-table__filters-search-wrapper {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-direction: column;
-      width: 100%;
-      margin-bottom: 0px;
-      @include moreThanTablet() {
-        flex-direction: row;
-        margin-bottom: 20px;
+    // Pagination Styles
+    .ant-pagination {
+      // All LI Styles
+      li.ant-pagination-item {
+        border-radius: 8px;
+        border: none;
+        background-color: transparent;
+        a {
+          background: #212e48;
+          border-radius: 8px;
+          color: #3699ff;
+          width: 32px;
+          height: 32px;
+          border: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
       }
-      @include moreThanDesktop() {
-        flex-direction: row;
-        justify-content: space-between;
-        width: auto;
-        margin-bottom: 0px;
+      // Active Item Styles
+      li.ant-pagination-item-active {
+        a {
+          background: #3699ff;
+          border-radius: 8px;
+          color: #fff;
+        }
       }
-    }
-    // Input Styles
-    .custom-table__filters-search {
-      background-color: #171723;
-      padding: 14px;
-      border-radius: 12px;
-      border: 1px solid #e8e8e8;
-      width: 100%;
-      @include moreThanTablet() {
-        width: 50%;
-      }
-      @include moreThanDesktop() {
-        min-width: 398px;
-      }
-      .ant-input {
-        background-color: #171723;
-        margin-left: 12px;
-        &::placeholder {
-          font: normal normal normal 16px/21px Roboto;
-          letter-spacing: 0px;
-          color: #92928f;
+
+      // Container
+      .ant-pagination-item-container {
+        display: flex;
+        height: 32px;
+        width: 32px;
+        border-radius: 8px;
+        align-items: center;
+        justify-content: center;
+        // Ellipses Styles
+        .ant-pagination-item-ellipsis {
+          color: #616166;
         }
       }
     }
-
-    // Select Styles
-    .custom-table__filters-select {
-      // height: 60px;
-      -moz-appearance: none;
-      -webkit-appearance: none;
-      appearance: none;
-      width: 100%;
-      margin-bottom: 20px;
-      // padding: 14px;
-      background: #1e1e2d;
-      @include moreThanTablet() {
-        width: 50%;
-        margin-bottom: 0px;
-      }
-      @include moreThanDesktop() {
-        min-width: 260px;
-      }
-      .ant-select-selector {
-        border-radius: 12px;
-        height: 50px;
-        background: #171723;
-      }
-      .ant-select-selection-item {
-        font-size: 16px;
-        letter-spacing: 0px;
-        color: #92928f;
-        padding: 10px;
-      }
-      .ant-select-arrow {
-        color: #92928f !important;
-      }
-    }
-    .custom-table__order-btn {
-      background: #3699ff;
-      border-style: none;
-      border-radius: 8px;
-      color: #ffffff;
-      min-height: 50px;
-    }
-    .custom-table__filters-buttons {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      flex-direction: column;
-      width: 100%;
-      @include moreThanTablet() {
-        flex-direction: row;
-      }
-      @include moreThanDesktop() {
-        flex-direction: row;
-        width: auto;
-      }
+    // Next / Prev Btns
+    .ant-pagination-next,
+    .ant-pagination-prev {
       button {
-        width: 100%;
-        @include moreThanDesktop() {
-          width: auto;
-        }
+        color: #3699ff;
+        background: #212e48;
+        padding: 0px;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-color: #212e48;
+        border-radius: 8px;
       }
     }
-  }
-}
-
-// Select Dropdown styles
-.custom-select__dropdown {
-  .ant-select-item {
-    padding: 10px 12px;
+    // Disabled Btns
+    .ant-pagination-disabled {
+      button {
+        color: #92928f;
+        background: #323248;
+        border-color: #323248;
+      }
+    }
   }
 }

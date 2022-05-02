@@ -1,121 +1,179 @@
-import { Input, Select, Table as AntdTable, Button } from 'antd';
+import { Input, Button, Table as AntTable, Dropdown } from 'antd';
+import { Dropdown as DropdownIcon } from 'icons';
 import { Search } from 'icons';
 import { useEffect, useState } from 'react';
+
 import './Table.styles.scss';
 
-const { Option } = Select;
+// Methods to Select Rows
+// const rowSelectionMethods = {
+//   onChange: (selectedRowKeys, selectedRows) => {
+//     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+//   },
+//   getCheckboxProps: (record) => ({
+//     disabled: record.name === 'Disabled User', // Column configuration not to be checked
+//     name: record.name,
+//   }),
+// };
 
-// Pagination Items
-function itemRender(current, type, originalElement) {
-  if (type === 'prev') {
-    return <div>{/* <ArrowLeft /> */}</div>;
-  }
-  if (type === 'next') {
-    return <div>{/* <ArrowRight /> */}</div>;
-  }
-  return originalElement;
-}
-
-export function Table({ data, columns, rowSelection, buttons, pageSize = 5 }) {
-  const [selectedFilter, setSelectedFilter] = useState(columns[0]?.dataIndex);
-  const [filteredData, setFilteredData] = useState([]);
-  const [searchText, setSearchText] = useState('');
+export const Table = ({
+  columns,
+  data,
+  fieldToFilter = 'name',
+  btnData,
+  pagination,
+  rowSelection,
+  customFilterSort,
+  loading,
+  permissions,
+  editAction,
+  deleteAction,
+  viewAction,
+  t,
+}) => {
+  const [dataSource, setDataSource] = useState([]);
+  const [tableColumns, setTableColumns] = useState([]);
+  const [filtered, setFiltered] = useState([]);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
-    if (searchText) {
-      setSearchText(searchText);
-      const search = searchText.toLowerCase();
-      const newData = data.filter((item) => {
-        const value =
-          typeof item[selectedFilter] === 'number'
-            ? item[selectedFilter].toString().toLowerCase()
-            : item[selectedFilter].toLowerCase();
-        return value.indexOf(search) !== -1;
+    if (fieldToFilter !== null && fieldToFilter !== undefined) {
+      const filteredData = data.filter((item) => {
+        if (item[fieldToFilter] !== null && item[fieldToFilter] !== undefined) {
+          return item[fieldToFilter]
+            .toString()
+            .toLowerCase()
+            .includes(search.toLowerCase());
+        }
+        return false;
       });
-      if (newData.length) {
-        setFilteredData(newData);
-      } else {
-        setFilteredData([
-          {
-            key: 'Not Found',
-            uid: 'Not Found',
-            name: 'Not Found',
-            status: 'Not Found',
-            last_check_in: 'Not Found',
-            last_check_out: 'Not Found',
-          },
-        ]);
-      }
-    } else {
-      setFilteredData([]);
+      setFiltered(filteredData);
     }
-  }, [searchText, selectedFilter]);
+  }, [data, fieldToFilter, search]);
 
-  const handleSearch = (e) => {
-    setSearchText(e.target.value);
-  };
+  // Only Set Data if there are view permissions
+  useEffect(() => {
+    let dataViewer = [];
+    if (permissions !== undefined && permissions !== null && permissions.View) {
+      dataViewer = filtered.length ? filtered : data;
+    }
+    setDataSource(dataViewer);
+  }, [data, filtered, permissions]);
+  // Only Add Actions if there are Update & Delete permissions
+  useEffect(() => {
+    if (permissions !== undefined && permissions !== null) {
+      const actionColumn =
+        (permissions?.View && viewAction) ||
+        permissions?.Remove ||
+        permissions?.Update
+          ? {
+              title: t('actions'),
+              key: 'actions',
+              render: (text, record) => (
+                <Dropdown
+                  overlayClassName="custom-table__table-dropdown-overlay"
+                  className="custom-table__table-dropdown"
+                  destroyPopupOnHide
+                  placement="bottomRight"
+                  overlay={
+                    <>
+                      {viewAction && permissions?.View && viewAction(record)}
+                      {editAction && permissions?.Update && editAction(record)}
+                      {deleteAction &&
+                        permissions?.Remove &&
+                        deleteAction(record)}
+                    </>
+                  }
+                  trigger={['click']}
+                >
+                  <Button
+                    type="primary"
+                    className="custom-table__table-dropdown-btn"
+                  >
+                    <div>{t ? t('actions') : 'Actions'}</div>
+                    <div>
+                      <DropdownIcon />
+                    </div>
+                  </Button>
+                </Dropdown>
+              ),
+            }
+          : {};
+      setTableColumns([...columns, actionColumn]);
+    }
+  }, []);
 
   return (
     <div className="custom-table">
-      <div>
-        <div className="custom-table__filters">
-          <div className="custom-table__filters-search-wrapper">
-            <Input
-              className="custom-table__filters-search"
-              placeholder="Search Here"
-              prefix={<Search />}
-              onChange={handleSearch}
-            />
-
-            <Select
-              value={selectedFilter}
-              className="custom-table__filters-select"
-              dropdownClassName="custom-select__dropdown"
-              onChange={(selected) => {
-                setSelectedFilter(selected);
-              }}
-            >
-              {columns?.map((col) => {
-                return (
-                  <Option key={col?.dataIndex} value={col?.dataIndex}>
-                    Status {col?.title}
-                  </Option>
-                );
-              })}
-            </Select>
-            <Button className="custom-table__order-btn">View All Orders</Button>
-          </div>
-          <div className="custom-table__filters-buttons">
-            {buttons?.map((btn) => {
-              return (
+      {/* Header */}
+      {permissions !== undefined && permissions !== null ? (
+        <>
+          <div className="flex items-center justify-between custom-table__top-row">
+            {/* Input */}
+            <div>
+              {
+                <>
+                  {permissions?.Search ? (
+                    <>
+                      {customFilterSort ? (
+                        customFilterSort
+                      ) : (
+                        <Input
+                          placeholder={'Search Here'}
+                          prefix={<Search />}
+                          className="custom-table__input"
+                          onChange={(e) => setSearch(e.target.value)}
+                        />
+                      )}
+                    </>
+                  ) : (
+                    <></>
+                  )}
+                </>
+              }
+            </div>
+            {/* Button */}
+            <div>
+              {btnData?.text && btnData?.onClick && permissions?.Create ? (
                 <Button
-                  key={btn?.title}
-                  variant={btn?.variant}
-                  onClick={btn?.onClick}
-                  disabled={btn?.disabled}
+                  type="primary"
+                  className="custom-table__btn"
+                  onClick={btnData?.onClick}
                 >
-                  {btn?.title}
+                  {btnData.text}
                 </Button>
-              );
-            })}
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
-        </div>
-      </div>
-
-      <AntdTable
-        rowSelection={rowSelection}
-        columns={columns}
-        dataSource={filteredData.length ? filteredData : data}
-        className="custom-table__el"
-        showSorterTooltip={false}
-        pagination={{
-          pageSize,
-          itemRender,
-          showTotal: (total, range) =>
-            `Showing ${range[0]}-${range[1]} of ${total} Records`,
-        }}
-        scroll={{ x: true }}
-      />
+          {/* Header End */}
+          {/* Table */}
+          <div className="custom-table__table">
+            <AntTable
+              columns={tableColumns}
+              dataSource={dataSource}
+              pagination={
+                pagination !== undefined && pagination !== null
+                  ? pagination
+                  : { position: ['bottomLeft'], showSizeChanger: false }
+              }
+              rowSelection={rowSelection}
+              loading={permissions?.View ? loading : false}
+              locale={{
+                emptyText: permissions?.View
+                  ? 'No Data'
+                  : 'You are not authorized to view this data.',
+              }}
+            />
+          </div>
+        </>
+      ) : (
+        <h3 className="text-white">
+          Please enable permissions to view the table.
+        </h3>
+      )}
+      {/* Table End */}
     </div>
   );
-}
+};
