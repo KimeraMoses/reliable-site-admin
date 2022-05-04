@@ -17,7 +17,7 @@ export function SideBar({ hideSide }) {
       }`}
     >
       <ul className="p-0">
-        {sidebarData.map(({ name, module, path, icon }) => {
+        {sidebarData.map(({ name, module, path, hideInSide, icon }) => {
           const isModulePresent = checkModule({
             modules: userLevelModules,
             module,
@@ -31,6 +31,7 @@ export function SideBar({ hideSide }) {
                   path={path}
                   icon={icon}
                   hideSide={hideSide}
+                  hideInSide={hideInSide}
                 />
               ) : (
                 <></>

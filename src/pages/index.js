@@ -30,6 +30,12 @@ export const dashboardPages = [
     path: '/dashboard/users/*',
     Component: lazy(() => import('./Dashboard/Users/Users.page')),
   },
+  {
+    path: '/dashboard/account-settings/*',
+    Component: lazy(() =>
+      import('./Dashboard/AccountSettings/AccountSettings.page')
+    ),
+  },
 ];
 
 export default pages;

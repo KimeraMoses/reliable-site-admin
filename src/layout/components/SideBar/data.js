@@ -64,4 +64,17 @@ export const sidebarData = [
     path: '/admin/dashboard/settings',
     icon: (fill) => <Settings fill={fill} />,
   },
+  {
+    name: 'Account Settings',
+    hideInSide: true,
+    module: 'AccountSettings',
+    path: '/admin/dashboard/account-settings',
+    icon: () => <></>,
+    subLinks: [
+      {
+        name: 'General',
+        path: '/admin/dashboard/account-settings/general',
+      },
+    ],
+  },
 ];
