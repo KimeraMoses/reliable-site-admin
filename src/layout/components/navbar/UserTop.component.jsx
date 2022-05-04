@@ -60,6 +60,7 @@ function UserTop() {
             bottom: '-254px',
             right: 0,
             boxShadow: '0px 0px 40px #00000066',
+            zIndex: 2,
           }}
         >
           {/* Name and Email Box */}
