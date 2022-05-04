@@ -23,7 +23,7 @@ try {
     fs.writeFileSync(
       `${moduleFolder}/component.jsx`,
       `import { useTranslation } from 'react-i18next';
-import './styles.scss';
+import './style.scss';
 
 export const ${process.argv[2]} = () => {
   const { t } = useTranslation('/${process.argv[2]}/ns');
