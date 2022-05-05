@@ -54,7 +54,10 @@ export function Modal({
                   ) : (
                     <div className="modal__form">
                       {fields.map(
-                        ({ type, name, placeholder, title }, index) => {
+                        (
+                          { type, name, placeholder, title, options },
+                          index
+                        ) => {
                           const strength = values?.password
                             ? passwordStrength(values?.password)?.value
                             : 'Password Not Entered Yet!';
@@ -157,6 +160,40 @@ export function Modal({
                                       </div>
                                     )}
                                   </div>
+                                ) : // Select
+                                type === 'select' ? (
+                                  <Field name={name}>
+                                    {({
+                                      field,
+                                      meta,
+                                      form: { setFieldValue },
+                                    }) => {
+                                      return (
+                                        <div className="w-full">
+                                          <select
+                                            onChange={(e) =>
+                                              setFieldValue(
+                                                name,
+                                                e.target.value
+                                              )
+                                            }
+                                            className="form-select appearance-none block w-full px-[16px] h-[52px] text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0 focus:bg-[#171723] focus:border-none focus:outline-none"
+                                          >
+                                            {options?.map((option) => (
+                                              <option value={option?.value}>
+                                                {option?.label}
+                                              </option>
+                                            ))}
+                                          </select>
+                                          {meta.touched && meta.error && (
+                                            <div className="error">
+                                              {meta.error}
+                                            </div>
+                                          )}
+                                        </div>
+                                      );
+                                    }}
+                                  </Field>
                                 ) : (
                                   <>
                                     <Field

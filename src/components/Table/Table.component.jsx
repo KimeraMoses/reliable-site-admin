@@ -29,6 +29,7 @@ export const Table = ({
   editAction,
   deleteAction,
   viewAction,
+  additionalBtns,
   t,
 }) => {
   const [dataSource, setDataSource] = useState([]);
@@ -133,7 +134,22 @@ export const Table = ({
               }
             </div>
             {/* Button */}
-            <div>
+            <div className="flex items-center gap-[8px]">
+              {additionalBtns?.length ? (
+                additionalBtns?.map((btn) => {
+                  return (
+                    <Button
+                      type="primary"
+                      className="px-[32px] border-none rounded-[8px] h-[52px] bg-[#212E48] hover:bg-[#212E48] active:bg-[#212E48] focus:bg-[#212E48] text-[#3699FF] hover:text-[#3699FF] active:text-[#3699FF] focus:text-[#3699FF]"
+                      onClick={btn?.onClick}
+                    >
+                      {btn.text}
+                    </Button>
+                  );
+                })
+              ) : (
+                <></>
+              )}
               {btnData?.text && btnData?.onClick && permissions?.Create ? (
                 <Button
                   type="primary"
