@@ -3,7 +3,7 @@ import { Formik, Form, Field } from 'formik';
 import { object } from 'yup';
 import { passwordStrength } from 'check-password-strength';
 import './Modal.styles.scss';
-import { Switch, Checkbox, Button } from 'antd';
+import { Switch, Button } from 'antd';
 import { Fragment } from 'react';
 
 const demoFields = [];
@@ -23,21 +23,15 @@ export function Modal({
   cancelButtonText = 'Cancel',
   handleCancel,
   customBody,
+  additionalBody,
   loading,
   handleSubmit = (values) => console.log(values),
 }) {
   const handleClose = () => {
     setShow(false);
   };
-  const isCrud = fields?.map((field) => field?.type === 'crud');
   return (
-    <BSModal
-      show={show}
-      onHide={handleClose}
-      className={`custom-modal ${
-        isCrud.includes(true) ? 'custom-modal__crud' : ''
-      }`}
-    >
+    <BSModal show={show} onHide={handleClose} className={`custom-modal`}>
       <BSModal.Body className="modal__bg">
         <div className="modal__header">
           <h3>{heading}</h3>
@@ -67,9 +61,7 @@ export function Modal({
                           return (
                             <Fragment key={name}>
                               <div className="modal__form-el" key={name}>
-                                <p className="modal__form-el-label">
-                                  {type === 'crud' ? '' : title}
-                                </p>
+                                <p className="modal__form-el-label">{title}</p>
                                 {/* Switch */}
                                 {type === 'switch' ? (
                                   <Field name={name}>
@@ -100,105 +92,6 @@ export function Modal({
                                               {meta.error}
                                             </div>
                                           )}
-                                        </div>
-                                      );
-                                    }}
-                                  </Field>
-                                ) : type === 'crud' ? (
-                                  // Crud
-                                  <Field name={name}>
-                                    {({
-                                      field,
-                                      meta,
-                                      form: { setFieldValue },
-                                    }) => {
-                                      console.log(field);
-                                      // console.log(field);
-                                      const nestedValues = [
-                                        {
-                                          name: 'Create',
-                                          title: 'Create',
-                                          value:
-                                            field?.value?.permissions?.Create,
-                                        },
-                                        {
-                                          name: 'Read',
-                                          title: 'Read',
-                                          value:
-                                            field?.value?.permissions?.View,
-                                        },
-                                        {
-                                          name: 'Update',
-                                          title: 'Update',
-                                          value:
-                                            field?.value?.permissions?.Update,
-                                        },
-                                        {
-                                          name: 'Delete',
-                                          title: 'Delete',
-                                          value:
-                                            field?.value?.permissions?.Remove,
-                                        },
-                                      ];
-                                      return (
-                                        <div className="modal__form-el-checkbox">
-                                          <div className="modal__form-el-checkbox-container">
-                                            <div className="modal__form-el-checkbox-container-label">
-                                              {title}
-                                            </div>
-                                            <div className="modal__form-el-checkbox-container-group">
-                                              <Checkbox
-                                                onChange={(e) => {
-                                                  setFieldValue(field?.name, {
-                                                    ...field?.value,
-                                                    permissions: {
-                                                      All: e.target.checked,
-                                                      Create: e.target.checked,
-                                                      Read: e.target.checked,
-                                                      Update: e.target.checked,
-                                                      Delete: e.target.checked,
-                                                    },
-                                                  });
-                                                }}
-                                                checked={field?.value?.All}
-                                              >
-                                                <p className="modal__form-el-checkbox-container-label">
-                                                  All
-                                                </p>
-                                              </Checkbox>
-                                              {nestedValues.map(
-                                                ({ name, value, title }) => {
-                                                  return (
-                                                    <div
-                                                      key={name}
-                                                      className="modal__form-el-checkbox-container-el"
-                                                    >
-                                                      <Checkbox
-                                                        checked={value}
-                                                        onChange={(e) =>
-                                                          setFieldValue(
-                                                            field?.name,
-                                                            {
-                                                              ...field?.value,
-                                                              permissions: {
-                                                                [name]:
-                                                                  e.target
-                                                                    .checked,
-                                                              },
-                                                            }
-                                                          )
-                                                        }
-                                                      >
-                                                        <p className="modal__form-el-checkbox-container-label">
-                                                          {title}
-                                                        </p>
-                                                      </Checkbox>
-                                                    </div>
-                                                  );
-                                                }
-                                              )}
-                                            </div>
-                                          </div>
                                         </div>
                                       );
                                     }}
@@ -281,17 +174,13 @@ export function Modal({
                                   </>
                                 )}
                               </div>
-                              {type === 'crud' && fields?.length > index + 1 ? (
-                                <div className="modal__crud-divider" />
-                              ) : (
-                                <></>
-                              )}
                             </Fragment>
                           );
                         }
                       )}
                     </div>
                   )}
+                  {additionalBody ? additionalBody : <></>}
                   <div className="modal__buttons">
                     <button
                       onClick={handleCancel ? handleCancel : handleClose}

@@ -1,6 +1,6 @@
 // import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import { Navigation, ProfileDetails } from './sections';
+import { Navigation, ProfileDetails, SigninMethods } from './sections';
 import './style.scss';
 
 export const UserProfile = () => {
@@ -19,6 +19,7 @@ export const UserProfile = () => {
       Component = () => (
         <>
           <ProfileDetails />
+          <SigninMethods />
         </>
       );
       break;

@@ -48,13 +48,13 @@ export const ProfileDetails = () => {
                         key={field?.name}
                       >
                         <label
-                          for="imageUrl"
+                          htmlFor={field?.name}
                           className="text-white text-[14px]"
                         >
                           {field?.label}
                         </label>
                         {field?.type === 'image' ? (
-                          <ImageUpload name="imageUrl" />
+                          <ImageUpload name={field?.name} />
                         ) : (
                           <Input
                             placeholder={field?.placeholder}
