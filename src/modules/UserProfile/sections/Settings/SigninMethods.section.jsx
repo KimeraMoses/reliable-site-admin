@@ -1,6 +1,7 @@
 import { Button } from 'components';
 import { useState } from 'react';
-import { UpdateEmail } from './sections';
+import { ResetPassword, UpdateEmail } from './sections';
+import { ChooseAuthMethod } from './sections/ChooseAuthMethod.section';
 
 const user = {
   fullName: 'Paul Elliot',
@@ -10,6 +11,8 @@ const user = {
 export const SigninMethods = () => {
   // States to manage the modals
   const [updateEmail, setUpdateEmail] = useState(false);
+  const [resetPassword, setResetPassword] = useState(false);
+  const [chooseAuth, setChooseAuth] = useState(false);
   // Render
   return (
     <div className="bg-[#1E1E2D] rounded-[8px] mt-[20px]">
@@ -46,7 +49,9 @@ export const SigninMethods = () => {
             <p className="text-[#92928F] text-[14px]">••••••••••••••••</p>
           </div>
           <div>
-            <Button type="secondary">Reset Password</Button>
+            <Button type="secondary" onClick={() => setResetPassword(true)}>
+              Reset Password
+            </Button>
           </div>
         </div>
         {/* MFA Section */}
@@ -64,12 +69,14 @@ export const SigninMethods = () => {
             </div>
           </div>
           <div>
-            <Button>Enable</Button>
+            <Button onClick={() => setChooseAuth(true)}>Enable</Button>
           </div>
         </div>
       </div>
       {/* Modals */}
       <UpdateEmail show={updateEmail} setShow={setUpdateEmail} />
+      <ResetPassword show={resetPassword} setShow={setResetPassword} />
+      <ChooseAuthMethod show={chooseAuth} setShow={setChooseAuth} />
     </div>
   );
 };
