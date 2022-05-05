@@ -78,10 +78,10 @@ export function DashboardLayout({ children, hide }) {
           </div>
         )}
         <div className="col">
-          <div className="bg-[#1A1A27] p-4 md:px-6 flex items-center gap-5">
+          <div className="bg-[#1A1A27] px-[20px] py-[20px] md:px-[40px] flex items-center gap-5">
             <h2 className="text-xl font-normal text-white">{active?.name}</h2>
 
-            {activeSub?.name ? (
+            {activeSub?.name && !active.hideBread ? (
               <>
                 <div className="h-5 w-[1px] bg-[#323248]" />
                 <h6 className="text-white text-[12px]">

@@ -1,5 +1,6 @@
 import { DashboardLayout } from 'layout';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { UserProfile } from 'modules';
 
 export default function AccountSettings() {
   return (
@@ -9,7 +10,7 @@ export default function AccountSettings() {
           index
           element={<Navigate to="/admin/dashboard/account-settings/general" />}
         />
-        <Route path="general" element={<>General</>} />
+        <Route path="general" element={<UserProfile />} />
         <Route path="*" element={<>404</>} />
       </Routes>
     </DashboardLayout>

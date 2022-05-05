@@ -67,6 +67,7 @@ export const sidebarData = [
   {
     name: 'Account Settings',
     hideInSide: true,
+    hideBread: true,
     module: 'AccountSettings',
     path: '/admin/dashboard/account-settings',
     icon: () => <></>,

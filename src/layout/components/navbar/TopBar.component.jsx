@@ -31,7 +31,7 @@ export function TopBar({ hide = false, hideSide, toggleSide }) {
         style={{ width: hideSide ? 'calc(100% - 84px)' : 'calc(100% - 300px)' }}
       >
         {active?.subLinks?.length ? (
-          <div className="flex items-center gap-4 ml-6">
+          <div className="flex items-center gap-4 ml-[40px]">
             {active?.subLinks.map((link) => (
               <Link
                 to={link?.path}

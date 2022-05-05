@@ -9,7 +9,7 @@ import './UserTop.css';
 
 function UserTop() {
   const [dropdown, setDropdown] = useState(false);
-  const { user } = useSelector((state) => state.auth);
+  const { user, isLoggedIn } = useSelector((state) => state.auth);
   const lessThanDesktop = useMediaQuery({
     query: '(max-width: 900px)',
   });
@@ -48,7 +48,7 @@ function UserTop() {
             className="h-full w-full"
           />
         ) : (
-          <UserName />
+          <UserName isLoggedIn={isLoggedIn} user={user} />
         )}
         {/* Dropdown */}
         <div
@@ -75,7 +75,7 @@ function UserTop() {
                     className="h-full w-full"
                   />
                 ) : (
-                  <UserName />
+                  <UserName isLoggedIn={isLoggedIn} user={user} />
                 )}
               </div>
               <div className="bg-[#1C3238] px-[8px] py-[4px] rounded-[4px] ">
@@ -95,6 +95,7 @@ function UserTop() {
               <p
                 className="pt-[20px] px-[20px] text-[#92928F] hover:text-[#3699FF] transition-all text-[14px] last:pb-[20px]"
                 onClick={link?.onClick}
+                key={link?.name}
               >
                 {link?.name}
               </p>
