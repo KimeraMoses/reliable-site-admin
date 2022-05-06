@@ -4,7 +4,7 @@ import { Table } from 'components';
 import './APIKeys.styles.scss';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Add } from './sections';
+import { Add, EditAPIKey } from './sections';
 // import { useSelector } from 'react-redux';
 // import { checkModule } from 'lib/checkModule';
 
@@ -13,6 +13,10 @@ export const APIKeys = () => {
   const [selectedSort, setSelectedSort] = useState('label');
   const [data, setData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
+  // Edit Modal State Start
+  const [showEdit, setShowEdit] = useState(false);
+  const [apikey, setApikey] = useState({});
+  // Edit Modal State End
 
   const { t } = useTranslation('/Users/ns');
 
@@ -120,7 +124,14 @@ export const APIKeys = () => {
           rowSelection={rowSelection}
           editAction={(record) => (
             <>
-              <Button>Edit</Button>
+              <Button
+                onClick={() => {
+                  setApikey(record);
+                  setShowEdit(true);
+                }}
+              >
+                Edit
+              </Button>
               <Button>Permissions</Button>
             </>
           )}
@@ -154,6 +165,7 @@ export const APIKeys = () => {
       </div>
       {/* Modals */}
       <Add show={show} setShow={setShow} />
+      <EditAPIKey show={showEdit} setShow={setShowEdit} apikey={apikey} />
     </div>
   );
 };
