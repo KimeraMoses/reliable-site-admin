@@ -13,12 +13,12 @@ export const UserProfileCard = () => {
     details: [
       { title: t('accountID'), value: user?.id },
       { title: t('billingEmail'), value: user?.email },
-      {
-        title: t('billingAddress'),
-        value: '101 Collin Street, Melbourne 3000, Australia',
-      },
+      // {
+      //   title: t('billingAddress'),
+      //   value: '101 Collin Street, Melbourne 3000, Australia',
+      // },
       { title: t('language'), value: 'English' },
-      { title: t('upcomingInvoice'), value: '54238-8693' },
+      // { title: t('upcomingInvoice'), value: '54238-8693' },
     ],
   };
 
