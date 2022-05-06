@@ -1,4 +1,4 @@
-import { Button, Dropdown, Select } from 'antd';
+import { Button, Dropdown, Select, Tooltip } from 'antd';
 import { Copy, Down, Dropdown as DropdownIcon } from 'icons';
 import { Table } from 'components';
 import './APIKeys.styles.scss';
@@ -33,9 +33,16 @@ export const APIKeys = () => {
         return (
           <div className="flex gap-[8px] items-center">
             <div>{text}</div>
-            <div>
-              <Copy />
-            </div>
+            <Tooltip title="Copied!" trigger="click">
+              <div
+                onClick={() => {
+                  navigator.clipboard.writeText(text);
+                }}
+                className="cursor-pointer"
+              >
+                <Copy />
+              </div>
+            </Tooltip>
           </div>
         );
       },
@@ -53,33 +60,6 @@ export const APIKeys = () => {
         <div className="bg-[#1C3238] px-[8px] py-[4px] text-[#0BB783] w-[fit-content] rounded-[4px]">
           {status}
         </div>
-      ),
-    },
-    {
-      title: t('actions'),
-      key: 'actions',
-      render: () => (
-        <Dropdown
-          overlayClassName="custom-table__table-dropdown-overlay"
-          className="custom-table__table-dropdown"
-          destroyPopupOnHide
-          placement="bottomRight"
-          overlay={
-            <>
-              {/* TODO: Replace with UID */}
-              <Button onClick={() => {}}>View</Button>
-              <Button>Edit</Button>
-            </>
-          }
-          trigger={['click']}
-        >
-          <Button type="primary" className="custom-table__table-dropdown-btn">
-            <div>{t('actions')}</div>
-            <div>
-              <DropdownIcon />
-            </div>
-          </Button>
-        </Dropdown>
       ),
     },
   ];
@@ -131,11 +111,20 @@ export const APIKeys = () => {
         <Table
           data={data}
           columns={columns}
-          btnData={{ text: t('addAPIKey'), onClick: () => {} }}
+          btnData={{ text: 'Add API Key', onClick: () => {} }}
           fieldToFilter="label"
           pagination={false}
           rowSelection={rowSelection}
           permissions={permissions}
+          editAction={(record) => {
+            return (
+              <>
+                {/* TODO: Replace with UID */}
+                <Button onClick={() => {}}>Edit</Button>
+                <Button>Permissions</Button>
+              </>
+            );
+          }}
           t={t}
           customFilterSort={
             <>
