@@ -17,7 +17,7 @@ export const ImageUpload = ({ name }) => {
             onChange={(e) => {
               const [file] = e.target.files;
               if (file) {
-                setFieldValue(name, file);
+                setFieldValue(name, e.target.files[0]);
                 setFieldValue('preview', URL.createObjectURL(file));
               }
             }}

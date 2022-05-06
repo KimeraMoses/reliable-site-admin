@@ -18,7 +18,7 @@ import { accountSuspended, closeLockScreen } from 'store/Slices/settingSlice';
 import '../../layout/components/navbar/UserTop.css';
 
 function LockScreen() {
-  const user = useSelector((state) => state.auth.user);
+  const { user, isLoggedIn } = useSelector((state) => state.auth);
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const isTrustDevice = true;
@@ -132,7 +132,7 @@ function LockScreen() {
                   className="h-full w-full"
                 />
               ) : (
-                <UserName />
+                <UserName isLoggedIn={isLoggedIn} user={user} />
               )}
             </div>
             <div>

@@ -1,25 +1,32 @@
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Button, ImageUpload, Input } from 'components';
+import { deepEqual } from 'lib';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateUserProfile } from 'store';
 
-const initialValues = {
-  imageUrl: '',
-  fullName: 'Paul Elliot',
-  status: true,
-  ipAddress: '253.205.121.39',
-};
 const fields = [
-  { name: 'imageUrl', label: 'Avatar', type: 'image' },
+  { name: 'image', label: 'Avatar', type: 'image' },
   { name: 'fullName', label: 'Full Name', type: 'text' },
   { name: 'status', label: 'Status', type: 'switch' },
   { name: 'ipAddress', label: 'IP Address', type: 'text' },
 ];
 
 const validationSchema = Yup.object().shape({
-  // imageUrl: Yup.string().required('Image is required'),
+  // image: Yup.string().required('Image is required'),
 });
 
 export const ProfileDetails = () => {
+  const { user, isLoading } = useSelector((state) => state.auth);
+  const initialValues = {
+    image: user?.image,
+    fullName: user?.fullName,
+    status: user?.status,
+    ipAddress: user?.ipAddress,
+  };
+
+  const dispatch = useDispatch();
+
   return (
     <div className="mt-[20px] bg-[#1E1E2D] rounded-[8px]">
       {/* Heading */}
@@ -33,7 +40,24 @@ export const ProfileDetails = () => {
           validationSchema={validationSchema}
           enableReinitialize
           onSubmit={(values) => {
-            console.log(values);
+            const fileName = values?.image?.name;
+            const ext = fileName
+              ? fileName.substr(fileName.lastIndexOf('.') + 1)
+              : '';
+            const newValues = {
+              image: values?.image
+                ? {
+                    name: values?.image,
+                    extension: ext,
+                    data: values?.image,
+                  }
+                : undefined,
+              fullName: values?.fullName,
+              status: values?.status,
+              ipAddress: values?.ipAddress,
+            };
+            // console.log(newValues);
+            dispatch(updateUserProfile(newValues));
           }}
         >
           {({ values, handleReset }) => {
@@ -71,7 +95,13 @@ export const ProfileDetails = () => {
                   <Button type="secondary" onClick={handleReset}>
                     Discard
                   </Button>
-                  <Button htmlType="submit">Save Changes</Button>
+                  <Button
+                    htmlType="submit"
+                    disabled={deepEqual(initialValues, values)}
+                    loading={isLoading}
+                  >
+                    Save Changes
+                  </Button>
                 </div>
               </Form>
             );

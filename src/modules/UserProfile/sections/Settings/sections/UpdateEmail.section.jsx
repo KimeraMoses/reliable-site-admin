@@ -34,8 +34,12 @@ export const UpdateEmail = ({ show, setShow }) => {
       fields={fields}
       initialValues={initialValues}
       validationSchema={validationSchema}
-      handleSubmit={(values) => {
-        console.log(values);
+      handleSubmit={({ email, confirmPassword }) => {
+        const finalValues = {
+          email,
+          password: confirmPassword,
+        };
+        console.log(finalValues);
         setShow(false);
       }}
       show={show}

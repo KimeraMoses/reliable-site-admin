@@ -1,4 +1,6 @@
 import { Modal } from 'components';
+import { useDispatch, useSelector } from 'react-redux';
+import { changePassword } from 'store';
 import * as Yup from 'yup';
 
 const fields = [
@@ -29,26 +31,34 @@ const initialValues = {
 };
 
 const validationSchema = Yup.object().shape({
-  currentPassword: Yup.string().required('Password is required'),
+  currentPassword: Yup.string().required('Current Password is required'),
   newPassword: Yup.string()
     .notOneOf(
       [Yup.ref('currentPassword'), null],
-      'Password cannot be the same as current password'
+      'New Password cannot be the same as current password'
     )
-    .required('Password is required'),
+    .required('New Password is required'),
   confirmNewPassword: Yup.string()
     .oneOf([Yup.ref('newPassword'), null], 'Passwords must match')
-    .required('Password is required'),
+    .required('Confirm New Password is required'),
 });
 
 export const ResetPassword = ({ show, setShow }) => {
+  const { isLoading } = useSelector((state) => state?.auth);
+  const dispatch = useDispatch();
   return (
     <Modal
       fields={fields}
       initialValues={initialValues}
       validationSchema={validationSchema}
-      handleSubmit={(values) => {
-        console.log(values);
+      loading={isLoading}
+      handleSubmit={async (values) => {
+        const finalValues = {
+          currentPassword: values.currentPassword,
+          password: values.newPassword,
+          confirmPassword: values.confirmNewPassword,
+        };
+        await dispatch(changePassword(finalValues));
         setShow(false);
       }}
       show={show}

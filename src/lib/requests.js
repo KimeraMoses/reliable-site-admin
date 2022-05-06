@@ -44,6 +44,14 @@ export const registerAdminConfig = () => ({
   url: '/api/identity/register-admin',
   config: identityConfig('Create'),
 });
+export const updateUserProfileConfig = () => ({
+  url: `/api/identity/profile`,
+  config: identityConfig('Update'),
+});
+export const changePasswordConfig = () => ({
+  url: `/api/identity/change-password`,
+  config: identityConfig('Update'),
+});
 
 // Users
 const Users = 'Users';

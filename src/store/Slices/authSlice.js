@@ -1,21 +1,21 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   user: {},
   token: null,
   rToken: null,
   isLoggedIn: false,
-  status: "",
+  status: '',
   message: null,
-  updateStatus: "",
+  updateStatus: '',
   isLoading: false,
-  authUri: "",
+  authUri: '',
   hasMFA: false,
 };
 
 export const authSlice = createSlice({
   initialState,
-  name: "authSlice",
+  name: 'authSlice',
   reducers: {
     autoAuthenticationSuccess(state, { payload }) {
       state.user = payload.user;
@@ -110,8 +110,9 @@ export const authSlice = createSlice({
       state.user = {};
       state.token = null;
       state.isLoggedIn = false;
-      localStorage.removeItem("AuthToken");
-      localStorage.removeItem("CurrentUser");
+      state.isLoading = false;
+      localStorage.removeItem('AuthToken');
+      localStorage.removeItem('CurrentUser');
       state.hasMFA = false;
     },
   },

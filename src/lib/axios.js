@@ -6,7 +6,6 @@ export const axios = axiosMain.create({
 
 axios.interceptors.request.use(
   function (config) {
-    // const refreshToken = tokenObj?.refreshToken;
     const AuthToken = localStorage.getItem('AuthToken');
     const tokenObj = JSON.parse(AuthToken);
     const token = tokenObj?.token;

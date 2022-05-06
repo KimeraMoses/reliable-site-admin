@@ -1,6 +1,5 @@
 // import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Navigation, ProfileDetails, SigninMethods, APIKeys } from './sections';
 import './style.scss';
 

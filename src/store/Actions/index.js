@@ -12,3 +12,4 @@ export {
   deleteGroup,
   updateGroup,
 } from './userGroups';
+export { updateUserProfile, changePassword } from './AuthActions';
