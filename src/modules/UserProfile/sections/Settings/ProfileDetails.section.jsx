@@ -1,7 +1,7 @@
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Button, ImageUpload, Input } from 'components';
-import { deepEqual } from 'lib';
+import { addServerUrl, convertBase64, deepEqual } from 'lib';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUserProfile } from 'store';
 
@@ -15,11 +15,10 @@ const fields = [
 const validationSchema = Yup.object().shape({
   // image: Yup.string().required('Image is required'),
 });
-
 export const ProfileDetails = () => {
   const { user, isLoading } = useSelector((state) => state.auth);
   const initialValues = {
-    image: user?.image,
+    image: user?.imageUrl,
     fullName: user?.fullName,
     status: user?.status,
     ipAddress: user?.ipAddress,
@@ -39,19 +38,25 @@ export const ProfileDetails = () => {
           initialValues={initialValues}
           validationSchema={validationSchema}
           enableReinitialize
-          onSubmit={(values) => {
+          onSubmit={async (values) => {
             const fileName = values?.image?.name;
-            const ext = fileName
-              ? fileName.substr(fileName.lastIndexOf('.') + 1)
-              : '';
+            const imgData = {};
+            if (fileName) {
+              const ext = fileName.substr(fileName.lastIndexOf('.'));
+              const finalName = fileName.substr(0, fileName.indexOf('.'));
+
+              let base64image = '';
+              try {
+                base64image = await convertBase64(values?.image);
+                imgData.name = finalName;
+                imgData.extension = `${ext}`;
+                imgData.data = base64image;
+              } catch (e) {
+                base64image = '';
+              }
+            }
             const newValues = {
-              image: values?.image
-                ? {
-                    name: values?.image,
-                    extension: ext,
-                    data: values?.image,
-                  }
-                : undefined,
+              image: Object.keys(imgData).length ? imgData : undefined,
               fullName: values?.fullName,
               status: values?.status,
               ipAddress: values?.ipAddress,

@@ -2,9 +2,9 @@ import {
   getError,
   axios,
   updateUserProfileConfig,
-  getUserConfig,
   getProfile,
   changePasswordConfig,
+  updateEmailConfig,
 } from 'lib';
 import { toast } from 'react-toastify';
 import {
@@ -50,6 +50,27 @@ export const SaveTokenInLocalStorage = (dispatch, userDetails) => {
   localStorage.setItem('CurrentUser', JSON.stringify(userDetails));
 };
 
+// Update Email
+export const updateEmail = (data) => async (dispatch) => {
+  dispatch(initAuthenticationPending());
+  try {
+    const { url, config } = updateEmailConfig();
+    await axios.put(url, data, config);
+    const profileConfig = getProfile();
+    const profileRes = await axios.get(
+      profileConfig?.url,
+      profileConfig?.config
+    );
+    dispatch(
+      authenticationSuccess({
+        user: profileRes?.data?.data,
+      })
+    );
+    toast.success('Email updated successfully');
+  } catch (error) {
+    toast.error('Email update failed');
+  }
+};
 // Change Password
 export const changePassword = (values) => {
   return async function (dispatch) {
@@ -58,6 +79,9 @@ export const changePassword = (values) => {
       const { url } = changePasswordConfig();
       await axios.post(url, values);
       dispatch(logout());
+      toast.success(
+        'Password changed successfully, Please login again using new password'
+      );
     } catch (e) {
       toast.error(getError(e));
     }

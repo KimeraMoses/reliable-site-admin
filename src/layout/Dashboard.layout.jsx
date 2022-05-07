@@ -60,9 +60,11 @@ export function DashboardLayout({ children, hide }) {
     }
   }, [pathname]);
 
-  // useEffect(() => {
-  //   dispatch(GetMFAUri(user && user.id));
-  // }, [user, dispatch]);
+  useEffect(() => {
+    if (user) {
+      dispatch(GetMFAUri(user.id));
+    }
+  }, [user, dispatch]);
 
   const toggleSide = () => {
     setHideSide((state) => !state);

@@ -1,12 +1,14 @@
 import * as Yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Input, Modal } from 'components';
 import { Info } from 'icons';
-
-const data = {
-  qr: 'https://www.shift4shop.com/lp/qr-code-generator/qrcodes/c823cefe10d24fbf376d40d26199e862.png',
-  code: 'KBSS3QDAAFUMCBY63YCKI5WSSVACUMPN',
-};
+import QRCode from 'react-qr-code';
+import { axios, getError, validateMFAConfig } from 'lib';
+import { logout } from 'store/Slices/authSlice';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+import { enableDisableMFA } from 'lib/api-calls';
 
 const initialValues = {
   code: '',
@@ -17,12 +19,39 @@ const validationSchema = Yup.object().shape({
 });
 
 export const AuthApps = ({ show, setShow }) => {
+  const [loading, setLoading] = useState(false);
+  const { authUri, user } = useSelector((state) => state.auth);
+  let url = new URL(authUri);
+  let params = new URLSearchParams(url.search);
+
+  const dispatch = useDispatch();
+
   return (
     <Modal
-      handleSubmit={(values) => {
+      handleSubmit={async (values) => {
+        setLoading(true);
+        try {
+          // Validate Code
+          const res = await axios.post(validateMFAConfig().url, {
+            userId: user.id,
+            code: values.code,
+            isRemember: false,
+          });
+          if (res?.status === 200) {
+            // Enable 2FA
+            await enableDisableMFA({ userId: user.id, flag: true });
+            toast.success('2FA Enabled Successfully');
+            // Logout
+            dispatch(logout());
+          }
+        } catch (e) {
+          toast.error(getError(e));
+          setLoading(false);
+        }
         console.log(values);
         setShow(false);
       }}
+      loading={loading}
       show={show}
       setShow={setShow}
       heading="Choose Authentication Method"
@@ -42,10 +71,12 @@ export const AuthApps = ({ show, setShow }) => {
           </p>
           {/* QR Image */}
           <div className="mb-[32px] flex items-center justify-center">
-            <img
-              src={data?.qr}
-              alt="QR"
-              className="rounded-[8px] h-[200px] w-[200px] object-cover"
+            <QRCode
+              value={params.get('secret')}
+              title="Scan QR Code to Enable MFA"
+              width={200}
+              height={200}
+              className="rounded-[8px]"
             />
           </div>
           {/* Additional Info */}
@@ -60,7 +91,7 @@ export const AuthApps = ({ show, setShow }) => {
               your app, and enter your username and the code:
             </p>
             <p className="text-white text-[16px] text-center font-medium">
-              {data?.code}
+              {params.get('secret')}
             </p>
             {/* Input */}
           </div>

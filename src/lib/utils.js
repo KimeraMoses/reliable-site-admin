@@ -79,3 +79,43 @@ export async function asyncForEach(array, callback) {
     await callback(array[index], index, array);
   }
 }
+
+// Convert Image to Base64
+export const convertBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
+
+    fileReader.onload = () => {
+      resolve(fileReader.result);
+    };
+
+    fileReader.onerror = (error) => {
+      reject(error);
+    };
+  });
+};
+
+// Add Server URL Properly
+export const addServerUrl = (
+  url = '{server_url}/Files/Images/ApplicationUser/Usama.jpeg.jpeg'
+) => {
+  const truncated = url.substring(url.indexOf('/'), url.length);
+  const finalURL = `${process.env.REACT_APP_BASEURL}${truncated}`;
+  return finalURL;
+};
+
+// Convert URL to File
+export const convertUrlToFile = async (imgUrl, fileName) => {
+  const imgExt = imgUrl.split(/[#?]/)[0].split('.').pop().trim();
+  try {
+    const response = await fetch(imgUrl);
+    const blob = await response.blob();
+    const file = new File([blob], `${fileName}.` + imgExt, {
+      type: blob.type,
+    });
+    return file;
+  } catch (e) {
+    console.log(e);
+  }
+};

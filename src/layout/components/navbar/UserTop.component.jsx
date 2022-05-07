@@ -9,6 +9,7 @@ import './UserTop.css';
 
 function UserTop() {
   const [dropdown, setDropdown] = useState(false);
+  const [showName, setShowName] = useState(false);
   const { user, isLoggedIn } = useSelector((state) => state.auth);
   const lessThanDesktop = useMediaQuery({
     query: '(max-width: 900px)',
@@ -41,14 +42,16 @@ function UserTop() {
       ref={dropDownRef}
     >
       <div className="h-12 w-12 rounded-lg border-2 border-[#3699FF] p-1 userName">
-        {user && user.imageUrl && user.imageUrl.length > 0 ? (
+        {user && user.imageUrl && user.imageUrl.length > 0 && !showName ? (
           <img
             src={user && user.imageUrl}
             alt={user && user.userName}
             className="h-full w-full"
+            onLoad={() => setShowName(false)}
+            onError={() => setShowName(true)}
           />
         ) : (
-          <UserName isLoggedIn={isLoggedIn} user={user} />
+          <>{user && <UserName isLoggedIn={isLoggedIn} user={user} />}</>
         )}
         {/* Dropdown */}
         <div
@@ -68,14 +71,21 @@ function UserTop() {
             <div className="flex items-start justify-between">
               {/* Image + Status */}
               <div className="h-12 w-12 rounded-lg border-2 border-[#3699FF] p-1 userName">
-                {user && user.imageUrl && user.imageUrl.length > 0 ? (
+                {user &&
+                user.imageUrl &&
+                user.imageUrl.length > 0 &&
+                !showName ? (
                   <img
                     src={user && user.imageUrl}
                     alt={user && user.userName}
+                    onLoad={() => setShowName(false)}
+                    onError={() => setShowName(true)}
                     className="h-full w-full"
                   />
                 ) : (
-                  <UserName isLoggedIn={isLoggedIn} user={user} />
+                  <>
+                    {user && <UserName isLoggedIn={isLoggedIn} user={user} />}
+                  </>
                 )}
               </div>
               <div className="bg-[#1C3238] px-[8px] py-[4px] rounded-[4px] ">
@@ -85,9 +95,7 @@ function UserTop() {
             <div className="mt-[20px]">
               {/* onClick={() => dispatch(logout())} */}
               <h3 className="text-white text-[14px] mb-0">{user?.fullName}</h3>
-              <h3 className="text-[#92928F] text-[14px] mb-0">
-                {user?.userName}
-              </h3>
+              <h3 className="text-[#92928F] text-[14px] mb-0">{user?.email}</h3>
             </div>
           </div>
           <div>

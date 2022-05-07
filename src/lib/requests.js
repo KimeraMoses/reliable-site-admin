@@ -52,6 +52,10 @@ export const changePasswordConfig = () => ({
   url: `/api/identity/change-password`,
   config: identityConfig('Update'),
 });
+export const updateEmailConfig = () => ({
+  url: `/api/identity/updateemail`,
+  config: identityConfig('Update'),
+});
 
 // Users
 const Users = 'Users';
@@ -112,4 +116,12 @@ export const createAdminGroupPermission = () => ({
 export const updateAdminGroupPermission = (permissionId) => ({
   url: `/api/admingroupmodulemanagement/${permissionId}`,
   config: adminGMMC('Update'),
+});
+
+// MFA Authentication Endpoints
+export const validateMFAConfig = () => ({
+  url: '/api/mfauthenticator/validate-mfa',
+});
+export const enableDisableMFAConfig = () => ({
+  url: '/api/mfauthenticator/enable-disable-2fa',
 });
