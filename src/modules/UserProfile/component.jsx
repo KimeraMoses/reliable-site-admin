@@ -1,6 +1,13 @@
 // import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
-import { Navigation, ProfileDetails, SigninMethods, APIKeys } from './sections';
+import {
+  Navigation,
+  ProfileDetails,
+  SigninMethods,
+  APIKeys,
+  Logs,
+  LoginSessions,
+} from './sections';
 import './style.scss';
 
 export const UserProfile = () => {
@@ -27,10 +34,20 @@ export const UserProfile = () => {
       Component = () => <APIKeys />;
       break;
     case 'Logs':
-      Component = () => <>Logs</>;
+      Component = () => (
+        <>
+          <LoginSessions />
+          <Logs />
+        </>
+      );
       break;
     default:
-      Component = () => <>Settings</>;
+      Component = () => (
+        <>
+          <ProfileDetails />
+          <SigninMethods />
+        </>
+      );
   }
 
   return (

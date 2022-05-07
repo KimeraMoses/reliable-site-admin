@@ -30,6 +30,8 @@ export const Table = ({
   deleteAction,
   viewAction,
   additionalBtns,
+  hideActions,
+  hideHeaders,
   t,
 }) => {
   const [dataSource, setDataSource] = useState([]);
@@ -62,7 +64,7 @@ export const Table = ({
   }, [data, filtered, permissions]);
   // Only Add Actions if there are Update & Delete permissions
   useEffect(() => {
-    if (permissions !== undefined && permissions !== null) {
+    if (permissions !== undefined && permissions !== null && !hideActions) {
       const actionColumn =
         (permissions?.View && viewAction) ||
         permissions?.Remove ||
@@ -101,6 +103,8 @@ export const Table = ({
             }
           : {};
       setTableColumns([...columns, actionColumn]);
+    } else {
+      setTableColumns(columns);
     }
   }, []);
 
@@ -165,7 +169,11 @@ export const Table = ({
           </div>
           {/* Header End */}
           {/* Table */}
-          <div className="custom-table__table">
+          <div
+            className={`custom-table__table ${
+              hideHeaders ? 'custom-table__table-hide-headers' : ''
+            }`}
+          >
             <AntTable
               columns={tableColumns}
               dataSource={dataSource}

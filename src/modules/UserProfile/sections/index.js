@@ -4,3 +4,5 @@ export { Navigation } from './Navigation/Navigation.section';
 export * from './Settings';
 // API Keys
 export { APIKeys } from './APIKeys/APIKeys.section';
+// Logs
+export * from './Logs';

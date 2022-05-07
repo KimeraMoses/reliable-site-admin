@@ -125,3 +125,8 @@ export const validateMFAConfig = () => ({
 export const enableDisableMFAConfig = () => ({
   url: '/api/mfauthenticator/enable-disable-2fa',
 });
+
+// Logs End-Points
+export const getLogsConfig = () => ({
+  url: '/api/audit-logs',
+});

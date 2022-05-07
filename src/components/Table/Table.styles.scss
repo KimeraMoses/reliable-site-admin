@@ -1,3 +1,10 @@
+.custom-table__table.custom-table__table-hide-headers {
+  margin-top: 32px;
+  .ant-table-thead {
+    display: none;
+  }
+}
+
 .custom-table {
   // Input in Header
   &__input {
