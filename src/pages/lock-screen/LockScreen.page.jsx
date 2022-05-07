@@ -19,6 +19,7 @@ import '../../layout/components/navbar/UserTop.css';
 
 function LockScreen() {
   const { user, isLoggedIn } = useSelector((state) => state.auth);
+  const [showName, setShowName] = useState(false);
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const isTrustDevice = true;
@@ -125,14 +126,20 @@ function LockScreen() {
           </div>
           <div className="flex mb-5">
             <div className="h-12 w-12 rounded-lg border-2 border-[#3699FF] p-2 userName mr-4">
-              {user && user.imageUrl && user.imageUrl.length > 0 ? (
+              {user &&
+              user.imageUrl &&
+              user.imageUrl.length > 0 &&
+              !showName ? (
                 <img
                   src={user && user.imageUrl}
                   alt={user && user.userName}
+                  onLoad={() => setShowName(false)}
+                  onError={() => setShowName(true)}
                   className="h-full w-full"
                 />
               ) : (
-                <UserName isLoggedIn={isLoggedIn} user={user} />
+                user &&
+                showName && <UserName isLoggedIn={isLoggedIn} user={user} />
               )}
             </div>
             <div>
