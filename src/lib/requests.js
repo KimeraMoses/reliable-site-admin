@@ -1,8 +1,9 @@
-const getConfig = ({ module, action }) => {
+const getConfig = ({ module, action, xForwardedFor }) => {
   const config = {
     headers: {
       modulename: module,
       moduleactionname: action,
+      'X-Forwarded-For': xForwardedFor,
     },
   };
   return config;
@@ -124,6 +125,14 @@ export const validateMFAConfig = () => ({
 });
 export const enableDisableMFAConfig = () => ({
   url: '/api/mfauthenticator/enable-disable-2fa',
+});
+// Check MFA Status
+export const getCurrentMFAStatus = () => ({
+  url: `/api/mfauthenticator/getcurrentstatusoftwofactorauthentication`,
+});
+// Send OTP to Email
+export const sendOTPToEmailConfig = () => ({
+  url: '/api/mfauthenticator/generateotpemail',
 });
 
 // Logs End-Points

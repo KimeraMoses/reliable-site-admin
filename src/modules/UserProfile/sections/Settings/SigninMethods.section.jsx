@@ -99,7 +99,7 @@ export const SigninMethods = () => {
                   }}
                   loading={loading}
                   type={hasMFA ? 'secondary' : 'primary'}
-                  className="bg-slate-500"
+                  className={hasMFA ? 'bg-slate-500' : ''}
                 >
                   {hasMFA ? 'Disable' : 'Enable'}
                 </Button>

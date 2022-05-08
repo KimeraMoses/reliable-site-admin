@@ -15,6 +15,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { AutoAuthenticate, maintenanceStatus } from 'store/Actions/AuthActions';
 import { getAppModules, getUserModules } from 'store/Actions/moduleActions';
 import { initiateLockScreen } from 'store/Slices/settingSlice';
+import { ChangeMfaStatus } from 'store/Slices/authSlice';
+import { toast } from 'react-toastify';
+import { axios, getCurrentMFAStatus, getError } from 'lib';
 
 const SignIn = React.lazy(() => import('pages/sign-in/SignIn.page'));
 const SignUp = React.lazy(() => import('pages/sign-up/SignUp.page'));
@@ -42,6 +45,7 @@ const LockScreen = React.lazy(() =>
 
 function App() {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
+  const user = useSelector((state) => state.auth.user);
   const { maintenance, suspended } = useSelector((state) => state.settings);
   const isIdle = useSelector((state) => state.settings.isIdle);
   const Timeout = 1000 * 900;
@@ -59,6 +63,24 @@ function App() {
     dispatch(getUserModules());
     // dispatch(trustedDays())
   }, [dispatch]);
+
+  // Check MFA Status
+  const checkMFAStatus = async () => {
+    try {
+      const { url } = getCurrentMFAStatus();
+      const res = await axios.post(url, { userId: user?.id });
+      if (res?.data?.is2faEnabled) {
+        dispatch(ChangeMfaStatus());
+      }
+    } catch (e) {
+      toast.error(getError(e));
+    }
+  };
+  useEffect(() => {
+    if (isLoggedIn) {
+      checkMFAStatus();
+    }
+  }, [isLoggedIn, dispatch]);
 
   return (
     <div className="App bg-custom-main flex items-center content-center">

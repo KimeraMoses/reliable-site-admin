@@ -27,12 +27,11 @@ export const Email = ({ show, setShow }) => {
         <div className="pb-[32px]">
           {/* Heading */}
           <h6 className="mb-[12px] text-white text-[16px] text-center">
-            Email Address
+            One Time Password (OTP)
           </h6>
           {/* Desc */}
           <p className="text-[#92928F] text-[14px] text-center mb-[32px]">
-            Enter your email address registered with this account and we will
-            send you a verification code upon request.
+            Please enter the OTP sent to your email.
           </p>
           {/* Input */}
           <div className="mt-[32px]">

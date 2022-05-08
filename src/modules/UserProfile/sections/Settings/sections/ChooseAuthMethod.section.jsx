@@ -4,6 +4,9 @@ import { Modal } from 'components';
 import { Mail, Gear } from 'icons';
 import { AuthApps } from './AuthApps.section';
 import { Email } from './Email.section';
+import { axios, getError, sendOTPToEmailConfig } from 'lib';
+import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 const authMethods = [
   {
@@ -23,21 +26,34 @@ const authMethods = [
 ];
 
 export const ChooseAuthMethod = ({ show, setShow }) => {
+  const [loading, setLoading] = useState(false);
   const [active, setActive] = useState('authApps');
 
   // Sub Modals State
   const [authApps, setAuthApps] = useState(false);
   const [email, setEmail] = useState(false);
 
+  const { user } = useSelector((state) => state?.auth);
+
   return (
     <>
       {/* Step 1 */}
       <Modal
-        handleSubmit={() => {
+        handleSubmit={async () => {
           if (active === 'authApps') {
             setAuthApps(true);
           } else if (active === 'email') {
-            setEmail(true);
+            try {
+              setLoading(true);
+              const { url } = sendOTPToEmailConfig();
+              const res = await axios.post(url, { userId: user.id });
+              toast.success(res?.data?.messages[0]);
+              setLoading(false);
+              setEmail(true);
+            } catch (error) {
+              setLoading(false);
+              toast.error(getError(error));
+            }
           }
           setShow(false);
         }}
@@ -45,6 +61,7 @@ export const ChooseAuthMethod = ({ show, setShow }) => {
         setShow={setShow}
         heading="Choose Authentication Method"
         submitText="Continue"
+        loading={loading}
         customBody={
           <div className="pb-[32px]">
             <h6 className="mb-[32px] text-[#92928F] text-[14px]">

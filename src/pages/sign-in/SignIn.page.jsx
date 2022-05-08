@@ -18,6 +18,7 @@ import Recaptcha from 'pages/Google-Recaptcha/Recaptcha';
 import { useCookies } from 'react-cookie';
 import { getAppModules, getUserModules } from 'store/Actions/moduleActions';
 import { useTranslation } from 'react-i18next';
+import axios from 'axios';
 
 const initialValues = {
   username: '',
@@ -45,6 +46,7 @@ function SignIn() {
   const login = (userName, password, TrustDevice) => {
     return async (dispatch) => {
       dispatch(initAuthenticationPending());
+      const ipRes = await axios.get('https://api.ipify.org/?format=json');
       const response = await fetch(
         `${process.env.REACT_APP_BASEURL}/api/tokens`,
         {
@@ -58,6 +60,7 @@ function SignIn() {
             'Content-type': 'application/json',
             'admin-api-key': process.env.REACT_APP_ADMIN_APIKEY,
             tenant: 'admin',
+            'X-Forwarded-For': ipRes?.data?.ip,
           }),
         }
       );
