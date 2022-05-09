@@ -1,7 +1,6 @@
 import { Select } from 'antd';
 import { Down } from 'icons';
 import { Table } from 'components';
-import moment from 'moment';
 import './styles.scss';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';

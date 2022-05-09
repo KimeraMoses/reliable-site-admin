@@ -1,8 +1,15 @@
 import { toast } from 'react-toastify';
 
-import { getError, axios, getLogsConfig, getUserLoginSessions } from 'lib';
+import {
+  getError,
+  axios,
+  getLogsConfig,
+  getUserLoginSessions,
+  getLogsByUserIDConfig,
+} from 'lib';
 import {
   getLogsSlice,
+  getUserLogsSlice,
   setLogsLoading,
   getLoginSessionsSlice,
 } from 'store/Slices/logs';
@@ -21,6 +28,23 @@ export const getLogs = () => {
         const { url } = getLogsConfig();
         const res = await axios.get(url);
         await dispatch(getLogsSlice(res?.data?.data));
+        dispatch(setLogsLoading(false));
+      } catch (e) {
+        toast.error(getError(e));
+        dispatch(setLogsLoading(false));
+      }
+    }
+  };
+};
+
+export const getUserLogs = (uid) => {
+  return async (dispatch) => {
+    dispatch(setLogsLoading(true));
+    if (token) {
+      try {
+        const { url } = getLogsByUserIDConfig(uid);
+        const res = await axios.get(url);
+        await dispatch(getUserLogsSlice(res?.data?.data));
         dispatch(setLogsLoading(false));
       } catch (e) {
         toast.error(getError(e));

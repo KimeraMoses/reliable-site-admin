@@ -1,8 +1,10 @@
 import { getName } from 'lib';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 
 export const UserProfileCard = () => {
+  const [showName, setShowName] = useState(true);
   const { user, loading } = useSelector((state) => state.users);
   const { t } = useTranslation('Users/ns');
 
@@ -31,15 +33,17 @@ export const UserProfileCard = () => {
           {/* IMAGE + NAME */}
           <div className="admin-details__user-card-img">
             <div className="admin-details__user-card-img-box h-[120px] w-[120px] flex items-center justify-center">
-              {userInfo?.img && userInfo?.img?.length ? (
+              {userInfo?.img && userInfo?.img?.length && !showName ? (
                 <img
                   src={user && user.imageUrl}
                   alt={user && user.userName}
+                  onLoad={() => setShowName(false)}
+                  onError={() => setShowName(true)}
                   className="h-full w-full"
                 />
               ) : (
                 <div className="text-[36px] text-white">
-                  {getName({ user })}
+                  {user && showName && getName({ user })}
                 </div>
               )}
             </div>

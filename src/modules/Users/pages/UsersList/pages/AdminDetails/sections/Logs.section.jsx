@@ -1,11 +1,14 @@
 import { Select } from 'antd';
+import moment from 'moment';
 import { Down } from 'icons';
 import { Table } from 'components';
 import './APIKeys.styles.scss';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { checkModule } from 'lib/checkModule';
+import { getLogs } from 'store';
+import { getUserLogs } from 'store';
 
 export const Logs = () => {
   const [selectedFilter, setSelectedFilter] = useState('status');
@@ -13,11 +16,24 @@ export const Logs = () => {
 
   const { t } = useTranslation('/Users/ns');
 
+  const { logs, loading } = useSelector((state) => state?.logs);
+  const { user } = useSelector((state) => state?.users);
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
     module: 'Users',
     modules: userModules,
   });
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getLogs());
+  }, []);
+
+  useEffect(() => {
+    if (user) {
+      getUserLogs(user.id);
+    }
+  }, [user]);
 
   const columns = [
     {
@@ -42,20 +58,25 @@ export const Logs = () => {
     },
   ];
 
+  // Set Data to Fetched Logs
   useEffect(() => {
-    const data = [];
-    for (let i = 1; i <= 4; i++) {
-      data.push({
-        key: i,
-        status: `200 OK`,
-        url: 'POST /v1/invoices/in_2664_9528/payment',
-        reqDate: `Sunday, March 27th, 2022 at 05:00 PM`,
+    const dataHolder = [];
+    logs.forEach((log) => {
+      dataHolder.push({
+        key: log.id,
+        status: '200 OK',
+        url: `${log.type} ${log.tableName}`,
+        reqDate: moment(log.dateTime).format(
+          'dddd, MMMM Do, YYYY [at] h:mm:ss a'
+        ),
       });
-    }
+    });
+    setData(dataHolder);
+  }, [logs]);
 
-    // User your filter logic here
-
-    setData(data);
+  useEffect(() => {
+    // TODO: User your filter logic here
+    // setData(data);
   }, [selectedFilter]);
 
   const onSelectChange = (e) => {
@@ -68,15 +89,22 @@ export const Logs = () => {
         {t('logs')}
       </h6>
       <div className="border-dashed border-t-[1px] h-[0px] border-[#323248] mt-[32px] mb-[32px]" />
-      <div className="api-keys__table pb-[30px]">
+      <div className="up-custom-logs__table pb-[30px]">
         <Table
           data={data}
           columns={columns}
           fieldToFilter={'status'}
           t={t}
           btnData={{ text: t('downloadReport'), onClick: () => {} }}
-          pagination={false}
+          pagination={{
+            pageSize: 5,
+            position: ['bottomLeft'],
+            showSizeChanger: false,
+          }}
+          hideActions
+          hideHeaders
           permissions={permissions}
+          loading={loading}
           customFilterSort={
             <>
               <Select

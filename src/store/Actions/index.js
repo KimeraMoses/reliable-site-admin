@@ -13,4 +13,4 @@ export {
   updateGroup,
 } from './userGroups';
 export { updateUserProfile, changePassword, updateEmail } from './AuthActions';
-export { getLogs, getLoginSessions } from './logs';
+export { getLogs, getUserLogs, getLoginSessions } from './logs';

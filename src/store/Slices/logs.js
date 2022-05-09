@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   logs: [],
+  userLogs: [],
   loading: false,
   loginSessions: [],
 };
@@ -10,6 +11,9 @@ const settingSlice = createSlice({
   initialState,
   reducers: {
     getLogsSlice: (state, { payload }) => {
+      state.logs = payload;
+    },
+    getUserLogsSlice: (state, { payload }) => {
       state.logs = payload;
     },
     getLoginSessionsSlice: (state, { payload }) => {
@@ -23,5 +27,10 @@ const settingSlice = createSlice({
 
 const { reducer, actions } = settingSlice;
 
-export const { getLogsSlice, getLoginSessionsSlice, setLogsLoading } = actions;
+export const {
+  getLogsSlice,
+  getUserLogsSlice,
+  getLoginSessionsSlice,
+  setLogsLoading,
+} = actions;
 export default reducer;
