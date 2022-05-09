@@ -13,8 +13,8 @@ export const Next = () => {
           transform="translate(634.43 193.93)"
           fill="none"
           stroke="#fff"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           stroke-width="1.5"
         />
         <path
@@ -24,8 +24,8 @@ export const Next = () => {
           transform="translate(623.5 200)"
           fill="none"
           stroke="#fff"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           stroke-width="1.5"
         />
         <path
