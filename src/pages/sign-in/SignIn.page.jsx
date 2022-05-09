@@ -18,7 +18,7 @@ import Recaptcha from 'pages/Google-Recaptcha/Recaptcha';
 import { useCookies } from 'react-cookie';
 import { getAppModules, getUserModules } from 'store/Actions/moduleActions';
 import { useTranslation } from 'react-i18next';
-import axios from 'axios';
+import { getIPData, getDeviceName } from 'lib';
 
 const initialValues = {
   username: '',
@@ -42,11 +42,11 @@ function SignIn() {
   const [cookies] = useCookies();
   const isTrustDevice = cookies.admin_days ? true : false;
   const refRecaptcha = useRef();
-  let has2faEnabled = false;
+  let hasMFAEnabled = false;
   const login = (userName, password, TrustDevice) => {
     return async (dispatch) => {
       dispatch(initAuthenticationPending());
-      const ipRes = await axios.get('https://api.ipify.org/?format=json');
+      const { ip, location } = await getIPData();
       const response = await fetch(
         `${process.env.REACT_APP_BASEURL}/api/tokens`,
         {
@@ -60,7 +60,9 @@ function SignIn() {
             'Content-type': 'application/json',
             'admin-api-key': process.env.REACT_APP_ADMIN_APIKEY,
             tenant: 'admin',
-            'X-Forwarded-For': ipRes?.data?.ip,
+            'X-Forwarded-For': ip,
+            location,
+            devicename: getDeviceName(),
           }),
         }
       );
@@ -70,7 +72,7 @@ function SignIn() {
           setError('User Not found, Please check your credentials');
         }
         if (error.exception.includes('User Not Active')) {
-          has2faEnabled = true;
+          hasMFAEnabled = true;
           // localStorage.setItem("Account-Suspended", true);
           dispatch(accountSuspended());
           navigate('/admin/account-suspended');
@@ -86,7 +88,7 @@ function SignIn() {
       }
       const res = await response.json();
       if (res.messages[0]) {
-        has2faEnabled = true;
+        hasMFAEnabled = true;
         navigate('/admin/one-time-password');
         localStorage.setItem('userId', res.messages[1]);
         localStorage.setItem('userName', res.messages[3]);
@@ -145,7 +147,7 @@ function SignIn() {
                     resetForm();
                   } catch (err) {
                     setIsLoading(false);
-                    if (!has2faEnabled) {
+                    if (!hasMFAEnabled) {
                       toast.error('Failed to Login', {
                         ...messageNotifications,
                       });

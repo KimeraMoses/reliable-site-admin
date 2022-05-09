@@ -1,11 +1,14 @@
 import { Select } from 'antd';
 import { Down } from 'icons';
 import { Table } from 'components';
+import moment from 'moment';
 import './styles.scss';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { checkModule } from 'lib/checkModule';
+import { getLoginSessions } from 'store';
+import { getDifference } from 'lib';
 
 export const LoginSessions = () => {
   const [selectedSort, setSelectedSort] = useState('1 Hr');
@@ -74,6 +77,40 @@ export const LoginSessions = () => {
     setData(data);
   }, [selectedSort]);
 
+  const { user } = useSelector((state) => state.auth);
+  const { loginSessions, loading } = useSelector((state) => state.logs);
+  const dispatch = useDispatch();
+  // get data from api
+  useEffect(() => {
+    if (user) {
+      dispatch(getLoginSessions(user?.id));
+    }
+  }, [user, dispatch]);
+  // set table data
+  useEffect(() => {
+    if (loginSessions) {
+      const dataHolder = [];
+      loginSessions.forEach((log) => {
+        const date = new Date(log.loginTime);
+        dataHolder.push({
+          key: log.id,
+          location: log.location,
+          status: 'OK',
+          device: log.deviceName,
+          ipAddress: log.ipAddress,
+          time: getDifference(date),
+          loginTime: log.loginTime,
+        });
+      });
+      dataHolder.sort((a, b) => {
+        return (
+          new Date(b.loginTime).getTime() - new Date(a.loginTime).getTime()
+        );
+      });
+      setData(dataHolder);
+      console.log(dataHolder);
+    }
+  }, [loginSessions]);
   const onSelectChange = (e) => {
     setSelectedSort(e);
   };
@@ -90,8 +127,13 @@ export const LoginSessions = () => {
           columns={columns}
           fieldToFilter={'location'}
           btnData={{ text: t('viewAll'), onClick: () => {} }}
-          pagination={false}
+          pagination={{
+            pageSize: 5,
+            position: ['bottomLeft'],
+            showSizeChanger: false,
+          }}
           permissions={permissions}
+          loading={loading}
           hideActions
           t={t}
           customFilterSort={

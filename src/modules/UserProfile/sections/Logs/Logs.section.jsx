@@ -27,8 +27,6 @@ export const Logs = () => {
     dispatch(getLogs());
   }, []);
 
-  console.log(logs);
-
   const columns = [
     {
       title: t('status'),

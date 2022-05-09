@@ -1,6 +1,6 @@
 import { Button } from 'components';
 import { getError } from 'lib';
-import { enableDisableMFA } from 'lib/api-calls';
+import { enableDisable2FA, removeAuthentication } from 'lib/api-calls';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -80,13 +80,14 @@ export const SigninMethods = () => {
               <div>
                 <Button
                   onClick={async () => {
+                    // await enableDisable2FA({
+                    //   userId: user.id,
+                    //   flag: false,
+                    // });
                     if (hasMFA) {
                       setLoading(true);
                       try {
-                        await enableDisableMFA({
-                          userId: user.id,
-                          flag: false,
-                        });
+                        await removeAuthentication({ userId: user.id });
                         toast.success('MFA Disabled, Please login again.');
                         dispatch(logout());
                       } catch (error) {

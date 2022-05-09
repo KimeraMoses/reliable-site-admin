@@ -1,3 +1,6 @@
+import axios from 'axios';
+import { browserName, browserVersion } from 'react-device-detect';
+
 export const getGroupModules = ({ appModules = [], groupModules = [] }) => {
   const groupNames = groupModules?.map((el) => el?.name);
   const filteredModules = appModules?.filter((module) => {
@@ -118,4 +121,72 @@ export const convertUrlToFile = async (imgUrl, fileName) => {
   } catch (e) {
     console.log(e);
   }
+};
+
+// Get Difference between now and date
+export const getDifference = (date) => {
+  const now = new Date();
+  const diff = now.getTime() - date.getTime();
+
+  const diffInMinutes = Math.round(diff / 60000);
+  const diffInHours = Math.round(diffInMinutes / 60);
+  const diffInDays = Math.round(diffInHours / 24);
+  const diffInWeeks = Math.round(diffInDays / 7);
+  const diffInMonths = Math.round(diffInDays / 30);
+  const diffInYears = Math.round(diffInDays / 365);
+  if (diffInMinutes < 1) {
+    return 'Just Now';
+  }
+  if (diffInMinutes < 2) {
+    return '1 Minute Ago';
+  }
+  if (diffInMinutes < 60) {
+    return `${diffInMinutes} Minutes Ago`;
+  }
+  if (diffInHours < 2) {
+    return '1 Hour Ago';
+  }
+  if (diffInHours < 24) {
+    return `${diffInHours} Hours Ago`;
+  }
+  if (diffInDays < 2) {
+    return '1 Day Ago';
+  }
+  if (diffInDays < 7) {
+    return `${diffInDays} Days Ago`;
+  }
+  if (diffInWeeks < 2) {
+    return '1 Week Ago';
+  }
+  if (diffInWeeks < 4) {
+    return `${diffInWeeks} Weeks Ago`;
+  }
+  if (diffInMonths < 2) {
+    return '1 Month Ago';
+  }
+  if (diffInMonths < 12) {
+    return `${diffInMonths} Months Ago`;
+  }
+  if (diffInYears < 2) {
+    return '1 Year Ago';
+  }
+  return `${diffInYears} Years Ago`;
+};
+
+// Get IP Address Info
+export const getIPData = async () => {
+  const res = await axios.get('https://geolocation-db.com/json/');
+  const { city, state, country_name } = res.data;
+  const cityString = city ? `${city}, ` : '';
+  const stateString = state ? `${state}, ` : '';
+  const countryString = country_name ? `${country_name}` : '';
+  return {
+    ip: res.data.IPv4,
+    location: `${cityString}${stateString}${countryString}`,
+  };
+};
+
+// Get Device Name
+export const getDeviceName = () => {
+  return `${browserName} ${browserVersion}`;
 };

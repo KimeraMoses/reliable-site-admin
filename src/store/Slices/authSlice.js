@@ -11,6 +11,7 @@ const initialState = {
   isLoading: false,
   authUri: '',
   hasMFA: false,
+  hasOTP: false,
 };
 
 export const authSlice = createSlice({
@@ -105,6 +106,9 @@ export const authSlice = createSlice({
     },
     ChangeMfaStatus(state) {
       state.hasMFA = true;
+    },
+    ChangeOTPStatus(state) {
+      state.hasOTP = true;
     },
     logout(state) {
       state.user = {};

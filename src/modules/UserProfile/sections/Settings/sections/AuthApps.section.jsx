@@ -8,7 +8,6 @@ import { axios, getError, validateMFAConfig } from 'lib';
 import { logout } from 'store/Slices/authSlice';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { enableDisableMFA } from 'lib/api-calls';
 
 const initialValues = {
   code: '',
@@ -38,9 +37,7 @@ export const AuthApps = ({ show, setShow }) => {
             isRemember: false,
           });
           if (res?.status === 200) {
-            // Enable 2FA
-            await enableDisableMFA({ userId: user.id, flag: true });
-            toast.success('2FA Enabled Successfully');
+            toast.success('MFA Enabled Successfully');
             // Logout
             dispatch(logout());
           }

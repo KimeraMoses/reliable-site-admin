@@ -1,7 +1,7 @@
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Button, ImageUpload, Input } from 'components';
-import { addServerUrl, convertBase64, deepEqual } from 'lib';
+import { convertBase64, deepEqual } from 'lib';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUserProfile } from 'store';
 
@@ -21,7 +21,7 @@ export const ProfileDetails = () => {
     image: user?.imageUrl,
     fullName: user?.fullName,
     status: user?.status,
-    ipAddress: user?.ipAddress,
+    ipAddress: user?.restrictAccessIPAddress,
   };
 
   const dispatch = useDispatch();

@@ -5,6 +5,8 @@ import {
   getProfile,
   changePasswordConfig,
   updateEmailConfig,
+  getIPData,
+  getDeviceName
 } from 'lib';
 import { toast } from 'react-toastify';
 import {
@@ -341,7 +343,7 @@ export const trustedDays = () => {
 export const loginbyOtp = (userName, otpCode) => {
   return async (dispatch) => {
     dispatch(initAuthenticationPending());
-    const ipRes = await axios.get('https://api.ipify.org/?format=json');
+    const { ip, location } = await getIPData();
     const response = await fetch(
       `${process.env.REACT_APP_BASEURL}/api/tokens/gettokenbyotp`,
       {
@@ -354,7 +356,9 @@ export const loginbyOtp = (userName, otpCode) => {
           'Content-type': 'application/json',
           'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
           tenant: 'admin',
-          'X-Forwarded-For': ipRes?.data?.ip,
+          'X-Forwarded-For': ip,
+          location,
+          devicename: getDeviceName(),
         }),
       }
     );
