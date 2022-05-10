@@ -1,6 +1,7 @@
 export {
   getUsers,
   getUserById,
+  updateUser,
   editUserPermissions,
   getUserModulesById,
 } from './usersActions';

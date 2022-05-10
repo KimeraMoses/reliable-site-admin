@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUsers } from 'store';
 import { checkModule } from 'lib/checkModule';
+import { EditUser } from '../sections';
 
 const initialAddValues = {
   username: '',
@@ -147,6 +148,7 @@ export const UsersList = () => {
           id: user?.id,
           name: user?.fullName,
           email: user?.email,
+          ...user,
           // TODO: Check with back-end dev for these two fields
           companyName: user?.companyName ? user?.companyName : 'N/A',
           createdAt: user?.createdAt ? user?.createdAt : 'N/A',
@@ -156,6 +158,9 @@ export const UsersList = () => {
     }
   }, [users]);
   // Users Logic End
+
+  // Edit User Logic
+  const [editUser, setEditUser] = useState(null);
 
   return (
     <div className="users">
@@ -173,8 +178,12 @@ export const UsersList = () => {
               console.log(values);
             }}
           />
-          <Modal show={editModal} setShow={setEditModal} heading="Edit Group" />
-
+          <EditUser
+            show={editModal}
+            setShow={setEditModal}
+            t={t}
+            user={editUser}
+          />
           <Table
             columns={columns}
             data={tableUsers}
@@ -202,7 +211,17 @@ export const UsersList = () => {
                 </>
               );
             }}
-            deleteAction={(record) => <Button>Edit</Button>}
+            editAction={(record) => (
+              <Button
+                onClick={() => {
+                  console.log(record);
+                  setEditUser(record);
+                  setEditModal(true);
+                }}
+              >
+                Edit
+              </Button>
+            )}
             t={t}
           />
         </div>

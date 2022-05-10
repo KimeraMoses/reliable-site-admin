@@ -80,5 +80,7 @@
   "editPermissionsShort": "Edit Permissions",
   "editGroup": "Edit Group",
   "deleteGroup": "Delete Group",
-  "deleteWarning": "Are you sure you wish to delete this group? Deleting this group will move all users to the default group."
+  "deleteWarning": "Are you sure you wish to delete this group? Deleting this group will move all users to the default group.",
+
+  "editUser": "Edit User"
 }

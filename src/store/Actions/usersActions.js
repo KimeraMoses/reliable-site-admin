@@ -6,6 +6,7 @@ import {
   updateUserModule,
   addUserModule,
   getUserModulesConfig,
+  updateUserProfileByIDConfig,
 } from 'lib';
 import { toast } from 'react-toastify';
 import {
@@ -40,6 +41,27 @@ export const getUserById = (id) => {
       const res = await axios.get(url, config);
       dispatch(getUser(res?.data?.data));
       dispatch(setUserLoading(false));
+    } catch (e) {
+      toast.error(getError(e));
+      dispatch(setUserLoading(false));
+    }
+  };
+};
+
+// Update User
+export const updateUser = (id, data) => {
+  return async (dispatch) => {
+    dispatch(setUserLoading(true));
+    try {
+      const { url, config } = updateUserProfileByIDConfig(id);
+      const res = await axios.put(url, data, config);
+      if (res.status === 200) {
+        const { url, config } = getUserConfig(id);
+        const res = await axios.get(url, config);
+        dispatch(getUser(res?.data?.data));
+        toast.success('User Updated Successfully');
+        dispatch(setUserLoading(false));
+      }
     } catch (e) {
       toast.error(getError(e));
       dispatch(setUserLoading(false));
