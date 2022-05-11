@@ -3,8 +3,9 @@ import UserTop from './UserTop.component';
 import Logo from './Logo.component';
 import { sidebarData } from '../SideBar/data';
 import { Link, useLocation } from 'react-router-dom';
+import { Dropdown } from 'antd';
 
-export function TopBar({ hide = false, hideSide, toggleSide }) {
+export function TopBar({ hide = false, hideSide, toggleSide, innerSubLinks }) {
   const [active, setActive] = useState(null);
 
   const { pathname } = useLocation();
@@ -32,19 +33,56 @@ export function TopBar({ hide = false, hideSide, toggleSide }) {
       >
         {active?.subLinks?.length ? (
           <div className="flex items-center gap-4 ml-[40px]">
-            {active?.subLinks.map((link) => (
-              <Link
-                to={link?.path}
-                key={link?.path}
-                className={`${
-                  pathname.includes(link?.path)
-                    ? 'bg-[#1b1b2b] text-[#3699FF]'
-                    : 'text-[#92928F]'
-                } rounded-lg py-2 px-4 hover:bg-[#1b1b2b] hover:text-[#3699FF]`}
-              >
-                {link?.name}
-              </Link>
-            ))}
+            {active?.subLinks.map((link) => {
+              const innerLinks = (
+                <div className="bg-[#1e1e2d] flex flex-col">
+                  {innerSubLinks.map((link) => (
+                    <Link
+                      to={link?.path}
+                      key={link?.path}
+                      className={`${
+                        pathname.includes(link?.path)
+                          ? 'bg-[#1b1b2b] text-[#3699FF]'
+                          : 'text-[#92928F]'
+                      } py-2 mb-1 px-4 hover:bg-[#1b1b2b] hover:text-[#3699FF]`}
+                    >
+                      {link?.name}
+                    </Link>
+                  ))}
+                </div>
+              );
+              return (
+                <>
+                  {innerSubLinks?.length && pathname.includes(link?.path) ? (
+                    <Dropdown overlay={innerLinks}>
+                      <Link
+                        to={link?.path}
+                        key={link?.path}
+                        className={`${
+                          pathname.includes(link?.path)
+                            ? 'bg-[#1b1b2b] text-[#3699FF]'
+                            : 'text-[#92928F]'
+                        } rounded-lg py-2 px-4 hover:bg-[#1b1b2b] hover:text-[#3699FF]`}
+                      >
+                        {link?.name}
+                      </Link>
+                    </Dropdown>
+                  ) : (
+                    <Link
+                      to={link?.path}
+                      key={link?.path}
+                      className={`${
+                        pathname.includes(link?.path)
+                          ? 'bg-[#1b1b2b] text-[#3699FF]'
+                          : 'text-[#92928F]'
+                      } rounded-lg py-2 px-4 hover:bg-[#1b1b2b] hover:text-[#3699FF]`}
+                    >
+                      {link?.name}
+                    </Link>
+                  )}
+                </>
+              );
+            })}
           </div>
         ) : (
           <></>

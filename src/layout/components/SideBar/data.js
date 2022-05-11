@@ -20,6 +20,34 @@ export const sidebarData = [
     module: 'Billing',
     path: '/admin/dashboard/billing',
     icon: (fill) => <Billing fill={fill} />,
+    subLinks: [
+      { name: 'Orders', path: '/admin/dashboard/billing/orders' },
+      {
+        name: 'Clients',
+        path: '/admin/dashboard/billing/clients',
+        showDropdown: true,
+        subLinks: [
+          {
+            name: 'Clients List',
+            path: '/admin/dashboard/billing/clients/list/show',
+            subLinks: [
+              {
+                name: 'Client Details',
+                path: '/admin/dashboard/billing/clients/list/details/:id',
+              },
+            ],
+          },
+          {
+            name: 'Mass Email Clients',
+            path: '/admin/dashboard/billing/clients/send-email/mass-email-clients',
+          },
+          {
+            name: 'Client Notification',
+            path: '/admin/dashboard/billing/clients/show-notifications/client-notifications',
+          },
+        ],
+      },
+    ],
   },
   {
     name: 'Support',

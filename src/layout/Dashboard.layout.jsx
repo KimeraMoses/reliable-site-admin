@@ -47,17 +47,19 @@ export function DashboardLayout({ children, hide }) {
           }
         );
         setActiveInnerSub(activeInnerSubLink[0]);
+      } else {
+        setActiveInnerSub('');
       }
     }
 
     // Set Inner Sublink
-    if (activeLink[0]?.subLinks?.length) {
-      const activeSubLink = activeLink[0].subLinks.filter((subItem) => {
-        const { path } = subItem;
-        return pathname.includes(path);
-      });
-      setActiveSub(activeSubLink[0]);
-    }
+    // if (activeLink[0]?.subLinks?.length) {
+    //   const activeSubLink = activeLink[0].subLinks.filter((subItem) => {
+    //     const { path } = subItem;
+    //     return pathname.includes(path);
+    //   });
+    //   setActiveSub(activeSubLink[0]);
+    // }
   }, [pathname]);
 
   useEffect(() => {
@@ -72,7 +74,14 @@ export function DashboardLayout({ children, hide }) {
 
   return (
     <div className="w-full md:min-h-screen">
-      <TopBar hide={hide} hideSide={hideSide} toggleSide={toggleSide} />
+      <TopBar
+        hide={hide}
+        hideSide={hideSide}
+        toggleSide={toggleSide}
+        innerSubLinks={
+          activeSub && activeSub.showDropdown ? activeSub.subLinks : []
+        }
+      />
       <div className="flex">
         {!hide && (
           <div className="col-auto">

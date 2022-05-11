@@ -31,6 +31,10 @@ export const dashboardPages = [
     Component: lazy(() => import('./Dashboard/Users/Users.page')),
   },
   {
+    path: '/dashboard/billing/*',
+    Component: lazy(() => import('./Dashboard/Billing/Billing.page')),
+  },
+  {
     path: '/dashboard/account-settings/*',
     Component: lazy(() =>
       import('./Dashboard/AccountSettings/AccountSettings.page')
