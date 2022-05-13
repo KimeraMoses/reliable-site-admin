@@ -12,6 +12,8 @@ import {
   EventsLogs,
   AccountStatement,
   Settings,
+  UserPermissions,
+  APIKeys,
 } from './sections';
 // import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -25,6 +27,8 @@ export const ClientDetails = () => {
 
   const links = [
     { label: 'OVERVIEW', onClick: () => setActive('OVERVIEW') },
+    { label: 'PERMISSIONS', onClick: () => setActive('PERMISSIONS') },
+    { label: 'API KEYS', onClick: () => setActive('API KEYS') },
     { label: 'SETTINGS', onClick: () => setActive('SETTINGS') },
     { label: 'EVENTS & LOGS', onClick: () => setActive('EVENTS & LOGS') },
     {
@@ -67,6 +71,8 @@ export const ClientDetails = () => {
                 <></>
               )}
               {active === 'SETTINGS' ? <Settings /> : <></>}
+              {active === 'API KEYS' ? <APIKeys /> : <></>}
+              {active === 'PERMISSIONS' ? <UserPermissions /> : <></>}
               {active === 'EVENTS & LOGS' ? <EventsLogs /> : <></>}
               {active === 'ACCOUNT STATEMENT' ? <AccountStatement /> : <></>}
             </div>

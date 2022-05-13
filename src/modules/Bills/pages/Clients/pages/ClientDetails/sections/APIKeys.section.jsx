@@ -1,5 +1,5 @@
-import { Button, Dropdown, Select, Tooltip } from 'antd';
-import { Copy, Down, Dropdown as DropdownIcon } from 'icons';
+import { Button, Select, Tooltip } from 'antd';
+import { Copy, Down } from 'icons';
 import { Table } from 'components';
 import './APIKeys.styles.scss';
 import { useEffect, useState } from 'react';
@@ -120,8 +120,8 @@ export const APIKeys = () => {
             return (
               <>
                 {/* TODO: Replace with UID */}
-                <Button onClick={() => {}}>Edit</Button>
-                <Button>Permissions</Button>
+                <Button onClick={() => {}}>Enable</Button>
+                <Button>Disable</Button>
               </>
             );
           }}
