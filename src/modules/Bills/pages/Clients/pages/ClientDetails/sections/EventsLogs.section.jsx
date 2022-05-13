@@ -1,6 +1,5 @@
 import { List } from 'components';
 import { Basket, User } from 'icons';
-import './common-list.scss';
 
 let data = [];
 for (let i = 0; i < 20; i++) {

@@ -3,10 +3,11 @@ import './List.styles.scss';
 
 const { Item } = $List;
 
-export const List = ({ data, renderFn }) => {
+export const List = ({ data, renderFn, header }) => {
   return (
     <div className="custom-list">
       <$List
+        header={header}
         dataSource={data}
         pagination={{
           pageSize: 8,

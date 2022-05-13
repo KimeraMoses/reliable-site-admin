@@ -10,6 +10,7 @@ import {
   ProductsServices,
   // Events & Logs
   EventsLogs,
+  AccountStatement,
 } from './sections';
 // import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -19,7 +20,7 @@ import { useParams } from 'react-router-dom';
 export const ClientDetails = () => {
   // const { t } = useTranslation('/Bills/ns');
 
-  const [active, setActive] = useState('EVENTS & LOGS');
+  const [active, setActive] = useState('ACCOUNT STATEMENT');
 
   const links = [
     { label: 'OVERVIEW', onClick: () => setActive('OVERVIEW') },
@@ -64,6 +65,7 @@ export const ClientDetails = () => {
                 <></>
               )}
               {active === 'EVENTS & LOGS' ? <EventsLogs /> : <></>}
+              {active === 'ACCOUNT STATEMENT' ? <AccountStatement /> : <></>}
             </div>
           </>
         )}
