@@ -5,6 +5,8 @@ export { Navigation } from './Navigation.section';
 export { ProductsServices } from './ProductsServices.section';
 export { AssignedTickets } from './AssignedTickets.section';
 export { PastEmails } from './PastEmail.section';
+// Settings
+export { Settings } from './Settings.section';
 // Events & Logs
 export { EventsLogs } from './EventsLogs.section';
 // Account Statement

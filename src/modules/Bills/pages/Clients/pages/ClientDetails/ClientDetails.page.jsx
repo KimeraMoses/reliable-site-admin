@@ -11,6 +11,7 @@ import {
   // Events & Logs
   EventsLogs,
   AccountStatement,
+  Settings,
 } from './sections';
 // import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -24,6 +25,7 @@ export const ClientDetails = () => {
 
   const links = [
     { label: 'OVERVIEW', onClick: () => setActive('OVERVIEW') },
+    { label: 'SETTINGS', onClick: () => setActive('SETTINGS') },
     { label: 'EVENTS & LOGS', onClick: () => setActive('EVENTS & LOGS') },
     {
       label: 'ACCOUNT STATEMENT',
@@ -64,6 +66,7 @@ export const ClientDetails = () => {
               ) : (
                 <></>
               )}
+              {active === 'SETTINGS' ? <Settings /> : <></>}
               {active === 'EVENTS & LOGS' ? <EventsLogs /> : <></>}
               {active === 'ACCOUNT STATEMENT' ? <AccountStatement /> : <></>}
             </div>
