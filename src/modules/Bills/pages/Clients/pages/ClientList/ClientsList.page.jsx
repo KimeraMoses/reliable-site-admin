@@ -1,13 +1,15 @@
-import { Button, Switch } from 'antd';
+import { Button } from 'antd';
 import * as Yup from 'yup';
+import { useNavigate } from 'react-router-dom';
 import { Table } from 'components';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { checkModule } from 'lib/checkModule';
 
-const ClientList = () => {
+export const ClientList = () => {
   const [showAdd, setShowAdd] = useState(false);
+  const navigate = useNavigate();
 
   const { t } = useTranslation('/Bills/ns');
   const { userModules } = useSelector((state) => state?.modules);
@@ -83,7 +85,13 @@ const ClientList = () => {
           }}
           editAction={(record) => (
             <>
-              <Button onClick={() => {}}>View</Button>
+              <Button
+                onClick={() => {
+                  navigate('/admin/dashboard/billing/clients/list/show/123');
+                }}
+              >
+                View
+              </Button>
               <Button onClick={() => {}}>Login As Client</Button>
             </>
           )}
@@ -94,5 +102,3 @@ const ClientList = () => {
     </div>
   );
 };
-
-export default ClientList;

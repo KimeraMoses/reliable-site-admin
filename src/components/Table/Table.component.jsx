@@ -144,7 +144,7 @@ export const Table = ({
                   return (
                     <Button
                       type="primary"
-                      className="px-[32px] border-none rounded-[8px] h-[52px] bg-[#212E48] hover:bg-[#212E48] active:bg-[#212E48] focus:bg-[#212E48] text-[#3699FF] hover:text-[#3699FF] active:text-[#3699FF] focus:text-[#3699FF]"
+                      className={`px-[32px] border-none rounded-[8px] h-[52px] bg-[#212E48] hover:bg-[#212E48] active:bg-[#212E48] focus:bg-[#212E48] text-[#3699FF] hover:text-[#3699FF] active:text-[#3699FF] focus:text-[#3699FF] ${btn?.customClass}`}
                       onClick={btn?.onClick}
                     >
                       {btn.text}
@@ -157,7 +157,7 @@ export const Table = ({
               {btnData?.text && btnData?.onClick && permissions?.Create ? (
                 <Button
                   type="primary"
-                  className="custom-table__btn"
+                  className={`custom-table__btn px-[32px] ${btnData?.customClass}`}
                   onClick={btnData?.onClick}
                 >
                   {btnData.text}

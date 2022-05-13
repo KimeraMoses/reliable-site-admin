@@ -1,7 +1,7 @@
 import Orders from './Orders/Orders.page';
-import ClientsList from './Clients/ClientsList.page';
+import Clients from './Clients/Clients.page';
 
 export const pages = [
   { path: '/orders', Component: Orders },
-  { path: '/clients/list/show', Component: ClientsList },
+  { path: '/clients/*', Component: Clients },
 ];

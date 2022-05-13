@@ -4,3 +4,5 @@ export * from './Dashboard';
 export * from './Users';
 // User Profile Module Icons
 export * from './UserProfile';
+// Client List
+export * from './ClientList';
