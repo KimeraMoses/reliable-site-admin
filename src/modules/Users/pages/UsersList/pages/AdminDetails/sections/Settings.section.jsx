@@ -1,9 +1,23 @@
 import { Formik, Form, Field } from 'formik';
 import { Switch } from 'antd';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { getUserSettingsById } from 'store';
 
 export const Settings = () => {
   const { t } = useTranslation('/Users/ns');
+
+  const { user, loading, userSettings } = useSelector((state) => state?.users);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (user) {
+      dispatch(getUserSettingsById(user?.id));
+    }
+  }, [user]);
+
+  // console.log(userSettings);
 
   const initialValues = {
     adminStatus: true,

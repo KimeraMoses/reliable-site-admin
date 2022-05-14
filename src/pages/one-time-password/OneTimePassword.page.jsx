@@ -128,7 +128,7 @@ function OneTimePassword() {
                       type="submit"
                       className="bg-blue-500 hover:bg-blue-700 w-full h-12 rounded-md text-white font-light ml-2 ease-in duration-200"
                     >
-                      {isLoading ? t('verifying') : t('submitButton')}
+                      {isLoading ? t('verify') : t('submitButton')}
                     </button>
                   </div>
                 </Form>

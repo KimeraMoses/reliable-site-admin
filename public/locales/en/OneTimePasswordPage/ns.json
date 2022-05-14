@@ -1,11 +1,11 @@
 {
   "header": "One Time Pin",
-  "subTitle": "Enter The OTP Sent To Your Email Address",
+  "subTitle": "Please enter 2FA Code.",
   "placeholder": "Enter One Time Pin",
   "submitButton": "Submit",
   "cancelButton": "Cancel",
-  "enterOTP": "Enter The OTP On your MFA App",
-  "verify": "verifying...",
+  "enterOTP": "Please enter 2FA Code.",
+  "verify": "Verifying...",
   "success": "Otp verified Successfully",
   "failed": "Failed to Verify OTP",
   "trust": "Trust this device for "

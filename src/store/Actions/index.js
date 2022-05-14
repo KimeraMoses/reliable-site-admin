@@ -2,6 +2,7 @@ export {
   addUser,
   getUsers,
   getUserById,
+  getUserSettingsById,
   updateUser,
   editUserPermissions,
   getUserModulesById,

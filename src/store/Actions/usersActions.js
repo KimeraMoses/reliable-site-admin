@@ -8,6 +8,7 @@ import {
   getUserModulesConfig,
   updateUserProfileByIDConfig,
   registerAdminConfig,
+  getUserAppSettingsConfig,
 } from 'lib';
 import { toast } from 'react-toastify';
 import {
@@ -16,6 +17,7 @@ import {
   getUsersDispatch,
   setUserLoading,
 } from 'store/Slices';
+import { getUserSettingsSlice } from 'store/Slices/usersSlice';
 
 // Get All Users
 export const getUsers = () => {
@@ -143,6 +145,22 @@ export const editUserPermissions = ({ permission, uid }) => {
       dispatch(setUserLoading(false));
     } catch (e) {
       console.log(e);
+      toast.error(getError(e));
+      dispatch(setUserLoading(false));
+    }
+  };
+};
+
+// Get User Settings By ID
+export const getUserSettingsById = (id) => {
+  return async (dispatch) => {
+    dispatch(setUserLoading(true));
+    try {
+      const { url, config } = getUserAppSettingsConfig(id);
+      const res = await axios.get(url, config);
+      dispatch(getUserSettingsSlice(res?.data?.data));
+      dispatch(setUserLoading(false));
+    } catch (e) {
       toast.error(getError(e));
       dispatch(setUserLoading(false));
     }

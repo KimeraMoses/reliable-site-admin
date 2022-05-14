@@ -157,3 +157,15 @@ export const getLogsByUserIDConfig = (uid) => ({
 export const getUserLoginSessions = (userId) => ({
   url: `/api/userloginhistory/loginhistorybyuserid/${userId}`,
 });
+
+// UserAppSettings End-Points
+const UserAppSettings = 'UserAppSettings';
+const userAppSettingsConfig = (action) =>
+  getConfig({ module: UserAppSettings, action });
+// Get User Settings
+export const getUserAppSettingsConfig = (id) => {
+  return {
+    url: `api/v1/admin/userappsettings/${id}`,
+    config: userAppSettingsConfig('View'),
+  };
+};
