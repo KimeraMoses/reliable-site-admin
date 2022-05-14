@@ -1,4 +1,5 @@
 export {
+  addUser,
   getUsers,
   getUserById,
   updateUser,

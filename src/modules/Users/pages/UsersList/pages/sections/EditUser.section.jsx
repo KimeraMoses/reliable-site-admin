@@ -1,20 +1,29 @@
 import { Modal } from 'components';
+import { deepEqual } from 'lib';
+import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
+import { updateUser } from 'store';
 import * as Yup from 'yup';
 
-const addValidationSchema = Yup.object().shape({
+const validationSchema = Yup.object().shape({
   fullName: Yup.string().required('Full name is required'),
   status: Yup.bool().required('Status is required'),
   ipAddress: Yup.string().required('IP Address is required'),
 });
 
 export const EditUser = ({ t, show, setShow, user }) => {
-  const initialAddValues = {
+  const initialValues = {
     fullName: user?.fullName,
     status: user?.status,
     ipAddress: user?.restrictAccessIPAddress,
+    // adminGroupID: user?.adminGroupID,
   };
 
-  const addFields = [
+  const { loading } = useSelector((state) => state?.users);
+
+  const dispatch = useDispatch();
+
+  const fields = [
     {
       type: 'input',
       name: 'fullName',
@@ -40,11 +49,17 @@ export const EditUser = ({ t, show, setShow, user }) => {
       setShow={setShow}
       heading={t('editUser')}
       submitText={t('editUser')}
-      initialValues={initialAddValues}
-      validationSchema={addValidationSchema}
-      fields={addFields}
-      handleSubmit={(values) => {
-        console.log(values);
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      loading={loading}
+      fields={fields}
+      handleSubmit={async (values) => {
+        if (deepEqual(values, initialValues)) {
+          toast.warn('Nothing is changed!');
+        } else {
+          await dispatch(updateUser(user?.id, values));
+        }
+        setShow(false);
       }}
     />
   );

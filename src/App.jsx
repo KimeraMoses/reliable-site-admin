@@ -69,7 +69,7 @@ function App() {
     try {
       const { url } = getCurrentMFAStatus();
       const res = await axios.post(url, { userId: user?.id });
-      if (res?.data?.hasAuthenticator) {
+      if (res?.data?.is2faEnabled) {
         dispatch(ChangeMfaStatus());
       }
     } catch (e) {

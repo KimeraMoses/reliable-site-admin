@@ -25,6 +25,7 @@ export function Modal({
   customBody,
   additionalBody,
   loading,
+  disableSubmit,
   handleSubmit = (values) => console.log(values),
 }) {
   const handleClose = () => {
@@ -233,6 +234,7 @@ export function Modal({
                       htmlType="submit"
                       loading={loading}
                       className="modal__buttons-btn modal__buttons-btn-primary"
+                      disabled={disableSubmit}
                     >
                       {submitText}
                     </Button>

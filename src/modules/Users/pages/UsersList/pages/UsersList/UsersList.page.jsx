@@ -9,20 +9,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getUsers } from 'store';
 import { checkModule } from 'lib/checkModule';
 import { EditUser } from '../sections';
+import { getUserGroups } from 'store';
+import { addUser } from 'store';
 
 const initialAddValues = {
-  username: '',
+  userName: '',
   fullName: '',
   email: '',
   password: '',
   confirmPassword: '',
   status: true,
   ipAddress: '',
-  groupID: '',
+  adminGroupId: '',
 };
 
 const addValidationSchema = Yup.object().shape({
-  username: Yup.string().required('Username is required'),
+  userName: Yup.string().required('Username is required'),
   fullName: Yup.string().required('Full name is required'),
   email: Yup.string().email('Email is invalid').required('Email is required'),
   password: Yup.string()
@@ -36,7 +38,7 @@ const addValidationSchema = Yup.object().shape({
     .required('Confirm Password is required'),
   status: Yup.bool().required('Status is required'),
   ipAddress: Yup.string().required('IP Address is required'),
-  groupID: Yup.string().required('Group is required'),
+  adminGroupId: Yup.string().required('Group is required'),
 });
 
 export const UsersList = () => {
@@ -47,10 +49,15 @@ export const UsersList = () => {
 
   const navigate = useNavigate();
 
+  const { userGroups } = useSelector((state) => state?.userGroups);
+  useEffect(() => {
+    dispatch(getUserGroups());
+  }, []);
+
   const addFields = [
     {
       type: 'input',
-      name: 'username',
+      name: 'userName',
       placeholder: 'Paul.Elliott',
       title: t('username'),
     },
@@ -91,11 +98,13 @@ export const UsersList = () => {
     },
     {
       type: 'select',
-      options: [
-        { label: 'Group1', value: 'group1' },
-        { label: 'Group2', value: 'group2' },
-      ],
-      name: 'groupID',
+      options: userGroups.length
+        ? userGroups.map((group) => ({
+            label: group?.groupName,
+            value: group?.id,
+          }))
+        : [],
+      name: 'adminGroupId',
       placeholder: 'Select Admin Group...',
       title: t('adminGroup'),
     },
@@ -174,8 +183,10 @@ export const UsersList = () => {
             initialValues={initialAddValues}
             validationSchema={addValidationSchema}
             fields={addFields}
-            handleSubmit={(values) => {
-              console.log(values);
+            loading={loading}
+            handleSubmit={async (values) => {
+              await dispatch(addUser(values));
+              setShowAdd(false);
             }}
           />
           <EditUser

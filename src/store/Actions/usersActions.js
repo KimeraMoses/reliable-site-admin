@@ -7,6 +7,7 @@ import {
   addUserModule,
   getUserModulesConfig,
   updateUserProfileByIDConfig,
+  registerAdminConfig,
 } from 'lib';
 import { toast } from 'react-toastify';
 import {
@@ -48,6 +49,27 @@ export const getUserById = (id) => {
   };
 };
 
+// Add User
+export const addUser = (data) => {
+  return async (dispatch) => {
+    dispatch(setUserLoading(true));
+    try {
+      const { url, config } = registerAdminConfig();
+      const res = await axios.post(url, data, config);
+      if (res.status === 200) {
+        const { url, config } = getUsersConfig();
+        const res = await axios.get(url, config);
+        dispatch(getUsers(res?.data?.data));
+        toast.success('User Added Successfully');
+      }
+    } catch (e) {
+      toast.error(getError(e));
+    } finally {
+      dispatch(setUserLoading(false));
+    }
+  };
+};
+
 // Update User
 export const updateUser = (id, data) => {
   return async (dispatch) => {
@@ -55,15 +77,22 @@ export const updateUser = (id, data) => {
     try {
       const { url, config } = updateUserProfileByIDConfig(id);
       const res = await axios.put(url, data, config);
+      // If Updated Then Get User
       if (res.status === 200) {
         const { url, config } = getUserConfig(id);
         const res = await axios.get(url, config);
         dispatch(getUser(res?.data?.data));
+        // If Get User Done Then Get All Users
+        if (res.status === 200) {
+          const { url, config } = getUsersConfig();
+          const res = await axios.get(url, config);
+          dispatch(getUsers(res?.data?.data));
+        }
         toast.success('User Updated Successfully');
-        dispatch(setUserLoading(false));
       }
     } catch (e) {
       toast.error(getError(e));
+    } finally {
       dispatch(setUserLoading(false));
     }
   };

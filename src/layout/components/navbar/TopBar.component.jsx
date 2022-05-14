@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import UserTop from './UserTop.component';
 import Logo from './Logo.component';
 import { sidebarData } from '../SideBar/data';
@@ -52,7 +52,7 @@ export function TopBar({ hide = false, hideSide, toggleSide, innerSubLinks }) {
                 </div>
               );
               return (
-                <>
+                <Fragment key={link?.path}>
                   {innerSubLinks?.length && pathname.includes(link?.path) ? (
                     <Dropdown overlay={innerLinks}>
                       <Link
@@ -80,7 +80,7 @@ export function TopBar({ hide = false, hideSide, toggleSide, innerSubLinks }) {
                       {link?.name}
                     </Link>
                   )}
-                </>
+                </Fragment>
               );
             })}
           </div>
