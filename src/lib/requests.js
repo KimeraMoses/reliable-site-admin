@@ -159,13 +159,13 @@ export const getUserLoginSessions = (userId) => ({
 });
 
 // UserAppSettings End-Points
-const UserAppSettings = 'UserAppSettings';
+const UserAppSettings = 'Users';
 const userAppSettingsConfig = (action) =>
   getConfig({ module: UserAppSettings, action });
 // Get User Settings
 export const getUserAppSettingsConfig = (id) => {
   return {
-    url: `api/v1/admin/userappsettings/${id}`,
+    url: `api/v1/admin/userappsettings/getuserappsettingbyuserid/${id}`,
     config: userAppSettingsConfig('View'),
   };
 };

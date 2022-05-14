@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { getUserSettingsById } from 'store';
 
+// TODO: INTEGRATE ONCE ISSUES ARE RESOVLED
 export const Settings = () => {
   const { t } = useTranslation('/Users/ns');
 
@@ -13,7 +14,7 @@ export const Settings = () => {
 
   useEffect(() => {
     if (user) {
-      dispatch(getUserSettingsById(user?.id));
+      // dispatch(getUserSettingsById(user?.id));
     }
   }, [user]);
 
