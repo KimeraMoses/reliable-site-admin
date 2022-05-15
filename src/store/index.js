@@ -6,6 +6,7 @@ import moduleReducer from './Slices/moduleSlice';
 import usersReducer from './Slices/usersSlice';
 import userGroupsReducer from './Slices/userGroupsSlice';
 import logsReducer from './Slices/logs';
+import apiKeysReducer from './Slices/apiKeysSlice';
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     users: usersReducer,
     userGroups: userGroupsReducer,
     logs: logsReducer,
+    apiKeys: apiKeysReducer,
   },
 });
 

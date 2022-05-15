@@ -5,8 +5,6 @@ import './APIKeys.styles.scss';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Add, EditAPIKey } from './sections';
-// import { useSelector } from 'react-redux';
-// import { checkModule } from 'lib/checkModule';
 
 export const APIKeys = () => {
   const [show, setShow] = useState(false);

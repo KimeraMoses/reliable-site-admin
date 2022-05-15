@@ -159,9 +159,7 @@ export const getUserLoginSessions = (userId) => ({
 });
 
 // UserAppSettings End-Points
-const UserAppSettings = 'Users';
-const userAppSettingsConfig = (action) =>
-  getConfig({ module: UserAppSettings, action });
+const userAppSettingsConfig = (action) => getConfig({ module: Users, action });
 // Get User Settings
 export const getUserAppSettingsConfig = (id) => {
   return {
@@ -169,3 +167,11 @@ export const getUserAppSettingsConfig = (id) => {
     config: userAppSettingsConfig('View'),
   };
 };
+
+// User API Keys Management End-Points
+const apiKeyConfig = (action) => getConfig({ module: Users, action });
+// Add API Key
+export const addAPIKeyConfig = () => ({
+  url: `/api/manageuserapikey`,
+  config: apiKeyConfig('Create'),
+});
