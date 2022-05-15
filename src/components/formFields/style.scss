@@ -3,3 +3,121 @@
     display: none;
   }
 }
+
+.custom-date-picker {
+  border: none;
+  input {
+    color: #92928f;
+    &:placeholder {
+      color: #92928f;
+    }
+  }
+  .ant-picker-clear {
+    background: #141421;
+    color: #fff;
+  }
+  .ant-picker-suffix {
+    background: #141421;
+    color: #fff;
+  }
+  &-dd {
+    z-index: 9999999;
+    color: #fff;
+    border: none;
+    .ant-picker-panel-container {
+      background: #1e1e2d;
+      border-radius: 8px;
+      border: none;
+      box-shadow: 0 3px 6px -4px #141421, 0 6px 16px 0 #141421,
+        0 9px 28px 8px #141421;
+      .ant-picker-panel {
+        background: #1e1e2d;
+        border-radius: 8px;
+        border: none;
+
+        // Change color of all button content
+        button {
+          color: #fff;
+          span {
+            color: #fff;
+            &::before {
+              color: #fff;
+            }
+            &::after {
+              color: #fff;
+            }
+          }
+        }
+        // Change color of all table content
+        table {
+          th {
+            color: #fff;
+            &:hover {
+              div {
+                background: #1890ff !important;
+                border-radius: 4px;
+              }
+            }
+          }
+          td {
+            color: #fff;
+            &:hover {
+              div {
+                background: #1890ff !important;
+                border-radius: 4px;
+              }
+            }
+          }
+        }
+
+        // Header
+        .ant-picker-header {
+          border-bottom: 1px solid #141421;
+          color: #fff;
+          .ant-picker-header-view {
+            color: #fff;
+          }
+        }
+
+        // Time
+        .ant-picker-datetime-panel .ant-picker-time-panel {
+          border-left: 1px solid #141421;
+          .ant-picker-time-panel-column:not(:first-child) {
+            border-left: 1px solid #141421;
+          }
+        }
+        .ant-picker-time-panel-cell {
+          &-inner {
+            color: #fff;
+            &:hover {
+              background: #1890ff !important;
+            }
+          }
+        }
+        .ant-picker-time-panel-cell-selected {
+          .ant-picker-time-panel-cell-inner {
+            background: #1890ff;
+          }
+        }
+        // Footer
+        .ant-picker-footer {
+          border-top: 1px solid #141421;
+          border-bottom: 1px solid #141421;
+
+          // Ok
+          .ant-picker-ok {
+            button {
+              background: #1890ff;
+              border-color: #1890ff;
+              color: #fff;
+              border-radius: 8px;
+              padding: 0px 40px;
+              height: 32px;
+              font-size: 14px;
+            }
+          }
+        }
+      }
+    }
+  }
+}

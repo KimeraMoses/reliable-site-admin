@@ -3,6 +3,7 @@ import { Formik, Form, Field } from 'formik';
 import { object } from 'yup';
 import { passwordStrength } from 'check-password-strength';
 import './Modal.styles.scss';
+import { DatePicker } from 'components';
 import { Switch, Button } from 'antd';
 import { Fragment } from 'react';
 
@@ -67,7 +68,9 @@ export function Modal({
                               <div className="modal__form-el" key={name}>
                                 <p className="modal__form-el-label">{title}</p>
                                 {/* Switch */}
-                                {type === 'switch' ? (
+                                {type === 'date' ? (
+                                  <DatePicker name={name} />
+                                ) : type === 'switch' ? (
                                   <Field name={name}>
                                     {({
                                       field,
