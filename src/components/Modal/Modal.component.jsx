@@ -57,7 +57,15 @@ export function Modal({
                     <div className="modal__form">
                       {fields.map(
                         (
-                          { type, name, placeholder, title, options },
+                          {
+                            type,
+                            name,
+                            placeholder,
+                            title,
+                            options,
+                            disableDate,
+                            disableTime,
+                          },
                           index
                         ) => {
                           const strength = values?.password
@@ -69,7 +77,11 @@ export function Modal({
                                 <p className="modal__form-el-label">{title}</p>
                                 {/* Switch */}
                                 {type === 'date' ? (
-                                  <DatePicker name={name} />
+                                  <DatePicker
+                                    name={name}
+                                    disableDate={disableDate}
+                                    disableTime={disableTime}
+                                  />
                                 ) : type === 'switch' ? (
                                   <Field name={name}>
                                     {({
@@ -170,11 +182,12 @@ export function Modal({
                                     {({
                                       field,
                                       meta,
-                                      form: { setFieldValue },
+                                      form: { setFieldValue, values },
                                     }) => {
                                       return (
                                         <div className="w-full">
                                           <select
+                                            value={values[name]}
                                             onChange={(e) =>
                                               setFieldValue(
                                                 name,

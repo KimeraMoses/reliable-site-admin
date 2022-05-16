@@ -1,5 +1,8 @@
 import * as Yup from 'yup';
+import moment from 'moment';
 import { Modal } from 'components';
+import { deepEqual } from 'lib';
+import { toast } from 'react-toastify';
 
 const fields = [
   {
@@ -9,67 +12,64 @@ const fields = [
     placeholder: 'Navitare',
   },
   {
-    name: 'createdAt',
-    type: 'input',
-    title: 'Created',
-    placeholder: 'Sunday, March 27th, 2022 at 04:30 PM',
-  },
-  {
-    name: 'status',
-    type: 'select',
-    options: [
-      { label: 'ACTIVE', value: 'ACTIVE' },
-      { label: 'INACTIVE', value: 'INACTIVE' },
-    ],
+    name: 'statusApi',
+    type: 'switch',
     title: 'Status',
   },
   {
     name: 'tenant',
     type: 'select',
-    options: [
-      { label: 'Admin', value: 'admin' },
-      { label: 'Client', value: 'client' },
-    ],
+    options: [{ label: 'Admin', value: 'admin' }],
     title: 'Tenant',
   },
   {
-    name: 'expiresAt',
-    type: 'input',
+    name: 'validTill',
+    type: 'date',
     title: 'Expires',
-    placeholder: 'Sunday, March 27th, 2022 at 04:30 PM',
+    disableDate: (current) => current && current.valueOf() < Date.now(),
   },
 ];
 
-const initialValues = {
-  label: '',
-  createdAt: '',
-  status: 'ACTIVE',
-  tenant: 'admin',
-  expiresAt: '',
-};
-
 const validationSchema = Yup.object().shape({
   label: Yup.string().required('Label is required'),
-  createdAt: Yup.string().required('Created is required'),
-  status: Yup.string().required('Status is required'),
+  statusApi: Yup.string().required('Status is required'),
   tenant: Yup.string().required('Tenant is required'),
-  expiresAt: Yup.string().required('Expires is required'),
+  validTill: Yup.date().required('Expiry date is required'),
 });
 
 export const EditAPIKey = ({ show, setShow, apikey }) => {
-  console.log(apikey);
+  const initialValues = {
+    id: apikey?.key,
+    validTill: moment(apikey?.validTill),
+    statusApi: apikey?.status === 'Active' ? true : false,
+    tenant: apikey?.tenant,
+    label: apikey?.label,
+  };
+
   return (
-    <Modal
-      show={show}
-      setShow={setShow}
-      fields={fields}
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      heading="Edit API Key"
-      submitText="Submit"
-      handleSubmit={(values) => {
-        console.log(values);
-      }}
-    />
+    <>
+      <Modal
+        show={show}
+        setShow={setShow}
+        fields={fields}
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        heading="Edit API Key"
+        submitText="Update"
+        handleSubmit={(values) => {
+          if (deepEqual(values, initialValues)) {
+            setShow(false);
+            toast.warn('Nothing was changed!');
+          } else {
+            delete values['id'];
+            const newValues = {
+              ...values,
+              validTill: values.validTill.toISOString(),
+            };
+            console.log(newValues);
+          }
+        }}
+      />
+    </>
   );
 };

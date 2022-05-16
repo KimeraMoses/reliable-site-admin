@@ -24,6 +24,14 @@
     z-index: 9999999;
     color: #fff;
     border: none;
+    .ant-picker-cell-disabled {
+      cursor: not-allowed;
+      div {
+        color: #92928f;
+        background: #2a2a3e;
+        cursor: not-allowed;
+      }
+    }
     .ant-picker-panel-container {
       background: #1e1e2d;
       border-radius: 8px;

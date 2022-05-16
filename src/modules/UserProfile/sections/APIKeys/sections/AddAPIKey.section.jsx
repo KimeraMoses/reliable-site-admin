@@ -3,6 +3,7 @@ import { Modal } from 'components';
 import { nanoid } from 'nanoid';
 import { useState } from 'react';
 import { AddPermissions } from './AddPermissions.section';
+import { useSelector } from 'react-redux';
 
 const fields = [
   {
@@ -12,7 +13,7 @@ const fields = [
     placeholder: 'Navitare',
   },
   {
-    name: 'status',
+    name: 'statusApi',
     type: 'switch',
     title: 'Status',
   },
@@ -26,29 +27,33 @@ const fields = [
     name: 'validTill',
     type: 'date',
     title: 'Expires',
-    placeholder: 'Sunday, March 27th, 2022 at 04:30 PM',
+    disableDate: (current) => current && current.valueOf() < Date.now(),
   },
 ];
-
-const initialValues1 = {
-  applicationKey: nanoid(),
-  userIds: '',
-  validTill: '',
-  statusApi: true,
-  tenant: '',
-  label: '',
-};
 
 const validationSchema1 = Yup.object().shape({
   label: Yup.string().required('Label is required'),
   statusApi: Yup.string().required('Status is required'),
   tenant: Yup.string().required('Tenant is required'),
-  expiresAt: Yup.string().required('Expires is required'),
+  validTill: Yup.date().required('Expiry date is required'),
 });
 
 export const AddAPIKey = ({ show, setShow }) => {
   const [apiKeyInit, setAPIKeyInit] = useState(false);
   const [showPermissions, setShowPermissions] = useState(false);
+
+  const { user } = useSelector((state) => state?.auth);
+
+  const initialValues1 = {
+    applicationKey: nanoid(),
+    userIds: user?.id,
+    safeListIpAddresses: user?.restrictAccessIPAddress,
+    validTill: '',
+    statusApi: true,
+    tenant: 'admin',
+    label: '',
+  };
+
   return (
     <>
       <Modal
@@ -60,8 +65,12 @@ export const AddAPIKey = ({ show, setShow }) => {
         heading="Add API Key"
         submitText="Configure Permissions"
         handleSubmit={(values) => {
+          const newValues = {
+            ...values,
+            validTill: values.validTill.toISOString(),
+          };
           setShow(false);
-          setAPIKeyInit(values);
+          setAPIKeyInit(newValues);
           setShowPermissions(true);
         }}
       />

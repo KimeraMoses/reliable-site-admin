@@ -1,20 +1,38 @@
-import { Button, Select, Tooltip } from 'antd';
-import { Copy, Down } from 'icons';
+import {
+  Button,
+  // Select,
+  Tooltip,
+} from 'antd';
+import {
+  Copy,
+  //  Down
+} from 'icons';
 import { Table } from 'components';
 import './APIKeys.styles.scss';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Add, EditAPIKey } from './sections';
+import { checkModule } from 'lib/checkModule';
+import { useSelector, useDispatch } from 'react-redux';
+import { getAPIKeysByUID } from 'store';
 
 export const APIKeys = () => {
   const [show, setShow] = useState(false);
-  const [selectedSort, setSelectedSort] = useState('label');
+  // const [selectedSort, setSelectedSort] = useState('label');
   const [data, setData] = useState([]);
   const [selectedRows, setSelectedRows] = useState([]);
   // Edit Modal State Start
   const [showEdit, setShowEdit] = useState(false);
   const [apikey, setApikey] = useState({});
   // Edit Modal State End
+
+  const { userModules } = useSelector((state) => state?.modules);
+  const { apiKeys, loading } = useSelector((state) => state?.apiKeys);
+  const { user } = useSelector((state) => state?.auth);
+  const { permissions } = checkModule({
+    module: 'Users',
+    modules: userModules,
+  });
 
   const { t } = useTranslation('/Users/ns');
 
@@ -74,30 +92,45 @@ export const APIKeys = () => {
     },
   };
 
+  const dispatch = useDispatch();
   useEffect(() => {
-    const data = [];
-    for (let i = 5; i > 0; i--) {
-      data.push({
-        key: i,
-        label: `API Key ${i}`,
-        apiKey: `${i}0asdwr${i}asd${i}`,
-        createdAt: 'Sunday, March 27th, 2022 at 04:30 PM',
-        status: `ACTIVE`,
-      });
+    if (user) {
+      dispatch(getAPIKeysByUID(user?.id));
     }
+  }, [user]);
 
-    data.sort((a, b) => {
-      if (a[selectedSort] && b[selectedSort]) {
-        return a?.[selectedSort]?.localeCompare(b?.[selectedSort]);
-      }
-      return a > b;
-    });
-    setData(data);
-  }, [selectedSort]);
+  useEffect(() => {
+    if (apiKeys) {
+      let dataArr = [];
+      apiKeys.forEach((key) => {
+        dataArr.push({
+          key: key?.id,
+          label: key?.label !== null ? key?.label : 'N/A',
+          apiKey: key?.applicationKey,
+          createdAt: key?.createdAt ? key?.createdAt : 'N/A',
+          status: key?.statusApi ? 'Active' : 'Inactive',
+          validTill: key?.validTill,
+          tenant: key?.tenant,
+        });
+      });
+      setData(dataArr);
+    }
+  }, [apiKeys]);
 
-  const onSelectChange = (e) => {
-    setSelectedSort(e);
-  };
+  // TODO: Sort Logic once Sorted :D
+  // useEffect(() => {
+  //   data.sort((a, b) => {
+  //     if (a[selectedSort] && b[selectedSort]) {
+  //       return a?.[selectedSort]?.localeCompare(b?.[selectedSort]);
+  //     }
+  //     return a > b;
+  //   });
+  //   setData(data);
+  // }, [selectedSort]);
+
+  // const onSelectChange = (e) => {
+  //   setSelectedSort(e);
+  // };
 
   return (
     <div className="mt-[20px] bg-[#1E1E2D] rounded-[8px] pb-[32px]">
@@ -107,6 +140,7 @@ export const APIKeys = () => {
         <Table
           data={data}
           columns={columns}
+          loading={loading}
           additionalBtns={
             selectedRows?.length
               ? [
@@ -133,32 +167,27 @@ export const APIKeys = () => {
               <Button>Permissions</Button>
             </>
           )}
-          permissions={{
-            View: true,
-            Create: true,
-            Update: true,
-            Remove: true,
-          }}
+          permissions={permissions}
           t={t}
-          customFilterSort={
-            <>
-              <Select
-                className="min-w-[235px] bg-[#171723]"
-                onChange={onSelectChange}
-                dropdownClassName="custom-select-dropdown"
-                value={selectedSort}
-                suffixIcon={<Down />}
-              >
-                {columns?.map((el) => {
-                  return (
-                    <Select.Option key={el?.key} value={el?.key}>
-                      {t('sortBy')} {el?.title}
-                    </Select.Option>
-                  );
-                })}
-              </Select>
-            </>
-          }
+          // customFilterSort={
+          //   <>
+          //     <Select
+          //       className="min-w-[235px] bg-[#171723]"
+          //       onChange={onSelectChange}
+          //       dropdownClassName="custom-select-dropdown"
+          //       value={selectedSort}
+          //       suffixIcon={<Down />}
+          //     >
+          //       {columns?.map((el) => {
+          //         return (
+          //           <Select.Option key={el?.key} value={el?.key}>
+          //             {t('sortBy')} {el?.title}
+          //           </Select.Option>
+          //         );
+          //       })}
+          //     </Select>
+          //   </>
+          // }
         />
       </div>
       {/* Modals */}
