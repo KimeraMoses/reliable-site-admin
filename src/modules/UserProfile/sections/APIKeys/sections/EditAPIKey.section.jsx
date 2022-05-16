@@ -1,8 +1,9 @@
 import * as Yup from 'yup';
 import moment from 'moment';
 import { Modal } from 'components';
-import { deepEqual } from 'lib';
-import { toast } from 'react-toastify';
+import { useDispatch, useSelector } from 'react-redux';
+import { updateAPIKey } from 'store';
+import { getAPIKeysByUID } from 'store';
 
 const fields = [
   {
@@ -46,6 +47,10 @@ export const EditAPIKey = ({ show, setShow, apikey }) => {
     label: apikey?.label,
   };
 
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state?.auth);
+  const { loading } = useSelector((state) => state?.apiKeys);
+
   return (
     <>
       <Modal
@@ -53,21 +58,20 @@ export const EditAPIKey = ({ show, setShow, apikey }) => {
         setShow={setShow}
         fields={fields}
         initialValues={initialValues}
+        loading={loading}
         validationSchema={validationSchema}
         heading="Edit API Key"
         submitText="Update"
-        handleSubmit={(values) => {
-          if (deepEqual(values, initialValues)) {
-            setShow(false);
-            toast.warn('Nothing was changed!');
-          } else {
-            delete values['id'];
-            const newValues = {
-              ...values,
-              validTill: values.validTill.toISOString(),
-            };
-            console.log(newValues);
-          }
+        handleSubmit={async (values) => {
+          const keyId = values?.id;
+          delete values['id'];
+          const newValues = {
+            ...values,
+            validTill: values.validTill.toISOString(),
+          };
+          await dispatch(updateAPIKey(keyId, newValues));
+          await dispatch(getAPIKeysByUID(user?.id));
+          setShow(false);
         }}
       />
     </>

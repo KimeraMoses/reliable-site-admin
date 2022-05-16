@@ -18,4 +18,9 @@ export {
 export { updateUserProfile, changePassword, updateEmail } from './AuthActions';
 export { getLogs, getUserLogs, getLoginSessions } from './logs';
 // API Keys Actions
-export { addAPIKey, getAllAPIKeys, getAPIKeysByUID } from './apiKeys';
+export {
+  addAPIKey,
+  getAllAPIKeys,
+  getAPIKeysByUID,
+  updateAPIKey,
+} from './apiKeys';

@@ -26,6 +26,7 @@ export const AddPermissions = ({ show, setShow, apiKeyInit }) => {
               name,
               permissionDetail: JSON.stringify(permissionDetail),
               tenant,
+              userApiKeyId: '',
             };
           }
         );
@@ -33,6 +34,7 @@ export const AddPermissions = ({ show, setShow, apiKeyInit }) => {
           ...apiKeyInit,
           userApiKeyModules: valuesToPost,
         };
+        // console.log(finalObject);
         await dispatch(addAPIKey(user?.id, finalObject));
         setShow(false);
       }}

@@ -4,6 +4,7 @@ import {
   getAPIKeysByUserIDConfig,
   getAPIKeysConfig,
   getError,
+  updateAPIKeyConfig,
 } from 'lib';
 import { toast } from 'react-toastify';
 import { getAPIKeys, setAPILoading } from 'store/Slices/apiKeysSlice';
@@ -53,6 +54,24 @@ export const getAPIKeysByUID = (uid) => {
       const { url, defaultData, config } = getAPIKeysByUserIDConfig(uid);
       const res = await axios.post(url, defaultData, config);
       dispatch(getAPIKeys(res?.data?.data));
+    } catch (e) {
+      toast.error(getError(e));
+    } finally {
+      dispatch(setAPILoading(false));
+    }
+  };
+};
+
+// Update API Key
+export const updateAPIKey = (id, data) => {
+  return async (dispatch) => {
+    dispatch(setAPILoading(true));
+    try {
+      const { url, config } = updateAPIKeyConfig(id);
+      const res = await axios.put(url, data, config);
+      if (res.status === 200) {
+        toast.success('API Key Updated Successfully');
+      }
     } catch (e) {
       toast.error(getError(e));
     } finally {
