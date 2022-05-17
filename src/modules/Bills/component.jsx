@@ -16,7 +16,7 @@ export function Bills() {
           element={<Navigate to="/admin/dashboard/billing/clients/list/show" />}
         />
         {pages?.map(({ path, Component }) => {
-          return <Route path={path} element={<Component />} />;
+          return <Route key={path} path={path} element={<Component />} />;
         })}
       </Routes>
     </DashboardLayout>
