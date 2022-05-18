@@ -40,6 +40,10 @@ export const dashboardPages = [
       import('./Dashboard/AccountSettings/AccountSettings.page')
     ),
   },
+  {
+    path: '/dashboard/settings/*',
+    Component: lazy(() => import('./Dashboard/Settings/Settings.page')),
+  },
 ];
 
 export default pages;

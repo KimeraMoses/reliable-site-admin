@@ -91,6 +91,16 @@ export const sidebarData = [
     module: 'Settings',
     path: '/admin/dashboard/settings',
     icon: (fill) => <Settings fill={fill} />,
+    subLinks: [
+      {
+        name: 'General',
+        path: '/admin/dashboard/settings/general',
+      },
+      {
+        name: 'Billing',
+        path: '/admin/dashboard/settings/billing',
+      },
+    ],
   },
   {
     name: 'Account Settings',
