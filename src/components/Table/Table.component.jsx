@@ -32,7 +32,6 @@ export const Table = ({
   additionalBtns,
   hideActions,
   hideHeaders,
-  t,
 }) => {
   const [dataSource, setDataSource] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
@@ -70,35 +69,40 @@ export const Table = ({
         permissions?.Remove ||
         permissions?.Update
           ? {
-              title: t('actions'),
+              title: 'Actions',
               key: 'actions',
+              align: 'right',
               render: (text, record) => (
-                <Dropdown
-                  overlayClassName="custom-table__table-dropdown-overlay"
-                  className="custom-table__table-dropdown"
-                  destroyPopupOnHide
-                  placement="bottomRight"
-                  overlay={
-                    <>
-                      {viewAction && permissions?.View && viewAction(record)}
-                      {editAction && permissions?.Update && editAction(record)}
-                      {deleteAction &&
-                        permissions?.Remove &&
-                        deleteAction(record)}
-                    </>
-                  }
-                  trigger={['click']}
-                >
-                  <Button
-                    type="primary"
-                    className="custom-table__table-dropdown-btn"
+                <div className="flex items-center justify-end">
+                  <Dropdown
+                    overlayClassName="custom-table__table-dropdown-overlay"
+                    className="custom-table__table-dropdown"
+                    destroyPopupOnHide
+                    placement="bottomRight"
+                    overlay={
+                      <>
+                        {viewAction && permissions?.View && viewAction(record)}
+                        {editAction &&
+                          permissions?.Update &&
+                          editAction(record)}
+                        {deleteAction &&
+                          permissions?.Remove &&
+                          deleteAction(record)}
+                      </>
+                    }
+                    trigger={['click']}
                   >
-                    <div>{t ? t('actions') : 'Actions'}</div>
-                    <div>
-                      <DropdownIcon />
-                    </div>
-                  </Button>
-                </Dropdown>
+                    <Button
+                      type="primary"
+                      className="custom-table__table-dropdown-btn"
+                    >
+                      <div>{'Actions'}</div>
+                      <div>
+                        <DropdownIcon />
+                      </div>
+                    </Button>
+                  </Dropdown>
+                </div>
               ),
             }
           : {};

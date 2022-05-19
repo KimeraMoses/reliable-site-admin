@@ -100,6 +100,30 @@ export const sidebarData = [
         name: 'Billing',
         path: '/admin/dashboard/settings/billing',
       },
+      {
+        name: 'Payment Gateways',
+        path: '/admin/dashboard/settings/payment-gateways',
+      },
+      {
+        name: 'Support',
+        path: '/admin/dashboard/settings/support',
+      },
+      {
+        name: 'SMTP',
+        path: '/admin/dashboard/settings/smtp',
+      },
+      {
+        name: 'Email Templates',
+        path: '/admin/dashboard/settings/email-templates',
+      },
+      {
+        name: 'Maintenance',
+        path: '/admin/dashboard/settings/maintenance',
+      },
+      {
+        name: 'API',
+        path: '/admin/dashboard/settings/api',
+      },
     ],
   },
   {
