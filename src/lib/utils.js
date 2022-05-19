@@ -190,3 +190,10 @@ export const getIPData = async () => {
 export const getDeviceName = () => {
   return `${browserName} ${browserVersion}`;
 };
+
+// Convert camelCase to Title Case
+export const convertCamelToTitle = (str) => {
+  const result = str.replace(/([A-Z])/g, ' $1');
+  const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
+  return finalResult;
+};
