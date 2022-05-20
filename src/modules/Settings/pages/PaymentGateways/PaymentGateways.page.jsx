@@ -1,23 +1,25 @@
 import { Button, Switch } from 'antd';
 import { Table } from 'components';
+import { useState } from 'react';
+import { AddPaymentGateway, EditPaymentGateway } from './sections';
 
 const columns = [
   {
     title: 'Payment Gateway',
-    dataIndex: 'payment_gateway',
-    key: 'payment_gateway',
+    dataIndex: 'gatewayName',
+    key: 'gatewayName',
     width: '33%',
   },
   {
     title: 'API Key',
-    dataIndex: 'api_key',
-    key: 'api_key',
+    dataIndex: 'apiKey',
+    key: 'apiKey',
     width: '33%',
   },
   {
-    title: 'Toggle',
-    dataIndex: 'toggle',
-    key: 'toggle',
+    title: 'Status',
+    dataIndex: 'status',
+    key: 'status',
     render: (value) => <Switch defaultChecked={value} onChange={() => {}} />,
   },
 ];
@@ -26,15 +28,24 @@ let data = [];
 for (let i = 0; i < 25; i++) {
   data.push({
     key: i,
-    payment_gateway: 'PayPal',
-    api_key: '123456789',
-    toggle: i % 2 === 0 ? true : false,
+    gatewayName: 'PayPal',
+    apiKey: '123456789',
+    status: i % 2 === 0 ? true : false,
   });
 }
 
 const PaymentGateways = () => {
+  const [addModalShow, setAddModalShow] = useState(false);
+  const [editValue, setEditValue] = useState(false);
+  const [editModalShow, setEditModalShow] = useState(false);
   return (
     <div className="m-[40px] p-[40px] bg-[#1E1E2D] rounded-[8px]">
+      <AddPaymentGateway show={addModalShow} setShow={setAddModalShow} />
+      <EditPaymentGateway
+        show={editModalShow}
+        setShow={setEditModalShow}
+        editValue={editValue}
+      />
       <Table
         columns={columns}
         data={data}
@@ -48,16 +59,14 @@ const PaymentGateways = () => {
         fieldToFilter="name"
         btnData={{
           text: 'Add Payment Gateway',
-          onClick: () => {},
+          onClick: () => setAddModalShow(true),
         }}
         // loading={loading}
-        // viewAction={(record) => {
-        //   return <></>;
-        // }}
         editAction={(record) => (
           <Button
             onClick={() => {
-              console.log(record);
+              setEditValue(record);
+              setEditModalShow(true);
             }}
           >
             Edit

@@ -65,6 +65,7 @@ export function Modal({
                             options,
                             disableDate,
                             disableTime,
+                            disabled,
                           },
                           index
                         ) => {
@@ -188,6 +189,7 @@ export function Modal({
                                         <div className="w-full">
                                           <select
                                             value={values[name]}
+                                            disabled={disabled}
                                             onChange={(e) =>
                                               setFieldValue(
                                                 name,
@@ -222,6 +224,7 @@ export function Modal({
                                       type={type}
                                       name={name}
                                       placeholder={placeholder}
+                                      disabled={disabled}
                                     />
                                     {touched[name] && errors[name] && (
                                       <div className="error">

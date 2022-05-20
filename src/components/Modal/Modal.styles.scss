@@ -89,11 +89,15 @@
         padding: 0px 16px;
         border-radius: 8px;
         outline: none;
+        color: #92928f;
         &::placeholder {
           color: #92928f;
         }
         &:focus {
           outline: none;
+        }
+        &:disabled {
+          background: #323248;
         }
       }
       // Switch
