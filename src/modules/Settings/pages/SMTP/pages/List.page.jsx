@@ -1,6 +1,8 @@
 import { Button } from 'antd';
 import { Table } from 'components';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Delete } from './sections';
 
 const columns = [
   {
@@ -39,9 +41,12 @@ for (let i = 0; i < 25; i++) {
 }
 
 export const List = () => {
+  const [show, setShow] = useState(false);
+  const [record, setRecord] = useState(null);
   const navigate = useNavigate();
   return (
     <div className="m-[40px] p-[40px] bg-[#1E1E2D] rounded-[8px]">
+      <Delete show={show} setShow={setShow} record={record} />
       <Table
         columns={columns}
         data={data}
@@ -69,6 +74,18 @@ export const List = () => {
             Edit
           </Button>
         )}
+        deleteAction={(record) => {
+          return (
+            <Button
+              onClick={() => {
+                setRecord(record);
+                setShow(true);
+              }}
+            >
+              Delete
+            </Button>
+          );
+        }}
       />
     </div>
   );
