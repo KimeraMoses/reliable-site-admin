@@ -1,9 +1,67 @@
+// Image Upload Styles
 .image-upload {
   &__el {
     display: none;
   }
 }
 
+// Tag Input Styles
+.custom-select {
+  .ant-select-selector {
+    padding: 12px 0px 12px 12px !important;
+    min-height: 40px !important;
+    .ant-select-selection-placeholder {
+      color: #92928f;
+    }
+  }
+  .ant-select-selection-search {
+    margin-inline-start: 0px;
+    color: #92928f;
+  }
+  .ant-select-item {
+    color: #92928f;
+    background: #323248;
+  }
+  .ant-select-selection-item {
+    background: #323248;
+    border: none;
+    border-radius: 8px;
+    .ant-select-selection-item-content {
+      margin-right: 10px;
+    }
+    .ant-select-selection-item-remove {
+      color: #92928f;
+      display: flex;
+      align-items: center;
+    }
+  }
+  &__dropdown {
+    background: #171723;
+    .ant-empty-description {
+      color: #92928f;
+    }
+    .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+      background: #171723;
+      color: #92928f;
+    }
+    .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+      background: #171723;
+      color: #92928f;
+    }
+    .ant-select-item {
+      color: #92928f;
+      &:hover {
+        background: #1d1d2c;
+      }
+      .ant-select-item-option-state {
+        display: flex;
+        align-items: center;
+      }
+    }
+  }
+}
+
+// Date Picker Styles
 .custom-date-picker {
   border: none;
   input {
