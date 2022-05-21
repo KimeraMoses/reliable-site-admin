@@ -1,0 +1,5 @@
+<svg id="text-underline" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+  <path id="Vector" d="M0,0H9.333" transform="translate(3.333 14)" fill="none" stroke="#92928f" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+  <path id="Vector-2" data-name="Vector" d="M0,0V4.667a4.667,4.667,0,0,0,9.333,0V0" transform="translate(3.333 2)" fill="none" stroke="#92928f" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+  <path id="Vector-3" data-name="Vector" d="M0,0H16V16H0Z" transform="translate(16 16) rotate(180)" fill="none" opacity="0"/>
+</svg>
