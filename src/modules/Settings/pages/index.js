@@ -7,12 +7,11 @@ export const pages = [
     path: 'payment-gateways',
     Component: lazy(() => import('./PaymentGateways/PaymentGateways.page')),
   },
+  {
+    path: 'support',
+    Component: lazy(() => import('./Support/Support.page')),
+  },
 ];
-
-// {
-//   name: 'Support',
-//   path: '/admin/dashboard/settings/support',
-// },
 // {
 //   name: 'SMTP',
 //   path: '/admin/dashboard/settings/smtp',
