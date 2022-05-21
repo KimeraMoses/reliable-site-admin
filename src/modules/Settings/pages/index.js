@@ -11,6 +11,10 @@ export const pages = [
     path: 'support',
     Component: lazy(() => import('./Support/Support.page')),
   },
+  {
+    path: 'smtp/*',
+    Component: lazy(() => import('./SMTP/SMTP.page')),
+  },
 ];
 // {
 //   name: 'SMTP',

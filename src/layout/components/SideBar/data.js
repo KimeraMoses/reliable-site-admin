@@ -111,6 +111,16 @@ export const sidebarData = [
       {
         name: 'SMTP',
         path: '/admin/dashboard/settings/smtp',
+        subLinks: [
+          {
+            name: 'Add New Configuration',
+            path: '/admin/dashboard/settings/smtp/configuration/add',
+          },
+          {
+            name: 'Edit Configuration',
+            path: '/admin/dashboard/settings/smtp/edit/:id',
+          },
+        ],
       },
       {
         name: 'Email Templates',
