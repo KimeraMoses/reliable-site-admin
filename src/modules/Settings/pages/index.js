@@ -19,16 +19,11 @@ export const pages = [
     path: 'email-templates/*',
     Component: lazy(() => import('./EmailTemplates/EmailTemplates.page')),
   },
+  {
+    path: 'maintenance',
+    Component: lazy(() => import('./Maintenance/Maintenance.page')),
+  },
 ];
-
-// {
-//   name: 'Email Templates',
-//   path: '/admin/dashboard/settings/email-templates',
-// },
-// {
-//   name: 'Maintenance',
-//   path: '/admin/dashboard/settings/maintenance',
-// },
 // {
 //   name: 'API',
 //   path: '/admin/dashboard/settings/api',
