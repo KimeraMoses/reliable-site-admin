@@ -8,6 +8,7 @@ export function SMTPEditor({
   wrapperClassName,
   editorClassName,
   placeholder,
+  onBlur,
 }) {
   return (
     <Editor
@@ -16,6 +17,7 @@ export function SMTPEditor({
       editorClassName={editorClassName}
       onEditorStateChange={onChange}
       placeholder={placeholder}
+      onBlur={onBlur}
       toolbar={{
         options: ['inline', 'image'],
         inline: {

@@ -108,7 +108,7 @@ export function Modal({
                                             </div>
                                           </div>
                                           {meta.touched && meta.error && (
-                                            <div className="error">
+                                            <div className="error mt-[8px]">
                                               {meta.error}
                                             </div>
                                           )}
@@ -172,7 +172,7 @@ export function Modal({
                                       letters, numbers & symbols.
                                     </div>
                                     {touched[name] && errors[name] && (
-                                      <div className="error">
+                                      <div className="error mt-[8px]">
                                         {errors[name]}
                                       </div>
                                     )}
@@ -208,7 +208,7 @@ export function Modal({
                                             ))}
                                           </select>
                                           {meta.touched && meta.error && (
-                                            <div className="error">
+                                            <div className="error mt-[8px]">
                                               {meta.error}
                                             </div>
                                           )}
@@ -227,7 +227,7 @@ export function Modal({
                                       disabled={disabled}
                                     />
                                     {touched[name] && errors[name] && (
-                                      <div className="error">
+                                      <div className="error mt-[8px]">
                                         {errors[name]}
                                       </div>
                                     )}

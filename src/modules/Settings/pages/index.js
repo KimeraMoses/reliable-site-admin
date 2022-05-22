@@ -15,11 +15,12 @@ export const pages = [
     path: 'smtp/*',
     Component: lazy(() => import('./SMTP/SMTP.page')),
   },
+  {
+    path: 'email-templates/*',
+    Component: lazy(() => import('./EmailTemplates/EmailTemplates.page')),
+  },
 ];
-// {
-//   name: 'SMTP',
-//   path: '/admin/dashboard/settings/smtp',
-// },
+
 // {
 //   name: 'Email Templates',
 //   path: '/admin/dashboard/settings/email-templates',

@@ -11,16 +11,16 @@ export const Delete = ({ show, setShow, record }) => {
   };
   return (
     <Modal
-      heading="Delete Configuration"
+      heading="Delete Email Template"
       customBody={
         <div className="mb-[32px]">
-          Are you sure you wish to delete this configuration? This action is
+          Are you sure you wish to delete this email template? This action is
           permanent and can not be undone.
         </div>
       }
       initialValues={initialValues}
       validationSchema={validationSchema}
-      submitText="Delete Configuration"
+      submitText="Delete Template"
       handleSubmit={(values) => {
         console.log(values?.id);
         setShow(false);

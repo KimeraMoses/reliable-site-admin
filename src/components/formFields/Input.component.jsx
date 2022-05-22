@@ -79,7 +79,7 @@ export const Input = ({
             disabled={disabled}
           />
           {meta.touched && meta.error && (
-            <div className="error">{meta.error}</div>
+            <div className="error mt-[8px]">{meta.error}</div>
           )}
         </div>
       )}

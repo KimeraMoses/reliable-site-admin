@@ -125,6 +125,16 @@ export const sidebarData = [
       {
         name: 'Email Templates',
         path: '/admin/dashboard/settings/email-templates',
+        subLinks: [
+          {
+            name: 'Add New Template',
+            path: '/admin/dashboard/settings/email-templates/template/add',
+          },
+          {
+            name: 'Edit Template',
+            path: '/admin/dashboard/settings/email-templates/edit/:id',
+          },
+        ],
       },
       {
         name: 'Maintenance',
