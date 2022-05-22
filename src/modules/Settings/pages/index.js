@@ -23,8 +23,8 @@ export const pages = [
     path: 'maintenance',
     Component: lazy(() => import('./Maintenance/Maintenance.page')),
   },
+  {
+    path: 'api',
+    Component: lazy(() => import('./API/API.page')),
+  },
 ];
-// {
-//   name: 'API',
-//   path: '/admin/dashboard/settings/api',
-// },
