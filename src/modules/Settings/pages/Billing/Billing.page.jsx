@@ -1,21 +1,11 @@
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Button, Card, Input } from 'components';
-
-const initialValues = {
-  maxNumberOfRefunds: 20,
-  minimumOrderAmount: 20,
-};
+import { useSelector } from 'react-redux';
 
 const validationSchema = Yup.object().shape({
-  maxNumberOfRefunds: Yup.number()
-    .min(1, 'Must be greater than 0')
-    .max(100, 'Must be less than 100')
-    .required('This is a required field'),
-  minimumOrderAmount: Yup.number()
-    .min(1, 'Must be greater than 0')
-    .max(100, 'Must be less than 100')
-    .required('This is a required field'),
+  maxNumberOfRefunds: Yup.number().required('This is a required field'),
+  minOrderAmount: Yup.number().required('This is a required field'),
 });
 
 export default function Billing() {
@@ -27,18 +17,25 @@ export default function Billing() {
       type: 'number',
     },
     {
-      name: 'minimumOrderAmount',
+      name: 'minOrderAmount',
       label: 'Minimum Order Amount',
       type: 'number',
     },
   ];
 
+  const { settings, loading } = useSelector((state) => state?.appSettings);
+  const initialValues = {
+    maxNumberOfRefunds: settings?.maxNumberOfRefunds,
+    minOrderAmount: settings?.minOrderAmount,
+  };
+
   return (
     <div className="p-[40px]">
-      <Card heading="Billing Settings">
+      <Card heading="Billing Settings" loading={loading}>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
+          enableReinitialize
           onSubmit={(values) => console.log(values)}
         >
           <Form>

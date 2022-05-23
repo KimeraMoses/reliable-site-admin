@@ -1,17 +1,10 @@
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Button, Card, Input } from 'components';
-
-const initialValues = {
-  maxNumberOfSubCategories: 20,
-  autoApproveNewArticles: true,
-};
+// import { useSelector } from 'react-redux';
 
 const validationSchema = Yup.object().shape({
-  maxNumberOfSubCategories: Yup.number()
-    .min(1, 'Must be greater than 0')
-    .max(100, 'Must be less than 100')
-    .required('This is a required field'),
+  maxNumberOfSubCategories: Yup.number().required('This is a required field'),
   autoApproveNewArticles: Yup.boolean().required('This is a required field'),
 });
 
@@ -20,7 +13,7 @@ export default function Support() {
   const fields = [
     {
       name: 'maxNumberOfSubCategories',
-      label: 'Max Number of Refunds',
+      label: 'Max Number of Sub Categories',
       type: 'number',
     },
     {
@@ -29,6 +22,12 @@ export default function Support() {
       type: 'switch',
     },
   ];
+
+  // const { settings } = useSelector((state) => state?.settings);
+  const initialValues = {
+    maxNumberOfSubCategories: 20,
+    autoApproveNewArticles: true,
+  };
 
   return (
     <div className="p-[40px]">
