@@ -1,34 +1,39 @@
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Button, Card, Input } from 'components';
-
-const initialValues = {
-  twoFactorAuth: true,
-  googleAuth: true,
-  microsoftAuth: true,
-};
+import { useSelector } from 'react-redux';
+import { deepEqual } from 'lib';
+import { toast } from 'react-toastify';
 
 const validationSchema = Yup.object().shape({
-  twoFactorAuth: Yup.boolean().required('This is a required field'),
-  googleAuth: Yup.boolean().required('This is a required field'),
-  microsoftAuth: Yup.boolean().required('This is a required field'),
+  foceMFA: Yup.boolean().required('This is a required field'),
+  googleAuthenticator: Yup.boolean().required('This is a required field'),
+  microsoftAuthenticator: Yup.boolean().required('This is a required field'),
 });
 
 export function MFASettings() {
+  const { settings } = useSelector((state) => state?.appSettings);
+
+  const initialValues = {
+    foceMFA: settings?.forceMFA,
+    googleAuthenticator: settings?.googleAuthenticator,
+    microsoftAuthenticator: settings?.microsoftAuthenticator,
+  };
+
   // Fields
   const fields = [
     {
-      name: 'twoFactorAuth',
+      name: 'foceMFA',
       label: '2 Factor Authentication',
       type: 'switch',
     },
     {
-      name: 'googleAuth',
+      name: 'googleAuthenticator',
       label: 'Google Authentication',
       type: 'switch',
     },
     {
-      name: 'microsoftAuth',
+      name: 'microsoftAuthenticator',
       label: 'Microsoft Authentication',
       type: 'switch',
     },
@@ -39,7 +44,14 @@ export function MFASettings() {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values) => console.log(values)}
+        enableReinitialize
+        onSubmit={(values) => {
+          if (deepEqual(values, initialValues)) {
+            toast.info('No changes were made');
+          } else {
+            console.log(values);
+          }
+        }}
       >
         <Form>
           <div className="grid grid-cols-4 gap-[20px] mb-[32px]">

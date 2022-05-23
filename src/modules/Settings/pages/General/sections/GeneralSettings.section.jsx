@@ -16,9 +16,9 @@ export function GeneralSettings() {
   const { countries } = useCountries();
 
   useEffect(() => {
-    const cArr = countries.map((country) => ({
-      label: country?.name,
-      value: country?.name,
+    const cArr = countries.map((defaultCountry) => ({
+      label: defaultCountry?.name,
+      value: defaultCountry?.name,
     }));
     cArr.sort((a, b) => {
       if (a.label < b.label) {
@@ -51,13 +51,13 @@ export function GeneralSettings() {
       ],
     },
     {
-      name: 'country',
+      name: 'defaultCountry',
       label: 'Country',
       type: 'select',
       options: countriesData,
     },
     {
-      name: 'termsOfService',
+      name: 'termsOfServiceURL',
       label: 'Terms of Service',
       type: 'text',
     },
@@ -112,16 +112,15 @@ export function GeneralSettings() {
   ];
 
   const { settings } = useSelector((state) => state?.appSettings);
-  console.log(settings);
   const initialValues = {
     dateFormat: settings?.dateFormat,
-    country: settings?.defaultCountry,
-    termsOfService: settings?.termsOfServiceURL,
+    defaultCountry: settings?.defaultCountry,
+    termsOfServiceURL: settings?.termsOfServiceURL,
     termsOfServiceAgreement: settings?.termsOfServiceAgreement,
     recordsToDisplay: settings?.recordsToDisplay,
     autoRefreshInterval: settings?.autoRefreshInterval,
-    module1Settings: '',
-    module2Settings: '',
+    // module1Settings: '',
+    // module2Settings: '',
   };
 
   return (
@@ -131,7 +130,7 @@ export function GeneralSettings() {
         validationSchema={validationSchema}
         onSubmit={(values) => {
           if (deepEqual(values, initialValues)) {
-            toast.warn('Nothing changed in General Settings.');
+            toast.info('No changes were made');
           } else {
             console.log(values);
           }
