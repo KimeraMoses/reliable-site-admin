@@ -3,17 +3,9 @@ import { useCountries } from 'use-react-countries';
 import * as Yup from 'yup';
 import { Button, Card, Input } from 'components';
 import { useEffect, useState } from 'react';
-
-const initialValues = {
-  dateFormat: 'DD/MM/YYYY',
-  country: 'United States',
-  termsOfService: 'https://www.reliablesite.com/termsofservice',
-  termsOfServiceAgreement: true,
-  recordsToDisplay: '10',
-  autoRefreshInterval: '60',
-  module1Settings: '',
-  module2Settings: '',
-};
+import { useSelector } from 'react-redux';
+import { deepEqual } from 'lib';
+import { toast } from 'react-toastify';
 
 const validationSchema = Yup.object().shape({
   dateFormat: Yup.string().required('This is a required field'),
@@ -37,7 +29,13 @@ export function GeneralSettings() {
       }
       return 0;
     });
-    setCountriesData(cArr);
+    const finalValues = [
+      ...cArr,
+      // TODO: Remove after updating to available countries
+      { label: 'Canada1', value: 'CAD' },
+      { label: 'Other', value: 'Other' },
+    ];
+    setCountriesData(finalValues);
   }, [countries]);
 
   // Fields
@@ -47,8 +45,9 @@ export function GeneralSettings() {
       label: 'Date Format',
       type: 'select',
       options: [
-        { label: 'DD/MM/YYYY', value: 'DD/MM/YYYY' },
-        { label: 'MM/DD/YYYY', value: 'MM/DD/YYYY' },
+        { label: 'MM/DD/YYYY HH:mm:ss', value: 'MM/DD/YYYY HH:mm:ss' },
+        { label: 'MM/DD/YYYY HH:mm:ss A', value: 'MM/DD/YYYY HH:mm:ss A' },
+        { label: 'MM/dd/yyyy hh:mm t', value: 'MM/dd/yyyy hh:mm t' },
       ],
     },
     {
@@ -72,8 +71,10 @@ export function GeneralSettings() {
       label: 'Records To Display',
       type: 'select',
       options: [
-        { label: '5', value: '5' },
-        { label: '10', value: '10' },
+        { label: '05', value: 5 },
+        { label: '10', value: 10 },
+        { label: '20', value: 20 },
+        { label: '30', value: 30 },
       ],
     },
     {
@@ -81,38 +82,61 @@ export function GeneralSettings() {
       label: 'Auto Refresh Interval',
       type: 'select',
       options: [
-        { label: '30 Seconds', value: '30' },
-        { label: '60 Seconds', value: '60' },
-        { label: '90 Seconds', value: '90' },
-        { label: '120 Seconds', value: '120' },
+        { label: '05 Seconds', value: 5 },
+        { label: '10 Seconds', value: 10 },
+        { label: '20 Seconds', value: 20 },
+        { label: '30 Seconds', value: 30 },
+        { label: '60 Seconds', value: 60 },
+        { label: '90 Seconds', value: 90 },
+        { label: '120 Seconds', value: 120 },
       ],
     },
-    {
-      name: 'module1Settings',
-      label: 'Module 1 Settings',
-      type: 'select',
-      options: [
-        { label: 'Select Settings', value: 'select_settings' },
-        { label: 'Select Settings 1', value: 'select_settings1' },
-      ],
-    },
-    {
-      name: 'module2Settings',
-      label: 'Module 2 Settings',
-      type: 'select',
-      options: [
-        { label: 'Select Settings', value: 'select_settings' },
-        { label: 'Select Settings 1', value: 'select_settings1' },
-      ],
-    },
+    // {
+    //   name: 'module1Settings',
+    //   label: 'Module 1 Settings',
+    //   type: 'select',
+    //   options: [
+    //     { label: 'Select Settings', value: 'select_settings' },
+    //     { label: 'Select Settings 1', value: 'select_settings1' },
+    //   ],
+    // },
+    // {
+    //   name: 'module2Settings',
+    //   label: 'Module 2 Settings',
+    //   type: 'select',
+    //   options: [
+    //     { label: 'Select Settings', value: 'select_settings' },
+    //     { label: 'Select Settings 1', value: 'select_settings1' },
+    //   ],
+    // },
   ];
+
+  const { settings } = useSelector((state) => state?.appSettings);
+  console.log(settings);
+  const initialValues = {
+    dateFormat: settings?.dateFormat,
+    country: settings?.defaultCountry,
+    termsOfService: settings?.termsOfServiceURL,
+    termsOfServiceAgreement: settings?.termsOfServiceAgreement,
+    recordsToDisplay: settings?.recordsToDisplay,
+    autoRefreshInterval: settings?.autoRefreshInterval,
+    module1Settings: '',
+    module2Settings: '',
+  };
 
   return (
     <Card heading="General Settings">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={(values) => console.log(values)}
+        onSubmit={(values) => {
+          if (deepEqual(values, initialValues)) {
+            toast.warn('Nothing changed in General Settings.');
+          } else {
+            console.log(values);
+          }
+        }}
+        enableReinitialize
       >
         <Form>
           <div className="grid grid-cols-4 gap-[20px] mb-[32px]">

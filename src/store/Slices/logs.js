@@ -6,7 +6,7 @@ const initialState = {
   loading: false,
   loginSessions: [],
 };
-const settingSlice = createSlice({
+const logsSlice = createSlice({
   name: 'logs',
   initialState,
   reducers: {
@@ -25,7 +25,7 @@ const settingSlice = createSlice({
   },
 });
 
-const { reducer, actions } = settingSlice;
+const { reducer, actions } = logsSlice;
 
 export const {
   getLogsSlice,

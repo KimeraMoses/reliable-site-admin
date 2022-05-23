@@ -24,3 +24,5 @@ export {
   getAPIKeysByUID,
   updateAPIKey,
 } from './apiKeys';
+// app Settings Actions
+export * from './appSettings';

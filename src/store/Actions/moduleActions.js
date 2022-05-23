@@ -23,8 +23,8 @@ export const getAppModules = () => {
     setModuleLoading(true);
     if (token) {
       try {
-        const { url, config } = getAppModulesConfig();
-        const res = await axios.get(url, config);
+        const { url } = getAppModulesConfig();
+        const res = await axios.get(url);
         dispatch(getAppLevelModules(res?.data?.data));
         setModuleLoading(false);
       } catch (e) {
@@ -40,14 +40,14 @@ export const getUserModules = () => {
     setModuleLoading(true);
     // Get User Profile
     try {
-      const { url, config } = getProfile();
-      const userRes = await axios.get(url, config);
+      const { url } = getProfile();
+      const userRes = await axios.get(url);
       const userId = userRes?.data?.data?.id;
       // Get User Level Modules if UserID exists
       if (userId) {
         try {
-          const { url, config } = getUserModulesConfig(userId);
-          const moduleRes = await axios.get(url, config);
+          const { url } = getUserModulesConfig(userId);
+          const moduleRes = await axios.get(url);
           dispatch(getUserLevelModules(moduleRes?.data?.data));
           setModuleLoading(false);
         } catch (e) {

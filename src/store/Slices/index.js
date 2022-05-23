@@ -11,3 +11,4 @@ export {
   clearGroup,
   getGroup,
 } from './userGroupsSlice';
+export * from './appSettings';
