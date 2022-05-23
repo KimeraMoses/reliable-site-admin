@@ -2,45 +2,50 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import { Button, Input, Card } from 'components';
-
-const initialValues = {
-  enable3rdPartyAPIKeys: true,
-  numberOfRequestsPerIP: 200,
-  intervalBeforeNextAPIRequestInSeconds: 3500,
-};
+import { useSelector } from 'react-redux';
 
 const validationSchema = Yup.object().shape({
-  enable3rdPartyAPIKeys: Yup.boolean().required('Status is required'),
-  numberOfRequestsPerIP: Yup.number().required('TTL is required'),
-  intervalBeforeNextAPIRequestInSeconds:
+  enableThirdPartyAPIkeys: Yup.boolean().required('Status is required'),
+  numberofRequestsPerIpApiKey: Yup.number().required('TTL is required'),
+  intervalBeforeNextAPIkeyRequestInSeconds:
     Yup.number().required('Reason is required'),
 });
 
 // Fields
 const fields = [
   {
-    name: 'enable3rdPartyAPIKeys',
+    name: 'enableThirdPartyAPIkeys',
     label: 'Enable 3rd Party API Keys',
     type: 'switch',
   },
   {
-    name: 'numberOfRequestsPerIP',
+    name: 'numberofRequestsPerIpApiKey',
     label: 'Number of Requests Per IP',
     type: 'number',
   },
   {
-    name: 'intervalBeforeNextAPIRequestInSeconds',
+    name: 'intervalBeforeNextAPIkeyRequestInSeconds',
     label: 'Interval Before Next API Request in Seconds',
     type: 'number',
   },
 ];
 
 export const APISettings = () => {
+  const { settings, loading } = useSelector((state) => state?.appSettings);
+
+  const initialValues = {
+    enableThirdPartyAPIkeys: settings?.enableThirdPartyAPIkeys,
+    numberofRequestsPerIpApiKey: settings?.numberofRequestsPerIpApiKey,
+    intervalBeforeNextAPIkeyRequestInSeconds:
+      settings?.intervalBeforeNextAPIkeyRequestInSeconds,
+  };
+
   return (
-    <Card heading="API Keys">
+    <Card heading="API Keys" loading={loading}>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
+        enableReinitialize
         onSubmit={(values) => console.log(values)}
       >
         <Form>

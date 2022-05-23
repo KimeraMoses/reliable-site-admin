@@ -47,7 +47,7 @@ const InputType = ({
           value={values[name]}
           rows={rows}
           onChange={(e) => setFieldValue(name, e.target.value)}
-          className="form-textarea appearance-none block w-full px-[16px] py-[16px] text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0 focus:bg-[#171723] focus:border-none focus:outline-none"
+          className="appearance-none block w-full px-[16px] py-[16px] text-base font-normal text-[#92928f] placeholder:text-[#92928F] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0 focus:bg-[#171723] focus:border-none focus:outline-none"
         />
       );
     default:
