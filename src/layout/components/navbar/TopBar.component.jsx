@@ -32,7 +32,7 @@ export function TopBar({ hide = false, hideSide, toggleSide, innerSubLinks }) {
         style={{ width: hideSide ? 'calc(100% - 84px)' : 'calc(100% - 300px)' }}
       >
         {active?.subLinks?.length ? (
-          <div className="flex items-center gap-4 ml-[40px] overflow-x-scroll xxl:overflow-x-hidden">
+          <div className="flex items-center gap-[12px] ml-[40px] overflow-x-scroll xxl:overflow-x-hidden">
             {active?.subLinks.map((link) => {
               const innerLinks = (
                 <div className="bg-[#1e1e2d] flex flex-col">

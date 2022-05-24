@@ -27,4 +27,8 @@ export const pages = [
     path: 'api',
     Component: lazy(() => import('./API/API.page')),
   },
+  {
+    path: 'portal',
+    Component: lazy(() => import('./Portal/Portal.page')),
+  },
 ];

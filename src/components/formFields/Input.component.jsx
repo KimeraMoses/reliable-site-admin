@@ -71,11 +71,12 @@ export const Input = ({
   options,
   disabled,
   rows,
+  className,
 }) => {
   return (
     <Field name={name}>
       {({ field, meta, form: { values, setFieldValue } }) => (
-        <div className="w-full">
+        <div className={`w-full ${className}`}>
           {label ? (
             <label htmlFor={name} className="mb-[16px] text-white text-[14px]">
               {label}
