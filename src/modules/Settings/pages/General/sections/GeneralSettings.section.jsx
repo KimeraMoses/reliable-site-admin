@@ -91,24 +91,60 @@ export function GeneralSettings() {
         { label: '120 Seconds', value: 120 },
       ],
     },
-    // {
-    //   name: 'module1Settings',
-    //   label: 'Module 1 Settings',
-    //   type: 'select',
-    //   options: [
-    //     { label: 'Select Settings', value: 'select_settings' },
-    //     { label: 'Select Settings 1', value: 'select_settings1' },
-    //   ],
-    // },
-    // {
-    //   name: 'module2Settings',
-    //   label: 'Module 2 Settings',
-    //   type: 'select',
-    //   options: [
-    //     { label: 'Select Settings', value: 'select_settings' },
-    //     { label: 'Select Settings 1', value: 'select_settings1' },
-    //   ],
-    // },
+    {
+      name: 'defaultInactivityMinutesLockAdmin',
+      label: 'Lock Admin after Inactive Minutes',
+      type: 'number',
+    },
+    {
+      name: 'defaultInactivityMinutesLockClient',
+      label: 'Lock Client after Inactive Minutes',
+      type: 'number',
+    },
+    {
+      name: 'loginRequestsPerIPAdmin',
+      label: 'Login Requests Per IP (Admin)',
+      type: 'number',
+    },
+    {
+      name: 'loginRequestsPerIPClient',
+      label: 'Login Requests Per IP (Client)',
+      type: 'number',
+    },
+    {
+      name: 'requestsIntervalPerIPAfterLimitAdminInSeconds',
+      label: 'Request Interval Per IP After Limit in Seconds (Admin)',
+      type: 'number',
+    },
+    {
+      name: 'requestsIntervalPerIPAfterLimitClientInSeconds',
+      label: 'Request Interval Per IP After Limit in Seconds (Client)',
+      type: 'number',
+    },
+    {
+      name: 'requestsPerIPAdmin',
+      label: 'Request Per IP (Admin)',
+      type: 'number',
+    },
+    {
+      name: 'requestsPerIPClient',
+      label: 'Request Per IP (Client)',
+      type: 'number',
+    },
+    {
+      name: 'tenant',
+      label: 'Tenant',
+      type: 'select',
+      options: [
+        { label: 'Client', value: 'Client' },
+        { label: 'Admin', value: 'Admin' },
+      ],
+    },
+    {
+      name: 'vat',
+      label: 'VAT',
+      type: 'number',
+    },
   ];
 
   const { settings } = useSelector((state) => state?.appSettings);
@@ -119,8 +155,16 @@ export function GeneralSettings() {
     termsOfServiceAgreement: settings?.termsOfServiceAgreement,
     recordsToDisplay: settings?.recordsToDisplay,
     autoRefreshInterval: settings?.autoRefreshInterval,
-    // module1Settings: '',
-    // module2Settings: '',
+    defaultInactivityMinutesLockAdmin: settings?.defaultInactivityMinutesLockAdmin,
+    defaultInactivityMinutesLockClient: settings?.defaultInactivityMinutesLockClient,
+    loginRequestsPerIPAdmin: settings?.loginRequestsPerIPAdmin,
+    loginRequestsPerIPClient: settings?.loginRequestsPerIPClient,
+    requestsIntervalPerIPAfterLimitAdminInSeconds: settings?.requestsIntervalPerIPAfterLimitAdminInSeconds,
+    requestsIntervalPerIPAfterLimitClientInSeconds: settings?.requestsIntervalPerIPAfterLimitClientInSeconds,
+    requestsPerIPAdmin: settings?.requestsPerIPAdmin,
+    requestsPerIPClient: settings?.requestsPerIPClient,
+    tenant: settings?.tenant,
+    vat: settings?.vat,
   };
 
   return (
@@ -138,8 +182,9 @@ export function GeneralSettings() {
         enableReinitialize
       >
         <Form>
-          <div className="grid grid-cols-4 gap-[20px] mb-[32px]">
+          <div className="grid grid-cols-4 gap-[20px] mb-[32px] items-end">
             {fields.map((field) => (
+              <div className="flex items-end">
               <Input
                 key={field.name}
                 name={field.name}
@@ -148,6 +193,7 @@ export function GeneralSettings() {
                 type={field.type}
                 options={field.options}
               />
+              </div>
             ))}
           </div>
           <Button htmlType="submit" type="ghost" className="px-[32px] h-[52px]">

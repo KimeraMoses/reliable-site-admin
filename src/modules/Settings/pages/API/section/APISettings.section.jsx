@@ -28,6 +28,16 @@ const fields = [
     label: 'Interval Before Next API Request in Seconds',
     type: 'number',
   },
+  {
+    name: 'enableAPIAccessAdmin',
+    label: 'Enable API Access (Admin)',
+    type: 'switch',
+  },
+  {
+    name: 'enableAPIAccessClient',
+    label: 'Enable API Access (Client)',
+    type: 'switch',
+  },
 ];
 
 export const APISettings = () => {
@@ -38,6 +48,8 @@ export const APISettings = () => {
     numberofRequestsPerIpApiKey: settings?.numberofRequestsPerIpApiKey,
     intervalBeforeNextAPIkeyRequestInSeconds:
       settings?.intervalBeforeNextAPIkeyRequestInSeconds,
+    enableAPIAccessAdmin: settings?.enableAPIAccessAdmin,
+    enableAPIAccessClient: settings?.enableAPIAccessClient,
   };
 
   return (
