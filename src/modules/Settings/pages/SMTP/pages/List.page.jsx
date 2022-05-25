@@ -1,7 +1,10 @@
 import { Button } from 'antd';
 import { Table } from 'components';
-import { useState } from 'react';
+import { checkModule } from 'lib/checkModule';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { getAllSMTPs } from 'store';
 import { Delete } from './sections';
 
 const columns = [
@@ -17,47 +20,61 @@ const columns = [
   },
   {
     title: 'Protocol',
-    dataIndex: 'protocol',
-    key: 'protocol',
+    dataIndex: 'httpsProtocol',
+    key: 'httpsProtocol',
+    render: (text) => (text ? 'HTTPS' : 'HTTP'),
     width: '40%',
   },
   {
     title: 'Created At',
     dataIndex: 'createdAt',
+    render: (text) => (text ? text : 'N/A'),
     key: 'createdAt',
   },
 ];
-
-let data = [];
-for (let i = 0; i < 25; i++) {
-  data.push({
-    id: i,
-    key: i,
-    host: `Host Name ${i}`,
-    port: `30${i}`,
-    protocol: 'HTTP',
-    createdAt: 'Sunday, March 26th, 2022 at 06:30 PM',
-  });
-}
 
 export const List = () => {
   const [show, setShow] = useState(false);
   const [record, setRecord] = useState(null);
   const navigate = useNavigate();
+
+  // Check for permissions Start
+  const { userModules } = useSelector((state) => state?.modules);
+  const { permissions } = checkModule({
+    module: 'Settings',
+    modules: userModules,
+  });
+  // Check for permissions End
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getAllSMTPs());
+  }, []);
+  // Settigns Table Data
+  const { loading, smtps } = useSelector((state) => state?.smtps);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    if (smtps.length) {
+      const dataToSet = smtps.map((smtp) => {
+        return {
+          ...smtp,
+          key: smtp?.id,
+        };
+      });
+      setData(dataToSet);
+    }
+  }, [smtps]);
+
   return (
     <div className="m-[40px] p-[40px] bg-[#1E1E2D] rounded-[8px]">
       <Delete show={show} setShow={setShow} record={record} />
       <Table
         columns={columns}
         data={data}
-        permissions={{
-          View: true,
-          Update: true,
-          Remove: true,
-          Create: true,
-          Search: true,
-        }}
-        fieldToFilter="name"
+        loading={loading}
+        permissions={permissions}
+        fieldToFilter="host"
         btnData={{
           text: 'Add New Configuration',
           onClick: () => {

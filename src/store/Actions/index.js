@@ -28,3 +28,5 @@ export {
 export * from './appSettings';
 // Payment Gateways Actions
 export * from './paymentGateways';
+// SMTP Actions
+export * from './smtp';

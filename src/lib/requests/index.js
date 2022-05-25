@@ -23,3 +23,5 @@ export * from './users';
 
 // Payment Gateways
 export * from './paymentGateways';
+// SMTPs
+export * from './smtp';
