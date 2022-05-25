@@ -155,12 +155,16 @@ export function GeneralSettings() {
     termsOfServiceAgreement: settings?.termsOfServiceAgreement,
     recordsToDisplay: settings?.recordsToDisplay,
     autoRefreshInterval: settings?.autoRefreshInterval,
-    defaultInactivityMinutesLockAdmin: settings?.defaultInactivityMinutesLockAdmin,
-    defaultInactivityMinutesLockClient: settings?.defaultInactivityMinutesLockClient,
+    defaultInactivityMinutesLockAdmin:
+      settings?.defaultInactivityMinutesLockAdmin,
+    defaultInactivityMinutesLockClient:
+      settings?.defaultInactivityMinutesLockClient,
     loginRequestsPerIPAdmin: settings?.loginRequestsPerIPAdmin,
     loginRequestsPerIPClient: settings?.loginRequestsPerIPClient,
-    requestsIntervalPerIPAfterLimitAdminInSeconds: settings?.requestsIntervalPerIPAfterLimitAdminInSeconds,
-    requestsIntervalPerIPAfterLimitClientInSeconds: settings?.requestsIntervalPerIPAfterLimitClientInSeconds,
+    requestsIntervalPerIPAfterLimitAdminInSeconds:
+      settings?.requestsIntervalPerIPAfterLimitAdminInSeconds,
+    requestsIntervalPerIPAfterLimitClientInSeconds:
+      settings?.requestsIntervalPerIPAfterLimitClientInSeconds,
     requestsPerIPAdmin: settings?.requestsPerIPAdmin,
     requestsPerIPClient: settings?.requestsPerIPClient,
     tenant: settings?.tenant,
@@ -184,15 +188,15 @@ export function GeneralSettings() {
         <Form>
           <div className="grid grid-cols-4 gap-[20px] mb-[32px] items-end">
             {fields.map((field) => (
-              <div className="flex items-end">
-              <Input
-                key={field.name}
-                name={field.name}
-                label={field?.label}
-                placeholder={field.placeholder}
-                type={field.type}
-                options={field.options}
-              />
+              <div className="flex items-end" key={field?.name}>
+                <Input
+                  key={field.name}
+                  name={field.name}
+                  label={field?.label}
+                  placeholder={field.placeholder}
+                  type={field.type}
+                  options={field.options}
+                />
               </div>
             ))}
           </div>

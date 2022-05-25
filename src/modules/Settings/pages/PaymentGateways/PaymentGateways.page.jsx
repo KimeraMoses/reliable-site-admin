@@ -60,6 +60,8 @@ const PaymentGateways = () => {
   });
   // Check for permissions End
 
+  console.log(paymentGateways);
+
   return (
     <div className="m-[40px] p-[40px] bg-[#1E1E2D] rounded-[8px]">
       <AddPaymentGateway show={addModalShow} setShow={setAddModalShow} />
