@@ -94,7 +94,8 @@
           color: #616166;
           text-align: left;
 
-          &:hover {
+          &:hover,
+          &:focus {
             background: rgb(39, 39, 58);
             color: #fff;
           }

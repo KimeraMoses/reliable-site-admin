@@ -4,43 +4,38 @@ import { checkModule } from 'lib/checkModule';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getAllPaymentGateways } from 'store';
-import { AddPaymentGateway, EditPaymentGateway } from './sections';
+import {
+  AddPaymentGateway,
+  DeletePaymentGateway,
+  EditPaymentGateway,
+} from './sections';
 
 const columns = [
   {
     title: 'Payment Gateway',
     dataIndex: 'name',
     key: 'name',
-    width: '33%',
+    width: '20%',
   },
   {
     title: 'API Key',
     dataIndex: 'apiKey',
     key: 'apiKey',
-    width: '33%',
   },
   {
     title: 'Status',
     dataIndex: 'status',
     key: 'status',
-    render: (value) => <Switch defaultChecked={value} disabled={true} />,
+    render: (value) => <Switch checked={value} disabled={true} />,
   },
 ];
-
-// let data = [];
-// for (let i = 0; i < 25; i++) {
-//   data.push({
-//     key: i,
-//     name: 'PayPal',
-//     apiKey: '123456789',
-//     status: i % 2 === 0 ? true : false,
-//   });
-// }
 
 const PaymentGateways = () => {
   const [addModalShow, setAddModalShow] = useState(false);
   const [editValue, setEditValue] = useState(false);
   const [editModalShow, setEditModalShow] = useState(false);
+  const [deleteModalShow, setDeleteModalShow] = useState(false);
+  const [deleteID, setDeleteID] = useState(null);
 
   const dispatch = useDispatch();
 
@@ -82,6 +77,11 @@ const PaymentGateways = () => {
         setShow={setEditModalShow}
         editValue={editValue}
       />
+      <DeletePaymentGateway
+        show={deleteModalShow}
+        setShow={setDeleteModalShow}
+        id={deleteID}
+      />
       <Table
         columns={columns}
         data={data}
@@ -92,7 +92,6 @@ const PaymentGateways = () => {
           text: 'Add Payment Gateway',
           onClick: () => setAddModalShow(true),
         }}
-        // loading={loading}
         editAction={(record) => (
           <Button
             onClick={() => {
@@ -101,6 +100,17 @@ const PaymentGateways = () => {
             }}
           >
             Edit
+          </Button>
+        )}
+        deleteAction={(record) => (
+          <Button
+            className="focus:bg-[unset]"
+            onClick={() => {
+              setDeleteID(record?.id);
+              setDeleteModalShow(true);
+            }}
+          >
+            Delete
           </Button>
         )}
       />
