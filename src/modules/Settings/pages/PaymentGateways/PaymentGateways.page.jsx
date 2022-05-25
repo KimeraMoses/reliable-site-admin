@@ -9,8 +9,8 @@ import { AddPaymentGateway, EditPaymentGateway } from './sections';
 const columns = [
   {
     title: 'Payment Gateway',
-    dataIndex: 'gatewayName',
-    key: 'gatewayName',
+    dataIndex: 'name',
+    key: 'name',
     width: '33%',
   },
   {
@@ -23,19 +23,19 @@ const columns = [
     title: 'Status',
     dataIndex: 'status',
     key: 'status',
-    render: (value) => <Switch defaultChecked={value} onChange={() => {}} />,
+    render: (value) => <Switch defaultChecked={value} disabled={true} />,
   },
 ];
 
-let data = [];
-for (let i = 0; i < 25; i++) {
-  data.push({
-    key: i,
-    gatewayName: 'PayPal',
-    apiKey: '123456789',
-    status: i % 2 === 0 ? true : false,
-  });
-}
+// let data = [];
+// for (let i = 0; i < 25; i++) {
+//   data.push({
+//     key: i,
+//     name: 'PayPal',
+//     apiKey: '123456789',
+//     status: i % 2 === 0 ? true : false,
+//   });
+// }
 
 const PaymentGateways = () => {
   const [addModalShow, setAddModalShow] = useState(false);
@@ -60,7 +60,19 @@ const PaymentGateways = () => {
   });
   // Check for permissions End
 
-  console.log(paymentGateways);
+  // Setting data properly
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    if (paymentGateways.length) {
+      const dataToSet = paymentGateways.map((pg) => {
+        return {
+          ...pg,
+          key: pg?.id,
+        };
+      });
+      setData(dataToSet);
+    }
+  }, [paymentGateways]);
 
   return (
     <div className="m-[40px] p-[40px] bg-[#1E1E2D] rounded-[8px]">

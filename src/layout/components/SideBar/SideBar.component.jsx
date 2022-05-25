@@ -40,11 +40,6 @@ export function SideBar({ hideSide }) {
           );
         })}
       </ul>
-      {!hideSide && (
-        <div className="qr__code">
-          <QRCode value={authenticatorUri} title="Scan QR Code to Enable MFA" />
-        </div>
-      )}
     </div>
   );
 }
