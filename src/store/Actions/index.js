@@ -24,5 +24,7 @@ export {
   getAPIKeysByUID,
   updateAPIKey,
 } from './apiKeys';
-// app Settings Actions
+// App Settings Actions
 export * from './appSettings';
+// Payment Gateways Actions
+export * from './paymentGateways';

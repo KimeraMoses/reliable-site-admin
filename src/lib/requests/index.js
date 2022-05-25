@@ -20,3 +20,6 @@ export * from './userAppSettings';
 export * from './settings';
 // Users End-Points
 export * from './users';
+
+// Payment Gateways
+export * from './paymentGateways';

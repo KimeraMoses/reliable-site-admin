@@ -12,3 +12,4 @@ export {
   getGroup,
 } from './userGroupsSlice';
 export * from './appSettings';
+export * from './paymentGateways';

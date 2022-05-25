@@ -1,6 +1,9 @@
 import { Button, Switch } from 'antd';
 import { Table } from 'components';
-import { useState } from 'react';
+import { checkModule } from 'lib/checkModule';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getAllPaymentGateways } from 'store';
 import { AddPaymentGateway, EditPaymentGateway } from './sections';
 
 const columns = [
@@ -38,6 +41,25 @@ const PaymentGateways = () => {
   const [addModalShow, setAddModalShow] = useState(false);
   const [editValue, setEditValue] = useState(false);
   const [editModalShow, setEditModalShow] = useState(false);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllPaymentGateways());
+  }, []);
+
+  const { paymentGateways, loading } = useSelector(
+    (state) => state.paymentGateways
+  );
+
+  // Check for permissions Start
+  const { userModules } = useSelector((state) => state?.modules);
+  const { permissions } = checkModule({
+    module: 'Settings',
+    modules: userModules,
+  });
+  // Check for permissions End
+
   return (
     <div className="m-[40px] p-[40px] bg-[#1E1E2D] rounded-[8px]">
       <AddPaymentGateway show={addModalShow} setShow={setAddModalShow} />
@@ -49,13 +71,8 @@ const PaymentGateways = () => {
       <Table
         columns={columns}
         data={data}
-        permissions={{
-          View: true,
-          Update: true,
-          Remove: true,
-          Create: true,
-          Search: true,
-        }}
+        permissions={permissions}
+        loading={loading}
         fieldToFilter="name"
         btnData={{
           text: 'Add Payment Gateway',

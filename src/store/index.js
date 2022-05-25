@@ -8,6 +8,7 @@ import userGroupsReducer from './Slices/userGroupsSlice';
 import logsReducer from './Slices/logs';
 import apiKeysReducer from './Slices/apiKeysSlice';
 import appSettingsReducer from './Slices/appSettings';
+import paymentGateways from './Slices/paymentGateways';
 
 const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ const store = configureStore({
     logs: logsReducer,
     apiKeys: apiKeysReducer,
     appSettings: appSettingsReducer,
+    paymentGateways: paymentGateways,
   },
 });
 
