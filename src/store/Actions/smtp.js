@@ -1,4 +1,10 @@
-import { axios, getError, addSMTPConfig, getAllSMTPsConfig } from 'lib';
+import {
+  axios,
+  getError,
+  addSMTPConfig,
+  getAllSMTPsConfig,
+  deleteSMTPConfig,
+} from 'lib';
 import { toast } from 'react-toastify';
 import { getSMTPs, setSMTPLoading } from 'store/Slices';
 
@@ -57,22 +63,22 @@ export const addSMTP = ({ data }) => {
 //   };
 // };
 
-// export const deletePaymentGateway = ({ id }) => {
-//   return async (dispatch) => {
-//     dispatch(setPaymentGatewaysLoading(true));
-//     try {
-//       const { url, config } = deletePaymentGatewayConfig({ id });
-//       const response = await axios.delete(url, config);
-//       if (response.status === 200) {
-//         const { url, defaultData, config } = getPaymentGatewaysConfig();
-//         const response = await axios.post(url, defaultData, config);
-//         dispatch(getPaymentGateways(response?.data?.data));
-//         toast.success('Payment Gateway Deleted Successfully');
-//       }
-//     } catch (error) {
-//       toast.error(getError(error));
-//     } finally {
-//       dispatch(setPaymentGatewaysLoading(false));
-//     }
-//   };
-// };
+export const deleteSMTP = ({ id }) => {
+  return async (dispatch) => {
+    dispatch(setSMTPLoading(true));
+    try {
+      const { url, config } = deleteSMTPConfig({ id });
+      const response = await axios.delete(url, config);
+      if (response.status === 200) {
+        const { url, defaultData, config } = getAllSMTPsConfig();
+        const response = await axios.post(url, defaultData, config);
+        dispatch(getSMTPs(response?.data?.data));
+        toast.success('SMTP Configuration Deleted Successfully');
+      }
+    } catch (error) {
+      toast.error(getError(error));
+    } finally {
+      dispatch(setSMTPLoading(false));
+    }
+  };
+};

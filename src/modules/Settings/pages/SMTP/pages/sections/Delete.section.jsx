@@ -1,4 +1,6 @@
 import { Modal } from 'components';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteSMTP } from 'store';
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object().shape({
@@ -9,6 +11,10 @@ export const Delete = ({ show, setShow, record }) => {
   const initialValues = {
     id: record?.id,
   };
+
+  const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state?.smtps);
+
   return (
     <Modal
       heading="Delete Configuration"
@@ -20,9 +26,10 @@ export const Delete = ({ show, setShow, record }) => {
       }
       initialValues={initialValues}
       validationSchema={validationSchema}
+      loading={loading}
       submitText="Delete Configuration"
-      handleSubmit={(values) => {
-        console.log(values?.id);
+      handleSubmit={async (values) => {
+        await dispatch(deleteSMTP({ id: values?.id }));
         setShow(false);
       }}
       show={show}
