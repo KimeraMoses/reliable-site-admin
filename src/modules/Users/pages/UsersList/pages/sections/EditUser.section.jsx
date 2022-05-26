@@ -16,10 +16,11 @@ export const EditUser = ({ t, show, setShow, user }) => {
     fullName: user?.fullName,
     status: user?.status,
     ipAddress: user?.restrictAccessIPAddress,
-    // adminGroupID: user?.adminGroupID,
+    adminGroupID: user?.adminGroupID,
   };
 
   const { loading } = useSelector((state) => state?.users);
+  const { userGroups } = useSelector((state) => state?.userGroups);
 
   const dispatch = useDispatch();
 
@@ -40,6 +41,18 @@ export const EditUser = ({ t, show, setShow, user }) => {
       name: 'ipAddress',
       placeholder: '253.205.121.39',
       title: t('ipAddress'),
+    },
+    {
+      type: 'select',
+      options: userGroups.length
+        ? userGroups.map((group) => ({
+            label: group?.groupName,
+            value: group?.id,
+          }))
+        : [],
+      name: 'adminGroupId',
+      placeholder: 'Select Admin Group...',
+      title: t('adminGroup'),
     },
   ];
 

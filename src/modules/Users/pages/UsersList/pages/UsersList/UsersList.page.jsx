@@ -50,9 +50,6 @@ export const UsersList = () => {
   const navigate = useNavigate();
 
   const { userGroups } = useSelector((state) => state?.userGroups);
-  useEffect(() => {
-    dispatch(getUserGroups());
-  }, []);
 
   const addFields = [
     {
@@ -145,6 +142,7 @@ export const UsersList = () => {
   useEffect(() => {
     (async () => {
       await dispatch(getUsers());
+      await dispatch(getUserGroups());
     })();
   }, [dispatch]);
 
