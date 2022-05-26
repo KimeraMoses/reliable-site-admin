@@ -7,7 +7,21 @@ const userAppSettingsConfig = (action) =>
 // Get User Settings
 export const getUserAppSettingsConfig = (id) => {
   return {
-    url: `api/v1/admin/userappsettings/getuserappsettingbyuserid/${id}`,
+    url: `/api/v1/admin/userappsettings/getuserappsettingbyuserid/${id}`,
     config: userAppSettingsConfig('View'),
+  };
+};
+// Update User Settings
+export const updateUserAppSettings = ({ id }) => {
+  return {
+    url: `/api/v1/admin/userappsettings/${id}`,
+    config: userAppSettingsConfig('Update'),
+  };
+};
+// Update User Settings
+export const addUserAppSettings = () => {
+  return {
+    url: `/api/v1/admin/userappsettings`,
+    config: userAppSettingsConfig('Create'),
   };
 };

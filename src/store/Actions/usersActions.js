@@ -9,6 +9,8 @@ import {
   updateUserProfileByIDConfig,
   registerAdminConfig,
   getUserAppSettingsConfig,
+  updateUserAppSettings,
+  addUserAppSettings,
 } from 'lib';
 import { toast } from 'react-toastify';
 import {
@@ -154,15 +156,36 @@ export const editUserPermissions = ({ permission, uid }) => {
 // Get User Settings By ID
 export const getUserSettingsById = (id) => {
   return async (dispatch) => {
-    dispatch(setUserLoading(true));
     try {
       const { url, config } = getUserAppSettingsConfig(id);
       const res = await axios.get(url, config);
       dispatch(getUserSettingsSlice(res?.data?.data));
-      dispatch(setUserLoading(false));
     } catch (e) {
       toast.error(getError(e));
-      dispatch(setUserLoading(false));
+    }
+  };
+};
+
+// Update User Settings By ID
+export const updateUserSettings = ({ data }) => {
+  return async (dispatch) => {
+    try {
+      let res;
+      if (data?.id) {
+        const { url, config } = updateUserAppSettings({ id: data?.id });
+        res = await axios.put(url, data, config);
+      } else {
+        const { url, config } = addUserAppSettings();
+        res = await axios.post(url, data, config);
+      }
+      if (res.status === 200) {
+        const { url, config } = getUserAppSettingsConfig(data?.userId);
+        const res = await axios.get(url, config);
+        dispatch(getUserSettingsSlice(res?.data?.data));
+        toast.success('User Settings Updated Successfully');
+      }
+    } catch (e) {
+      toast.error(getError(e));
     }
   };
 };

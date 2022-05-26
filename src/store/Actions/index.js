@@ -3,6 +3,7 @@ export {
   getUsers,
   getUserById,
   getUserSettingsById,
+  updateUserSettings,
   updateUser,
   editUserPermissions,
   getUserModulesById,
