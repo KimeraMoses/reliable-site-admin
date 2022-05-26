@@ -18,7 +18,7 @@ const initialValues = {
   fromName: '',
   fromEmail: '',
   companyAddress: '',
-  bcc: '',
+  bcc: [],
   headerContent: '',
   signature: '',
   footerContent: '',

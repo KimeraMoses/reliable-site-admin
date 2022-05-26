@@ -85,7 +85,11 @@ export const List = () => {
         editAction={(record) => (
           <Button
             onClick={() => {
-              navigate(`/admin/dashboard/settings/smtp/edit/${record.id}`);
+              navigate(`/admin/dashboard/settings/smtp/edit/${record.id}`, {
+                state: {
+                  smtp: record,
+                },
+              });
             }}
           >
             Edit
