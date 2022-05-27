@@ -11,7 +11,7 @@ import {
 import './style.scss';
 
 export const UserProfile = () => {
-  const [tab, setTab] = useState('API Keys');
+  const [tab, setTab] = useState('Settings');
   // const { t } = useTranslation('/UserProfile/ns');
 
   const items = [
