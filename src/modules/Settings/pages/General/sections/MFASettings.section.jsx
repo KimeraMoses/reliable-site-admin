@@ -1,9 +1,10 @@
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Button, Card, Input } from 'components';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deepEqual } from 'lib';
 import { toast } from 'react-toastify';
+import { updateAppSettings } from 'store';
 
 const validationSchema = Yup.object().shape({
   foceMFA: Yup.boolean().required('This is a required field'),
@@ -13,6 +14,7 @@ const validationSchema = Yup.object().shape({
 
 export function MFASettings() {
   const { settings } = useSelector((state) => state?.appSettings);
+  const dispatch = useDispatch();
 
   const initialValues = {
     foceMFA: settings?.forceMFA,
@@ -45,11 +47,13 @@ export function MFASettings() {
         initialValues={initialValues}
         validationSchema={validationSchema}
         enableReinitialize
-        onSubmit={(values) => {
+        onSubmit={async (values) => {
           if (deepEqual(values, initialValues)) {
             toast.info('No changes were made');
           } else {
-            console.log(values);
+            await dispatch(
+              updateAppSettings({ id: settings?.id, data: values })
+            );
           }
         }}
       >

@@ -1,15 +1,11 @@
 import { Formik, Form } from 'formik';
 import { useCountries } from 'use-react-countries';
-import * as Yup from 'yup';
 import { Button, Card, Input } from 'components';
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deepEqual } from 'lib';
 import { toast } from 'react-toastify';
-
-const validationSchema = Yup.object().shape({
-  dateFormat: Yup.string().required('This is a required field'),
-});
+import { updateAppSettings } from 'store';
 
 export function GeneralSettings() {
   const [countriesData, setCountriesData] = useState([]);
@@ -132,15 +128,6 @@ export function GeneralSettings() {
       type: 'number',
     },
     {
-      name: 'tenant',
-      label: 'Tenant',
-      type: 'select',
-      options: [
-        { label: 'Client', value: 'Client' },
-        { label: 'Admin', value: 'Admin' },
-      ],
-    },
-    {
       name: 'vat',
       label: 'VAT',
       type: 'number',
@@ -148,6 +135,7 @@ export function GeneralSettings() {
   ];
 
   const { settings } = useSelector((state) => state?.appSettings);
+  const dispatch = useDispatch();
   const initialValues = {
     dateFormat: settings?.dateFormat,
     defaultCountry: settings?.defaultCountry,
@@ -167,7 +155,6 @@ export function GeneralSettings() {
       settings?.requestsIntervalPerIPAfterLimitClientInSeconds,
     requestsPerIPAdmin: settings?.requestsPerIPAdmin,
     requestsPerIPClient: settings?.requestsPerIPClient,
-    tenant: settings?.tenant,
     vat: settings?.vat,
   };
 
@@ -175,12 +162,13 @@ export function GeneralSettings() {
     <Card heading="General Settings">
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={(values) => {
+        onSubmit={async (values) => {
           if (deepEqual(values, initialValues)) {
             toast.info('No changes were made');
           } else {
-            console.log(values);
+            await dispatch(
+              updateAppSettings({ id: settings?.id, data: values })
+            );
           }
         }}
         enableReinitialize
