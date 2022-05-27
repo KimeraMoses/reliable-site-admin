@@ -11,7 +11,7 @@ import { Table } from 'components';
 import './APIKeys.styles.scss';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Add, Delete, EditAPIKey, EditPermissions } from './sections';
+import { Add, EditAPIKey, EditPermissions } from './sections';
 import { checkModule } from 'lib/checkModule';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAPIKeysByUID } from 'store';
@@ -19,19 +19,15 @@ import { getAPIKeyByID } from 'store';
 
 export const APIKeys = () => {
   const [show, setShow] = useState(false);
-  // const [selectedSort, setSelectedSort] = useState('label');
   const [data, setData] = useState([]);
-  const [selectedRows, setSelectedRows] = useState([]);
   // Edit Modal State Start
   const [showEdit, setShowEdit] = useState(false);
   const [editPermissions, setEditPermissions] = useState(false);
-  // Delete Modal State
-  const [showDelete, setShowDelete] = useState(false);
-  const [recordToDel, setRecordToDel] = useState(false);
+  // Edit Modal State End
 
   const { userModules } = useSelector((state) => state?.modules);
   const { apiKeys, loading } = useSelector((state) => state?.apiKeys);
-  const { user } = useSelector((state) => state?.auth);
+  const { user } = useSelector((state) => state?.users);
   const { permissions } = checkModule({
     module: 'Users',
     modules: userModules,
@@ -90,17 +86,6 @@ export const APIKeys = () => {
     },
   ];
 
-  const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        'selectedRows: ',
-        selectedRows
-      );
-      setSelectedRows(selectedRows);
-    },
-  };
-
   const dispatch = useDispatch();
   useEffect(() => {
     if (user) {
@@ -135,19 +120,9 @@ export const APIKeys = () => {
           data={data}
           columns={columns}
           loading={loading}
-          additionalBtns={
-            selectedRows?.length
-              ? [
-                  { text: 'Enable', onClick: () => {} },
-                  { text: 'Disable', onClick: () => {} },
-                  { text: 'Delete', onClick: () => {} },
-                ]
-              : []
-          }
           btnData={{ text: 'Add API Key', onClick: () => setShow(true) }}
           fieldToFilter="label"
           pagination={false}
-          rowSelection={rowSelection}
           editAction={(record) => (
             <>
               <Button
@@ -164,22 +139,10 @@ export const APIKeys = () => {
                   setEditPermissions(true);
                 }}
               >
-                Edit Permissions
+                Permissions
               </Button>
             </>
           )}
-          deleteAction={(record) => {
-            return (
-              <Button
-                onClick={async () => {
-                  setRecordToDel(record?.key);
-                  setShowDelete(true);
-                }}
-              >
-                Delete
-              </Button>
-            );
-          }}
           permissions={permissions}
           t={t}
         />
@@ -188,7 +151,6 @@ export const APIKeys = () => {
       <Add show={show} setShow={setShow} />
       <EditAPIKey show={showEdit} setShow={setShowEdit} />
       <EditPermissions show={editPermissions} setShow={setEditPermissions} />
-      <Delete show={showDelete} setShow={setShowDelete} id={recordToDel} />
     </div>
   );
 };

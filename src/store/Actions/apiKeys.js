@@ -5,9 +5,9 @@ import {
   getAPIKeysByUserIDConfig,
   getAPIKeysConfig,
   getError,
-  updateAPIKeyConfig,
   updateAPIKeyPermissionsConfig,
   updateAPIKeySettingsConfig,
+  deleteAPIKeyConfig,
 } from 'lib';
 import { toast } from 'react-toastify';
 import { getAPIKeys, getAPIKey, setAPILoading } from 'store/Slices';
@@ -81,25 +81,7 @@ export const getAPIKeyByID = (id) => {
   };
 };
 
-// Update API Key
-export const updateAPIKey = (id, data) => {
-  return async (dispatch) => {
-    dispatch(setAPILoading(true));
-    try {
-      const { url, config } = updateAPIKeyConfig(id);
-      const res = await axios.put(url, data, config);
-      if (res.status === 200) {
-        toast.success('API Key Updated Successfully');
-      }
-    } catch (e) {
-      toast.error(getError(e));
-    } finally {
-      dispatch(setAPILoading(false));
-    }
-  };
-};
-
-// Update API Key
+// Update API Key Settings
 export const updateAPIKeySettings = (id, data) => {
   return async (dispatch) => {
     dispatch(setAPILoading(true));
@@ -126,6 +108,27 @@ export const updateAPIKeyPermissions = (id, data) => {
       const res = await axios.put(url, data, config);
       if (res.status === 200) {
         toast.success('API Key Permissions Updated Successfully');
+      }
+    } catch (e) {
+      toast.error(getError(e));
+    } finally {
+      dispatch(setAPILoading(false));
+    }
+  };
+};
+
+// Delete API Key
+export const deleteAPIKey = (id) => {
+  return async (dispatch, getState) => {
+    dispatch(setAPILoading(true));
+    try {
+      const { url, config } = deleteAPIKeyConfig(id);
+      const res = await axios.delete(url, config);
+      if (res.status === 200) {
+        const { apiKeys } = getState().apiKeys;
+        const newAPIKeys = apiKeys.filter((key) => key.id !== id);
+        dispatch(getAPIKeys(newAPIKeys));
+        toast.success('API Key Deleted Successfully');
       }
     } catch (e) {
       toast.error(getError(e));

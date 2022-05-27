@@ -7,7 +7,7 @@ export { PastEmails } from './PastEmail.section';
 // User Permissions
 export { UserPermissions } from './UserPermissions.section';
 // API Keys
-export { APIKeys } from './APIKeys.section';
+export { APIKeys } from './APIKeys/APIKeys.section';
 // Settings
 export { Settings } from './Settings.section';
 // Event Logs

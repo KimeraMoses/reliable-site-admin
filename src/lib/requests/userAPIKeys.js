@@ -43,11 +43,6 @@ export const addAPIKeyConfig = () => ({
   url: `/api/manageuserapikey`,
   config: apiKeyConfig('Create'),
 });
-// Update API Key
-export const updateAPIKeyConfig = (id) => ({
-  url: `/api/manageuserapikey/${id}`,
-  config: apiKeyConfig('Update'),
-});
 // Update API Key Settings
 export const updateAPIKeySettingsConfig = (id) => ({
   url: `/api/manageuserapikey/userapikeyupdate/${id}`,
@@ -60,6 +55,6 @@ export const updateAPIKeyPermissionsConfig = (id) => ({
 });
 // Delete API Key
 export const deleteAPIKeyConfig = (id) => ({
-  url: `/api/manageuserapikey//${id}`,
-  config: apiKeyConfig('Delete'),
+  url: `/api/manageuserapikey/${id}`,
+  config: apiKeyConfig('Remove'),
 });
