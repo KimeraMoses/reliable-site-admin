@@ -1,24 +1,23 @@
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import moment from 'moment';
 import { Button, Card, Input } from 'components';
-
-const initialValues = {
-  status: true,
-  tllInSeconds: 7200,
-  reason: '',
-};
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { getMaintenanceSettingsByTenant } from 'store';
+import { updateMaintenanceSettings } from 'store';
 
 const validationSchema = Yup.object().shape({
-  status: Yup.boolean().required('Status is required'),
+  isMaintenanceOn: Yup.boolean().required('Status is required'),
   tllInSeconds: Yup.number().required('TTL is required'),
-  reason: Yup.string().required('Reason is required'),
+  message: Yup.string().required('Reason is required'),
 });
 
 export default function Maintenance() {
   // Fields
   const fields = [
     {
-      name: 'status',
+      name: 'isMaintenanceOn',
       label: 'Status',
       type: 'switch',
     },
@@ -29,13 +28,39 @@ export default function Maintenance() {
     },
   ];
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getMaintenanceSettingsByTenant());
+  }, []);
+
+  const { loading, maintenanceSettings } = useSelector(
+    (state) => state.appSettings
+  );
+
+  const initialValues = {
+    isMaintenanceOn: maintenanceSettings?.isMaintenanceOn,
+    tllInSeconds: 0,
+    message: maintenanceSettings?.message,
+  };
+
   return (
     <div className="p-[40px]">
-      <Card heading="Maintenance Settings">
+      <Card heading="Maintenance Settings" loading={loading}>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
-          onSubmit={(values) => console.log(values)}
+          enableReinitialize
+          onSubmit={async (values) => {
+            const finalObject = {
+              expirationDateTime: moment()
+                .add(values.tllInSeconds, 'seconds')
+                .toISOString(),
+              status: values.isMaintenanceOn,
+              message: values.message,
+            };
+            await dispatch(updateMaintenanceSettings({ data: finalObject }));
+          }}
         >
           <Form>
             <div className="grid grid-cols-4 gap-[20px] mb-[32px]">
@@ -52,7 +77,7 @@ export default function Maintenance() {
             </div>
             <div className="grid grid-cols-2 gap-[20px] mb-[32px]">
               <Input
-                name="reason"
+                name="message"
                 label="Reason"
                 placeholder="Enter Reason"
                 type="textarea"

@@ -2,7 +2,9 @@ import {
   axios,
   getBillingSettingsByTenantConfig,
   getError,
+  getMaintenanceSettingsConfig,
   getSettingsByTenant,
+  postMaintenanceSettingsConfig,
   updateBillingSettingsConfig,
   updateSettingsConfig,
 } from 'lib';
@@ -10,6 +12,7 @@ import { toast } from 'react-toastify';
 import {
   getAppSettings,
   getBillingSettings,
+  getMaintenanceSettings,
   setAppSettingsLoading,
 } from 'store/Slices';
 
@@ -66,7 +69,7 @@ export const getBillingSettingsByTenant = () => {
   };
 };
 
-// Update Settings
+// Update Billing Settings
 export const updateBillingSettings = ({ id, data }) => {
   return async (dispatch) => {
     dispatch(setAppSettingsLoading(true));
@@ -77,6 +80,43 @@ export const updateBillingSettings = ({ id, data }) => {
         const { url, config } = getBillingSettingsByTenantConfig();
         const response = await axios.get(url, config);
         dispatch(getBillingSettings(response.data.data));
+        toast.success('Settings updated successfully');
+      }
+    } catch (error) {
+      toast.error(getError(error));
+    } finally {
+      dispatch(setAppSettingsLoading(false));
+    }
+  };
+};
+
+// Get Maintenance Settings
+export const getMaintenanceSettingsByTenant = () => {
+  return async (dispatch) => {
+    dispatch(setAppSettingsLoading(true));
+    try {
+      const { url, config } = getMaintenanceSettingsConfig();
+      const response = await axios.get(url, config);
+      dispatch(getMaintenanceSettings(response?.data));
+    } catch (error) {
+      toast.error(getError(error));
+    } finally {
+      dispatch(setAppSettingsLoading(false));
+    }
+  };
+};
+
+// // Update Maintenance Settings
+export const updateMaintenanceSettings = ({ data }) => {
+  return async (dispatch) => {
+    dispatch(setAppSettingsLoading(true));
+    try {
+      const { url, config } = postMaintenanceSettingsConfig();
+      const response = await axios.post(url, data, config);
+      if (response.status === 200) {
+        const { url, config } = getMaintenanceSettingsConfig();
+        const response = await axios.get(url, config);
+        dispatch(getMaintenanceSettings(response?.data));
         toast.success('Settings updated successfully');
       }
     } catch (error) {

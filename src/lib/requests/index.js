@@ -29,3 +29,5 @@ export * from './smtp';
 export * from './billingSettings';
 // Email Templates
 export * from './emailTemplates';
+// Maintenance Settings
+export * from './maintenanceSettings';

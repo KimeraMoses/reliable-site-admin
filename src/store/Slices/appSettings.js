@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   settings: null,
   billingSettings: null,
+  maintenanceSettings: null,
   loading: false,
 };
 
@@ -19,11 +20,18 @@ const appSettingsSlice = createSlice({
     getBillingSettings: (state, { payload }) => {
       state.billingSettings = payload;
     },
+    getMaintenanceSettings: (state, { payload }) => {
+      state.maintenanceSettings = payload;
+    },
   },
 });
 
 const { actions, reducer } = appSettingsSlice;
 
-export const { setAppSettingsLoading, getAppSettings, getBillingSettings } =
-  actions;
+export const {
+  setAppSettingsLoading,
+  getAppSettings,
+  getBillingSettings,
+  getMaintenanceSettings,
+} = actions;
 export default reducer;
