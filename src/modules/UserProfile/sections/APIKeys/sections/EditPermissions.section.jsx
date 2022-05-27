@@ -16,6 +16,7 @@ export const EditPermissions = ({ show, setShow }) => {
       });
       const currentModules = apiKey?.userApiKeyModules.map((module) => {
         return {
+          isActive: true,
           name: module.name,
           permissionDetail: JSON.parse(module.permissionDetail),
         };
