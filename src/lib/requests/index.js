@@ -25,3 +25,5 @@ export * from './users';
 export * from './paymentGateways';
 // SMTPs
 export * from './smtp';
+// Billing Settings
+export * from './billingSettings';

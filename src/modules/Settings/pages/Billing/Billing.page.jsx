@@ -1,7 +1,10 @@
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Button, Card, Input } from 'components';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { deepEqual } from 'lib';
+import { toast } from 'react-toastify';
+import { updateBillingSettings } from 'store';
 
 const validationSchema = Yup.object().shape({
   maxNumberOfRefunds: Yup.number().required('This is a required field'),
@@ -21,12 +24,21 @@ export default function Billing() {
       label: 'Minimum Order Amount',
       type: 'number',
     },
+    {
+      name: 'refundRetainPercentage',
+      label: 'Refund Retain Percentage',
+      type: 'number',
+    },
   ];
 
-  const { settings, loading } = useSelector((state) => state?.appSettings);
+  const dispatch = useDispatch();
+  const { billingSettings, loading } = useSelector(
+    (state) => state?.appSettings
+  );
   const initialValues = {
-    maxNumberOfRefunds: settings?.maxNumberOfRefunds,
-    minOrderAmount: settings?.minOrderAmount,
+    maxNumberOfRefunds: billingSettings?.maxNumberOfRefunds,
+    minOrderAmount: billingSettings?.minOrderAmount,
+    refundRetainPercentage: billingSettings?.refundRetainPercentage,
   };
 
   return (
@@ -36,7 +48,15 @@ export default function Billing() {
           initialValues={initialValues}
           validationSchema={validationSchema}
           enableReinitialize
-          onSubmit={(values) => console.log(values)}
+          onSubmit={async (values) => {
+            if (deepEqual(values, initialValues)) {
+              toast.info('No changes were made');
+            } else {
+              await dispatch(
+                updateBillingSettings({ id: billingSettings?.id, data: values })
+              );
+            }
+          }}
         >
           <Form>
             <div className="grid grid-cols-4 gap-[20px] mb-[32px]">
