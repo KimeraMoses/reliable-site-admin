@@ -11,7 +11,7 @@ import { Table } from 'components';
 import './APIKeys.styles.scss';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Add, EditAPIKey, EditPermissions } from './sections';
+import { Add, Delete, EditAPIKey, EditPermissions } from './sections';
 import { checkModule } from 'lib/checkModule';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAPIKeysByUID } from 'store';
@@ -23,7 +23,9 @@ export const APIKeys = () => {
   // Edit Modal State Start
   const [showEdit, setShowEdit] = useState(false);
   const [editPermissions, setEditPermissions] = useState(false);
-  // Edit Modal State End
+  // Delete Modal State
+  const [showDelete, setShowDelete] = useState(false);
+  const [recordToDel, setRecordToDel] = useState(false);
 
   const { userModules } = useSelector((state) => state?.modules);
   const { apiKeys, loading } = useSelector((state) => state?.apiKeys);
@@ -143,6 +145,18 @@ export const APIKeys = () => {
               </Button>
             </>
           )}
+          deleteAction={(record) => {
+            return (
+              <Button
+                onClick={async () => {
+                  setRecordToDel(record?.key);
+                  setShowDelete(true);
+                }}
+              >
+                Delete
+              </Button>
+            );
+          }}
           permissions={permissions}
           t={t}
         />
@@ -151,6 +165,7 @@ export const APIKeys = () => {
       <Add show={show} setShow={setShow} />
       <EditAPIKey show={showEdit} setShow={setShowEdit} />
       <EditPermissions show={editPermissions} setShow={setEditPermissions} />
+      <Delete show={showDelete} setShow={setShowDelete} id={recordToDel} />
     </div>
   );
 };
