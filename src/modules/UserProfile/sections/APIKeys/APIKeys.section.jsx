@@ -11,10 +11,11 @@ import { Table } from 'components';
 import './APIKeys.styles.scss';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Add, EditAPIKey } from './sections';
+import { Add, EditAPIKey, EditPermissions } from './sections';
 import { checkModule } from 'lib/checkModule';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAPIKeysByUID } from 'store';
+import { getAPIKeyByID } from 'store';
 
 export const APIKeys = () => {
   const [show, setShow] = useState(false);
@@ -23,7 +24,7 @@ export const APIKeys = () => {
   const [selectedRows, setSelectedRows] = useState([]);
   // Edit Modal State Start
   const [showEdit, setShowEdit] = useState(false);
-  const [apikey, setApikey] = useState({});
+  const [editPermissions, setEditPermissions] = useState(false);
   // Edit Modal State End
 
   const { userModules } = useSelector((state) => state?.modules);
@@ -74,8 +75,14 @@ export const APIKeys = () => {
       key: 'status',
       dataIndex: 'status',
       render: (status) => (
-        <div className="bg-[#1C3238] px-[8px] py-[4px] text-[#0BB783] w-[fit-content] rounded-[4px]">
-          {status}
+        <div
+          className={`${
+            status
+              ? 'bg-[#1C3238] text-[#0BB783]'
+              : 'bg-[#3A2434] text-[#F64E60]'
+          } px-[8px] py-[4px] w-[fit-content] rounded-[4px]`}
+        >
+          {status ? 'ACTIVE' : 'INACTIVE'}
         </div>
       ),
     },
@@ -108,7 +115,7 @@ export const APIKeys = () => {
           label: key?.label !== null ? key?.label : 'N/A',
           apiKey: key?.applicationKey,
           createdAt: key?.createdAt ? key?.createdAt : 'N/A',
-          status: key?.statusApi ? 'Active' : 'Inactive',
+          status: key?.statusApi,
           validTill: key?.validTill,
           tenant: key?.tenant,
         });
@@ -116,21 +123,6 @@ export const APIKeys = () => {
       setData(dataArr);
     }
   }, [apiKeys]);
-
-  // TODO: Sort Logic once Sorted :D
-  // useEffect(() => {
-  //   data.sort((a, b) => {
-  //     if (a[selectedSort] && b[selectedSort]) {
-  //       return a?.[selectedSort]?.localeCompare(b?.[selectedSort]);
-  //     }
-  //     return a > b;
-  //   });
-  //   setData(data);
-  // }, [selectedSort]);
-
-  // const onSelectChange = (e) => {
-  //   setSelectedSort(e);
-  // };
 
   return (
     <div className="mt-[20px] bg-[#1E1E2D] rounded-[8px] pb-[32px]">
@@ -157,42 +149,31 @@ export const APIKeys = () => {
           editAction={(record) => (
             <>
               <Button
-                onClick={() => {
-                  setApikey(record);
+                onClick={async () => {
+                  await dispatch(getAPIKeyByID(record?.key));
                   setShowEdit(true);
                 }}
               >
                 Edit
               </Button>
-              <Button>Permissions</Button>
+              <Button
+                onClick={async () => {
+                  await dispatch(getAPIKeyByID(record?.key));
+                  setEditPermissions(true);
+                }}
+              >
+                Permissions
+              </Button>
             </>
           )}
           permissions={permissions}
           t={t}
-          // customFilterSort={
-          //   <>
-          //     <Select
-          //       className="min-w-[235px] bg-[#171723]"
-          //       onChange={onSelectChange}
-          //       dropdownClassName="custom-select-dropdown"
-          //       value={selectedSort}
-          //       suffixIcon={<Down />}
-          //     >
-          //       {columns?.map((el) => {
-          //         return (
-          //           <Select.Option key={el?.key} value={el?.key}>
-          //             {t('sortBy')} {el?.title}
-          //           </Select.Option>
-          //         );
-          //       })}
-          //     </Select>
-          //   </>
-          // }
         />
       </div>
       {/* Modals */}
       <Add show={show} setShow={setShow} />
-      <EditAPIKey show={showEdit} setShow={setShowEdit} apikey={apikey} />
+      <EditAPIKey show={showEdit} setShow={setShowEdit} />
+      <EditPermissions show={editPermissions} setShow={setEditPermissions} />
     </div>
   );
 };

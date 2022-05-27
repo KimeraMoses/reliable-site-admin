@@ -2,8 +2,9 @@ import * as Yup from 'yup';
 import moment from 'moment';
 import { Modal } from 'components';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateAPIKey } from 'store';
-import { getAPIKeysByUID } from 'store';
+import { getAPIKeysByUID, updateAPIKeySettings } from 'store';
+import { deepEqual } from 'lib';
+import { toast } from 'react-toastify';
 
 const fields = [
   {
@@ -38,19 +39,20 @@ const validationSchema = Yup.object().shape({
   validTill: Yup.date().required('Expiry date is required'),
 });
 
-export const EditAPIKey = ({ show, setShow, apikey }) => {
-  const initialValues = {
-    id: apikey?.key,
-    validTill: moment(apikey?.validTill),
-    statusApi: apikey?.status === 'Active' ? true : false,
-    tenant: apikey?.tenant,
-    label: apikey?.label,
-  };
-
+export const EditAPIKey = ({ show, setShow }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state?.auth);
-  const { loading } = useSelector((state) => state?.apiKeys);
+  const { loading, apiKey } = useSelector((state) => state?.apiKeys);
 
+  const initialValues = {
+    validTill: moment(apiKey?.validTill),
+    statusApi: apiKey?.statusApi,
+    tenant: apiKey?.tenant,
+    label: apiKey?.label,
+    applicationKey: apiKey?.applicationKey,
+    userIds: apiKey?.userIds,
+    safeListIpAddresses: apiKey?.safeListIpAddresses,
+  };
   return (
     <>
       <Modal
@@ -63,15 +65,18 @@ export const EditAPIKey = ({ show, setShow, apikey }) => {
         heading="Edit API Key"
         submitText="Update"
         handleSubmit={async (values) => {
-          const keyId = values?.id;
-          delete values['id'];
-          const newValues = {
-            ...values,
-            validTill: values.validTill.toISOString(),
-          };
-          await dispatch(updateAPIKey(keyId, newValues));
-          await dispatch(getAPIKeysByUID(user?.id));
-          setShow(false);
+          if (deepEqual(values, initialValues)) {
+            toast.info('No changes made');
+            setShow(false);
+          } else {
+            const newValues = {
+              ...values,
+              validTill: values.validTill.toISOString(),
+            };
+            await dispatch(updateAPIKeySettings(apiKey?.id, newValues));
+            await dispatch(getAPIKeysByUID(user?.id));
+            setShow(false);
+          }
         }}
       />
     </>

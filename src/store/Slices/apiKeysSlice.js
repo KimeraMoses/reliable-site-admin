@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   apiKeys: [],
+  apiKey: null,
   loading: false,
 };
 const apiKeysSlice = createSlice({
@@ -11,6 +12,9 @@ const apiKeysSlice = createSlice({
     getAPIKeys: (state, { payload }) => {
       state.apiKeys = payload;
     },
+    getAPIKey: (state, { payload }) => {
+      state.apiKey = payload;
+    },
     setAPILoading: (state, { payload }) => {
       state.loading = payload;
     },
@@ -19,5 +23,5 @@ const apiKeysSlice = createSlice({
 
 const { reducer, actions } = apiKeysSlice;
 
-export const { getAPIKeys, setAPILoading } = actions;
+export const { getAPIKeys, getAPIKey, setAPILoading } = actions;
 export default reducer;
