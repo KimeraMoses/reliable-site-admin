@@ -15,3 +15,4 @@ export * from './apiKeysSlice';
 export * from './appSettings';
 export * from './paymentGateways';
 export * from './smtp';
+export * from './emailTemplates';

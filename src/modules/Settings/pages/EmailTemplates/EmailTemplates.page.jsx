@@ -1,7 +1,20 @@
 import { Route, Routes } from 'react-router-dom';
 import { List, AddTemplate, EditTemplate } from './pages';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { getAllEmailTemplates } from 'store';
+import { getAllSMTPs } from 'store';
 
 function EmailTemplates() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    (async () => {
+      await dispatch(getAllEmailTemplates());
+      await dispatch(getAllSMTPs());
+    })();
+  }, []);
+
   return (
     <Routes>
       <Route index element={<List />} />

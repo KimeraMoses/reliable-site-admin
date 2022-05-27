@@ -1,6 +1,8 @@
 import { Button } from 'antd';
 import { Table } from 'components';
+import { checkModule } from 'lib/checkModule';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Delete } from './sections';
 
@@ -13,8 +15,8 @@ const columns = [
   },
   {
     title: 'Configuration',
-    dataIndex: 'config',
-    key: 'config',
+    dataIndex: 'smtpConfigurationId',
+    key: 'smtpConfigurationId',
     width: '70%',
   },
   {
@@ -37,34 +39,45 @@ const columns = [
   },
 ];
 
-let data = [];
-for (let i = 0; i < 25; i++) {
-  data.push({
-    id: i,
-    key: i,
-    subject: `Email Subject ${i}`,
-    config: 'SMTP Configuration - Host Name',
-    status: i % 2 === 0 ? true : false,
-  });
-}
-
 export const List = () => {
   const [show, setShow] = useState(false);
   const [record, setRecord] = useState(null);
   const navigate = useNavigate();
+
+  // Check for permissions Start
+  const { userModules } = useSelector((state) => state?.modules);
+  const { permissions } = checkModule({
+    module: 'Settings',
+    modules: userModules,
+  });
+  // Check for permissions End
+
+  const { emailTemplates, loading } = useSelector(
+    (state) => state.emailTemplates
+  );
+  const { smtps } = useSelector((state) => state?.smtps);
+  const smtpsLoading = useSelector((state) => state?.smtps?.loading);
+  let data = [];
+  console.log(emailTemplates);
+  emailTemplates.forEach((emailTemplate) => {
+    data.push({
+      key: emailTemplate?.id,
+      id: emailTemplate?.id,
+      subject: emailTemplate?.subject,
+      smtpConfigurationId:
+        smtps.find((x) => x.id === emailTemplate?.smtpConfigurationId)?.host ||
+        'N/A',
+      status: emailTemplate?.status,
+    });
+  });
+
   return (
     <div className="m-[40px] p-[40px] bg-[#1E1E2D] rounded-[8px]">
       <Delete show={show} setShow={setShow} record={record} />
       <Table
         columns={columns}
         data={data}
-        permissions={{
-          View: true,
-          Update: true,
-          Remove: true,
-          Create: true,
-          Search: true,
-        }}
+        permissions={permissions}
         fieldToFilter="name"
         btnData={{
           text: 'Add New Template',
@@ -72,7 +85,7 @@ export const List = () => {
             navigate('/admin/dashboard/settings/email-templates/template/add');
           },
         }}
-        // loading={loading}
+        loading={loading || smtpsLoading}
         editAction={(record) => (
           <Button
             onClick={() => {

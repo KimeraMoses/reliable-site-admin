@@ -14,3 +14,5 @@ export * from './appSettings';
 export * from './paymentGateways';
 // SMTP Actions
 export * from './smtp';
+// Email Templates
+export * from './emailTemplates';

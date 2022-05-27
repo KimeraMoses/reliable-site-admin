@@ -27,3 +27,5 @@ export * from './paymentGateways';
 export * from './smtp';
 // Billing Settings
 export * from './billingSettings';
+// Email Templates
+export * from './emailTemplates';
