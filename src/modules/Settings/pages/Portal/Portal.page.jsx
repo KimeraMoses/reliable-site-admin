@@ -1,7 +1,10 @@
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Button, Card, Input } from 'components';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { deepEqual } from 'lib';
+import { toast } from 'react-toastify';
+import { updateAppSettings } from 'store';
 
 const validationSchema = Yup.object().shape({
   enableLoginIntervalInSeconds_PortalSettings: Yup.boolean().required(
@@ -21,14 +24,23 @@ export default function Portal() {
       settings?.loginIntervalInSeconds_PortalSettings,
   };
 
+  const dispatch = useDispatch();
   return (
     <div className="p-[40px]">
-      <Card heading="Support Settings" loading={loading}>
+      <Card heading="Portal Settings" loading={loading}>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
           enableReinitialize
-          onSubmit={(values) => console.log(values)}
+          onSubmit={async (values) => {
+            if (deepEqual(values, initialValues)) {
+              toast.info('No changes were made');
+            } else {
+              await dispatch(
+                updateAppSettings({ id: settings?.id, data: values })
+              );
+            }
+          }}
         >
           {({ values }) => {
             // Conditional Based Rendering of Fields Start
