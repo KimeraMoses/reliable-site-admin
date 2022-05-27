@@ -31,3 +31,5 @@ export * from './billingSettings';
 export * from './emailTemplates';
 // Maintenance Settings
 export * from './maintenanceSettings';
+// Support Settings
+export * from './supportSettings';

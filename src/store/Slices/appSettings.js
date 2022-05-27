@@ -4,6 +4,7 @@ const initialState = {
   settings: null,
   billingSettings: null,
   maintenanceSettings: null,
+  supportSettings: null,
   loading: false,
 };
 
@@ -23,6 +24,9 @@ const appSettingsSlice = createSlice({
     getMaintenanceSettings: (state, { payload }) => {
       state.maintenanceSettings = payload;
     },
+    getSupportSettings: (state, { payload }) => {
+      state.supportSettings = payload;
+    },
   },
 });
 
@@ -33,5 +37,7 @@ export const {
   getAppSettings,
   getBillingSettings,
   getMaintenanceSettings,
+  getSupportSettings,
 } = actions;
+
 export default reducer;

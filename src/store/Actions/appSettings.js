@@ -4,15 +4,18 @@ import {
   getError,
   getMaintenanceSettingsConfig,
   getSettingsByTenant,
+  getSupportSettingsByTenantConfig,
   postMaintenanceSettingsConfig,
   updateBillingSettingsConfig,
   updateSettingsConfig,
+  updateSupportSettingsConfig,
 } from 'lib';
 import { toast } from 'react-toastify';
 import {
   getAppSettings,
   getBillingSettings,
   getMaintenanceSettings,
+  getSupportSettings,
   setAppSettingsLoading,
 } from 'store/Slices';
 
@@ -117,6 +120,44 @@ export const updateMaintenanceSettings = ({ data }) => {
         const { url, config } = getMaintenanceSettingsConfig();
         const response = await axios.get(url, config);
         dispatch(getMaintenanceSettings(response?.data));
+        toast.success('Settings updated successfully');
+      }
+    } catch (error) {
+      toast.error(getError(error));
+    } finally {
+      dispatch(setAppSettingsLoading(false));
+    }
+  };
+};
+
+// Get Support Settings By Tenant
+export const getSupportSettingsByTenant = () => {
+  return async (dispatch) => {
+    dispatch(setAppSettingsLoading(true));
+    try {
+      const { url, config } = getSupportSettingsByTenantConfig();
+      const response = await axios.get(url, config);
+      console.log(response);
+      dispatch(getSupportSettings(response.data.data));
+    } catch (error) {
+      toast.error(getError(error));
+    } finally {
+      dispatch(setAppSettingsLoading(false));
+    }
+  };
+};
+
+// Update Support Settings
+export const updateSupportSettings = ({ id, data }) => {
+  return async (dispatch) => {
+    dispatch(setAppSettingsLoading(true));
+    try {
+      const { url, config } = updateSupportSettingsConfig({ id });
+      const response = await axios.post(url, data, config);
+      if (response.status === 200) {
+        const { url, config } = getSupportSettingsByTenant();
+        const response = await axios.get(url, config);
+        dispatch(getSupportSettings(response?.data));
         toast.success('Settings updated successfully');
       }
     } catch (error) {

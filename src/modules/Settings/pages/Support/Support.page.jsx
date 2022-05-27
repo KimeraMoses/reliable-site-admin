@@ -1,7 +1,10 @@
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Button, Card, Input } from 'components';
-// import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { getSupportSettingsByTenant } from 'store';
+import { updateSupportSettings } from 'store';
 
 const validationSchema = Yup.object().shape({
   maxNumberOfSubCategories: Yup.number().required('This is a required field'),
@@ -17,25 +20,42 @@ export default function Support() {
       type: 'number',
     },
     {
+      name: 'refundRetainPercentage',
+      label: 'Refund Retain Percentage',
+      type: 'number',
+    },
+    {
       name: 'autoApproveNewArticles',
       label: 'Auto Approve New Articles',
       type: 'switch',
     },
   ];
 
-  // const { settings } = useSelector((state) => state?.settings);
+  const { supportSettngs, loading } = useSelector(
+    (state) => state?.appSettings
+  );
+  const dispatch = useDispatch();
   const initialValues = {
-    maxNumberOfSubCategories: 20,
-    autoApproveNewArticles: true,
+    maxNumberOfSubCategories: supportSettngs?.maxNumberOfSubCategories,
+    autoApproveNewArticles: supportSettngs?.autoApproveNewArticles,
+    refundRetainPercentage: supportSettngs?.refundRetainPercentage,
   };
+
+  useEffect(() => {
+    dispatch(getSupportSettingsByTenant());
+  }, []);
 
   return (
     <div className="p-[40px]">
-      <Card heading="Support Settings">
+      <Card heading="Support Settings" loading={loading}>
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
-          onSubmit={(values) => console.log(values)}
+          onSubmit={async (values) => {
+            await dispatch(
+              updateSupportSettings({ id: supportSettngs?.id, data: values })
+            );
+          }}
         >
           <Form>
             <div className="grid grid-cols-4 gap-[20px] mb-[32px]">
