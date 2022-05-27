@@ -2,7 +2,10 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 
 import { Button, Input, Card } from 'components';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { deepEqual } from 'lib';
+import { toast } from 'react-toastify';
+import { updateAppSettings } from 'store';
 
 const validationSchema = Yup.object().shape({
   enableThirdPartyAPIkeys: Yup.boolean().required('Status is required'),
@@ -20,7 +23,7 @@ const fields = [
   },
   {
     name: 'numberofRequestsPerIpApiKey',
-    label: 'Number of Requests Per IP',
+    label: 'Number of Requests Per IP API Key',
     type: 'number',
   },
   {
@@ -52,13 +55,22 @@ export const APISettings = () => {
     enableAPIAccessClient: settings?.enableAPIAccessClient,
   };
 
+  const dispatch = useDispatch();
   return (
     <Card heading="API Keys" loading={loading}>
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         enableReinitialize
-        onSubmit={(values) => console.log(values)}
+        onSubmit={async (values) => {
+          if (deepEqual(values, initialValues)) {
+            toast.info('No changes were made');
+          } else {
+            await dispatch(
+              updateAppSettings({ id: settings?.id, data: values })
+            );
+          }
+        }}
       >
         <Form>
           <div className="grid grid-cols-4 gap-[20px] mb-[32px]">
