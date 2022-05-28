@@ -31,20 +31,19 @@ export default function Support() {
     },
   ];
 
-  const { supportSettngs, loading } = useSelector(
+  const { supportSettings, loading } = useSelector(
     (state) => state?.appSettings
   );
   const dispatch = useDispatch();
   const initialValues = {
-    maxNumberOfSubCategories: supportSettngs?.maxNumberOfSubCategories,
-    autoApproveNewArticles: supportSettngs?.autoApproveNewArticles,
-    refundRetainPercentage: supportSettngs?.refundRetainPercentage,
+    maxNumberOfSubCategories: supportSettings?.maxNumberOfSubCategories,
+    autoApproveNewArticles: supportSettings?.autoApproveNewArticles,
+    refundRetainPercentage: supportSettings?.refundRetainPercentage,
   };
 
   useEffect(() => {
     dispatch(getSupportSettingsByTenant());
   }, []);
-
   return (
     <div className="p-[40px]">
       <Card heading="Support Settings" loading={loading}>
@@ -53,7 +52,7 @@ export default function Support() {
           validationSchema={validationSchema}
           onSubmit={async (values) => {
             await dispatch(
-              updateSupportSettings({ id: supportSettngs?.id, data: values })
+              updateSupportSettings({ id: supportSettings?.id, data: values })
             );
           }}
         >

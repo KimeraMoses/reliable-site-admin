@@ -5,7 +5,7 @@ const maintenanceSettingsConfig = (action) =>
 
 // Get Maintenance Settings
 export const getMaintenanceSettingsConfig = () => ({
-  url: `/api/maintenance/maintenancemode`,
+  url: `/api/maintenance/maintenancemode/admin`,
   config: maintenanceSettingsConfig('View'),
 });
 

@@ -6,7 +6,7 @@ import {
   changePasswordConfig,
   updateEmailConfig,
   getIPData,
-  getDeviceName
+  getDeviceName,
 } from 'lib';
 import { toast } from 'react-toastify';
 import {
@@ -300,7 +300,7 @@ export const maintenanceStatus = (token) => {
   return async (dispatch) => {
     dispatch(checkMaintenancePending());
     const response = await fetch(
-      `${process.env.REACT_APP_BASEURL}/api/maintenance/maintenancemode`,
+      `${process.env.REACT_APP_BASEURL}/api/maintenance/maintenancemode/admin`,
       {
         method: 'GET',
         headers: new Headers({

@@ -10,7 +10,7 @@ export const getSupportSettingsByTenantConfig = () => ({
 });
 
 // Update Billing Settings
-export const updateSupportSettingsConfig = (id) => ({
+export const updateSupportSettingsConfig = ({ id }) => ({
   url: `${prefix}/${id}`,
   config: supportConfig('Update'),
 });

@@ -137,7 +137,6 @@ export const getSupportSettingsByTenant = () => {
     try {
       const { url, config } = getSupportSettingsByTenantConfig();
       const response = await axios.get(url, config);
-      console.log(response);
       dispatch(getSupportSettings(response.data.data));
     } catch (error) {
       toast.error(getError(error));
@@ -153,7 +152,7 @@ export const updateSupportSettings = ({ id, data }) => {
     dispatch(setAppSettingsLoading(true));
     try {
       const { url, config } = updateSupportSettingsConfig({ id });
-      const response = await axios.post(url, data, config);
+      const response = await axios.put(url, data, config);
       if (response.status === 200) {
         const { url, config } = getSupportSettingsByTenant();
         const response = await axios.get(url, config);
