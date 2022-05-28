@@ -6,32 +6,6 @@ import { getAPIKeysByUID, updateAPIKeySettings } from 'store';
 import { deepEqual } from 'lib';
 import { toast } from 'react-toastify';
 
-const fields = [
-  {
-    name: 'label',
-    type: 'input',
-    title: 'Label',
-    placeholder: 'Navitare',
-  },
-  {
-    name: 'statusApi',
-    type: 'switch',
-    title: 'Status',
-  },
-  {
-    name: 'tenant',
-    type: 'select',
-    options: [{ label: 'Admin', value: 'admin' }],
-    title: 'Tenant',
-  },
-  {
-    name: 'validTill',
-    type: 'date',
-    title: 'Expires',
-    disableDate: (current) => current && current.valueOf() < Date.now(),
-  },
-];
-
 const validationSchema = Yup.object().shape({
   label: Yup.string().required('Label is required'),
   statusApi: Yup.string().required('Status is required'),
@@ -43,6 +17,50 @@ export const EditAPIKey = ({ show, setShow }) => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state?.auth);
   const { loading, apiKey } = useSelector((state) => state?.apiKeys);
+  const { users } = useSelector((state) => state?.users);
+
+  const fields = [
+    {
+      name: 'userIds',
+      type: 'select',
+      title: 'Select User',
+      options: users.map((user) => {
+        const userName = user?.fullName || user?.email;
+        return {
+          value: user.id,
+          label: userName,
+        };
+      }),
+    },
+    {
+      name: 'applicationKey',
+      type: 'input',
+      title: 'API Key',
+    },
+    {
+      name: 'label',
+      type: 'input',
+      title: 'Label',
+      placeholder: 'Navitare',
+    },
+    {
+      name: 'restrictAccessIPAddress',
+      type: 'input',
+      title: 'IP Address',
+      placeholder: '255.255.255.125',
+    },
+    {
+      name: 'validTill',
+      type: 'date',
+      title: 'Expires',
+      disableDate: (current) => current && current.valueOf() < Date.now(),
+    },
+    {
+      name: 'statusApi',
+      type: 'switch',
+      title: 'Status',
+    },
+  ];
 
   const initialValues = {
     validTill: moment(apiKey?.validTill),

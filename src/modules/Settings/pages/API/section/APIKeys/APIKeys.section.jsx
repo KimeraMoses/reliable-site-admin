@@ -1,5 +1,6 @@
 import { Button, Tooltip } from 'antd';
 import { Copy } from 'icons';
+import moment from 'moment';
 import { Table } from 'components';
 import './APIKeys.styles.scss';
 import { useEffect, useState } from 'react';
@@ -7,14 +8,14 @@ import { useTranslation } from 'react-i18next';
 import { Add, Delete, EditAPIKey, EditPermissions } from './sections';
 import { checkModule } from 'lib/checkModule';
 import { useSelector, useDispatch } from 'react-redux';
-import { getAPIKeysByUID } from 'store';
+import { getAllAPIKeys } from 'store';
 import { getAPIKeyByID } from 'store';
+import { getUsers } from 'store';
 
 export const APIKeysList = () => {
   const [show, setShow] = useState(false);
   // const [selectedSort, setSelectedSort] = useState('label');
   const [data, setData] = useState([]);
-  const [selectedRows, setSelectedRows] = useState([]);
   // Edit Modal State Start
   const [showEdit, setShowEdit] = useState(false);
   const [editPermissions, setEditPermissions] = useState(false);
@@ -24,7 +25,8 @@ export const APIKeysList = () => {
 
   const { userModules } = useSelector((state) => state?.modules);
   const { apiKeys, loading } = useSelector((state) => state?.apiKeys);
-  const { user } = useSelector((state) => state?.auth);
+  const { users } = useSelector((state) => state?.users);
+  const userLoading = useSelector((state) => state?.users?.loading);
   const { permissions } = checkModule({
     module: 'Settings',
     modules: userModules,
@@ -33,6 +35,16 @@ export const APIKeysList = () => {
   const { t } = useTranslation('/Users/ns');
 
   const columns = [
+    {
+      title: 'Number',
+      dataIndex: 'number',
+      key: 'number',
+    },
+    {
+      title: 'User',
+      dataIndex: 'user',
+      key: 'user',
+    },
     {
       title: t('label'),
       dataIndex: 'label',
@@ -61,9 +73,20 @@ export const APIKeysList = () => {
       },
     },
     {
+      title: 'IP Address',
+      dataIndex: 'safeListIpAddresses',
+      key: 'safeListIpAddresses',
+    },
+    {
       title: t('createDate'),
       key: 'createdAt',
       dataIndex: 'createdAt',
+    },
+    {
+      title: 'Expires',
+      key: 'validTill',
+      dataIndex: 'validTill',
+      render: (text) => moment(text).format('MMM Do, YYYY . hh:mm A'),
     },
     {
       title: t('status'),
@@ -77,38 +100,29 @@ export const APIKeysList = () => {
               : 'bg-[#3A2434] text-[#F64E60]'
           } px-[8px] py-[4px] w-[fit-content] rounded-[4px]`}
         >
-          {status ? 'ACTIVE' : 'INACTIVE'}
+          {status ? 'ENABLED' : 'DISABLED'}
         </div>
       ),
     },
   ];
 
-  const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        'selectedRows: ',
-        selectedRows
-      );
-      setSelectedRows(selectedRows);
-    },
-  };
-
   const dispatch = useDispatch();
   useEffect(() => {
-    if (user) {
-      dispatch(getAPIKeysByUID(user?.id));
-    }
-  }, [user]);
+    dispatch(getAllAPIKeys());
+    dispatch(getUsers());
+  }, []);
 
   useEffect(() => {
     if (apiKeys) {
       let dataArr = [];
-      apiKeys.forEach((key) => {
+      apiKeys.forEach((key, index) => {
         dataArr.push({
           key: key?.id,
+          number: index + 1,
+          user: users.find((x) => x?.id === key?.userIds)?.fullName || 'N/A',
           label: key?.label !== null ? key?.label : 'N/A',
           apiKey: key?.applicationKey,
+          safeListIpAddresses: key?.safeListIpAddresses,
           createdAt: key?.createdAt ? key?.createdAt : 'N/A',
           status: key?.statusApi,
           validTill: key?.validTill,
@@ -127,20 +141,9 @@ export const APIKeysList = () => {
         <Table
           data={data}
           columns={columns}
-          loading={loading}
-          additionalBtns={
-            selectedRows?.length
-              ? [
-                  { text: 'Enable', onClick: () => {} },
-                  { text: 'Disable', onClick: () => {} },
-                  { text: 'Delete', onClick: () => {} },
-                ]
-              : []
-          }
+          loading={loading || userLoading}
           btnData={{ text: 'Add API Key', onClick: () => setShow(true) }}
           fieldToFilter="label"
-          pagination={false}
-          rowSelection={rowSelection}
           editAction={(record) => (
             <>
               <Button

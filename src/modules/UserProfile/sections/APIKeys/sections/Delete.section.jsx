@@ -12,7 +12,7 @@ export const Delete = ({ show, setShow, id }) => {
   const dispatch = useDispatch();
   return (
     <Modal
-      heading="Delete Email Template"
+      heading="Delete API Key"
       customBody={
         <div className="mb-[32px]">
           Are you sure you wish to delete this API Key? This action is permanent
@@ -21,7 +21,7 @@ export const Delete = ({ show, setShow, id }) => {
       }
       initialValues={{ id }}
       validationSchema={validationSchema}
-      submitText="Delete Template"
+      submitText="Delete API Key"
       loading={loading}
       handleSubmit={async (values) => {
         await dispatch(deleteAPIKey(values?.id));
