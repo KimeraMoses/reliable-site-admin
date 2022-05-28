@@ -65,15 +65,15 @@ export const editSMTP = ({ data }) => {
 };
 
 export const deleteSMTP = ({ id }) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     dispatch(setSMTPLoading(true));
     try {
       const { url, config } = deleteSMTPConfig({ id });
       const response = await axios.delete(url, config);
       if (response.status === 200) {
-        const { url, defaultData, config } = getAllSMTPsConfig();
-        const response = await axios.post(url, defaultData, config);
-        dispatch(getSMTPs(response?.data?.data));
+        const { smtps } = getState().smtps;
+        const newSMTPs = smtps.filter((key) => key.id !== id);
+        dispatch(getSMTPs(newSMTPs));
         toast.success('SMTP Configuration Deleted Successfully');
       }
     } catch (error) {

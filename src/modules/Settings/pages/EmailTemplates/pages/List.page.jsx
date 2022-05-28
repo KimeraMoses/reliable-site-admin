@@ -58,7 +58,6 @@ export const List = () => {
   const { smtps } = useSelector((state) => state?.smtps);
   const smtpsLoading = useSelector((state) => state?.smtps?.loading);
   let data = [];
-  console.log(emailTemplates);
   emailTemplates.forEach((emailTemplate) => {
     data.push({
       key: emailTemplate?.id,

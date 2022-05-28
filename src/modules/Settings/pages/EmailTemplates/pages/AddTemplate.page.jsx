@@ -5,26 +5,19 @@ import { Formik, Form, Field } from 'formik';
 
 import { Input, SMTPEditor, Button } from 'components';
 import './styles.scss';
-
-const initialValues = {
-  subject: '',
-  config: '',
-  status: true,
-  clientName: '',
-  company: '',
-  address: '',
-  emailBodyHolder: EditorState.createEmpty(),
-  emailBody: '',
-};
+import { useDispatch, useSelector } from 'react-redux';
+import { addEmailTemplate } from 'store';
+import { Spin } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const validationSchema = Yup.object().shape({
   subject: Yup.string().required('Subject is required'),
-  config: Yup.string().required('Configuration is required'),
+  smtpConfigurationId: Yup.string().required('Configuration is required'),
   status: Yup.boolean().required('Status is required'),
   clientName: Yup.string().required('Client name is required'),
   company: Yup.string().required('Company is required'),
   address: Yup.string().required('Address is required'),
-  emailBody: Yup.string().required('Email body is required'),
+  body: Yup.string().required('Email body is required'),
 });
 
 const ConfigurationEditor = ({ editorState, onEditorStateChange, onBlur }) => {
@@ -65,99 +58,129 @@ const EmailBodyInput = ({ touched, errors, name, placeholder, label }) => {
 };
 
 export const AddTemplate = () => {
+  const { smtps } = useSelector((state) => state?.smtps);
+  const { user } = useSelector((state) => state?.auth);
+  const { loading } = useSelector((state) => state?.emailTemplates);
+
+  const smtpOptions = smtps.map((smtp) => {
+    return {
+      value: smtp.id,
+      label: smtp.host,
+    };
+  });
+
+  const initialValues = {
+    createdBy: user?.id,
+    subject: '',
+    body: '',
+    // TODO: Change when multi-tenancy enabled
+    tenant: 'Admin',
+    status: true,
+    smtpConfigurationId: smtpOptions[0]?.value || '',
+    clientName: '',
+    company: '',
+    address: '',
+    bodyHolder: EditorState.createEmpty(),
+  };
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
-      onSubmit={(values) => console.log(values)}
+      enableReinitialize
+      onSubmit={async (values) => {
+        await dispatch(addEmailTemplate({ data: values }));
+        navigate('/admin/dashboard/settings/email-templates');
+      }}
     >
       {({ values, errors, touched, setFieldValue, setFieldTouched }) => {
         return (
           <Form>
-            <div className="grid grid-cols-[1fr_3fr] gap-[20px] px-[32px] py-[40px]">
-              {/* SMTP Configuration Side */}
-              <div className="bg-[#1E1E2D] p-[32px] rounded-[8px]">
-                <h6 className="text-white mb-[32px]">New Template</h6>
-                <div className="flex flex-col gap-[20px]">
-                  <Input
-                    name="subject"
-                    label="Subject"
-                    placeholder="Email Subject"
-                  />
-                  <Input
-                    name="config"
-                    label="SMTP Configuration"
-                    placeholder="Select SMTP Configuration"
-                    type="select"
-                    options={[
-                      { label: 'Config1', value: 'Config1' },
-                      { label: 'Config2', value: 'Config2' },
-                    ]}
-                  />
-                  <Input name="status" label="Status" type="switch" />
-                </div>
-                <Button className="mt-[32px]" htmlType="submit">
-                  Add New Template
-                </Button>
-              </div>
-              {/* Email Body Side */}
-              <div className="flex flex-col gap-[20px]">
-                <div className="bg-[#1E1E2D] rounded-[8px]">
-                  <h6 className="text-white font-medium p-[32px]">
-                    Email Body
-                  </h6>
-                  {/* Other Inputs */}
-                  <div className="flex flex-col gap-[2px]">
-                    <EmailBodyInput
-                      name="clientName"
-                      label="Client Name"
-                      placeholder="[fullName]"
-                      touched={touched}
-                      errors={errors}
+            <Spin spinning={loading}>
+              <div className="grid grid-cols-[1fr_3fr] gap-[20px] px-[32px] py-[40px]">
+                {/* SMTP Configuration Side */}
+                <div className="bg-[#1E1E2D] p-[32px] rounded-[8px]">
+                  <h6 className="text-white mb-[32px]">New Template</h6>
+                  <div className="flex flex-col gap-[20px]">
+                    <Input
+                      name="subject"
+                      label="Subject"
+                      placeholder="Email Subject"
                     />
-                    <EmailBodyInput
-                      name="company"
-                      label="Company"
-                      placeholder="[company]"
-                      touched={touched}
-                      errors={errors}
+                    <Input
+                      name="smtpConfigurationId"
+                      label="SMTP Configuration"
+                      placeholder="Select SMTP Configuration"
+                      type="select"
+                      options={smtpOptions}
                     />
-                    <EmailBodyInput
-                      name="address"
-                      label="Address"
-                      placeholder="[address]"
-                      touched={touched}
-                      errors={errors}
-                    />
+                    <Input name="status" label="Status" type="switch" />
                   </div>
-                  <ConfigurationEditor
-                    editorState={values.emailBodyHolder}
-                    onBlur={() => setFieldTouched('emailBody', true)}
-                    onEditorStateChange={(state) => {
-                      setFieldValue('emailBodyHolder', state);
-                      const currentContentAsHTML = convertToHTML(
-                        state.getCurrentContent()
-                      );
-                      if (
-                        convertToRaw(state.getCurrentContent()).blocks
-                          .length === 1 &&
-                        convertToRaw(state.getCurrentContent()).blocks[0]
-                          .text === ''
-                      ) {
-                        setFieldValue('emailBody', '');
-                      } else {
-                        setFieldValue('emailBody', currentContentAsHTML);
-                      }
-                    }}
-                  />
-                  {touched['emailBody'] && errors['emailBody'] && (
-                    <div className="error whitespace-nowrap ml-[32px] mb-[16px] w-[20%]">
-                      {errors['emailBody']}
+                  <Button className="mt-[32px]" htmlType="submit">
+                    Add New Template
+                  </Button>
+                </div>
+                {/* Email Body Side */}
+                <div className="flex flex-col gap-[20px]">
+                  <div className="bg-[#1E1E2D] rounded-[8px]">
+                    <h6 className="text-white font-medium p-[32px]">
+                      Email Body
+                    </h6>
+                    {/* Other Inputs */}
+                    <div className="flex flex-col gap-[2px]">
+                      <EmailBodyInput
+                        name="clientName"
+                        label="Client Name"
+                        placeholder="[fullName]"
+                        touched={touched}
+                        errors={errors}
+                      />
+                      <EmailBodyInput
+                        name="company"
+                        label="Company"
+                        placeholder="[company]"
+                        touched={touched}
+                        errors={errors}
+                      />
+                      <EmailBodyInput
+                        name="address"
+                        label="Address"
+                        placeholder="[address]"
+                        touched={touched}
+                        errors={errors}
+                      />
                     </div>
-                  )}
+                    <ConfigurationEditor
+                      editorState={values.bodyHolder}
+                      onBlur={() => setFieldTouched('body', true)}
+                      onEditorStateChange={(state) => {
+                        setFieldValue('bodyHolder', state);
+                        const currentContentAsHTML = convertToHTML(
+                          state.getCurrentContent()
+                        );
+                        if (
+                          convertToRaw(state.getCurrentContent()).blocks
+                            .length === 1 &&
+                          convertToRaw(state.getCurrentContent()).blocks[0]
+                            .text === ''
+                        ) {
+                          setFieldValue('body', '');
+                        } else {
+                          setFieldValue('body', currentContentAsHTML);
+                        }
+                      }}
+                    />
+                    {touched['body'] && errors['body'] && (
+                      <div className="error whitespace-nowrap ml-[32px] mb-[16px] w-[20%]">
+                        {errors['body']}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
+            </Spin>
           </Form>
         );
       }}

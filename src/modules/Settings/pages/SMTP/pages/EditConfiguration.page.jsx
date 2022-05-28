@@ -1,4 +1,3 @@
-import { EditorState, convertFromHTML } from 'draft-js';
 import * as Yup from 'yup';
 import { Formik, Form } from 'formik';
 import { convertToHTML } from 'draft-convert';
@@ -10,8 +9,7 @@ import { Input, MultiSelect, SMTPEditor, Button } from 'components';
 import { editSMTP } from 'store';
 import './styles.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { ContentState } from 'draft-js';
-import { deepEqual } from 'lib';
+import { convertHTMLToDraftState, deepEqual } from 'lib';
 import { toast } from 'react-toastify';
 
 const validationSchema = Yup.object().shape({
@@ -65,28 +63,6 @@ export function EditConfiguration() {
   // Setting Initial Values
   const smtp = location?.state?.smtp;
 
-  // Setting Header Editor's Initial Values
-  const hcBlocks = convertFromHTML(smtp?.headerContent);
-  const hcState = ContentState.createFromBlockArray(
-    hcBlocks?.contentBlocks,
-    hcBlocks?.entityMap
-  );
-  const hcEditorState = EditorState.createWithContent(hcState);
-  // Setting Signature Editor's Initial Values
-  const scBlocks = convertFromHTML(smtp?.signature);
-  const scState = ContentState.createFromBlockArray(
-    scBlocks?.contentBlocks,
-    scBlocks?.entityMap
-  );
-  const scEditorState = EditorState.createWithContent(scState);
-  // Setting Signature Editor's Initial Values
-  const fcBlocks = convertFromHTML(smtp?.footerContent);
-  const fcState = ContentState.createFromBlockArray(
-    fcBlocks?.contentBlocks,
-    fcBlocks?.entityMap
-  );
-  const fcEditorState = EditorState.createWithContent(fcState);
-
   const initialValues = {
     id: smtp?.id,
     host: smtp?.host,
@@ -99,9 +75,9 @@ export function EditConfiguration() {
     headerContent: smtp?.headerContent,
     signature: smtp?.signature,
     footerContent: smtp?.footerContent,
-    headerContentHolder: hcEditorState,
-    signatureHolder: scEditorState,
-    footerContentHolder: fcEditorState,
+    headerContentHolder: convertHTMLToDraftState(smtp?.headerContent),
+    signatureHolder: convertHTMLToDraftState(smtp?.signature),
+    footerContentHolder: convertHTMLToDraftState(smtp?.footerContent),
   };
   // Setting Initial Values End
 

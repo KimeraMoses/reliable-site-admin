@@ -56,6 +56,7 @@ const InputType = ({
           {...field}
           className="w-full h-[52px] bg-[#171723] border-none rounded-[8px] placeholder:text-[#92928F] text-[#92928F] px-[16px] disabled:bg-[#323248]"
           placeholder={placeholder}
+          value={values[name]}
           type={type}
           disabled={disabled}
         />

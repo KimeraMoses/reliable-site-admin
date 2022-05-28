@@ -1,4 +1,6 @@
 import { Modal } from 'components';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteEmailTemplate } from 'store';
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object().shape({
@@ -9,6 +11,8 @@ export const Delete = ({ show, setShow, record }) => {
   const initialValues = {
     id: record?.id,
   };
+  const { loading } = useSelector((state) => state?.emailTemplates);
+  const dispatch = useDispatch();
   return (
     <Modal
       heading="Delete Email Template"
@@ -18,11 +22,12 @@ export const Delete = ({ show, setShow, record }) => {
           permanent and can not be undone.
         </div>
       }
+      loading={loading}
       initialValues={initialValues}
       validationSchema={validationSchema}
       submitText="Delete Template"
-      handleSubmit={(values) => {
-        console.log(values?.id);
+      handleSubmit={async (values) => {
+        await dispatch(deleteEmailTemplate({ id: values.id }));
         setShow(false);
       }}
       show={show}

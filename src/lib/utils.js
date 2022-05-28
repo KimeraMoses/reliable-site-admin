@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { EditorState, ContentState, convertFromHTML } from 'draft-js';
 import { browserName, browserVersion } from 'react-device-detect';
 
 export const getGroupModules = ({ appModules = [], groupModules = [] }) => {
@@ -196,4 +197,14 @@ export const convertCamelToTitle = (str) => {
   const result = str.replace(/([A-Z])/g, ' $1');
   const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
   return finalResult;
+};
+
+// Convert HTML to Draft JS
+export const convertHTMLToDraftState = (html) => {
+  const blocks = convertFromHTML(html);
+  const state = ContentState.createFromBlockArray(
+    blocks?.contentBlocks,
+    blocks?.entityMap
+  );
+  return EditorState.createWithContent(state);
 };
