@@ -148,6 +148,10 @@ export const sidebarData = [
         name: 'Portal',
         path: '/admin/dashboard/settings/portal',
       },
+      {
+        name: 'Brands',
+        path: '/admin/dashboard/settings/brands',
+      },
     ],
   },
   {

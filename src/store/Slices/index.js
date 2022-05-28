@@ -11,6 +11,12 @@ export {
   clearGroup,
   getGroup,
 } from './userGroupsSlice';
+
+export {
+  getBrands as getBrandsDispatch,
+  setBrandsLoading,
+} from './brandsSlice';
+
 export * from './apiKeysSlice';
 export * from './appSettings';
 export * from './paymentGateways';

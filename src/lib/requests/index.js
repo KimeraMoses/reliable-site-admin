@@ -33,3 +33,6 @@ export * from './emailTemplates';
 export * from './maintenanceSettings';
 // Support Settings
 export * from './supportSettings';
+
+// Brands End-Points
+export * from './brands';

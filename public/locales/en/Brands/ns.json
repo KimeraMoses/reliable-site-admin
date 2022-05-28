@@ -1,0 +1,16 @@
+{
+  "addNewBrand": "Add New Brand",
+  "searchText": "Search Here",
+  "name": "Name",
+  "companyName": "Company Name",
+  "createDate": "Created Date",
+  "logo": "Logo",
+  "clientAssigned": "Client Assigned",
+  "status": "Status",
+  "actions": "Actions",
+  "view": "View",
+  "edit": "Edit",
+  "addBrand": "Add Brand",
+  "editBrand": "Edit Brand",
+  "deleteBrand": "Delete Brand"
+}
