@@ -58,6 +58,28 @@ const Brands = () => {
       title: t('logo'),
       dataIndex: "logo",
       key: "logo",
+      render: (logoUrl, record) => {
+        let name = '';
+          let userN = record.name.split(' ');
+          if (userN.length < 2) {
+            name = userN[0].charAt(0);
+          } else {
+            name = userN[0].charAt(0) + userN[1].charAt(0);
+          }
+        return (
+          logoUrl ? (
+            <img
+              src={logoUrl}
+              alt={logoUrl}
+              className="h-full w-full rounded-[5px] object-cover text-[8px]"
+            />
+          ) : (
+            <div className="bg-[#1C3238] px-[8px] py-[4px] uppercase w-[40px] h-[40px] rounded-[4px] flex justify-center items-center">
+              {name}
+            </div>
+          )
+        )
+      }
     },
     {
       title: t('clientAssignedTable'),
@@ -86,11 +108,11 @@ const Brands = () => {
       render: (status) =>
         status ? (
           <div className="bg-[#1C3238] px-[8px] py-[4px] text-[#0BB783] w-[fit-content] rounded-[4px]">
-            {"Enable"}
+            {"ENABLED"}
           </div>
         ) : (
           <div className="bg-[#1C3238] px-[8px] py-[4px] text-[#F64E60] w-[fit-content] rounded-[4px]">
-            {"Disable"}
+            {"DISABLED"}
           </div>
         ),
     },
