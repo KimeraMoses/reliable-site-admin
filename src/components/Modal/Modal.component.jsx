@@ -294,14 +294,16 @@ export function Modal({
                                                   values[`${name}`] = checkedValues;
                                                 }}>
                                                 {users?.map((user) => (
-                                                  <Checkbox value={user.id} className="custdes">
-                                                    <div className="image_wr">
-                                                      <div className="imgwrap">
-                                                        {user.imageUrl ? <img src={user.imageUrl} /> : <img src={'https://via.placeholder.com/200'} />}
+                                                  user.fullName && (
+                                                    <Checkbox value={user.id} className="custdes">
+                                                      <div className="image_wr">
+                                                        <div className="imgwrap">
+                                                          {user.imageUrl ? <img src={user.imageUrl} /> : <img src={'https://via.placeholder.com/200'} />}
+                                                        </div>
+                                                        <div className="lablwrap">{user.fullName}</div>
                                                       </div>
-                                                      <div className="lablwrap">{user.fullName}</div>
-                                                    </div>
-                                                  </Checkbox>
+                                                    </Checkbox>
+                                                  )
                                                 ))}
                                               </Checkbox.Group>
                                             </div>
