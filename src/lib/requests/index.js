@@ -36,3 +36,5 @@ export * from './supportSettings';
 
 // Brands End-Points
 export * from './brands';
+// Departments End-Points
+export * from './departments';

@@ -17,6 +17,11 @@ export {
   setBrandsLoading,
 } from './brandsSlice';
 
+export {
+  getDepartments as getDepartmentsDispatch,
+  setDepartmentsLoading,
+} from './departmentsSlice';
+
 export * from './apiKeysSlice';
 export * from './appSettings';
 export * from './paymentGateways';

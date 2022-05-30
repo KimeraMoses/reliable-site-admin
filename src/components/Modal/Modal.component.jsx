@@ -245,7 +245,7 @@ export function Modal({
                                               </div>
                                               <div>
                                                 <img
-                                                  src="#"
+                                                  src={values[name]}
                                                   alt=""
                                                   id="img"
                                                   style={{

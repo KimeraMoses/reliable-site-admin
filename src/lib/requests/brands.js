@@ -24,12 +24,12 @@ export const addBrandConfig = () => ({
     config: brandsConfig('Create')
 });
 
-// Edit Payment Gateway
+// Edit Brand
 export const editBrandConfig = ({ id }) => ({
     url: `${prefix}/${id}`,
     config: brandsConfig('Update')
 });
-// Delete Payment Gateway
+// Delete Brand
 export const deleteBrandConfig = ({ id }) => ({
     url: `${prefix}/${id}`,
     config: brandsConfig('Remove')

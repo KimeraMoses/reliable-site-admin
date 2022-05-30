@@ -35,4 +35,8 @@ export const pages = [
     path: 'brands',
     Component: lazy(() => import('./Brands/Brands.page')),
   },
+  {
+    path: 'departments',
+    Component: lazy(() => import('./Departments/Departments.page')),
+  },
 ];

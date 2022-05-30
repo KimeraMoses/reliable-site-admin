@@ -19,3 +19,6 @@ export * from './emailTemplates';
 
 // Brands Actions
 export * from './brandsActions';
+
+// Departments Actions
+export * from './departmentsActions';

@@ -16,7 +16,6 @@ import { NavLink } from 'react-router-dom';
 const Brands = () => {
   const [addModalShow, setAddModalShow] = useState(false);
   const [editValue, setEditValue] = useState(false);
-  const [clientsValue, setClientsValue] = useState(false);
   const [editModalShow, setEditModalShow] = useState(false);
   const [clientsModalShow, setClientsModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
@@ -36,13 +35,6 @@ const Brands = () => {
 
   const { t } = useTranslation("/Brands/ns");
 
-  const handleClientsAssigned = (clientAssigned) => {
-    let a = brands?.filter(function (el) { return el.clientAssigned == clientAssigned });
-    console.log(brands);
-    //setClientsValue(clientAssigned);
-    // setClientsModalShow(true);
-  }
-
   const columns = [
     {
       title: t('name'),
@@ -60,17 +52,17 @@ const Brands = () => {
       key: "logo",
       render: (logoUrl, record) => {
         let name = '';
-          let userN = record.name.split(' ');
-          if (userN.length < 2) {
-            name = userN[0].charAt(0);
-          } else {
-            name = userN[0].charAt(0) + userN[1].charAt(0);
-          }
+        let userN = record.name.split(' ');
+        if (userN.length < 2) {
+          name = userN[0].charAt(0);
+        } else {
+          name = userN[0].charAt(0) + userN[1].charAt(0);
+        }
         return (
-          logoUrl ? (
+          record.logoUrl ? (
             <img
-              src={logoUrl}
-              alt={logoUrl}
+              src={record.logoUrl}
+              alt={record.logoUrl}
               className="h-full w-full rounded-[5px] object-cover text-[8px]"
             />
           ) : (
@@ -85,17 +77,12 @@ const Brands = () => {
       title: t('clientAssignedTable'),
       key: "clientAssigned",
       dataIndex: "clientAssigned",
-      onCell: (record, rowIndex) => {
-        return {
-          onClick: (ev) => {
+      render: (clientAssigned, record) => {
+        return (
+          <NavLink to={"#"} onClick={() => {
             setEditValue(record);
             setClientsModalShow(true);
-          },
-        };
-      },
-      render: (clientAssigned) => {
-        return (
-          <NavLink to={"#"}>
+          }}>
             {`${clientAssigned?.split(",")?.length} Clients Assigned`}
           </NavLink>
         )

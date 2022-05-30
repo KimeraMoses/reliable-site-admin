@@ -43,8 +43,7 @@ export const AddBrand = ({ show, setShow, users }) => {
         {
             type: "file",
             name: "logoUrl",
-            title: t("logo"),
-            subText: t("browseLogo")
+            title: t("browseLogo"),
         },
         {
             type: "switch",
@@ -57,7 +56,8 @@ export const AddBrand = ({ show, setShow, users }) => {
             placeholder: "Client Assigned",
             title: t("clientAssigned"),
             users: users
-        }
+        },
+
     ];
     const { loading } = useSelector((state) => state?.paymentGateways);
     return (
@@ -82,7 +82,7 @@ export const AddBrand = ({ show, setShow, users }) => {
                         base64image = await convertBase64(values?.image);
                         imgData.name = finalName;
                         imgData.extension = `${ext}`;
-                        imgData.data = base64image;
+                        imgData.data = base64image.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
                     } catch (e) {
                         base64image = '';
                     }

@@ -20,6 +20,7 @@ export const EditBrand = ({ show, setShow, editValue, users }) => {
         id: editValue.id,
         name: editValue.name,
         companyName: editValue.companyName,
+        logoUrl: editValue.logoUrl,
         clientAssigned: editValue?.clientAssigned?.split(","),
         status: editValue.status,
     };
@@ -82,7 +83,7 @@ export const EditBrand = ({ show, setShow, editValue, users }) => {
                         base64image = await convertBase64(values?.image);
                         imgData.name = finalName;
                         imgData.extension = `${ext}`;
-                        imgData.data = base64image;
+                        imgData.data = base64image.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
                     } catch (e) {
                         base64image = '';
                     }

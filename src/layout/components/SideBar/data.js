@@ -109,6 +109,14 @@ export const sidebarData = [
         path: '/admin/dashboard/settings/support',
       },
       {
+        name: 'Departments',
+        path: '/admin/dashboard/settings/departments',
+      },
+      {
+        name: 'Brands',
+        path: '/admin/dashboard/settings/brands',
+      },
+      {
         name: 'SMTP',
         path: '/admin/dashboard/settings/smtp',
         subLinks: [
@@ -148,10 +156,7 @@ export const sidebarData = [
         name: 'Portal',
         path: '/admin/dashboard/settings/portal',
       },
-      {
-        name: 'Brands',
-        path: '/admin/dashboard/settings/brands',
-      },
+      
     ],
   },
   {
