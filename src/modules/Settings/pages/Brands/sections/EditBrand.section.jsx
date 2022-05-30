@@ -2,6 +2,7 @@ import { Modal } from 'components';
 import { useDispatch, useSelector } from 'react-redux';
 import { editBrand } from 'store';
 import * as Yup from 'yup';
+import { convertBase64 } from 'lib';
 import { useTranslation } from "react-i18next";
 
 
@@ -9,16 +10,17 @@ const validationSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     companyName: Yup.string().required('Company Name is required'),
     //logo: Yup.mixed().required('Logo is required'),
-    clientAssigned: Yup.string().required('Client Assigned is required'),
+    clientAssigned: Yup.array().required('Client Assigned is required'),
     status: Yup.bool().required('Status is required'),
 });
 
-export const EditBrand = ({ show, setShow, editValue }) => {
+export const EditBrand = ({ show, setShow, editValue, users }) => {
+    console.log(editValue);
     const initialValues = {
         id: editValue.id,
         name: editValue.name,
         companyName: editValue.companyName,
-        clientAssigned: editValue.clientAssigned,
+        clientAssigned: editValue?.clientAssigned?.split(","),
         status: editValue.status,
     };
 
@@ -44,10 +46,11 @@ export const EditBrand = ({ show, setShow, editValue }) => {
             text: "BROWSE LOGO",
         },
         {
-            type: "text",
+            type: "userList",
             name: "clientAssigned",
             placeholder: "Client Assigned",
-            text: t("client_assigned"),
+            title: t("clientAssigned"),
+            users: users
         },
         {
             type: "switch",
@@ -69,7 +72,32 @@ export const EditBrand = ({ show, setShow, editValue }) => {
             initialValues={initialValues}
             validationSchema={validationSchema}
             handleSubmit={async (values) => {
-                await dispatch(editBrand({ data: values }));
+                const fileName = values?.image?.name;
+                const imgData = {};
+                if (fileName) {
+                    const ext = fileName.substr(fileName.lastIndexOf('.'));
+                    const finalName = fileName.substr(0, fileName.indexOf('.'));
+
+                    let base64image = '';
+                    try {
+                        base64image = await convertBase64(values?.image);
+                        imgData.name = finalName;
+                        imgData.extension = `${ext}`;
+                        imgData.data = base64image;
+                    } catch (e) {
+                        base64image = '';
+                    }
+                }
+                const newValues = {
+                    image: Object.keys(imgData).length ? imgData : undefined,
+                    name: values?.name,
+                    companyName: values?.companyName,
+                    logoUrl: values?.logoUrl,
+                    clientAssigned: values?.clientAssigned.toString(),
+                    status: values?.status,
+                    id: values?.id
+                };
+                await dispatch(editBrand({ data: newValues }));
                 setShow(false);
             }}
         />

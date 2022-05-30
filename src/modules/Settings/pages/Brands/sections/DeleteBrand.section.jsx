@@ -24,7 +24,7 @@ export const DeleteBrand = ({ show, setShow, id }) => {
             show={show}
             setShow={setShow}
             customBody={
-                < div className="mb-[32px]" >
+                <div className="mb-[32px]" >
                     Are you sure you wish to delete this brand ? This action is
                     permanent and can not be undone.
                 </div >

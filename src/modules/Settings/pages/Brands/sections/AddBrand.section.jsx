@@ -2,6 +2,7 @@ import { Modal } from 'components';
 import { useDispatch, useSelector } from 'react-redux';
 import { addBrand } from 'store';
 import * as Yup from 'yup';
+import { convertBase64 } from 'lib';
 import { useTranslation } from "react-i18next";
 
 
@@ -19,11 +20,11 @@ const validationSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     companyName: Yup.string().required('Company Name is required'),
     //logo: Yup.mixed().required('Logo is required'),
-    clientAssigned: Yup.string().required('Client Assigned is required'),
+    clientAssigned: Yup.array().required('Client Assigned is required'),
     status: Yup.bool().required('Status is required'),
 });
 
-export const AddBrand = ({ show, setShow }) => {
+export const AddBrand = ({ show, setShow, users }) => {
     const { t } = useTranslation("/Brands/ns");
     const dispatch = useDispatch();
     const fields = [
@@ -42,14 +43,14 @@ export const AddBrand = ({ show, setShow }) => {
         {
             type: "file",
             name: "logoUrl",
-            title: t("Logo"),
-            text: "BROWSE LOGO",
+            title: t("browseLogo"),
         },
         {
-            type: "text",
+            type: "userList",
             name: "clientAssigned",
             placeholder: "Client Assigned",
-            text: t("client_assigned"),
+            title: t("clientAssigned"),
+            users: users
         },
         {
             type: "switch",
@@ -69,7 +70,32 @@ export const AddBrand = ({ show, setShow }) => {
             initialValues={initialValues}
             validationSchema={validationSchema}
             handleSubmit={async (values) => {
-                await dispatch(addBrand(values));
+                const fileName = values?.image?.name;
+                const imgData = {};
+                if (fileName) {
+                    const ext = fileName.substr(fileName.lastIndexOf('.'));
+                    const finalName = fileName.substr(0, fileName.indexOf('.'));
+
+                    let base64image = '';
+                    try {
+                        base64image = await convertBase64(values?.image);
+                        imgData.name = finalName;
+                        imgData.extension = `${ext}`;
+                        imgData.data = base64image;
+                    } catch (e) {
+                        base64image = '';
+                    }
+                }
+                const newValues = {
+                    image: Object.keys(imgData).length ? imgData : undefined,
+                    name: values?.name,
+                    companyName: values?.companyName,
+                    logoUrl: values?.logoUrl,
+                    clientAssigned: values?.clientAssigned.toString(),
+                    status: values?.status,
+                    id: values?.id
+                };
+                await dispatch(addBrand(newValues));
                 setShow(false);
             }}
         />

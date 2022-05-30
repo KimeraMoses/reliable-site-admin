@@ -1,9 +1,9 @@
-import { Button, Switch } from 'antd';
+import { Button } from 'antd';
 import { Table } from 'components';
 import { checkModule } from 'lib/checkModule';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getBrands } from 'store';
+import { getBrands, getUsers } from 'store';
 import { useTranslation } from "react-i18next";
 import {
   AddBrand,
@@ -35,9 +35,9 @@ const Brands = () => {
       key: "logo",
     },
     {
-      title: t('clientAssigned'),
-      key: "clientAssigned",
-      dataIndex: "clientAssigned",
+      title: t('clientAssignedTable'),
+      key: "clientAssignedTable",
+      dataIndex: "clientAssignedTable",
     },
     {
       title: t('status'),
@@ -59,12 +59,14 @@ const Brands = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getBrands());
-  }, []);
+    (async () => {
+      await dispatch(getBrands());
+      await dispatch(getUsers());
+    })();
+  }, [dispatch]);
 
-  const { brands, loading } = useSelector(
-    (state) => state.brands
-  );
+  const { brands, loading } = useSelector((state) => state.brands);
+  const { users } = useSelector((state) => state?.users);
 
   // Check for permissions Start
   const { userModules } = useSelector((state) => state?.modules);
@@ -79,9 +81,12 @@ const Brands = () => {
   useEffect(() => {
     if (brands.length) {
       const dataToSet = brands.map((b) => {
-        return {
-          ...b,
+        return {      
+          ...b,    
           key: b?.id,
+          clientAssignedTable: `${b?.clientAssigned?.split(",")?.length} Clients Assigned`,
+          //clientAssigned: b?.clientAssigned,
+          
         };
       });
       setData(dataToSet);
@@ -89,12 +94,13 @@ const Brands = () => {
   }, [brands]);
 
   return (
-    <div className="m-[40px] p-[40px] bg-[#1E1E2D] rounded-[8px]">
-      <AddBrand show={addModalShow} setShow={setAddModalShow} />
+    <div className="brands-table m-[40px] p-[40px] bg-[#1E1E2D] rounded-[8px]">
+      <AddBrand show={addModalShow} setShow={setAddModalShow} users={users} />
       <EditBrand
         show={editModalShow}
         setShow={setEditModalShow}
         editValue={editValue}
+        users={users}
       />
       <DeleteBrand
         show={deleteModalShow}

@@ -38,10 +38,10 @@ export const addBrand = (data) => {
             const { url, config } = addBrandConfig();
             const res = await axios.post(url, data, config);
             if (res.status === 200) {
-                const { url, config } = getBrandsConfig();
-                const res = await axios.get(url, config);
-                dispatch(getBrands(res?.data?.data));
-                toast.success('Brands Added Successfully');
+                const { url, defaultData, config } = getBrandsConfig();
+                const response = await axios.post(url, defaultData, config);
+                dispatch(getBrands(response?.data?.data));
+                toast.success('Brand Added Successfully');
             }
         } catch (e) {
             toast.error(getError(e));
@@ -58,7 +58,6 @@ export const editBrand = ({ data }) => {
         try {
             const { url, config } = editBrandConfig({ id: data?.id });
             const response = await axios.put(url, data, config);
-            console.log(response);
             if (response.status === 200) {
                 const { url, defaultData, config } = getBrandsConfig();
                 const response = await axios.post(url, defaultData, config);

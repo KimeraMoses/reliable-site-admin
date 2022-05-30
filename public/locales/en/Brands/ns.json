@@ -5,12 +5,14 @@
   "companyName": "Company Name",
   "createDate": "Created Date",
   "logo": "Logo",
-  "clientAssigned": "Client Assigned",
+  "clientAssigned": "Clients",
   "status": "Status",
   "actions": "Actions",
   "view": "View",
   "edit": "Edit",
   "addBrand": "Add Brand",
   "editBrand": "Edit Brand",
-  "deleteBrand": "Delete Brand"
+  "deleteBrand": "Delete Brand",
+  "browseLogo": "BROWSE LOGO",
+  "clientAssignedTable":"Clients Assigned"
 }
