@@ -67,7 +67,8 @@ export function Modal({
                             disableDate,
                             disableTime,
                             disabled,
-                            users
+                            users,
+                            subText
                           },
                           index
                         ) => {
@@ -240,7 +241,7 @@ export function Modal({
                                                   fontSize: "10px",
                                                 }}
                                               >
-                                                {title}
+                                                {subText}
                                               </div>
                                               <div>
                                                 <img
@@ -286,7 +287,6 @@ export function Modal({
                                       }) => {
                                         return (
                                           <div className="w-full">
-                                            { console.log(values)}
                                             <div className="bg_col">
                                               <Checkbox.Group
                                                 defaultValue={values[name]}
@@ -305,6 +305,11 @@ export function Modal({
                                                 ))}
                                               </Checkbox.Group>
                                             </div>
+                                            {meta.touched && meta.error && (
+                                              <div className="error mt-[8px]">
+                                                {meta.error}
+                                              </div>
+                                            )}
                                           </div>
                                         );
                                       }}

@@ -1,56 +1,27 @@
 import { Modal } from 'components';
 import { useDispatch, useSelector } from 'react-redux';
-import { addBrand } from 'store';
+import { editBrand } from 'store';
 import * as Yup from 'yup';
 import { convertBase64 } from 'lib';
 import { useTranslation } from "react-i18next";
 
 
-
-const initialValues = {
-    name: '',
-    companyName: '',
-    logoUrl: '',
-    clientAssigned: '',
-    status: true,
-};
-
-
 const validationSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    companyName: Yup.string().required('Company Name is required'),
-    //logo: Yup.mixed().required('Logo is required'),
     clientAssigned: Yup.array().required('Client Assigned is required'),
-    status: Yup.bool().required('Status is required'),
 });
 
-export const AddBrand = ({ show, setShow, users }) => {
+export const ClientsAssigned = ({ show, setShow, editValue, users }) => {
+    const initialValues = {
+        id: editValue.id,
+        name: editValue.name,
+        companyName: editValue.companyName,
+        clientAssigned: editValue?.clientAssigned?.split(","),
+        status: editValue.status,
+    };
+
     const { t } = useTranslation("/Brands/ns");
     const dispatch = useDispatch();
     const fields = [
-        {
-            type: "input",
-            name: "name",
-            placeholder: "Brand Name",
-            title: t("Name"),
-        },
-        {
-            type: "input",
-            name: "companyName",
-            placeholder: "Mind2Matter",
-            title: t("Company"),
-        },
-        {
-            type: "file",
-            name: "logoUrl",
-            title: t("logo"),
-            subText: t("browseLogo")
-        },
-        {
-            type: "switch",
-            name: "status",
-            title: t("status"),
-        },
         {
             type: "userList",
             name: "clientAssigned",
@@ -59,15 +30,17 @@ export const AddBrand = ({ show, setShow, users }) => {
             users: users
         }
     ];
+
     const { loading } = useSelector((state) => state?.paymentGateways);
+
     return (
         <Modal
-            heading={t('addNewBrand')}
-            submitText={t('addBrand')}
+            heading={t('assignedClients')}
+            submitText={t('saveChanges')}
             show={show}
-            loading={loading}
             setShow={setShow}
             fields={fields}
+            loading={loading}
             initialValues={initialValues}
             validationSchema={validationSchema}
             handleSubmit={async (values) => {
@@ -96,7 +69,7 @@ export const AddBrand = ({ show, setShow, users }) => {
                     status: values?.status,
                     id: values?.id
                 };
-                await dispatch(addBrand(newValues));
+                await dispatch(editBrand({ data: newValues }));
                 setShow(false);
             }}
         />

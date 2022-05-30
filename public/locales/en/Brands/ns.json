@@ -2,7 +2,7 @@
   "addNewBrand": "Add New Brand",
   "searchText": "Search Here",
   "name": "Name",
-  "companyName": "Company Name",
+  "companyName": "Company",
   "createDate": "Created Date",
   "logo": "Logo",
   "clientAssigned": "Clients",
@@ -14,5 +14,7 @@
   "editBrand": "Edit Brand",
   "deleteBrand": "Delete Brand",
   "browseLogo": "BROWSE LOGO",
-  "clientAssignedTable":"Clients Assigned"
+  "clientAssignedTable": "Clients Assigned",
+  "assignedClients": "Assigned Clients",
+  "saveChanges":"Save Changes"
 }

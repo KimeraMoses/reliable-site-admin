@@ -42,8 +42,13 @@ export const EditBrand = ({ show, setShow, editValue, users }) => {
         {
             type: "file",
             name: "logoUrl",
-            title: t("Logo"),
-            text: "BROWSE LOGO",
+            title: t("logo"),
+            subText: t("browseLogo")
+        },
+        {
+            type: "switch",
+            name: "status",
+            title: t("status"),
         },
         {
             type: "userList",
@@ -51,12 +56,7 @@ export const EditBrand = ({ show, setShow, editValue, users }) => {
             placeholder: "Client Assigned",
             title: t("clientAssigned"),
             users: users
-        },
-        {
-            type: "switch",
-            name: "status",
-            title: t("status"),
-        },
+        }
     ];
 
     const { loading } = useSelector((state) => state?.paymentGateways);
@@ -77,7 +77,6 @@ export const EditBrand = ({ show, setShow, editValue, users }) => {
                 if (fileName) {
                     const ext = fileName.substr(fileName.lastIndexOf('.'));
                     const finalName = fileName.substr(0, fileName.indexOf('.'));
-
                     let base64image = '';
                     try {
                         base64image = await convertBase64(values?.image);

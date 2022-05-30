@@ -9,15 +9,40 @@ import {
   AddBrand,
   DeleteBrand,
   EditBrand,
+  ClientsAssigned,
 } from './sections';
+import { NavLink } from 'react-router-dom';
 
 const Brands = () => {
   const [addModalShow, setAddModalShow] = useState(false);
   const [editValue, setEditValue] = useState(false);
+  const [clientsValue, setClientsValue] = useState(false);
   const [editModalShow, setEditModalShow] = useState(false);
+  const [clientsModalShow, setClientsModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
   const [deleteID, setDeleteID] = useState(null);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    (async () => {
+      await dispatch(getBrands());
+      await dispatch(getUsers());
+    })();
+  }, [dispatch]);
+
+  const { brands, loading } = useSelector((state) => state.brands);
+  const { users } = useSelector((state) => state?.users);
+
   const { t } = useTranslation("/Brands/ns");
+
+  const handleClientsAssigned = (clientAssigned) => {
+    let a = brands?.filter(function (el) { return el.clientAssigned == clientAssigned });
+    console.log(brands);
+    //setClientsValue(clientAssigned);
+    // setClientsModalShow(true);
+  }
+
   const columns = [
     {
       title: t('name'),
@@ -36,8 +61,23 @@ const Brands = () => {
     },
     {
       title: t('clientAssignedTable'),
-      key: "clientAssignedTable",
-      dataIndex: "clientAssignedTable",
+      key: "clientAssigned",
+      dataIndex: "clientAssigned",
+      onCell: (record, rowIndex) => {
+        return {
+          onClick: (ev) => {
+            setEditValue(record);
+            setClientsModalShow(true);
+          },
+        };
+      },
+      render: (clientAssigned) => {
+        return (
+          <NavLink to={"#"}>
+            {`${clientAssigned?.split(",")?.length} Clients Assigned`}
+          </NavLink>
+        )
+      }
     },
     {
       title: t('status'),
@@ -56,17 +96,6 @@ const Brands = () => {
     },
   ];
 
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    (async () => {
-      await dispatch(getBrands());
-      await dispatch(getUsers());
-    })();
-  }, [dispatch]);
-
-  const { brands, loading } = useSelector((state) => state.brands);
-  const { users } = useSelector((state) => state?.users);
 
   // Check for permissions Start
   const { userModules } = useSelector((state) => state?.modules);
@@ -81,12 +110,9 @@ const Brands = () => {
   useEffect(() => {
     if (brands.length) {
       const dataToSet = brands.map((b) => {
-        return {      
-          ...b,    
-          key: b?.id,
-          clientAssignedTable: `${b?.clientAssigned?.split(",")?.length} Clients Assigned`,
-          //clientAssigned: b?.clientAssigned,
-          
+        return {
+          ...b,
+          key: b?.id
         };
       });
       setData(dataToSet);
@@ -99,6 +125,12 @@ const Brands = () => {
       <EditBrand
         show={editModalShow}
         setShow={setEditModalShow}
+        editValue={editValue}
+        users={users}
+      />
+      <ClientsAssigned
+        show={clientsModalShow}
+        setShow={setClientsModalShow}
         editValue={editValue}
         users={users}
       />
