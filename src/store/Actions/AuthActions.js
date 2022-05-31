@@ -124,6 +124,7 @@ export const getUserProfile = (token) => {
         headers: new Headers({
           'Content-type': 'application/json',
           'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
+          'admin-api-key': process.env.REACT_APP_ADMIN_APIKEY,
           tenant: 'admin',
           Authorization: `Bearer ${token}`,
         }),

@@ -1,7 +1,7 @@
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Button, ImageUpload, Input } from 'components';
-import { convertBase64, createServerImage, deepEqual } from 'lib';
+import { createServerImage, deepEqual } from 'lib';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUserProfile } from 'store';
 
