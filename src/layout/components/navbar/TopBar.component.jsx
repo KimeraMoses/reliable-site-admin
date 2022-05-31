@@ -7,7 +7,6 @@ import { Dropdown } from 'antd';
 
 export function TopBar({ hide = false, hideSide, toggleSide, innerSubLinks }) {
   const [active, setActive] = useState(null);
-
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -21,7 +20,6 @@ export function TopBar({ hide = false, hideSide, toggleSide, innerSubLinks }) {
     });
     setActive(activeLink[0]);
   }, [pathname]);
-
   return (
     <div className="h-20 w-full bg-custom-secondary flex items-center">
       <Logo hide={hide} hideSide={hideSide} toggleSide={toggleSide} />
@@ -32,7 +30,13 @@ export function TopBar({ hide = false, hideSide, toggleSide, innerSubLinks }) {
         style={{ width: hideSide ? 'calc(100% - 84px)' : 'calc(100% - 300px)' }}
       >
         {active?.subLinks?.length ? (
-          <div className="flex items-center gap-[12px] ml-[40px] overflow-x-scroll xxl:overflow-x-hidden">
+          <div
+            className={`flex items-center gap-[12px] ml-[40px] ${
+              active?.subLinks?.length > 5
+                ? 'overflow-x-scroll xxl:overflow-x-hidden'
+                : ''
+            }`}
+          >
             {active?.subLinks.map((link) => {
               const innerLinks = (
                 <div className="bg-[#1e1e2d] flex flex-col">

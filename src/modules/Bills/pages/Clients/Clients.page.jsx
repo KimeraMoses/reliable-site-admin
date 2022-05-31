@@ -5,7 +5,7 @@ const Clients = () => {
   return (
     <Routes>
       <Route path="list/show" element={<ClientList />} />
-      <Route path="list/show/:id" element={<ClientDetails />} />
+      <Route path="list/details/:id" element={<ClientDetails />} />
     </Routes>
   );
 };
