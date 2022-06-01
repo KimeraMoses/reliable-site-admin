@@ -1,6 +1,6 @@
 import { Button } from 'components';
 import UserName from 'layout/components/navbar/UserProfileCard/UserName';
-import { useState } from 'react';
+// import { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 // const user = {
@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 // const isLoggedIn = true;
 
 export const Navigation = ({ items, active }) => {
-  const [showName, setShowName] = useState(true);
+  // const [showName, setShowName] = useState(true);
   const { user, isLoggedIn } = useSelector((state) => state.auth);
   return (
     <>
@@ -26,23 +26,20 @@ export const Navigation = ({ items, active }) => {
               <div className="flex gap-[32px]">
                 <div
                   className={`w-[130px] h-[130px] flex items-center justify-center text-[#fff] text-[40px] ${
-                    user.imageUrl && !showName
+                    user?.base64Image
                       ? ''
                       : 'border-[#3699FF] border-[2px] rounded-[8px]'
                   }`}
                 >
-                  {user &&
-                  user.imageUrl &&
-                  user.imageUrl.length > 0 &&
-                  !showName ? (
+                  {user?.base64Image ? (
                     <img
-                      src={user && user.imageUrl}
+                      src={user && user.base64Image}
                       alt={user && user.fullName}
                       className="h-full w-full rounded-[5px] object-cover text-[8px]"
-                      onLoad={() => setShowName(false)}
-                      onError={() => {
-                        setShowName(true);
-                      }}
+                      // onLoad={() => setShowName(false)}
+                      // onError={() => {
+                      //   setShowName(true);
+                      // }}
                     />
                   ) : (
                     <UserName isLoggedIn={isLoggedIn} user={user} />

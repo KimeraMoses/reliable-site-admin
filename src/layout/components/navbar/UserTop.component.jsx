@@ -9,7 +9,6 @@ import './UserTop.css';
 
 function UserTop() {
   const [dropdown, setDropdown] = useState(false);
-  const [showName, setShowName] = useState(false);
   const { user, isLoggedIn } = useSelector((state) => state.auth);
   const lessThanDesktop = useMediaQuery({
     query: '(max-width: 900px)',
@@ -42,13 +41,11 @@ function UserTop() {
       ref={dropDownRef}
     >
       <div className="h-12 w-12 rounded-lg border-2 border-[#3699FF] p-1 userName">
-        {user && user.imageUrl && user.imageUrl.length > 0 && !showName ? (
+        {user?.base64Image ? (
           <img
-            src={user && user.imageUrl}
-            alt={user && user.userName}
+            src={user?.base64Image}
+            alt={user.userName}
             className="h-full w-full"
-            onLoad={() => setShowName(false)}
-            onError={() => setShowName(true)}
           />
         ) : (
           <>{user && <UserName isLoggedIn={isLoggedIn} user={user} />}</>
@@ -71,15 +68,10 @@ function UserTop() {
             <div className="flex items-start justify-between">
               {/* Image + Status */}
               <div className="h-12 w-12 rounded-lg border-2 border-[#3699FF] p-1 userName">
-                {user &&
-                user.imageUrl &&
-                user.imageUrl.length > 0 &&
-                !showName ? (
+                {user?.base64Image ? (
                   <img
-                    src={user && user.imageUrl}
-                    alt={user && user.userName}
-                    onLoad={() => setShowName(false)}
-                    onError={() => setShowName(true)}
+                    src={user?.base64Image}
+                    alt={user.userName}
                     className="h-full w-full"
                   />
                 ) : (

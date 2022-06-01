@@ -23,6 +23,10 @@ export const updateUserProfileByIDConfig = (id) => ({
   url: `/api/identity/profile/${id}`,
   config: identityConfig('Update'),
 });
+export const getUserProfileByIDConfig = (id) => ({
+  url: `/api/identity/profile/${id}`,
+  config: identityConfig('View'),
+});
 export const changePasswordConfig = () => ({
   url: `/api/identity/change-password`,
   config: identityConfig('Update'),
