@@ -32,6 +32,7 @@ export const Table = ({
   additionalBtns,
   hideActions,
   hideHeaders,
+  customAdditionalBody,
 }) => {
   const [dataSource, setDataSource] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
@@ -155,6 +156,8 @@ export const Table = ({
                     </Button>
                   );
                 })
+              ) : customAdditionalBody ? (
+                <>{customAdditionalBody}</>
               ) : (
                 <></>
               )}

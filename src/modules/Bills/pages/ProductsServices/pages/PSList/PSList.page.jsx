@@ -1,13 +1,16 @@
 import { Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { Table } from 'components';
-import { useState } from 'react';
+import { Input, Table } from 'components';
+// import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { checkModule } from 'lib/checkModule';
+import { useEffect } from 'react';
+import { getProducts } from 'store';
+import { Form, Formik } from 'formik';
 
 export const PSList = () => {
-  const [showAdd, setShowAdd] = useState(false);
+  // const [showAdd, setShowAdd] = useState(false);
   const navigate = useNavigate();
 
   const { t } = useTranslation('/Bills/ns');
@@ -18,87 +21,138 @@ export const PSList = () => {
   });
   const columns = [
     {
-      title: 'Client Name',
+      title: 'ID',
+      dataIndex: 'id',
+      key: 'id',
+    },
+    {
+      title: 'Name',
       dataIndex: 'name',
       key: 'name',
     },
     {
-      title: 'Email Address',
-      dataIndex: 'email',
-      key: 'email',
-    },
-    {
-      title: 'Company Name',
-      dataIndex: 'companyName',
-      key: 'companyName',
-    },
-    {
-      title: 'Payment Method',
-      dataIndex: 'paymentMethod',
-      key: 'paymentMethod',
-      render: (text) => {
+      title: 'Summary',
+      dataIndex: 'summary',
+      key: 'summary',
+      render: (text, record) => {
         return (
-          <div className="flex items-center gap-[12px]">
+          <div className="flex items-center gap-[16px]">
             <img
-              src="https://i.ibb.co/FVMH8xR/images.png"
-              alt="card"
-              className="w-[32px] h-[20px] object-cover rounded-[4px]"
+              className="w-[100px] h-[98px] rounded-[8px] object-contain bg-[yellow]"
+              src={record?.base64Image}
+              alt={record?.name}
             />
-            <p className="text-white">{text}</p>
+            <p className="text-white text-[14px]">{record?.description}</p>
           </div>
         );
       },
+      width: '50%',
     },
     {
-      title: 'Created Date',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
+      title: 'Items',
+      dataIndex: 'productLineItems',
+      key: 'productLineItems',
+      render: (lineItems) => {
+        return (
+          <div className="flex flex-col gap-[16px]">
+            {lineItems?.map((item) => (
+              <div className="flex flex-col gap-[4px]">
+                <div className="text-white text-[14px]">{item?.name}</div>
+                <div className="text-[#474761] text-[12px]">${item?.price}</div>
+              </div>
+            ))}
+          </div>
+        );
+      },
+      width: '20%',
+    },
+    {
+      title: 'Total',
+      dataIndex: 'total',
+      key: 'total',
+      render: (text, record) => {
+        let sum = 0;
+        record?.productLineItems?.forEach((item) => {
+          sum += item?.price;
+        });
+        return <>${sum}</>;
+      },
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      render: (status) => (
+        <div
+          className={`${
+            status === 1
+              ? 'bg-[#1C3238] text-[#0BB783]'
+              : 'bg-[#3A2434] text-[#F64E60]'
+          } px-[8px] py-[4px] w-[fit-content] rounded-[4px]`}
+        >
+          {status === 1 ? 'COMPLETED' : 'CANCELLED'}
+        </div>
+      ),
     },
   ];
 
-  const data = [];
-  for (let i = 0; i <= 40; i++) {
-    data.push({
-      key: i,
-      id: i,
-      name: `Client ${i}`,
-      email: `Paul${i}@Fakemail.com`,
-      companyName: `Mind2Matter ${i}`,
-      paymentMethod: `**** 9783`,
-      createdAt: `05/02/2022`,
-    });
-  }
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [dispatch]);
+
+  const { products, loading } = useSelector((state) => state?.products);
 
   return (
     <div className="p-[40px]">
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
-        <Table
-          columns={columns}
-          data={data}
-          // loading={loading}
-          fieldToFilter="name"
-          btnData={{
-            text: 'Add Client',
-            onClick: () => setShowAdd(true),
-            customClass: 'px-[82px]',
-          }}
-          editAction={(record) => (
-            <>
-              <Button
-                onClick={() => {
-                  navigate(
-                    '/admin/dashboard/billing/products-services/list/details/123'
-                  );
-                }}
-              >
-                View
-              </Button>
-              <Button onClick={() => {}}>Login As Client</Button>
-            </>
+        <Formik initialValues={{ selectFilter: 'name' }}>
+          {({ values }) => (
+            <Form>
+              <Table
+                columns={columns}
+                data={products}
+                loading={loading}
+                fieldToFilter={values?.selectFilter}
+                editAction={(record) => (
+                  <Button
+                    onClick={() => {
+                      navigate(
+                        `/admin/dashboard/billing/products-services/list/details/${record?.id}`,
+                        {
+                          state: { product: record },
+                        }
+                      );
+                    }}
+                  >
+                    View
+                  </Button>
+                )}
+                deleteAction={(record) => (
+                  <Button onClick={() => {}}>Delete</Button>
+                )}
+                permissions={permissions}
+                customAdditionalBody={
+                  <div className="min-w-[250px] flex items-center gap-[10px]">
+                    <div className="text-white text-[14px] w-[100px]">
+                      Filter By:
+                    </div>
+                    <Input
+                      name="selectFilter"
+                      type="select"
+                      options={[
+                        { value: 'name', label: 'Name' },
+                        { value: 'total', label: 'Total' },
+                        { value: 'status', label: 'Status' },
+                      ]}
+                    />
+                  </div>
+                }
+                t={t}
+              />
+            </Form>
           )}
-          permissions={permissions}
-          t={t}
-        />
+        </Formik>
       </div>
     </div>
   );

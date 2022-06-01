@@ -16,3 +16,5 @@ export * from './paymentGateways';
 export * from './smtp';
 // Email Templates
 export * from './emailTemplates';
+// Products
+export * from './products';

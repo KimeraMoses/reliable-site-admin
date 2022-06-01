@@ -18,10 +18,14 @@ import {
 // import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Spin } from 'antd';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 export const PSDetails = () => {
   // const { t } = useTranslation('/Bills/ns');
+  const location = useLocation();
+  const product = location?.state?.product;
+
+  console.log(product);
 
   const [active, setActive] = useState('ACCOUNT STATEMENT');
 

@@ -33,3 +33,5 @@ export * from './emailTemplates';
 export * from './maintenanceSettings';
 // Support Settings
 export * from './supportSettings';
+// Products
+export * from './products';
