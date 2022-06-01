@@ -11,6 +11,7 @@ export function DashboardLayout({ children, hide }) {
   const [active, setActive] = useState('');
   const [activeSub, setActiveSub] = useState('');
   const [activeInnerSub, setActiveInnerSub] = useState('');
+  const [activeDeepInnerSub, setActiveDeepInnerSub] = useState('');
   const user = useSelector((state) => state.auth.user);
   const { pathname } = useLocation();
   const dispatch = useDispatch();
@@ -47,19 +48,24 @@ export function DashboardLayout({ children, hide }) {
           }
         );
         setActiveInnerSub(activeInnerSubLink[0]);
+        // Set Deep Inner Sub Link
+        if (
+          activeInnerSubLink?.length &&
+          activeInnerSubLink[0]?.subLinks?.length
+        ) {
+          const activeDeepInnerSubLink =
+            activeInnerSubLink[0]?.subLinks?.filter(({ path }) => {
+              const trimmedPathname = path.substring(0, path.lastIndexOf('/'));
+              return pathname.includes(trimmedPathname);
+            });
+          setActiveDeepInnerSub(activeDeepInnerSubLink[0]);
+        } else {
+          setActiveDeepInnerSub('');
+        }
       } else {
         setActiveInnerSub('');
       }
     }
-
-    // Set Inner Sublink
-    // if (activeLink[0]?.subLinks?.length) {
-    //   const activeSubLink = activeLink[0].subLinks.filter((subItem) => {
-    //     const { path } = subItem;
-    //     return pathname.includes(path);
-    //   });
-    //   setActiveSub(activeSubLink[0]);
-    // }
   }, [pathname]);
 
   useEffect(() => {
@@ -102,8 +108,24 @@ export function DashboardLayout({ children, hide }) {
                   >{`${activeSub?.name} ${
                     activeInnerSub?.name ? '-' : ''
                   } `}</Link>
-                  {activeInnerSub?.name ? (
-                    <span>{`${activeInnerSub?.name}`}</span>
+
+                  {activeInnerSub?.name && !activeDeepInnerSub ? (
+                    <span>{`${activeInnerSub?.name} ${
+                      activeDeepInnerSub ? '-' : ''
+                    } `}</span>
+                  ) : activeInnerSub?.name && activeDeepInnerSub ? (
+                    <Link
+                      to={activeInnerSub?.path}
+                      className={activeInnerSub?.name ? 'text-[#92928f]' : ''}
+                    >{`${activeInnerSub?.name} ${
+                      activeInnerSub?.name ? '-' : ''
+                    } `}</Link>
+                  ) : (
+                    ''
+                  )}
+
+                  {activeDeepInnerSub?.name ? (
+                    <span>{`${activeDeepInnerSub?.name}`}</span>
                   ) : (
                     ''
                   )}

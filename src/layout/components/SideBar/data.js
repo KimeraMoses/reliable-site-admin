@@ -47,6 +47,27 @@ export const sidebarData = [
           },
         ],
       },
+      {
+        name: 'Products & Services',
+        path: '/admin/dashboard/billing/products-services',
+        showDropdown: true,
+        subLinks: [
+          {
+            name: 'Products & Services List',
+            path: '/admin/dashboard/billing/products-services/list/show',
+            subLinks: [
+              {
+                name: 'Product & Service Details',
+                path: '/admin/dashboard/billing/products-services/list/details/:id',
+              },
+            ],
+          },
+          {
+            name: 'Cancellation Requests',
+            path: '/admin/dashboard/billing/products-services/cancellation/requests',
+          },
+        ],
+      },
     ],
   },
   {

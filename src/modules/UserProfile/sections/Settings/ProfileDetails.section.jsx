@@ -1,7 +1,7 @@
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { Button, ImageUpload, Input } from 'components';
-import { convertBase64, deepEqual } from 'lib';
+import { createServerImage, deepEqual } from 'lib';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUserProfile } from 'store';
 
@@ -39,24 +39,9 @@ export const ProfileDetails = () => {
           validationSchema={validationSchema}
           enableReinitialize
           onSubmit={async (values) => {
-            const fileName = values?.image?.name;
-            const imgData = {};
-            if (fileName) {
-              const ext = fileName.substr(fileName.lastIndexOf('.'));
-              const finalName = fileName.substr(0, fileName.indexOf('.'));
-
-              let base64image = '';
-              try {
-                base64image = await convertBase64(values?.image);
-                imgData.name = finalName;
-                imgData.extension = `${ext}`;
-                imgData.data = base64image;
-              } catch (e) {
-                base64image = '';
-              }
-            }
+            const img = await createServerImage(values?.image);
             const newValues = {
-              image: Object.keys(imgData).length ? imgData : undefined,
+              image: Object.keys(img).length ? img : undefined,
               fullName: values?.fullName,
               status: values?.status,
               ipAddress: values?.ipAddress,

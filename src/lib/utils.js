@@ -100,6 +100,26 @@ export const convertBase64 = (file) => {
   });
 };
 
+// Create Image Data from Input type="image"
+export const createServerImage = async (file) => {
+  const fileName = file?.name;
+  const imgData = {};
+  if (fileName) {
+    const ext = fileName.substr(fileName.lastIndexOf('.'));
+    const finalName = fileName.substr(0, fileName.indexOf('.'));
+    let base64image = '';
+    try {
+      base64image = await convertBase64(file);
+      imgData.name = finalName;
+      imgData.extension = `${ext}`;
+      imgData.data = base64image;
+      return imgData;
+    } catch (e) {
+      return undefined;
+    }
+  }
+};
+
 // Add Server URL Properly
 export const addServerUrl = (
   url = '{server_url}/Files/Images/ApplicationUser/Usama.jpeg.jpeg'

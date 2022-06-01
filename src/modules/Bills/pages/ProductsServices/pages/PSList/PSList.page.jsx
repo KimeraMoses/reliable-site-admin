@@ -1,5 +1,4 @@
 import { Button } from 'antd';
-import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { Table } from 'components';
 import { useState } from 'react';
@@ -7,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { checkModule } from 'lib/checkModule';
 
-export const ClientList = () => {
+export const PSList = () => {
   const [showAdd, setShowAdd] = useState(false);
   const navigate = useNavigate();
 
@@ -87,7 +86,9 @@ export const ClientList = () => {
             <>
               <Button
                 onClick={() => {
-                  navigate('/admin/dashboard/billing/clients/list/details/123');
+                  navigate(
+                    '/admin/dashboard/billing/products-services/list/details/123'
+                  );
                 }}
               >
                 View

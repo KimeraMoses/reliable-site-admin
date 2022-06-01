@@ -1,5 +1,6 @@
 import { Field } from 'formik';
 import { useRef } from 'react';
+import { toast } from 'react-toastify';
 import './style.scss';
 
 export const ImageUpload = ({ name }) => {
@@ -17,8 +18,13 @@ export const ImageUpload = ({ name }) => {
             onChange={(e) => {
               const [file] = e.target.files;
               if (file) {
-                setFieldValue(name, e.target.files[0]);
-                setFieldValue('preview', URL.createObjectURL(file));
+                const fileSize = (file.size / 1024 / 1024).toFixed(4);
+                if (fileSize <= 2) {
+                  setFieldValue(name, e.target.files[0]);
+                  setFieldValue('preview', URL.createObjectURL(file));
+                } else {
+                  toast.error('Please select image below 2MB.');
+                }
               }
             }}
           />
@@ -27,7 +33,7 @@ export const ImageUpload = ({ name }) => {
               <div className="text-[#92928F] text-[14px]">
                 {values?.[name]?.name
                   ? values?.[name]?.name
-                  : 'Select Image...'}
+                  : 'Select Image (Max Size 2MB)'}
               </div>
               <div
                 className="text-[#3699FF] text-[14px] cursor-pointer"
