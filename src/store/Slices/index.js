@@ -1,5 +1,6 @@
 export {
   getUsers as getUsersDispatch,
+  getClients as getClientsDispatch,
   setUserLoading,
   getUser,
   getUserModule,

@@ -3,7 +3,7 @@ import { Table } from 'components';
 import { checkModule } from 'lib/checkModule';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getDepartments } from 'store';
+import { getDepartments, getUsers } from 'store';
 import { useTranslation } from "react-i18next";
 import {
     AddDepartment,
@@ -23,10 +23,12 @@ const Brands = () => {
     useEffect(() => {
         (async () => {
             await dispatch(getDepartments());
+            await dispatch(getUsers());
         })();
     }, [dispatch]);
 
     const { departments, loading } = useSelector((state) => state.departments);
+    const { users } = useSelector((state) => state?.users);
 
     const { t } = useTranslation("/Departments/ns");
 
@@ -45,10 +47,16 @@ const Brands = () => {
             title: t('status'),
             key: "deptStatus",
             dataIndex: "deptStatus",
-            render: (deptStatus) =>
-                <div className="bg-[#1C3238] px-[8px] py-[4px] text-[#0BB783] w-[fit-content] rounded-[4px]">
-                    {deptStatus}
-                </div>
+            render: (status) =>
+                status ? (
+                    <div className="bg-[#1C3238] px-[8px] py-[4px] text-[#0BB783] w-[fit-content] rounded-[4px]">
+                        {"ENABLED"}
+                    </div>
+                ) : (
+                    <div className="bg-[#1C3238] px-[8px] py-[4px] text-[#F64E60] w-[fit-content] rounded-[4px]">
+                        {"DISABLED"}
+                    </div>
+                ),
         },
     ];
 
@@ -77,11 +85,12 @@ const Brands = () => {
 
     return (
         <div className="m-[40px] p-[40px] bg-[#1E1E2D] rounded-[8px]">
-            <AddDepartment show={addModalShow} setShow={setAddModalShow} />
+            <AddDepartment show={addModalShow} setShow={setAddModalShow} users={users} />
             <EditDepartment
                 show={editModalShow}
                 setShow={setEditModalShow}
                 editValue={editValue}
+                users={users}
             />
             <DeleteDepartment
                 show={deleteModalShow}

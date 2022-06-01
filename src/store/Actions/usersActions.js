@@ -2,6 +2,7 @@ import {
   getError,
   axios,
   getUsersConfig,
+  getClientsConfig,
   getUserConfig,
   updateUserModule,
   addUserModule,
@@ -17,11 +18,12 @@ import {
   getUser,
   getUserModule,
   getUsersDispatch,
+  getClientsDispatch,
   setUserLoading,
 } from 'store/Slices';
 import { getUserSettingsSlice } from 'store/Slices/usersSlice';
 
-// Get All Users
+// Get All Admin Users
 export const getUsers = () => {
   return async (dispatch) => {
     dispatch(setUserLoading(true));
@@ -29,6 +31,22 @@ export const getUsers = () => {
       const { url, config } = getUsersConfig();
       const res = await axios.get(url, config);
       dispatch(getUsersDispatch(res?.data?.data));
+      dispatch(setUserLoading(false));
+    } catch (e) {
+      toast.error(getError(e));
+      dispatch(setUserLoading(false));
+    }
+  };
+};
+
+// Get All Client Users
+export const getClients = () => {
+  return async (dispatch) => {
+    dispatch(setUserLoading(true));
+    try {
+      const { url, config } = getClientsConfig();
+      const res = await axios.get(url, config);
+      dispatch(getClientsDispatch(res?.data?.data));
       dispatch(setUserLoading(false));
     } catch (e) {
       toast.error(getError(e));

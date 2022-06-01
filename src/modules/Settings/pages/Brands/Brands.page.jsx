@@ -3,7 +3,7 @@ import { Table } from 'components';
 import { checkModule } from 'lib/checkModule';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getBrands, getUsers } from 'store';
+import { getBrands, getClients } from 'store';
 import { useTranslation } from "react-i18next";
 import {
   AddBrand,
@@ -26,12 +26,12 @@ const Brands = () => {
   useEffect(() => {
     (async () => {
       await dispatch(getBrands());
-      await dispatch(getUsers());
+      await dispatch(getClients());
     })();
   }, [dispatch]);
 
   const { brands, loading } = useSelector((state) => state.brands);
-  const { users } = useSelector((state) => state?.users);
+  const { clients } = useSelector((state) => state?.users);
 
   const { t } = useTranslation("/Brands/ns");
 
@@ -130,18 +130,18 @@ const Brands = () => {
 
   return (
     <div className="brands-table m-[40px] p-[40px] bg-[#1E1E2D] rounded-[8px]">
-      <AddBrand show={addModalShow} setShow={setAddModalShow} users={users} />
+      <AddBrand show={addModalShow} setShow={setAddModalShow} users={clients} />
       <EditBrand
         show={editModalShow}
         setShow={setEditModalShow}
         editValue={editValue}
-        users={users}
+        users={clients}
       />
       <ClientsAssigned
         show={clientsModalShow}
         setShow={setClientsModalShow}
         editValue={editValue}
-        users={users}
+        users={clients}
       />
       <DeleteBrand
         show={deleteModalShow}

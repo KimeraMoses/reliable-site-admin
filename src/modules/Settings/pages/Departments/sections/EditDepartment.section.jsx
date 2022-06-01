@@ -11,7 +11,7 @@ const validationSchema = Yup.object().shape({
     deptStatus: Yup.string().required('Status is required'),
 });
 
-export const EditDepartment = ({ show, setShow, editValue }) => {
+export const EditDepartment = ({ show, setShow, editValue, users }) => {
     const initialValues = {
         id: editValue.id,
         deptNumber: editValue.deptNumber,
@@ -35,14 +35,16 @@ export const EditDepartment = ({ show, setShow, editValue }) => {
             title: t("Name"),
         },
         {
-            type: "select",
+            type: "switch",
             name: "deptStatus",
             title: t("status"),
-            options: [
-                { label: t("departmentStatus"), value: '' },
-                { label: 'Publish', value: 'Publish' },
-                { label: 'Draft', value: 'Draft' }
-            ],
+        },
+        {
+            type: "userList",
+            name: "adminAssigned",
+            placeholder: "Admin Assigned",
+            title: t("adminAssigned"),
+            users: users
         },
     ];
 

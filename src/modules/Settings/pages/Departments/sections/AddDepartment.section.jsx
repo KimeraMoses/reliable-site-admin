@@ -35,14 +35,16 @@ export const AddDepartment = ({ show, setShow, users }) => {
             title: t("Name"),
         },
         {
-            type: "select",
+            type: "switch",
             name: "deptStatus",
             title: t("status"),
-            options: [
-                { label: t("departmentStatus"), value: '' },
-                { label: 'Publish', value: 'Publish' },
-                { label: 'Draft', value: 'Draft' }
-            ],
+        },
+        {
+            type: "userList",
+            name: "adminAssigned",
+            placeholder: "Admin Assigned",
+            title: t("adminAssigned"),
+            users: users
         },
     ];
     const { loading } = useSelector((state) => state?.paymentGateways);

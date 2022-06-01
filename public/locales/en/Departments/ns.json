@@ -11,5 +11,6 @@
   "editDepartment": "Edit Department",
   "deleteDepartment": "Delete Department",
   "saveChanges": "Save Changes",
-  "departmentStatus": "Department Status"
+  "departmentStatus": "Department Status",
+  "adminAssigned":"Admin Assigned"
 }
