@@ -1,43 +1,23 @@
 import './PSDetails.styles.scss';
 import { useState } from 'react';
-import {
-  UserProfileCard,
-  SubUsers,
-  Navigation,
-  // Overview
-  AssignedTickets,
-  PastEmails,
-  ProductsServices,
-  // Events & Logs
-  EventsLogs,
-  AccountStatement,
-  Settings,
-  UserPermissions,
-  APIKeys,
-} from './sections';
-// import { useTranslation } from 'react-i18next';
+import { Navigation, Sidebar } from './sections';
 import { useSelector } from 'react-redux';
 import { Spin } from 'antd';
 import { useLocation, useParams } from 'react-router-dom';
 
 export const PSDetails = () => {
-  // const { t } = useTranslation('/Bills/ns');
   const location = useLocation();
   const product = location?.state?.product;
 
   console.log(product);
 
-  const [active, setActive] = useState('ACCOUNT STATEMENT');
+  const [active, setActive] = useState('GENERAL SETTINGS');
 
   const links = [
-    { label: 'OVERVIEW', onClick: () => setActive('OVERVIEW') },
-    { label: 'PERMISSIONS', onClick: () => setActive('PERMISSIONS') },
-    { label: 'API KEYS', onClick: () => setActive('API KEYS') },
-    { label: 'SETTINGS', onClick: () => setActive('SETTINGS') },
-    { label: 'EVENTS & LOGS', onClick: () => setActive('EVENTS & LOGS') },
+    { label: 'GENERAL SETTINGS', onClick: () => setActive('GENERAL SETTINGS') },
     {
-      label: 'ACCOUNT STATEMENT',
-      onClick: () => setActive('ACCOUNT STATEMENT'),
+      label: 'ADVANCED SETTINGS',
+      onClick: () => setActive('ADVANCED SETTINGS'),
     },
   ];
 
@@ -57,28 +37,13 @@ export const PSDetails = () => {
         ) : (
           <>
             <div className="admin-details__left">
-              {/* USER PROFILE CARD */}
-              <UserProfileCard />
-              <div className="mt-4">
-                <SubUsers />
-              </div>
+              {/* THUMBNAIL + STATUS + PRODUCT DETAILS */}
+              <Sidebar />
             </div>
             <div className="admin-details__right">
               <Navigation active={active} links={links} />
-              {active === 'OVERVIEW' ? (
-                <>
-                  <ProductsServices />
-                  <AssignedTickets />
-                  <PastEmails />
-                </>
-              ) : (
-                <></>
-              )}
-              {active === 'SETTINGS' ? <Settings /> : <></>}
-              {active === 'API KEYS' ? <APIKeys /> : <></>}
-              {active === 'PERMISSIONS' ? <UserPermissions /> : <></>}
-              {active === 'EVENTS & LOGS' ? <EventsLogs /> : <></>}
-              {active === 'ACCOUNT STATEMENT' ? <AccountStatement /> : <></>}
+              {active === 'GENERAL SETTINGS' ? <>GENERAL SETTINGS</> : <></>}
+              {active === 'ADVANCED SETTINGS' ? <>ADVANCED SETTINGS</> : <></>}
             </div>
           </>
         )}
