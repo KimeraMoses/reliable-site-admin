@@ -251,6 +251,8 @@ export function Modal({
                                                   style={{
                                                     border: "none",
                                                     outline: "none",
+                                                    width: `${values[name] && '50px'}`,
+                                                    height: `${values[name] && '35px'}`
                                                   }}
                                                 />
                                               </div>

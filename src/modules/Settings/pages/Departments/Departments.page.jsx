@@ -5,16 +5,19 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getDepartments, getUsers } from 'store';
 import { useTranslation } from "react-i18next";
+import { NavLink } from 'react-router-dom';
 import {
     AddDepartment,
     DeleteDepartment,
     EditDepartment,
+    adminAssigned,
 } from './sections';
 
 const Brands = () => {
     const [addModalShow, setAddModalShow] = useState(false);
     const [editValue, setEditValue] = useState(false);
     const [editModalShow, setEditModalShow] = useState(false);
+    const [adminModalShow, setAdminModalShow] = useState(false);
     const [deleteModalShow, setDeleteModalShow] = useState(false);
     const [deleteID, setDeleteID] = useState(null);
 
@@ -42,6 +45,21 @@ const Brands = () => {
             title: t('name'),
             dataIndex: "name",
             key: "name",
+        },
+        {
+            title: t('adminAssignedTable'),
+            key: "adminAssigned",
+            dataIndex: "adminAssigned",
+            render: (adminAssigned, record) => {
+                return (
+                    <NavLink to={"#"} onClick={() => {
+                        setEditValue(record);
+                        setAdminModalShow(true);
+                    }}>
+                        {`${adminAssigned?.split(",")?.length} Admin Assigned`}
+                    </NavLink>
+                )
+            }
         },
         {
             title: t('status'),

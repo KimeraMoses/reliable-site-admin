@@ -40,7 +40,7 @@ export const addBrand = (data) => {
             if (res.status === 200) {
                 const { url, defaultData, config } = getBrandsConfig();
                 const response = await axios.post(url, defaultData, config);
-                dispatch(getBrands(response?.data?.data));
+                dispatch(getBrandsDispatch(response?.data?.data));
                 toast.success('Brand Added Successfully');
             }
         } catch (e) {
@@ -61,7 +61,7 @@ export const editBrand = ({ data }) => {
             if (response.status === 200) {
                 const { url, defaultData, config } = getBrandsConfig();
                 const response = await axios.post(url, defaultData, config);
-                dispatch(getBrands(response?.data?.data));
+                dispatch(getBrandsDispatch(response?.data?.data));
                 toast.success('Brand Updated Successfully');
             }
         } catch (error) {
@@ -81,7 +81,7 @@ export const deleteBrand = ({ id }) => {
             if (response.status === 200) {
                 const { url, defaultData, config } = getBrandsConfig();
                 const response = await axios.post(url, defaultData, config);
-                dispatch(getBrands(response?.data?.data));
+                dispatch(getBrandsDispatch(response?.data?.data));
                 toast.success('Brands Deleted Successfully');
             }
         } catch (error) {

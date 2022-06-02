@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 
 const initialValues = {
     name: '',
-    status: true,
+    deptStatus: true,
 };
 
 

@@ -6,55 +6,36 @@ import { useTranslation } from "react-i18next";
 
 
 const validationSchema = Yup.object().shape({
-    deptNumber: Yup.string().required('Number is required'),
-    name: Yup.string().required('Name is required'),
-    deptStatus: Yup.string().required('Status is required'),
+    adminAssigned: Yup.array().required('Admin Assigned is required'),
 });
 
-export const EditDepartment = ({ show, setShow, editValue, users }) => {
+export const AdminAssigned = ({ show, setShow, editValue, users }) => {
     const initialValues = {
         id: editValue.id,
-        deptNumber: editValue.deptNumber,
         name: editValue.name,
-        deptStatus: editValue.deptStatus,
-        adminAssigned: editValue.adminAssigned,
+        companyName: editValue.companyName,
+        clientAssigned: editValue?.clientAssigned?.split(","),
+        status: editValue.status,
     };
 
-    const { t } = useTranslation("/Departments/ns");
+    const { t } = useTranslation("/Brands/ns");
     const dispatch = useDispatch();
     const fields = [
-        {
-            type: "input",
-            name: "deptNumber",
-            placeholder: "1",
-            title: t("number"),
-        },
-        {
-            type: "input",
-            name: "name",
-            placeholder: "Department Name",
-            title: t("Name"),
-        },
-        {
-            type: "switch",
-            name: "deptStatus",
-            title: t("status"),
-        },
         {
             type: "userList",
             name: "adminAssigned",
             placeholder: "Admin Assigned",
-            title: t("adminAssigned"),
+            title: t("AdminAssigned"),
             users: users
-        },
+        }
     ];
 
     const { loading } = useSelector((state) => state?.paymentGateways);
 
     return (
         <Modal
-            heading={t('editDepartment')}
-            submitText={t('editDepartment')}
+            heading={t('assignedAdmin')}
+            submitText={t('saveChanges')}
             show={show}
             setShow={setShow}
             fields={fields}

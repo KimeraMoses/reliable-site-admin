@@ -2,9 +2,8 @@ import { Modal } from 'components';
 import { useDispatch, useSelector } from 'react-redux';
 import { addBrand } from 'store';
 import * as Yup from 'yup';
-import { convertBase64 } from 'lib';
 import { useTranslation } from "react-i18next";
-
+import { createServerImage } from 'lib';
 
 
 const initialValues = {
@@ -43,7 +42,8 @@ export const AddBrand = ({ show, setShow, users }) => {
         {
             type: "file",
             name: "logoUrl",
-            title: t("browseLogo"),
+            title: t("logo"),
+            subText: t("browseLogo")
         },
         {
             type: "switch",
@@ -71,24 +71,9 @@ export const AddBrand = ({ show, setShow, users }) => {
             initialValues={initialValues}
             validationSchema={validationSchema}
             handleSubmit={async (values) => {
-                const fileName = values?.image?.name;
-                const imgData = {};
-                if (fileName) {
-                    const ext = fileName.substr(fileName.lastIndexOf('.'));
-                    const finalName = fileName.substr(0, fileName.indexOf('.'));
-
-                    let base64image = '';
-                    try {
-                        base64image = await convertBase64(values?.image);
-                        imgData.name = finalName;
-                        imgData.extension = `${ext}`;
-                        imgData.data = base64image.replace(/^data:image\/(png|jpg|jpeg);base64,/, "");
-                    } catch (e) {
-                        base64image = '';
-                    }
-                }
+                const img = values?.image ? await createServerImage(values?.image) : [];
                 const newValues = {
-                    image: Object.keys(imgData).length ? imgData : undefined,
+                    image: Object.keys(img).length ? img : undefined,
                     name: values?.name,
                     companyName: values?.companyName,
                     logoUrl: values?.logoUrl,

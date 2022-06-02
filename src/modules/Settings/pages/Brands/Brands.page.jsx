@@ -59,11 +59,11 @@ const Brands = () => {
           name = userN[0].charAt(0) + userN[1].charAt(0);
         }
         return (
-          record.logoUrl ? (
+          record.base64Logo ? (
             <img
-              src={record.logoUrl}
-              alt={record.logoUrl}
-              className="h-full w-full rounded-[5px] object-cover text-[8px]"
+              src={record.base64Logo}
+              alt={record.name}
+              className="h-full w-[40px] rounded-[5px] object-cover text-[8px]"
             />
           ) : (
             <div className="bg-[#1C3238] px-[8px] py-[4px] uppercase w-[40px] h-[40px] rounded-[4px] flex justify-center items-center">
