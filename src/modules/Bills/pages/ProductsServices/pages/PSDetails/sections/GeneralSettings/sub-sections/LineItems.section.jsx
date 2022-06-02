@@ -78,7 +78,7 @@ export const LineItems = () => {
 
   return (
     <>
-      <div className="bg-[#1E1E2D] p-[32px] rounded-[8px] mt-[32px]">
+      <div className="bg-[#1E1E2D] p-[32px] rounded-[8px] mt-[20px]">
         <div className="flex items-center justify-between mb-[16px]">
           <h6 className="text-white text-[16px]">Line Items & Price</h6>
           <Button onClick={() => setAdd(true)}>Add New Item</Button>
