@@ -1,6 +1,9 @@
 import { Button, MultiSelect } from 'components';
+import { useSelector } from 'react-redux';
 
 export const ProductDetails = () => {
+  const { categories } = useSelector((state) => state?.categories);
+
   return (
     <div className="p-[32px] bg-[#1E1E2D] rounded-[8px] mt-[20px]">
       <h6 className="text-white font-medium text-[16px]">ProductDetails</h6>
@@ -11,11 +14,10 @@ export const ProductDetails = () => {
         name="productCategories"
         placeholder="Select Categories"
         label="Cateogries"
-        options={[
-          { label: 'Pending', value: 0 },
-          { label: 'Confirmed', value: 1 },
-          { label: 'Canceled', value: 2 },
-        ]}
+        options={categories?.map((category) => ({
+          label: category?.name,
+          value: category?.id,
+        }))}
       />
       <Button type="ghost" className="mt-[16px] mb-[32px] w-full h-[52px]">
         Add New Category

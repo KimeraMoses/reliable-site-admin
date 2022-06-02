@@ -18,3 +18,5 @@ export * from './smtp';
 export * from './emailTemplates';
 // Products
 export * from './products';
+// Categories
+export * from './categories';

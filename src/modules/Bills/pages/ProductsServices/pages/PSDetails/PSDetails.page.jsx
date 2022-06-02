@@ -13,7 +13,9 @@ import {
   AdvancedSettings,
 } from './sections';
 import './PSDetails.styles.scss';
-import { convertHTMLToDraftState } from 'lib';
+import { convertHTMLToDraftState, createServerImage } from 'lib';
+import { getCategories } from 'store';
+import { updateProductByID } from 'store';
 
 export const PSDetails = () => {
   const [active, setActive] = useState('GENERAL SETTINGS');
@@ -32,33 +34,45 @@ export const PSDetails = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    dispatch(getProductByID(id));
+    (async () => {
+      await dispatch(getCategories());
+      await dispatch(getProductByID(id));
+    })();
   }, []);
+
+  const initVal = {
+    preview: product?.base64Image,
+    thumbnail: product?.thumbnail,
+    status: product?.status,
+    // TODO: Add departments once merged with task-116
+    productCategories: product?.productCategories?.map(
+      (category) => category?.categoryId
+    ),
+    tags: product?.tags?.split(','),
+    name: product?.name,
+    description: product?.description,
+    descriptionHolder: convertHTMLToDraftState(product?.headerContent),
+    productLineItems: product?.productLineItems,
+    notes: product?.notes,
+    registrationDate: moment(product?.registrationDate),
+    nextDueDate: moment(product?.nextDueDate),
+    terminationDate: moment(product?.terminationDate),
+    overrideSuspensionDate: moment(product?.overrideSuspensionDate),
+    overrideTerminationDate: moment(product?.overrideTerminationDate),
+  };
+
   return (
     <Formik
-      initialValues={{
-        preview: product?.base64Image,
-        thumbnail: product?.base64Image,
-        status: product?.status,
-        productCategories: product?.productCategories,
-        tags: product?.tags?.split(','),
-        name: product?.name,
-        description: product?.description,
-        descriptionHolder: convertHTMLToDraftState(product?.headerContent),
-        productLineItems: product?.productLineItems,
-        notes: product?.notes,
-        registrationDate: moment(product?.registrationDate),
-        nextDueDate: moment(product?.nextDueDate),
-        terminationDate: moment(product?.terminationDate),
-        overrideSuspensionDate: moment(product?.overrideSuspensionDate),
-        overrideTerminationDate: moment(product?.overrideTerminationDate),
-      }}
+      initialValues={initVal}
       enableReinitialize
-      onSubmit={(values) => {
+      onSubmit={async (values) => {
+        const img = await createServerImage(values.thumbnail);
         const newValues = {
-          thumbnail: values?.thumbnail,
+          thumbnail: img,
           status: values?.status,
-          productCategories: values?.productCategories,
+          productCategories: values?.productCategories?.map((item) => ({
+            categoryId: item,
+          })),
           tags: `${values?.tags}`,
           name: values?.name,
           description: values?.description,
@@ -71,7 +85,7 @@ export const PSDetails = () => {
           overrideTerminationDate:
             values?.overrideTerminationDate?.toISOString(),
         };
-        console.log(newValues);
+        await dispatch(updateProductByID(id, newValues));
       }}
     >
       {({ values }) => {

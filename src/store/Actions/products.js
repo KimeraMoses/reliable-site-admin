@@ -46,10 +46,12 @@ export const updateProductByID = (id, data) => {
   return async (dispatch) => {
     dispatch(setProductsLoading(true));
     try {
-      const product = await updateProductsByIDCall(id, data);
-      toast.success('Product Updated');
-      console.log(product);
-      dispatch(getProductDispatch(product?.data));
+      const res = await updateProductsByIDCall(id, data);
+      if (res?.status === 200) {
+        const product = await getProductsByIDCall(id);
+        dispatch(getProductDispatch(product?.data?.data));
+        toast.success('Product updated successfully');
+      }
     } catch (error) {
       toast.error(getError(error));
     } finally {

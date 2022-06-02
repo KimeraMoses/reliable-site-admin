@@ -92,8 +92,9 @@ export const LineItems = () => {
           <h6 className="text-white text-[16px]">Line Items & Price</h6>
           <Button onClick={() => setAdd(true)}>Add New Item</Button>
         </div>
-        {values?.productLineItems?.map((item) => (
+        {values?.productLineItems?.map((item, idx) => (
           <LineItem
+            key={`item-${idx}`}
             item={item}
             setDel={setDel}
             setId={setId}

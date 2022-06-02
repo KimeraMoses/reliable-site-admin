@@ -35,3 +35,5 @@ export * from './maintenanceSettings';
 export * from './supportSettings';
 // Products
 export * from './products';
+// Categories
+export * from './categories';

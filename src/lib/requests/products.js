@@ -17,6 +17,7 @@ export const getProductsByIDConfig = (id) => ({
 });
 
 // Update Product by ID
-export const updateProductsByIDConfig = (id) => ({
-  url: `http://localhost:5002/products/${id}`,
+export const updateProductByIDConfig = (id) => ({
+  url: `${prefix}/${id}`,
+  config: productsConfig('Update'),
 });

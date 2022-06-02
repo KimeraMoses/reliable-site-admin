@@ -12,6 +12,7 @@ import paymentGateways from './Slices/paymentGateways';
 import smtpReducer from './Slices/smtp';
 import emailTemplatesReducer from './Slices/emailTemplates';
 import ProductsReducer from './Slices/products';
+import categoriesReducer from './Slices/categories';
 
 const store = configureStore({
   reducer: {
@@ -28,6 +29,7 @@ const store = configureStore({
     smtps: smtpReducer,
     emailTemplates: emailTemplatesReducer,
     products: ProductsReducer,
+    categories: categoriesReducer,
   },
 });
 

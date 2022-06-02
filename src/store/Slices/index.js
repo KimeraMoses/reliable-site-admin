@@ -17,3 +17,4 @@ export * from './paymentGateways';
 export * from './smtp';
 export * from './emailTemplates';
 export * from './products';
+export * from './categories';

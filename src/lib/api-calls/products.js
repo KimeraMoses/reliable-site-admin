@@ -1,10 +1,9 @@
 import {
   getProductsConfig,
   getProductsByIDConfig,
-  updateProductsByIDConfig,
+  updateProductByIDConfig,
   axios,
 } from 'lib';
-import axiosIn from 'axios';
 
 // Get All Products
 export const getProductsCall = async () => {
@@ -34,6 +33,6 @@ export const getProductsByIDCall = async (id) => {
 
 // Update Product By ID
 export const updateProductsByIDCall = async (id, data) => {
-  const res = await axiosIn.put(updateProductsByIDConfig(id).url, data);
+  const res = await axios.put(updateProductByIDConfig(id).url, data);
   return res;
 };
