@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from 'components';
 import { AddLineItem, DeleteItem, EditLineItem } from './sections';
 import { nanoid } from 'nanoid';
@@ -47,6 +47,7 @@ export const LineItems = () => {
   const [id, setId] = useState(null);
   const [editData, setEditData] = useState(null);
   const [edit, setEdit] = useState(false);
+  const [total, setTotal] = useState(0);
 
   const { values, setFieldValue } = useFormikContext();
 
@@ -76,6 +77,14 @@ export const LineItems = () => {
     }
   };
 
+  useEffect(() => {
+    let sum = 0;
+    values?.productLineItems?.forEach((item) => {
+      sum += item?.price;
+    });
+    setTotal(sum);
+  }, [values?.productLineItems]);
+
   return (
     <>
       <div className="bg-[#1E1E2D] p-[32px] rounded-[8px] mt-[20px]">
@@ -92,6 +101,12 @@ export const LineItems = () => {
             setEditData={setEditData}
           />
         ))}
+        <div className="mt-[32px] rounded-[8px] border-[#3699FF] border-[1px] border-dashed bg-[#212E48] flex items-center justify-between p-[32px]">
+          <div className="text-white text-[20px] font-medium">
+            Total - ${total.toFixed(2)}
+          </div>
+          <div className="text-[#3699FF] text-[14px]">One Time Payment</div>
+        </div>
       </div>
 
       <AddLineItem show={add} setShow={setAdd} handleAdd={addLineItem} />
