@@ -1,3 +1,5 @@
+import { Thumbnail as ThumbnailComponent } from 'components';
+
 export const Thumbnail = () => {
-  return <div>Thumbnail</div>;
+  return <ThumbnailComponent name="thumbnail" />;
 };
