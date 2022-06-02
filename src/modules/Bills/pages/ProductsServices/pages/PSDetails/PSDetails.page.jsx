@@ -51,6 +51,7 @@ export const PSDetails = () => {
             price: 200,
           },
         ],
+        notes: product?.notes,
       }}
       enableReinitialize
       onSubmit={(values) => console.log(values)}
