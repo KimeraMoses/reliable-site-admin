@@ -297,7 +297,7 @@ export function Modal({
                                                 }}>
                                                 {users?.map((user) => (
                                                   user.fullName && (
-                                                    <Checkbox key={user.id} value={user.id} className="custdes">
+                                                    <Checkbox value={user.id} className="custdes">
                                                       <div className="image_wr">
                                                         <div className="imgwrap">
                                                           {user.imageUrl ? <img src={user.imageUrl} /> : <img src={'https://via.placeholder.com/200'} />}

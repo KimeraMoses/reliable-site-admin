@@ -18,14 +18,14 @@ export const AdminAssigned = ({ show, setShow, editValue, users }) => {
         status: editValue.status,
     };
 
-    const { t } = useTranslation("/Departments/ns");
+    const { t } = useTranslation("/Brands/ns");
     const dispatch = useDispatch();
     const fields = [
         {
             type: "userList",
             name: "adminAssigned",
             placeholder: "Admin Assigned",
-            title: t("Admin Assigned"),
+            title: t("AdminAssigned"),
             users: users
         }
     ];
