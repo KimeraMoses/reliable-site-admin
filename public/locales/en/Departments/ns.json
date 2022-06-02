@@ -12,6 +12,7 @@
   "deleteDepartment": "Delete Department",
   "saveChanges": "Save Changes",
   "departmentStatus": "Department Status",
+  "assignedAdmin": "Assigned Admin",
   "adminAssigned":"Admin Assigned",
   "adminAssignedTable": "Admin Assigned"
 }
