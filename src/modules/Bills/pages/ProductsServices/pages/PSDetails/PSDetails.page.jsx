@@ -39,6 +39,18 @@ export const PSDetails = () => {
         name: product?.name,
         description: product?.description,
         descriptionHolder: convertHTMLToDraftState(product?.headerContent),
+        productLineItems: [
+          {
+            id: '1',
+            name: 'Line Item 1',
+            price: 100,
+          },
+          {
+            id: '2',
+            name: 'Line Item 2',
+            price: 200,
+          },
+        ],
       }}
       enableReinitialize
       onSubmit={(values) => console.log(values)}
