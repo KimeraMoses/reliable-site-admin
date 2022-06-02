@@ -1,11 +1,17 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
 import { Spin } from 'antd';
 import { useParams } from 'react-router-dom';
 import { Form, Formik } from 'formik';
 
 import { getProductByID } from 'store';
-import { Navigation, Sidebar, GeneralSettings } from './sections';
+import {
+  Navigation,
+  Sidebar,
+  GeneralSettings,
+  AdvancedSettings,
+} from './sections';
 import './PSDetails.styles.scss';
 import { convertHTMLToDraftState } from 'lib';
 
@@ -52,6 +58,11 @@ export const PSDetails = () => {
           },
         ],
         notes: product?.notes,
+        registrationDate: moment(product?.registrationDate),
+        nextDueDate: moment(product?.nextDueDate),
+        terminationDate: moment(product?.terminationDate),
+        overrideSuspensionDate: moment(product?.overrideSuspensionDate),
+        overrideTerminationDate: moment(product?.overrideTerminationDate),
       }}
       enableReinitialize
       onSubmit={(values) => console.log(values)}
@@ -81,7 +92,7 @@ export const PSDetails = () => {
                         <></>
                       )}
                       {active === 'ADVANCED SETTINGS' ? (
-                        <>ADVANCED SETTINGS</>
+                        <AdvancedSettings />
                       ) : (
                         <></>
                       )}

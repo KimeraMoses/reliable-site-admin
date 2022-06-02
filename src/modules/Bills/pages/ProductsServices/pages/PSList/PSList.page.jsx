@@ -5,9 +5,10 @@ import { Input, Table } from 'components';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkModule } from 'lib/checkModule';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getProducts } from 'store';
 import { Form, Formik } from 'formik';
+import { Add } from './sections';
 
 export const PSList = () => {
   // const [showAdd, setShowAdd] = useState(false);
@@ -103,8 +104,10 @@ export const PSList = () => {
 
   const { products, loading } = useSelector((state) => state?.products);
 
+  const [showAdd, setShowAdd] = useState(false);
   return (
     <div className="p-[40px]">
+      <Add show={showAdd} setShow={setShowAdd} />
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
         <Formik initialValues={{ selectFilter: 'name' }}>
           {({ values }) => (
@@ -114,6 +117,10 @@ export const PSList = () => {
                 data={products}
                 loading={loading}
                 fieldToFilter={values?.selectFilter}
+                // btnData={{
+                //   onClick: () => setShowAdd(true),
+                //   text: 'Add New Product',
+                // }}
                 editAction={(record) => (
                   <Button
                     onClick={() => {
