@@ -71,7 +71,7 @@ export const getUserById = (id) => {
   };
 };
 
-// Add Admin User
+// Add User
 export const addUser = (data) => {
   return async (dispatch) => {
     dispatch(setUserLoading(true));
@@ -83,27 +83,6 @@ export const addUser = (data) => {
         const res = await axios.get(url, config);
         dispatch(getUsers(res?.data?.data));
         toast.success('User Added Successfully');
-      }
-    } catch (e) {
-      toast.error(getError(e));
-    } finally {
-      dispatch(setUserLoading(false));
-    }
-  };
-};
-
-// Add Client User
-export const addClientUser = (data) => {
-  return async (dispatch) => {
-    dispatch(setUserLoading(true));
-    try {
-      const { url, config } = addClientUser();
-      const res = await axios.post(url, data, config);
-      if (res.status === 200) {
-        const { url, config } = getUsersConfig();
-        const res = await axios.get(url, config);
-        dispatch(getUsers(res?.data?.data));
-        toast.success('Client User Added Successfully');
       }
     } catch (e) {
       toast.error(getError(e));
