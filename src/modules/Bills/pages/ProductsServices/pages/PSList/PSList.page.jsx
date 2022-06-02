@@ -38,11 +38,13 @@ export const PSList = () => {
       render: (text, record) => {
         return (
           <div className="flex items-center gap-[16px]">
-            <img
-              className="w-[100px] h-[98px] rounded-[8px] object-contain bg-[yellow]"
-              src={record?.base64Image}
-              alt={record?.name}
-            />
+            {record?.base64Image ? (
+              <img
+                className="w-[100px] h-[98px] rounded-[8px] object-contain bg-[yellow]"
+                src={record?.base64Image}
+                alt={record?.name}
+              />
+            ) : null}
             <p className="text-white text-[14px]">{record?.description}</p>
           </div>
         );
@@ -86,12 +88,14 @@ export const PSList = () => {
       render: (status) => (
         <div
           className={`${
-            status === 1
+            status === 0
+              ? 'bg-[#392F28] text-[#FFA800]'
+              : status === 1
               ? 'bg-[#1C3238] text-[#0BB783]'
               : 'bg-[#3A2434] text-[#F64E60]'
           } px-[8px] py-[4px] w-[fit-content] rounded-[4px]`}
         >
-          {status === 1 ? 'COMPLETED' : 'CANCELLED'}
+          {status === 0 ? 'PENDING' : status === 1 ? 'CONFIRMED' : 'CANCELLED'}
         </div>
       ),
     },

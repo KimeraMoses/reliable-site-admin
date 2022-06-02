@@ -45,18 +45,7 @@ export const PSDetails = () => {
         name: product?.name,
         description: product?.description,
         descriptionHolder: convertHTMLToDraftState(product?.headerContent),
-        productLineItems: [
-          {
-            id: '1',
-            name: 'Line Item 1',
-            price: 100,
-          },
-          {
-            id: '2',
-            name: 'Line Item 2',
-            price: 200,
-          },
-        ],
+        productLineItems: product?.productLineItems,
         notes: product?.notes,
         registrationDate: moment(product?.registrationDate),
         nextDueDate: moment(product?.nextDueDate),
@@ -65,7 +54,25 @@ export const PSDetails = () => {
         overrideTerminationDate: moment(product?.overrideTerminationDate),
       }}
       enableReinitialize
-      onSubmit={(values) => console.log(values)}
+      onSubmit={(values) => {
+        const newValues = {
+          thumbnail: values?.thumbnail,
+          status: values?.status,
+          productCategories: values?.productCategories,
+          tags: `${values?.tags}`,
+          name: values?.name,
+          description: values?.description,
+          productLineItems: values?.productLineItems,
+          notes: values?.notes,
+          registrationDate: values?.registrationDate?.toISOString(),
+          nextDueDate: values?.nextDueDate?.toISOString(),
+          terminationDate: values?.terminationDate?.toISOString(),
+          overrideSuspensionDate: values?.overrideSuspensionDate?.toISOString(),
+          overrideTerminationDate:
+            values?.overrideTerminationDate?.toISOString(),
+        };
+        console.log(newValues);
+      }}
     >
       {({ values }) => {
         // console.log(values);

@@ -1,4 +1,9 @@
-import { getError, getProductsByIDCall, getProductsCall } from 'lib';
+import {
+  getError,
+  getProductsByIDCall,
+  getProductsCall,
+  updateProductsByIDCall,
+} from 'lib';
 import { toast } from 'react-toastify';
 import {
   getProductsDispatch,
@@ -12,7 +17,7 @@ export const getProducts = () => {
     dispatch(setProductsLoading(true));
     try {
       const products = await getProductsCall();
-      dispatch(getProductsDispatch(products?.data));
+      dispatch(getProductsDispatch(products?.data?.data));
     } catch (error) {
       toast.error(getError(error));
     } finally {
@@ -27,6 +32,23 @@ export const getProductByID = (id) => {
     dispatch(setProductsLoading(true));
     try {
       const product = await getProductsByIDCall(id);
+      dispatch(getProductDispatch(product?.data?.data));
+    } catch (error) {
+      toast.error(getError(error));
+    } finally {
+      dispatch(setProductsLoading(false));
+    }
+  };
+};
+
+// Update Product By ID
+export const updateProductByID = (id, data) => {
+  return async (dispatch) => {
+    dispatch(setProductsLoading(true));
+    try {
+      const product = await updateProductsByIDCall(id, data);
+      toast.success('Product Updated');
+      console.log(product);
       dispatch(getProductDispatch(product?.data));
     } catch (error) {
       toast.error(getError(error));

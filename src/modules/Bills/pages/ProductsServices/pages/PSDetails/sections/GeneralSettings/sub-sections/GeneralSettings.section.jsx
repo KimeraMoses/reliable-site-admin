@@ -25,7 +25,7 @@ export const GS = () => {
   const { values, setFieldValue, setFieldTouched, touched, errors } =
     useFormikContext();
   return (
-    <div className="bg-[#1E1E2D] p-[32px] rounded-[8px] mt-[32px]">
+    <div className="bg-[#1E1E2D] p-[32px] rounded-[8px] mt-[20px]">
       <h6 className="text-white text-[16px] mb-[32px]">General Settings</h6>
       <Input name="name" placeholder="Product Name" label="Product Name" />
 
