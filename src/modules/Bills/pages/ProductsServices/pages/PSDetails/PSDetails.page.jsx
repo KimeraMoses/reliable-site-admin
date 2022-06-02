@@ -5,8 +5,9 @@ import { useParams } from 'react-router-dom';
 import { Form, Formik } from 'formik';
 
 import { getProductByID } from 'store';
-import { Navigation, Sidebar } from './sections';
+import { Navigation, Sidebar, GeneralSettings } from './sections';
 import './PSDetails.styles.scss';
+import { convertHTMLToDraftState } from 'lib';
 
 export const PSDetails = () => {
   const [active, setActive] = useState('GENERAL SETTINGS');
@@ -35,8 +36,12 @@ export const PSDetails = () => {
         status: product?.status,
         productCategories: product?.productCategories,
         tags: product?.tags?.split(','),
+        name: product?.name,
+        description: product?.description,
+        descriptionHolder: convertHTMLToDraftState(product?.headerContent),
       }}
       enableReinitialize
+      onSubmit={(values) => console.log(values)}
     >
       {({ values }) => {
         // console.log(values);
@@ -58,7 +63,7 @@ export const PSDetails = () => {
                     <div className="admin-details__right">
                       <Navigation active={active} links={links} />
                       {active === 'GENERAL SETTINGS' ? (
-                        <>GENERAL SETTINGS</>
+                        <GeneralSettings />
                       ) : (
                         <></>
                       )}

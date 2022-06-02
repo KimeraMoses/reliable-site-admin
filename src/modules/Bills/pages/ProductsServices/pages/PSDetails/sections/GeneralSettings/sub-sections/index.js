@@ -1,0 +1,1 @@
+export { GS } from './GeneralSettings.section';

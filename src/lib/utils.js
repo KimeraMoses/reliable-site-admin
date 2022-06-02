@@ -221,10 +221,14 @@ export const convertCamelToTitle = (str) => {
 
 // Convert HTML to Draft JS
 export const convertHTMLToDraftState = (html) => {
-  const blocks = convertFromHTML(html);
-  const state = ContentState.createFromBlockArray(
-    blocks?.contentBlocks,
-    blocks?.entityMap
-  );
-  return EditorState.createWithContent(state);
+  if (html) {
+    const blocks = convertFromHTML(html);
+    const state = ContentState.createFromBlockArray(
+      blocks?.contentBlocks,
+      blocks?.entityMap
+    );
+    return EditorState.createWithContent(state);
+  } else {
+    return EditorState.createEmpty();
+  }
 };
