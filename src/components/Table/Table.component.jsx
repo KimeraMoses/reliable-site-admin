@@ -32,6 +32,7 @@ export const Table = ({
   additionalBtns,
   hideActions,
   hideHeaders,
+  dateRangeSelector,
 }) => {
   const [dataSource, setDataSource] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
@@ -158,6 +159,7 @@ export const Table = ({
               ) : (
                 <></>
               )}
+              {dateRangeSelector ? dateRangeSelector : <></>}
               {btnData?.text && btnData?.onClick && permissions?.Create ? (
                 <Button
                   type="primary"

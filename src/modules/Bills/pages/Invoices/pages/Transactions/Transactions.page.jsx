@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Button } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
@@ -7,8 +7,9 @@ import moment from 'moment';
 
 import { checkModule } from 'lib/checkModule';
 import { getTransactions } from 'store';
-import { Table } from 'components';
+import { Table, DateRangePicker } from 'components';
 import { getName } from 'lib';
+import { Formik, Form } from 'formik';
 
 const dummyClients = [
   { fullName: 'Paul Elliot', id: '00000000-0000-0000-0000-000000000000' },
@@ -25,8 +26,8 @@ const dummyTransactions = [
   {
     id: '4d9aa5ff-f408-4e0a-8e11-4ce0a4001b29',
     referenceId: 'f867efd3-7613-4774-810d-e2cc12903d96',
-    createdOn: '2022-05-17T17:16:09.1932256',
-    lastModifiedOn: '2022-05-20T17:16:09.1932257',
+    createdOn: '2022-05-29T17:16:09.1932256',
+    lastModifiedOn: '2022-06-04T17:16:09.1932257',
     transactionBy: '00000000-0000-0000-0000-000000000000',
     transactionType: 0,
     total: 3000,
@@ -35,8 +36,28 @@ const dummyTransactions = [
   {
     id: '4d9aa5ff-f408-4e0a-8e11-4ce0a4001b29',
     referenceId: 'f867efd3-7613-4774-810d-e2cc12903d96',
-    createdOn: '2022-05-16T17:16:09.1932256',
-    lastModifiedOn: '2022-05-17T17:16:09.1932257',
+    createdOn: '2022-05-15T17:16:09.1932256',
+    lastModifiedOn: '2022-06-04T17:16:09.1932257',
+    transactionBy: '00000000-0000-0000-0000-000000000002',
+    transactionType: 1,
+    total: 3201,
+    transactionStatus: 1,
+  },
+  {
+    id: '4d9aa5ff-f408-4e0a-8e11-4ce0a4001b29',
+    referenceId: 'f867efd3-7613-4774-810d-e2cc12903d96',
+    createdOn: '2022-05-30T17:16:09.1932256',
+    lastModifiedOn: '2022-06-04T17:16:09.1932257',
+    transactionBy: '00000000-0000-0000-0000-000000000002',
+    transactionType: 1,
+    total: 3201,
+    transactionStatus: 1,
+  },
+  {
+    id: '4d9aa5ff-f408-4e0a-8e11-4ce0a4001b29',
+    referenceId: 'f867efd3-7613-4774-810d-e2cc12903d96',
+    createdOn: '2022-05-31T17:16:09.1932256',
+    lastModifiedOn: '2022-06-04T17:16:09.1932257',
     transactionBy: '00000000-0000-0000-0000-000000000001',
     transactionType: 1,
     total: 3201,
@@ -45,8 +66,8 @@ const dummyTransactions = [
   {
     id: '4d9aa5ff-f408-4e0a-8e11-4ce0a4001b29',
     referenceId: 'f867efd3-7613-4774-810d-e2cc12903d96',
-    createdOn: '2022-05-16T17:16:09.1932256',
-    lastModifiedOn: '2022-05-17T17:16:09.1932257',
+    createdOn: '2022-06-01T17:16:09.1932256',
+    lastModifiedOn: '2022-06-04T17:16:09.1932257',
     transactionBy: '00000000-0000-0000-0000-000000000002',
     transactionType: 0,
     total: 1801,
@@ -156,23 +177,75 @@ export const Transactions = () => {
     dispatch(getTransactions());
   }, []);
 
+  // Filter Data
+  const [filteredData, setFilteredData] = useState([]);
+  const [dateRange, setDateRange] = useState([]);
+
+  useEffect(() => {
+    const filteredData = dummyTransactions.filter((transaction) => {
+      if (dateRange?.length) {
+        const startDate = dateRange[0];
+        const endDate = dateRange[1];
+        const compareDate = transaction?.createdOn;
+        return moment(compareDate).isBetween(startDate, endDate);
+      } else {
+        return false;
+      }
+    });
+
+    setFilteredData(filteredData);
+  }, [dateRange]);
+
+  // Set Data with Client Name for Filter
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    if (dummyTransactions.length) {
+      const dataHolder = dummyTransactions.map((transaction) => {
+        const client = dummyClients?.filter(
+          (client) => client?.id === transaction?.transactionBy
+        );
+        return {
+          ...transaction,
+          name: client[0].fullName,
+        };
+      });
+      setData(dataHolder);
+    }
+  }, [dummyTransactions]);
+
   return (
-    <div className="p-[40px]">
-      <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
-        <Table
-          columns={columns}
-          data={dummyTransactions}
-          loading={loading}
-          fieldToFilter="client"
-          editAction={(record) => (
-            <>
-              <Button onClick={() => {}}>View</Button>
-            </>
-          )}
-          permissions={permissions}
-          t={t}
-        />
-      </div>
-    </div>
+    <Formik initialValues={{ dateRange: [] }}>
+      {() => {
+        return (
+          <Form>
+            <div className="p-[40px]">
+              <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
+                <Table
+                  columns={columns}
+                  data={filteredData.length ? filteredData : data}
+                  loading={loading}
+                  fieldToFilter="name"
+                  editAction={(record) => (
+                    <>
+                      <Button onClick={() => {}}>View</Button>
+                    </>
+                  )}
+                  permissions={permissions}
+                  dateRangeSelector={
+                    <>
+                      <DateRangePicker
+                        name="dateRange"
+                        onChange={(date) => setDateRange(date)}
+                      />
+                    </>
+                  }
+                  t={t}
+                />
+              </div>
+            </div>
+          </Form>
+        );
+      }}
+    </Formik>
   );
 };
