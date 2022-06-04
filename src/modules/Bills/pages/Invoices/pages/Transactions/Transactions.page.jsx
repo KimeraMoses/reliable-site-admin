@@ -10,6 +10,7 @@ import { getTransactions } from 'store';
 import { Table, DateRangePicker } from 'components';
 import { getName } from 'lib';
 import { Formik, Form } from 'formik';
+import { getClients, getUsers } from 'store';
 
 const dummyClients = [
   { fullName: 'Paul Elliot', id: '00000000-0000-0000-0000-000000000000' },
@@ -82,6 +83,18 @@ export const Transactions = () => {
     module: 'Users',
     modules: userModules,
   });
+
+  const dispatch = useDispatch();
+  const { loading, transactions } = useSelector((state) => state?.transactions);
+  const clientLoading = useSelector((state) => state?.users?.loading);
+  const { clients, users } = useSelector((state) => state?.users);
+  useEffect(() => {
+    dispatch(getTransactions());
+    dispatch(getClients());
+    dispatch(getUsers());
+  }, []);
+
+  // Set Columns
   const columns = [
     {
       title: 'ID',
@@ -94,25 +107,22 @@ export const Transactions = () => {
       dataIndex: 'transactionBy',
       key: 'transactionBy',
       width: '20%',
-      render: (text) => {
-        const client = dummyClients?.filter((client) => client?.id === text);
-
-        const { base64Image, fullName } = client[0];
-
+      render: (text, record) => {
+        const { name, image } = record;
         return (
           <div className="flex items-center gap-[12px]">
-            {base64Image ? (
+            {image ? (
               <img
-                src={base64Image}
-                alt={fullName}
+                src={image}
+                alt={name}
                 className="h-[40px] w-[40px] object-cover rounded-[8px]"
               />
             ) : (
               <div className="bg-[#171723] h-[40px] w-[40px] rounded-[8px] text-[#0BB783] font-medium text-[20px] flex items-center justify-center">
-                {getName({ user: client[0] })}
+                {getName({ user: { fullName: name } })}
               </div>
             )}
-            <div>{fullName}</div>
+            <div>{name}</div>
           </div>
         );
       },
@@ -171,18 +181,12 @@ export const Transactions = () => {
     },
   ];
 
-  const dispatch = useDispatch();
-  const { loading, transactions } = useSelector((state) => state?.transactions);
-  useEffect(() => {
-    dispatch(getTransactions());
-  }, []);
-
   // Filter Data
   const [filteredData, setFilteredData] = useState([]);
   const [dateRange, setDateRange] = useState([]);
 
   useEffect(() => {
-    const filteredData = dummyTransactions.filter((transaction) => {
+    const filteredData = transactions.filter((transaction) => {
       if (dateRange?.length) {
         const startDate = dateRange[0];
         const endDate = dateRange[1];
@@ -199,19 +203,27 @@ export const Transactions = () => {
   // Set Data with Client Name for Filter
   const [data, setData] = useState([]);
   useEffect(() => {
-    if (dummyTransactions.length) {
-      const dataHolder = dummyTransactions.map((transaction) => {
-        const client = dummyClients?.filter(
+    if (transactions.length) {
+      const dataHolder = transactions.map((transaction) => {
+        const client = clients?.filter(
           (client) => client?.id === transaction?.transactionBy
         );
-        return {
-          ...transaction,
-          name: client[0].fullName,
-        };
+        const admin = users?.filter(
+          (user) => user?.id === transaction?.transactionBy
+        );
+        if (client.length || admin.length) {
+          return {
+            ...transaction,
+            name: client[0]?.fullName || admin[0]?.fullName || 'Anonymous',
+            image: client[0]?.base64Image || admin[0]?.base64Image || '',
+          };
+        } else {
+          return transaction;
+        }
       });
       setData(dataHolder);
     }
-  }, [dummyTransactions]);
+  }, [transactions, users, clients]);
 
   return (
     <Formik initialValues={{ dateRange: [] }}>
@@ -223,7 +235,7 @@ export const Transactions = () => {
                 <Table
                   columns={columns}
                   data={filteredData.length ? filteredData : data}
-                  loading={loading}
+                  loading={loading || clientLoading}
                   fieldToFilter="name"
                   editAction={(record) => (
                     <>
