@@ -10,7 +10,7 @@ import {
     AddDepartment,
     DeleteDepartment,
     EditDepartment,
-    AdminAssigned,
+    adminAssigned,
 } from './sections';
 
 const Brands = () => {
@@ -52,7 +52,7 @@ const Brands = () => {
             dataIndex: "departmentAdmins",
             render: (departmentAdmins, record) => {
                 return (
-                    <NavLink to={"#"} className="text-[#3699FF]" onClick={() => {
+                    <NavLink to={"#"} onClick={() => {
                         setEditValue(record);
                         setAdminModalShow(true);
                     }}>
@@ -107,12 +107,6 @@ const Brands = () => {
             <EditDepartment
                 show={editModalShow}
                 setShow={setEditModalShow}
-                editValue={editValue}
-                users={users}
-            />
-            <AdminAssigned
-                show={adminModalShow}
-                setShow={setAdminModalShow}
                 editValue={editValue}
                 users={users}
             />

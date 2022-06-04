@@ -40,7 +40,7 @@ export const addDepartment = (data) => {
             if (res.status === 200) {
                 const { url, defaultData, config } = getDepartmentsConfig();
                 const response = await axios.post(url, defaultData, config);
-                dispatch(getDepartmentsDispatch(response?.data?.data));
+                dispatch(getDepartments(response?.data?.data));
                 toast.success('Departments Added Successfully');
             }
         } catch (e) {
@@ -61,7 +61,7 @@ export const editDepartment = ({ data }) => {
             if (response.status === 200) {
                 const { url, defaultData, config } = getDepartmentsConfig();
                 const response = await axios.post(url, defaultData, config);
-                dispatch(getDepartmentsDispatch(response?.data?.data));
+                dispatch(getDepartments(response?.data?.data));
                 toast.success('Departments Updated Successfully');
             }
         } catch (error) {
@@ -81,7 +81,7 @@ export const deleteDepartment = ({ id }) => {
             if (response.status === 200) {
                 const { url, defaultData, config } = getDepartmentsConfig();
                 const response = await axios.post(url, defaultData, config);
-                dispatch(getDepartmentsDispatch(response?.data?.data));
+                dispatch(getDepartments(response?.data?.data));
                 toast.success('Departments Deleted Successfully');
             }
         } catch (error) {
