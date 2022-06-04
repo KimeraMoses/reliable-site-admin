@@ -6,26 +6,32 @@ import { useTranslation } from "react-i18next";
 
 
 const validationSchema = Yup.object().shape({
-    adminAssigned: Yup.array().required('Admin Assigned is required'),
+    departmentAdmins: Yup.array().required('Admin Assigned is required'),
 });
 
 export const AdminAssigned = ({ show, setShow, editValue, users }) => {
+    const departmentAdmins = [];
+
+    editValue?.departmentAdmins?.map((b) => {
+        return departmentAdmins.push(b?.adminUserId);
+    });
+
     const initialValues = {
         id: editValue.id,
+        deptNumber: editValue.deptNumber,
         name: editValue.name,
-        companyName: editValue.companyName,
-        clientAssigned: editValue?.clientAssigned?.split(","),
-        status: editValue.status,
+        deptStatus: editValue.deptStatus,
+        departmentAdmins: departmentAdmins
     };
 
-    const { t } = useTranslation("/Departments/ns");
+    const { t } = useTranslation("/Settings/ns");
     const dispatch = useDispatch();
     const fields = [
         {
             type: "userList",
-            name: "adminAssigned",
+            name: "departmentAdmins",
             placeholder: "Admin Assigned",
-            title: t("Admin Assigned"),
+            title: t("Admins"),
             users: users
         }
     ];

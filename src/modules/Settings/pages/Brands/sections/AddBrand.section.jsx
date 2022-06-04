@@ -24,7 +24,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export const AddBrand = ({ show, setShow, users }) => {
-    const { t } = useTranslation("/Brands/ns");
+    const { t } = useTranslation("/Settings/ns");
     const dispatch = useDispatch();
     const fields = [
         {

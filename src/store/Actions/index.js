@@ -22,3 +22,5 @@ export * from './brandsActions';
 
 // Departments Actions
 export * from './departmentsActions';
+// Invoices Actions
+export * from './invoicesActions';

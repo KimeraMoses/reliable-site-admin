@@ -12,15 +12,21 @@ const validationSchema = Yup.object().shape({
 });
 
 export const EditDepartment = ({ show, setShow, editValue, users }) => {
+    const departmentAdmins = [];
+
+    editValue?.departmentAdmins?.map((b) => {
+        return departmentAdmins.push(b?.adminUserId);
+    });
+
     const initialValues = {
         id: editValue.id,
         deptNumber: editValue.deptNumber,
         name: editValue.name,
         deptStatus: editValue.deptStatus,
-        adminAssigned: editValue.adminAssigned,
+        departmentAdmins: departmentAdmins,        
     };
 
-    const { t } = useTranslation("/Departments/ns");
+    const { t } = useTranslation("/Settings/ns");
     const dispatch = useDispatch();
     const fields = [
         {
@@ -42,7 +48,7 @@ export const EditDepartment = ({ show, setShow, editValue, users }) => {
         },
         {
             type: "userList",
-            name: "adminAssigned",
+            name: "departmentAdmins",
             placeholder: "Admin Assigned",
             title: t("adminAssigned"),
             users: users

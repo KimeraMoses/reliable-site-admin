@@ -19,7 +19,7 @@ export const ClientsAssigned = ({ show, setShow, editValue, users }) => {
         status: editValue.status,
     };
 
-    const { t } = useTranslation("/Brands/ns");
+    const { t } = useTranslation("/Settings/ns");
     const dispatch = useDispatch();
     const fields = [
         {

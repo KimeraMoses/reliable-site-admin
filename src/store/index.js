@@ -13,6 +13,7 @@ import smtpReducer from './Slices/smtp';
 import emailTemplatesReducer from './Slices/emailTemplates';
 import brandsReducer from './Slices/brandsSlice';
 import departmentsReducer from './Slices/departmentsSlice';
+import invoicesReducer from './Slices/invoicesSlice';
 
 const store = configureStore({
   reducer: {
@@ -29,7 +30,8 @@ const store = configureStore({
     smtps: smtpReducer,
     emailTemplates: emailTemplatesReducer,
     brands: brandsReducer,
-    departments: departmentsReducer
+    departments: departmentsReducer,
+    invoices: invoicesReducer
   },
 });
 

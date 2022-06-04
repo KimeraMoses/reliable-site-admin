@@ -8,7 +8,7 @@ import { useTranslation } from "react-i18next";
 
 const initialValues = {
     name: '',
-    deptStatus: true,
+    deptStatus: true
 };
 
 
@@ -19,7 +19,7 @@ const validationSchema = Yup.object().shape({
 });
 
 export const AddDepartment = ({ show, setShow, users }) => {
-    const { t } = useTranslation("/Departments/ns");
+    const { t } = useTranslation("/Settings/ns");
     const dispatch = useDispatch();
     const fields = [
         {
@@ -41,7 +41,7 @@ export const AddDepartment = ({ show, setShow, users }) => {
         },
         {
             type: "userList",
-            name: "adminAssigned",
+            name: "departmentAdmins",
             placeholder: "Admin Assigned",
             title: t("adminAssigned"),
             users: users
