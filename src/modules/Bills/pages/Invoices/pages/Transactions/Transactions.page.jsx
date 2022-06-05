@@ -86,12 +86,8 @@ export const Transactions = () => {
 
   const dispatch = useDispatch();
   const { loading, transactions } = useSelector((state) => state?.transactions);
-  const clientLoading = useSelector((state) => state?.users?.loading);
-  const { clients, users } = useSelector((state) => state?.users);
   useEffect(() => {
     dispatch(getTransactions());
-    dispatch(getClients());
-    dispatch(getUsers());
   }, []);
 
   // Set Columns
@@ -108,21 +104,21 @@ export const Transactions = () => {
       key: 'transactionBy',
       width: '20%',
       render: (text, record) => {
-        const { name, image } = record;
+        const { fullName, userImagePath } = record;
         return (
           <div className="flex items-center gap-[12px]">
-            {image ? (
+            {userImagePath ? (
               <img
-                src={image}
-                alt={name}
+                src={userImagePath}
+                alt={fullName}
                 className="h-[40px] w-[40px] object-cover rounded-[8px]"
               />
             ) : (
               <div className="bg-[#171723] h-[40px] w-[40px] rounded-[8px] text-[#0BB783] font-medium text-[20px] flex items-center justify-center">
-                {getName({ user: { fullName: name } })}
+                {getName({ user: { fullName } })}
               </div>
             )}
-            <div>{name}</div>
+            <div>{fullName}</div>
           </div>
         );
       },
@@ -205,25 +201,14 @@ export const Transactions = () => {
   useEffect(() => {
     if (transactions.length) {
       const dataHolder = transactions.map((transaction) => {
-        const client = clients?.filter(
-          (client) => client?.id === transaction?.transactionBy
-        );
-        const admin = users?.filter(
-          (user) => user?.id === transaction?.transactionBy
-        );
-        if (client.length || admin.length) {
-          return {
-            ...transaction,
-            name: client[0]?.fullName || admin[0]?.fullName || 'Anonymous',
-            image: client[0]?.base64Image || admin[0]?.base64Image || '',
-          };
-        } else {
-          return transaction;
-        }
+        return {
+          key: transaction?.id,
+          ...transaction,
+        };
       });
       setData(dataHolder);
     }
-  }, [transactions, users, clients]);
+  }, [transactions]);
 
   return (
     <Formik initialValues={{ dateRange: [] }}>
@@ -235,7 +220,7 @@ export const Transactions = () => {
                 <Table
                   columns={columns}
                   data={filteredData.length ? filteredData : data}
-                  loading={loading || clientLoading}
+                  loading={loading}
                   fieldToFilter="name"
                   editAction={(record) => (
                     <>
