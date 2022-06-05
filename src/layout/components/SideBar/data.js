@@ -92,6 +92,26 @@ export const sidebarData = [
     module: 'KnowledgeBase',
     path: '/admin/dashboard/knowledge-base',
     icon: (fill) => <Knowledge fill={fill} />,
+    subLinks: [
+      {
+        name: 'Articles',
+        path: '/admin/dashboard/knowledge-base/articles',
+        subLinks: [
+          {
+            name: 'Article Detail',
+            path: '/admin/dashboard/billing/articles/article/view/:id',
+          },
+          {
+            name: 'Add New Article',
+            path: '/admin/dashboard/billing/articles/article/add/new',
+          },
+          {
+            name: 'Edit Article',
+            path: '/admin/dashboard/billing/articles/article/edit/:id',
+          },
+        ],
+      },
+    ],
   },
   {
     name: 'Reports',

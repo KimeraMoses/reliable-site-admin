@@ -44,6 +44,12 @@ export const dashboardPages = [
     path: '/dashboard/settings/*',
     Component: lazy(() => import('./Dashboard/Settings/Settings.page')),
   },
+  {
+    path: '/dashboard/knowledge-base/*',
+    Component: lazy(() =>
+      import('./Dashboard/KnowledgeBase/KnowledgeBase.page')
+    ),
+  },
 ];
 
 export default pages;
