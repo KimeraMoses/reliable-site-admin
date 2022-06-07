@@ -33,8 +33,9 @@ export const Table = ({
   hideActions,
   hideHeaders,
   dateRageFilter = false,
-  statusFilter = false,
-  handleStatus
+  statusFilter = [],
+  handleStatus,
+  handleDateRange
 }) => {
   const [dataSource, setDataSource] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
@@ -150,7 +151,7 @@ export const Table = ({
               {
                 dateRageFilter && (
                   <RangePicker
-                    onChange={(date) => console.log(date)}
+                    onChange={(date, dateString, id) => handleDateRange(date, dateString, id)}
                     dropdownClassName="custom-date-picker-dd"
                     format="YYYY-MM-DD    "
                     placeholder={['Date Range']}
@@ -158,22 +159,24 @@ export const Table = ({
                   />
                 )
               }
-
-              {
-                statusFilter && (
-                  <select
-                    onChange={(e) =>
-                      handleStatus(e.target.value)
-                    }
-                    className="custom-select form-select appearance-none block w-full px-[16px] h-[52px] text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0"
-                  >
-                    <option value="">Status</option>
-                    <option value="pending">Pending</option>
-                    <option value="completed">Completed</option>
-                    <option value="cancelled">Cancelled</option>
-                  </select>
-                )
-              }
+              {console.log(statusFilter)}
+              {statusFilter?.length ? (
+                <select
+                  onChange={(e) =>
+                    handleStatus(e.target.value)
+                  }
+                  className="custom-select form-select appearance-none block w-full px-[16px] h-[52px] text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0"
+                >
+                  <option value="">Status</option>
+                  {
+                    statusFilter.map((data, i) => (
+                      <option value={i}>{data.name}</option>
+                    ))
+                  }
+                </select>
+              ) : (
+                <></>
+              )}
 
               {additionalBtns?.length ? (
                 additionalBtns?.map((btn) => {

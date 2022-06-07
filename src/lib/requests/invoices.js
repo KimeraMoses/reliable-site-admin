@@ -14,7 +14,7 @@ export const getInvoicesConfig = (params) => ({
         keyword: '',
         pageNumber: 0,
         pageSize: 0,
-        orderBy: [''],
+        orderBy: ['']
     },
     config: invoicesConfig('View'),
 });

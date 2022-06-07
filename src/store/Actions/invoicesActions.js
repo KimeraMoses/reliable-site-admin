@@ -18,6 +18,13 @@ export const getInvoices = (params = []) => {
                 defaultData.advancedSearch.fields.push('status');
                 defaultData.advancedSearch.keyword = params?.status;
             }
+            console.log(params);
+            if (params?.startDate && params?.endDate) {
+                console.log('test');
+                defaultData['startDate'] = params?.startDate;
+                defaultData['endDate'] = params?.endDate;
+            }
+
             const res = await axios.post(url, defaultData, config);
             dispatch(getInvoicesDispatch(res?.data?.data));
             dispatch(setInvoiceLoading(false));

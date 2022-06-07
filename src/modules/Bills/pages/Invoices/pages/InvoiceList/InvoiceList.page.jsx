@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { checkModule } from 'lib/checkModule';
 import { Table } from 'components';
 import { getInvoices } from 'store';
+import { statusList } from 'lib';
 
 export const InvoiceList = () => {
     const navigate = useNavigate();
@@ -21,7 +22,6 @@ export const InvoiceList = () => {
         })();
     }, [dispatch]);
 
-
     const { invoices, loading } = useSelector((state) => state?.invoices);
     const { userModules } = useSelector((state) => state?.modules);
 
@@ -29,6 +29,7 @@ export const InvoiceList = () => {
         module: 'Users',
         modules: userModules,
     });
+
     const columns = [
         {
             title: '',
@@ -80,17 +81,21 @@ export const InvoiceList = () => {
         },
         {
             title: t('issueBy'),
-            dataIndex: 'issueBy',
-            key: 'issueBy',
-            render: (issueBy) => {
+            dataIndex: 'userImagePath',
+            key: 'userImagePath',
+            render: (userImagePath, record) => {
                 return (
                     <div className="flex items-center gap-[12px]">
-                        <img
-                            src={issueBy?.img}
-                            alt="card"
-                            className="w-[32px] h-[20px] object-cover rounded-[4px]"
-                        />
-                        <p className="text-white">{issueBy?.name}</p>
+                        {
+                            userImagePath && (
+                                <img
+                                    src={userImagePath}
+                                    alt="card"
+                                    className="w-[32px] h-[20px] object-cover rounded-[4px]"
+                                />
+                            )
+                        }
+                        <p className="text-white">{record?.fullName}</p>
                     </div>
                 )
             }
@@ -100,8 +105,9 @@ export const InvoiceList = () => {
             dataIndex: 'status',
             key: 'status',
             render: (status) => {
+                const statusValue = statusList(status);
                 return (
-                    <div className={`bg-[${(status === "PENDING" && "#392F28") || (status === "COMPLETED" && "#1C3238") || (status === "CANCELLED" && "#3A2434")}] px-[8px] py-[4px] text-[${(status === "PENDING" && "#FFA800") || (status === "COMPLETED" && "#0BB783") || (status === "CANCELLED" && "#F64E60")}] w-[fit-content] rounded-[4px]`}>{status}</div>
+                    <div className={`bg-[${statusValue.bg}] px-[8px] py-[4px] text-[${statusValue.text}] w-[fit-content] rounded-[4px]`}>{statusValue.name}</div>
                 )
             }
         },
@@ -109,7 +115,11 @@ export const InvoiceList = () => {
 
     // Setting data properly
     const [data, setData] = useState([]);
+    const [status, setStatus] = useState('');
+    const [startDate, setStartDate] = useState('');
+    const [endDate, setEndDate] = useState('');
     useEffect(() => {
+        setData([]);
         if (invoices.length) {
             const dataToSet = invoices.map((b) => {
                 return {
@@ -129,10 +139,32 @@ export const InvoiceList = () => {
                     data={data}
                     loading={loading}
                     dateRageFilter={true}
-                    statusFilter={true}
+                    statusFilter={statusList()}
                     fieldToFilter="billNo"
                     handleStatus={async (values) => {
-                        await dispatch(getInvoices({ status: values }));
+                        setStatus(values);
+                        let details = {
+                            status: values
+                        }
+                        if (startDate && endDate) {
+                            details["startDate"] = startDate;
+                            details["endDate"] = endDate;
+                        }
+                        await dispatch(getInvoices(details));
+                    }}
+                    handleDateRange={async (date, dateString, id) => {
+                        const startDate = date[0]._d;
+                        const endDate = date[1]._d;
+                        let details = {
+                            startDate: startDate,
+                            endDate: endDate
+                        }
+                        if (status) {
+                            details["status"] = status;
+                        }
+                        setStartDate(startDate);
+                        setEndDate(endDate);
+                        await dispatch(getInvoices(details));
                     }}
                     editAction={(record) => (
                         <Button onClick={() => {

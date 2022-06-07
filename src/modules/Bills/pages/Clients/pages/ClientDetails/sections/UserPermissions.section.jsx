@@ -186,7 +186,6 @@ export const UserPermissions = () => {
                     uid: user?.id,
                   })
                 );
-                console.log(newValues);
               });
               await dispatch(getUserModulesById(user?.id));
               setLocalLoading(false);
