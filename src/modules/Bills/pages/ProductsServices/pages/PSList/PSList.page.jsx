@@ -25,6 +25,7 @@ export const PSList = () => {
       title: 'ID',
       dataIndex: 'id',
       key: 'id',
+      render: (text) => <>{text.substr(text.length - 5)}</>,
     },
     {
       title: 'Name',
@@ -129,10 +130,7 @@ export const PSList = () => {
                   <Button
                     onClick={() => {
                       navigate(
-                        `/admin/dashboard/billing/products-services/list/details/${record?.id}`,
-                        {
-                          state: { product: record },
-                        }
+                        `/admin/dashboard/billing/products-services/list/details/${record?.id}`
                       );
                     }}
                   >
