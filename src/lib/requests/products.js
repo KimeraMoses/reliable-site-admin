@@ -21,3 +21,15 @@ export const updateProductByIDConfig = (id) => ({
   url: `${prefix}/${id}`,
   config: productsConfig('Update'),
 });
+
+// Create a Product
+export const createProductConfig = () => ({
+  url: `${prefix}`,
+  config: productsConfig('Create'),
+});
+
+// Delete Product by ID
+export const deleteProductByIDConfig = (id) => ({
+  url: `${prefix}/${id}`,
+  config: productsConfig('Delete'),
+});

@@ -19,7 +19,7 @@ export const Status = () => {
         options={[
           { label: 'Pending', value: 0 },
           { label: 'Confirmed', value: 1 },
-          { label: 'Canceled', value: 2 },
+          { label: 'Cancelled', value: 2 },
         ]}
       />
       <Input

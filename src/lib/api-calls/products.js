@@ -2,8 +2,10 @@ import {
   getProductsConfig,
   getProductsByIDConfig,
   updateProductByIDConfig,
+  createProductConfig,
   axios,
 } from 'lib';
+import { deleteProductByIDConfig } from 'lib/requests';
 
 // Get All Products
 export const getProductsCall = async () => {
@@ -34,5 +36,17 @@ export const getProductsByIDCall = async (id) => {
 // Update Product By ID
 export const updateProductsByIDCall = async (id, data) => {
   const res = await axios.put(updateProductByIDConfig(id).url, data);
+  return res;
+};
+
+// Create Product Call
+export const createProductCall = async (data) => {
+  const res = await axios.post(createProductConfig().url, data);
+  return res;
+};
+
+// Delete Product By ID
+export const deleteProductByIDCall = async (id) => {
+  const res = await axios.delete(deleteProductByIDConfig(id).url);
   return res;
 };

@@ -8,7 +8,8 @@ import { checkModule } from 'lib/checkModule';
 import { useEffect, useState } from 'react';
 import { getProducts } from 'store';
 import { Form, Formik } from 'formik';
-import { Add } from './sections';
+import { Add, Delete } from './sections';
+import { getCategories } from 'store';
 
 export const PSList = () => {
   // const [showAdd, setShowAdd] = useState(false);
@@ -104,15 +105,21 @@ export const PSList = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getProducts());
+    (async () => {
+      await dispatch(getCategories());
+      await dispatch(getProducts());
+    })();
   }, [dispatch]);
 
   const { products, loading } = useSelector((state) => state?.products);
 
   const [showAdd, setShowAdd] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
+  const [record, setRecord] = useState(null);
   return (
     <div className="p-[40px]">
       <Add show={showAdd} setShow={setShowAdd} />
+      <Delete show={showDelete} setShow={setShowDelete} record={record} />
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
         <Formik initialValues={{ selectFilter: 'name' }}>
           {({ values }) => (
@@ -138,7 +145,14 @@ export const PSList = () => {
                   </Button>
                 )}
                 deleteAction={(record) => (
-                  <Button onClick={() => {}}>Delete</Button>
+                  <Button
+                    onClick={() => {
+                      setRecord(record);
+                      setShowDelete(true);
+                    }}
+                  >
+                    Delete
+                  </Button>
                 )}
                 permissions={permissions}
                 customAdditionalBody={
