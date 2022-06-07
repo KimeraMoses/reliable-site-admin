@@ -106,7 +106,9 @@ export const LineItems = () => {
           <div className="text-white text-[20px] font-medium">
             Total - ${total.toFixed(2)}
           </div>
-          <div className="text-[#3699FF] text-[14px]">One Time Payment</div>
+          <div className="text-[#3699FF] text-[14px]">
+            {values?.paymentType === 0 ? 'One Time Payment' : 'Monthly Payment'}
+          </div>
         </div>
       </div>
 

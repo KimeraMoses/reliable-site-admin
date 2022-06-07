@@ -122,10 +122,10 @@ export const PSList = () => {
                 data={products}
                 loading={loading}
                 fieldToFilter={values?.selectFilter}
-                // btnData={{
-                //   onClick: () => setShowAdd(true),
-                //   text: 'Add New Product',
-                // }}
+                btnData={{
+                  onClick: () => setShowAdd(true),
+                  text: 'Add New Product',
+                }}
                 editAction={(record) => (
                   <Button
                     onClick={() => {

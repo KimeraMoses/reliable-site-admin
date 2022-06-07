@@ -15,10 +15,21 @@ export const Status = () => {
         placeholder="Status"
         type="select"
         label="Status"
+        className="mb-[20px]"
         options={[
           { label: 'Pending', value: 0 },
           { label: 'Confirmed', value: 1 },
           { label: 'Canceled', value: 2 },
+        ]}
+      />
+      <Input
+        name="paymentType"
+        placeholder="Payment Type"
+        type="select"
+        label="Payment Type"
+        options={[
+          { label: 'One Time', value: 0 },
+          { label: 'Monthly', value: 1 },
         ]}
       />
     </div>
