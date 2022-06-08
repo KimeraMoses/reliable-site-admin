@@ -59,43 +59,43 @@ export const InvoiceList = () => {
             render: (dueDate) => moment(dueDate).format('DD/MM/YYYY'),
         },
         {
-            title: t('issueFor'),
-            dataIndex: 'product',
-            key: 'product',
-            render: (product) => {
+            title: t('issuedFor'),
+            dataIndex: 'issuedFor',
+            key: 'issuedFor',
+            render: (issuedFor, record) => {
                 return (
                     <div className="flex items-center gap-[12px]">
                         {
-                            product?.thumbnail && (
+                            record?.issueForImage && (
                                 <img
-                                    src={product?.thumbnail}
+                                    src={record?.issueForImage}
                                     alt="card"
                                     className="w-[32px] h-[20px] object-cover rounded-[4px]"
                                 />
                             )
                         }
-                        <p className="text-white">{product.name}</p>
+                        <p className="text-white">{issuedFor}</p>
                     </div>
                 )
             }
         },
         {
-            title: t('issueBy'),
-            dataIndex: 'userImagePath',
-            key: 'userImagePath',
-            render: (userImagePath, record) => {
+            title: t('issuedBy'),
+            dataIndex: 'issuedBy',
+            key: 'issuedBy',
+            render: (issuedBy, record) => {
                 return (
                     <div className="flex items-center gap-[12px]">
                         {
-                            userImagePath && (
+                            record?.issueByImage && (
                                 <img
-                                    src={userImagePath}
+                                    src={record?.issueByImage}
                                     alt="card"
                                     className="w-[32px] h-[20px] object-cover rounded-[4px]"
                                 />
                             )
                         }
-                        <p className="text-white">{record?.fullName}</p>
+                        <p className="text-white">{issuedBy}</p>
                     </div>
                 )
             }
@@ -153,17 +153,23 @@ export const InvoiceList = () => {
                         await dispatch(getInvoices(details));
                     }}
                     handleDateRange={async (date, dateString, id) => {
-                        const startDate = date[0]._d;
-                        const endDate = date[1]._d;
-                        let details = {
-                            startDate: startDate,
-                            endDate: endDate
+                        let startDate = '';
+                        let endDate = '';
+                        let details = {};
+                        if (date) {
+                            startDate = date[0]._d;
+                            endDate = date[1]._d;
+                            details['startDate'] = startDate;
+                            details['endDate'] = endDate;
                         }
+                        
                         if (status) {
                             details["status"] = status;
                         }
+
                         setStartDate(startDate);
                         setEndDate(endDate);
+
                         await dispatch(getInvoices(details));
                     }}
                     editAction={(record) => (

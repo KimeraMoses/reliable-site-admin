@@ -57,6 +57,10 @@ export const Table = ({
     }
   }, [data, fieldToFilter, search]);
 
+  // const onOpenChange = (open) => {
+  //   console.log(open);
+  // }
+
   // Only Set Data if there are view permissions
   useEffect(() => {
     let dataViewer = [];
@@ -156,6 +160,7 @@ export const Table = ({
                     format="YYYY-MM-DD    "
                     placeholder={['Date Range']}
                     className="custom-date-picker w-full h-[52px] bg-[#171723] rounded-[8px] text-[#92928F] flex items-center justify-between px-[16px]"
+                    
                   />
                 )
               }
@@ -170,7 +175,7 @@ export const Table = ({
                   <option value="">Status</option>
                   {
                     statusFilter.map((data, i) => (
-                      <option value={i}>{data.name}</option>
+                      <option value={i} key={i}>{data.name}</option>
                     ))
                   }
                 </select>

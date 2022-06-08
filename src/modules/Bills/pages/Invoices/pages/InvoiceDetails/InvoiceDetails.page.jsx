@@ -18,16 +18,12 @@ export const InvoiceDetails = () => {
 
     useEffect(() => {
         (async () => {
-            await dispatch(getInvoiceById(id)).then(() => {
-                if (invoice?.userId) {
-                    dispatch(getUserById(invoice?.userId));
-                }
-            });
+            await dispatch(getInvoiceById(id));
         })();
     }, []);
 
     const { loading, invoice } = useSelector((state) => state?.invoices);
-    const { user } = useSelector((state) => state.users);
+   
 
     return (
         <div className="users text-center">
@@ -54,12 +50,12 @@ export const InvoiceDetails = () => {
                                     <p className="text-[#fff]  text-[14px] mt-[4px]">{moment(invoice?.dueDate).format('DD MMM YYYY')}{`${moment(invoice?.dueDate).isSame(moment(), 'day') ? ' . <span className="text-[#F64E60] inline-block">Due Today</span>' : ''}`} </p>
                                 </div>
                                 <div className="mt-[20px]">
-                                    <h6 className="text-[#474761] text-[14px]">{t('issueFor')}</h6>
-                                    <p className="text-[#fff]  text-[14px] mt-[4px]">{invoice?.product?.name}</p>
+                                    <h6 className="text-[#474761] text-[14px]">{t('issuedFor')}</h6>
+                                    <p className="text-[#fff]  text-[14px] mt-[4px]">{invoice?.issuedFor || '---'}</p>
                                 </div>
                                 <div className="mt-[20px]">
-                                    <h6 className="text-[#474761] text-[14px]">{t('issueBy')}</h6>
-                                    <p className="text-[#fff]  text-[14px] mt-[4px]">{user?.fullName}</p>
+                                    <h6 className="text-[#474761] text-[14px]">{t('issuedBy')}</h6>
+                                    <p className="text-[#fff]  text-[14px] mt-[4px]">{invoice?.issuedBy || '---'}</p>
                                 </div>
                                 <div className="mt-[40px]">
                                     <div className="flex items-center justify-between">
@@ -113,7 +109,7 @@ export const InvoiceDetails = () => {
                                 <h4 className="text-[#474761] text-[16px] mt-[60px] uppercase">{t('overview')}</h4>
                                 <div className="mt-[20px]">
                                     <h6 className="text-[#474761] text-[14px]">{t('productName')}</h6>
-                                    <p className="text-[#fff]  text-[14px] mt-[4px]">{invoice?.product?.name} . <NavLink to={"#"} className="text-[#3699FF] inline-block">{t('viewProduct')}</NavLink></p>
+                                    <p className="text-[#fff]  text-[14px] mt-[4px]">{invoice?.product?.name} . <NavLink to={`/admin/dashboard/billing/products-services/list/details/${invoice?.product?.id}`} className="text-[#3699FF] inline-block">{t('viewProduct')}</NavLink></p>
                                 </div>
                                 <div className="mt-[20px]">
                                     <h6 className="text-[#474761] text-[14px]">{t('completedBy')}</h6>
