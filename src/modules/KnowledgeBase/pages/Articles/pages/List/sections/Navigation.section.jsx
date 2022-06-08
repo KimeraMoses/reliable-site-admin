@@ -1,6 +1,8 @@
+import { useNavigate } from 'react-router-dom';
 import { Button } from 'components';
 
 export const Navigation = ({ current, setCurrent, navData }) => {
+  const navigate = useNavigate();
   return (
     <div className="bg-[#1E1E2D] p-[12px] rounded-[8px]">
       <div className="bg-[#323248] p-[8px] rounded-[8px] flex items-center justify-between">
@@ -17,7 +19,13 @@ export const Navigation = ({ current, setCurrent, navData }) => {
             </button>
           ))}
         </div>
-        <Button>Create New</Button>
+        <Button
+          onClick={() =>
+            navigate('/admin/dashboard/knowledge-base/articles/add/new')
+          }
+        >
+          Create New
+        </Button>
       </div>
     </div>
   );

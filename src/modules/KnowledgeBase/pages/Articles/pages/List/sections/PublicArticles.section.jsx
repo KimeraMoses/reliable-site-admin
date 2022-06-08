@@ -1,7 +1,9 @@
 import { List } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import { ArticleCard } from 'components';
 
 export function PublicArticles({ articles }) {
+  const navigate = useNavigate();
   return (
     <div className="mt-[20px]">
       <List
@@ -10,7 +12,15 @@ export function PublicArticles({ articles }) {
         rowKey={(article) => article?.id}
         renderItem={(item) => (
           <List.Item>
-            <ArticleCard {...item} articleType="Public Article" />
+            <ArticleCard
+              onView={() =>
+                navigate(
+                  `/admin/dashboard/knowledge-base/articles/article/view/${item?.id}`
+                )
+              }
+              {...item}
+              articleType="Public Article"
+            />
           </List.Item>
         )}
       />

@@ -1,0 +1,9 @@
+.create-post {
+  &__border {
+    // padding-bottom: 15px;
+    border-bottom: 1px dashed #474761;
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+}
