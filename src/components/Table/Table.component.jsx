@@ -1,4 +1,4 @@
-import { Input, Button, Table as AntTable, Dropdown } from 'antd';
+import { Input, Button, Table as AntTable, Dropdown, DatePicker } from 'antd';
 import { Dropdown as DropdownIcon } from 'icons';
 import { Search } from 'icons';
 import { useEffect, useState } from 'react';
@@ -32,6 +32,10 @@ export const Table = ({
   additionalBtns,
   hideActions,
   hideHeaders,
+  dateRageFilter = false,
+  statusFilter = [],
+  handleStatus,
+  handleDateRange
 }) => {
   const [dataSource, setDataSource] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
@@ -53,6 +57,10 @@ export const Table = ({
     }
   }, [data, fieldToFilter, search]);
 
+  // const onOpenChange = (open) => {
+  //   console.log(open);
+  // }
+
   // Only Set Data if there are view permissions
   useEffect(() => {
     let dataViewer = [];
@@ -66,52 +74,52 @@ export const Table = ({
     if (permissions !== undefined && permissions !== null && !hideActions) {
       const actionColumn =
         (permissions?.View && viewAction) ||
-        permissions?.Remove ||
-        permissions?.Update
+          permissions?.Remove ||
+          permissions?.Update
           ? {
-              title: 'Actions',
-              key: 'actions',
-              align: 'right',
-              render: (text, record) => (
-                <div className="flex items-center justify-end">
-                  <Dropdown
-                    overlayClassName="custom-table__table-dropdown-overlay"
-                    className="custom-table__table-dropdown"
-                    destroyPopupOnHide
-                    placement="bottomRight"
-                    overlay={
-                      <>
-                        {viewAction && permissions?.View && viewAction(record)}
-                        {editAction &&
-                          permissions?.Update &&
-                          editAction(record)}
-                        {deleteAction &&
-                          permissions?.Remove &&
-                          deleteAction(record)}
-                      </>
-                    }
-                    trigger={['click']}
+            title: 'Actions',
+            key: 'actions',
+            align: 'right',
+            render: (text, record) => (
+              <div className="flex items-center justify-end">
+                <Dropdown
+                  overlayClassName="custom-table__table-dropdown-overlay"
+                  className="custom-table__table-dropdown"
+                  destroyPopupOnHide
+                  placement="bottomRight"
+                  overlay={
+                    <>
+                      {viewAction && permissions?.View && viewAction(record)}
+                      {editAction &&
+                        permissions?.Update &&
+                        editAction(record)}
+                      {deleteAction &&
+                        permissions?.Remove &&
+                        deleteAction(record)}
+                    </>
+                  }
+                  trigger={['click']}
+                >
+                  <Button
+                    type="primary"
+                    className="custom-table__table-dropdown-btn"
                   >
-                    <Button
-                      type="primary"
-                      className="custom-table__table-dropdown-btn"
-                    >
-                      <div>{'Actions'}</div>
-                      <div>
-                        <DropdownIcon />
-                      </div>
-                    </Button>
-                  </Dropdown>
-                </div>
-              ),
-            }
+                    <div>{'Actions'}</div>
+                    <div>
+                      <DropdownIcon />
+                    </div>
+                  </Button>
+                </Dropdown>
+              </div>
+            ),
+          }
           : {};
       setTableColumns([...columns, actionColumn]);
     } else {
       setTableColumns(columns);
     }
   }, []);
-
+  const { RangePicker } = DatePicker;
   return (
     <div className="custom-table">
       {/* Header */}
@@ -142,7 +150,39 @@ export const Table = ({
               }
             </div>
             {/* Button */}
+
             <div className="flex items-center gap-[8px]">
+              {
+                dateRageFilter && (
+                  <RangePicker
+                    onChange={(date, dateString, id) => handleDateRange(date, dateString, id)}
+                    dropdownClassName="custom-date-picker-dd"
+                    format="YYYY-MM-DD    "
+                    placeholder={['Date Range']}
+                    className="custom-date-picker w-full h-[52px] bg-[#171723] rounded-[8px] text-[#92928F] flex items-center justify-between px-[16px]"
+                    
+                  />
+                )
+              }
+              {console.log(statusFilter)}
+              {statusFilter?.length ? (
+                <select
+                  onChange={(e) =>
+                    handleStatus(e.target.value)
+                  }
+                  className="custom-select form-select appearance-none block w-full px-[16px] h-[52px] text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0"
+                >
+                  <option value="">Status</option>
+                  {
+                    statusFilter.map((data, i) => (
+                      <option value={i} key={i}>{data.name}</option>
+                    ))
+                  }
+                </select>
+              ) : (
+                <></>
+              )}
+
               {additionalBtns?.length ? (
                 additionalBtns?.map((btn) => {
                   return (
@@ -174,9 +214,8 @@ export const Table = ({
           {/* Header End */}
           {/* Table */}
           <div
-            className={`custom-table__table ${
-              hideHeaders ? 'custom-table__table-hide-headers' : ''
-            }`}
+            className={`custom-table__table ${hideHeaders ? 'custom-table__table-hide-headers' : ''
+              }`}
           >
             <AntTable
               columns={tableColumns}

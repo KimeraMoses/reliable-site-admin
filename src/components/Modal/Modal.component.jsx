@@ -45,7 +45,6 @@ export function Modal({
             validationSchema={validationSchema}
             enableReinitialize
             onSubmit={(values) => {
-              console.log(values);
               handleSubmit(values);
             }}
           >

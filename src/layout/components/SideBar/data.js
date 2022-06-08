@@ -68,6 +68,27 @@ export const sidebarData = [
           },
         ],
       },
+      {
+        name: 'Invoices',
+        path: '/admin/dashboard/billing/invoices',
+        showDropdown: true,
+        subLinks: [
+          {
+            name: 'Invoice List',
+            path: '/admin/dashboard/billing/invoices/list/show',
+            subLinks: [
+              {
+                name: 'Invoice Details',
+                path: '/admin/dashboard/billing/invoices/list/details/:id',
+              },
+            ]
+          },
+          {
+            name: 'Transactions',
+            path: '#'
+          }
+        ]
+      }
     ],
   },
   {
@@ -177,7 +198,7 @@ export const sidebarData = [
         name: 'Portal',
         path: '/admin/dashboard/settings/portal',
       },
-      
+
     ],
   },
   {

@@ -22,7 +22,11 @@ export {
   getDepartments as getDepartmentsDispatch,
   setDepartmentsLoading,
 } from './departmentsSlice';
-
+export {
+  getInvoices as getInvoicesDispatch,
+  setInvoiceLoading,
+  getInvoice
+} from './invoicesSlice';
 export * from './apiKeysSlice';
 export * from './appSettings';
 export * from './paymentGateways';
