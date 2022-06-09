@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 // Custom Modules
 import { Input, MultiSelect, SMTPEditor, Button } from 'components';
 import { addEmailTemplate } from 'store';
-import './Add.styles.scss';
+import './Edit.styles.scss';
 
 const ConfigurationEditor = ({ editorState, onEditorStateChange, onBlur }) => {
   return (
@@ -84,7 +84,7 @@ const EmailBodyInput = ({
   );
 };
 
-export const Add = () => {
+export const Edit = () => {
   const initialValues = {
     title: '',
     categories: [],
@@ -167,7 +167,7 @@ export const Add = () => {
                 <div className="flex flex-col gap-[20px]">
                   <div className="bg-[#1E1E2D] rounded-[8px]">
                     <h6 className="text-white font-medium p-[32px] text-[16px]">
-                      Create New Article
+                      Edit Article
                     </h6>
                     {/* Other Inputs */}
                     <div className="flex flex-col gap-[2px]">
@@ -213,7 +213,7 @@ export const Add = () => {
                     )}
                     <div className="p-[32px] pt-[10px]">
                       <Button htmlType="submit" className="w-[fit_content]">
-                        Create New Article
+                        Edit Article
                       </Button>
                     </div>
                   </div>

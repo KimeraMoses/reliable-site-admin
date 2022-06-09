@@ -1,4 +1,3 @@
-import API from 'modules/Settings/pages/API/API.page';
 import { Article, RecentArticle } from './sections';
 import './View.styles.scss';
 

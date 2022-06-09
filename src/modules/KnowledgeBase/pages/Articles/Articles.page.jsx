@@ -1,13 +1,13 @@
 import { Route, Routes } from 'react-router-dom';
-import { Add, List, View } from './pages';
+import { Add, Edit, List, View } from './pages';
 
 const Articles = () => {
   return (
     <Routes>
       <Route index element={<List />} />
       <Route path="add/new" element={<Add />} />
-      <Route path="article/view/:id" element={<View />} />
-      {/* <Route path="article/edit/:id" element={< />} />  */}
+      <Route path="view/:id" element={<View />} />
+      <Route path="edit/:id" element={<Edit />} />
     </Routes>
   );
 };

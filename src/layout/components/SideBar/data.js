@@ -99,15 +99,15 @@ export const sidebarData = [
         subLinks: [
           {
             name: 'Article Detail',
-            path: '/admin/dashboard/billing/articles/article/view/:id',
+            path: '/admin/dashboard/knowledge-base/articles/view/:id',
           },
           {
             name: 'Add New Article',
-            path: '/admin/dashboard/billing/articles/article/add/new',
+            path: '/admin/dashboard/knowledge-base/articles/add/new',
           },
           {
             name: 'Edit Article',
-            path: '/admin/dashboard/billing/articles/article/edit/:id',
+            path: '/admin/dashboard/knowledge-base/articles/edit/:id',
           },
         ],
       },

@@ -8,12 +8,14 @@ export const MultiSelect = ({
   placeholder,
   options,
   mode = 'multiple',
+  className,
+  dropdownClassName,
 }) => {
   return (
     <Field name={name}>
       {({ meta, form: { setFieldValue, setFieldTouched } }) => {
         return (
-          <div className="w-full">
+          <div className="w-full custom-select-component">
             {label ? (
               <label
                 htmlFor={name}
@@ -26,10 +28,10 @@ export const MultiSelect = ({
               mode={mode}
               style={{ width: '100%' }}
               placeholder={placeholder}
-              className="custom-select"
-              dropdownClassName="custom-select__dropdown"
+              className={`custom-select ${className}`}
+              dropdownClassName={`custom-select__dropdown ${dropdownClassName}`}
               options={options}
-              value={meta.value}
+              value={meta?.value}
               onChange={(value) => {
                 setFieldValue(name, value);
               }}
@@ -37,7 +39,7 @@ export const MultiSelect = ({
                 setFieldTouched(name, true);
               }}
             />
-            {meta.touched && Array.isArray(meta.error) ? (
+            {meta?.touched && Array.isArray(meta?.error) ? (
               <>
                 {meta.error.map((err, index) => (
                   <div key={`error-tag-${index}`} className="error">
@@ -45,8 +47,8 @@ export const MultiSelect = ({
                   </div>
                 ))}
               </>
-            ) : meta.touched && meta.error ? (
-              <div className="error">{meta.error}</div>
+            ) : meta?.touched && meta?.error ? (
+              <div className="error">{meta?.error}</div>
             ) : null}
           </div>
         );
