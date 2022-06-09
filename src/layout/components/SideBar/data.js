@@ -122,7 +122,7 @@ export const sidebarData = [
         ],
       },
       {
-        name: 'UserSubmissions',
+        name: 'User Submissions',
         path: '/admin/dashboard/knowledge-base/user-submissions',
         subLinks: [
           {
@@ -130,6 +130,20 @@ export const sidebarData = [
             path: '/admin/dashboard/knowledge-base/user-submissions/view/:id',
           },
         ],
+      },
+      {
+        name: 'Feedback',
+        path: '/admin/dashboard/knowledge-base/feedback',
+        subLinks: [
+          {
+            name: 'Feedback Details',
+            path: '/admin/dashboard/knowledge-base/feedback/view/:id',
+          },
+        ],
+      },
+      {
+        name: 'Categories',
+        path: '/admin/dashboard/knowledge-base/categories',
       },
     ],
   },
