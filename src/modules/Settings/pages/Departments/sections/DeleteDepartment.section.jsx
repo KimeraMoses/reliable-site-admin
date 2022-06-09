@@ -12,7 +12,7 @@ export const DeleteDepartment = ({ show, setShow, id }) => {
     const initialValues = {
         id,
     };
-    const { t } = useTranslation("/Departments/ns");
+    const { t } = useTranslation("/Settings/ns");
     const dispatch = useDispatch();
     const { loading } = useSelector((state) => state?.paymentGateways);
 

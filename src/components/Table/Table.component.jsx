@@ -1,4 +1,4 @@
-import { Input, Button, Table as AntTable, Dropdown } from 'antd';
+import { Input, Button, Table as AntTable, Dropdown, DatePicker } from 'antd';
 import { Dropdown as DropdownIcon } from 'icons';
 import { Search } from 'icons';
 import { useEffect, useState } from 'react';
@@ -33,6 +33,10 @@ export const Table = ({
   hideActions,
   hideHeaders,
   dateRangeSelector,
+  dateRageFilter = false,
+  statusFilter = [],
+  handleStatus,
+  handleDateRange,
 }) => {
   const [dataSource, setDataSource] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
@@ -53,6 +57,10 @@ export const Table = ({
       setFiltered(filteredData);
     }
   }, [data, fieldToFilter, search]);
+
+  // const onOpenChange = (open) => {
+  //   console.log(open);
+  // }
 
   // Only Set Data if there are view permissions
   useEffect(() => {
@@ -112,7 +120,7 @@ export const Table = ({
       setTableColumns(columns);
     }
   }, []);
-
+  const { RangePicker } = DatePicker;
   return (
     <div className="custom-table">
       {/* Header */}
@@ -143,7 +151,36 @@ export const Table = ({
               }
             </div>
             {/* Button */}
+
             <div className="flex items-center gap-[8px]">
+              {dateRageFilter && (
+                <RangePicker
+                  onChange={(date, dateString, id) =>
+                    handleDateRange(date, dateString, id)
+                  }
+                  dropdownClassName="custom-date-picker-dd"
+                  format="YYYY-MM-DD    "
+                  placeholder={['Date Range']}
+                  className="custom-date-picker w-full h-[52px] bg-[#171723] rounded-[8px] text-[#92928F] flex items-center justify-between px-[16px]"
+                />
+              )}
+              {console.log(statusFilter)}
+              {statusFilter?.length ? (
+                <select
+                  onChange={(e) => handleStatus(e.target.value)}
+                  className="custom-select form-select appearance-none block w-full px-[16px] h-[52px] text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0"
+                >
+                  <option value="">Status</option>
+                  {statusFilter.map((data, i) => (
+                    <option value={i} key={i}>
+                      {data.name}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <></>
+              )}
+
               {additionalBtns?.length ? (
                 additionalBtns?.map((btn) => {
                   return (

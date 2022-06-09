@@ -14,6 +14,7 @@ import emailTemplatesReducer from './Slices/emailTemplates';
 import brandsReducer from './Slices/brandsSlice';
 import departmentsReducer from './Slices/departmentsSlice';
 import transactionsReducer from './Slices/transactions';
+import invoicesReducer from './Slices/invoicesSlice';
 
 const store = configureStore({
   reducer: {
@@ -32,6 +33,7 @@ const store = configureStore({
     brands: brandsReducer,
     departments: departmentsReducer,
     transactions: transactionsReducer,
+    invoices: invoicesReducer,
   },
 });
 

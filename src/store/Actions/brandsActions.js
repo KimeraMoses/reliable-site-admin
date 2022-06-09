@@ -19,8 +19,8 @@ export const getBrands = () => {
     return async (dispatch) => {
         dispatch(setBrandsLoading(true));
         try {
-            const { url, config } = getBrandsConfig();
-            const res = await axios.post(url, config);
+            const { url, defaultData, config } = getBrandsConfig();
+            const res = await axios.post(url, defaultData, config);
             dispatch(getBrandsDispatch(res?.data?.data));
             dispatch(setBrandsLoading(false));
         } catch (e) {

@@ -10,7 +10,7 @@ import {
     AddDepartment,
     DeleteDepartment,
     EditDepartment,
-    adminAssigned,
+    AdminAssigned,
 } from './sections';
 
 const Brands = () => {
@@ -33,7 +33,7 @@ const Brands = () => {
     const { departments, loading } = useSelector((state) => state.departments);
     const { users } = useSelector((state) => state?.users);
 
-    const { t } = useTranslation("/Departments/ns");
+    const { t } = useTranslation("/Settings/ns");
 
     const columns = [
         {
@@ -48,15 +48,15 @@ const Brands = () => {
         },
         {
             title: t('adminAssignedTable'),
-            key: "adminAssigned",
-            dataIndex: "adminAssigned",
-            render: (adminAssigned, record) => {
+            key: "departmentAdmins",
+            dataIndex: "departmentAdmins",
+            render: (departmentAdmins, record) => {
                 return (
-                    <NavLink to={"#"} onClick={() => {
+                    <NavLink to={"#"} className="text-[#3699FF]" onClick={() => {
                         setEditValue(record);
                         setAdminModalShow(true);
                     }}>
-                        {`${adminAssigned?.split(",")?.length} Admin Assigned`}
+                        {`${departmentAdmins?.length} Admin Assigned`}
                     </NavLink>
                 )
             }
@@ -115,6 +115,13 @@ const Brands = () => {
                 setShow={setDeleteModalShow}
                 id={deleteID}
             />
+            <AdminAssigned
+                show={adminModalShow}
+                setShow={setAdminModalShow}
+                editValue={editValue}
+                users={users}
+            />
+
             <Table
                 columns={columns}
                 data={data}

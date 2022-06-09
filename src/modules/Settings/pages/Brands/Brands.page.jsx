@@ -33,7 +33,7 @@ const Brands = () => {
   const { brands, loading } = useSelector((state) => state.brands);
   const { clients } = useSelector((state) => state?.users);
 
-  const { t } = useTranslation("/Brands/ns");
+  const { t } = useTranslation("/Settings/ns");
 
   const columns = [
     {

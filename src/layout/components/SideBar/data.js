@@ -74,8 +74,18 @@ export const sidebarData = [
         showDropdown: true,
         subLinks: [
           {
+            name: 'Invoice List',
+            path: '/admin/dashboard/billing/invoices/list/show',
+            subLinks: [
+              {
+                name: 'Invoice Details',
+                path: '/admin/dashboard/billing/invoices/list/details/:id',
+              },
+            ],
+          },
+          {
             name: 'Transactions',
-            path: '/admin/dashboard/billing/invoices/transactions',
+            path: '#',
           },
         ],
       },

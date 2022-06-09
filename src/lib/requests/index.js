@@ -38,6 +38,5 @@ export * from './supportSettings';
 export * from './brands';
 // Departments End-Points
 export * from './departments';
-
-// Transactions
-export * from './transactions';
+// Invoices End-Points
+export * from './invoices';
