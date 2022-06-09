@@ -87,6 +87,7 @@ export const Add = ({ show, setShow }) => {
           productCategories: [values.productCategories],
         };
         await dispatch(createProduct(newVal));
+        setShow(false);
       }}
       loading={loading}
       fields={fields}

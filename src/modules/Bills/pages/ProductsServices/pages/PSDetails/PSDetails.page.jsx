@@ -54,6 +54,7 @@ export const PSDetails = () => {
     descriptionHolder: convertHTMLToDraftState(product?.headerContent),
     productLineItems: product?.productLineItems,
     notes: product?.notes,
+    paymentType: product?.paymentType,
     registrationDate: moment(product?.registrationDate),
     nextDueDate: moment(product?.nextDueDate),
     terminationDate: moment(product?.terminationDate),
@@ -68,11 +69,16 @@ export const PSDetails = () => {
       onSubmit={async (values) => {
         const img = await createServerImage(values.thumbnail);
         const newValues = {
-          thumbnail: img,
+          thumbnail: img || {
+            name: null,
+            extension: null,
+            data: null,
+          },
           status: values?.status,
           productCategories: values?.productCategories?.map((item) => ({
             categoryId: item,
           })),
+          paymentType: values?.paymentType,
           tags: `${values?.tags}`,
           name: values?.name,
           description: values?.description,
@@ -85,7 +91,8 @@ export const PSDetails = () => {
           overrideTerminationDate:
             values?.overrideTerminationDate?.toISOString(),
         };
-        await dispatch(updateProductByID(id, newValues));
+        // await dispatch(updateProductByID(id, newValues));
+        console.log(newValues);
       }}
     >
       {({ values }) => {
