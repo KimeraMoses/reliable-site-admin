@@ -68,6 +68,27 @@ export const sidebarData = [
           },
         ],
       },
+      {
+        name: 'Invoices',
+        path: '/admin/dashboard/billing/invoices',
+        showDropdown: true,
+        subLinks: [
+          {
+            name: 'Invoice List',
+            path: '/admin/dashboard/billing/invoices/list/show',
+            subLinks: [
+              {
+                name: 'Invoice Details',
+                path: '/admin/dashboard/billing/invoices/list/details/:id',
+              },
+            ],
+          },
+          {
+            name: 'Transactions',
+            path: '#',
+          },
+        ],
+      },
     ],
   },
   {
@@ -81,6 +102,50 @@ export const sidebarData = [
     module: 'KnowledgeBase',
     path: '/admin/dashboard/knowledge-base',
     icon: (fill) => <Knowledge fill={fill} />,
+    subLinks: [
+      {
+        name: 'Articles',
+        path: '/admin/dashboard/knowledge-base/articles',
+        subLinks: [
+          {
+            name: 'Article Detail',
+            path: '/admin/dashboard/knowledge-base/articles/view/:id',
+          },
+          {
+            name: 'Add New Article',
+            path: '/admin/dashboard/knowledge-base/articles/add/new',
+          },
+          {
+            name: 'Edit Article',
+            path: '/admin/dashboard/knowledge-base/articles/edit/:id',
+          },
+        ],
+      },
+      {
+        name: 'User Submissions',
+        path: '/admin/dashboard/knowledge-base/user-submissions',
+        subLinks: [
+          {
+            name: 'Submission Details',
+            path: '/admin/dashboard/knowledge-base/user-submissions/view/:id',
+          },
+        ],
+      },
+      {
+        name: 'Feedback',
+        path: '/admin/dashboard/knowledge-base/feedback',
+        subLinks: [
+          {
+            name: 'Feedback Details',
+            path: '/admin/dashboard/knowledge-base/feedback/view/:id',
+          },
+        ],
+      },
+      {
+        name: 'Categories',
+        path: '/admin/dashboard/knowledge-base/categories',
+      },
+    ],
   },
   {
     name: 'Reports',
@@ -128,6 +193,14 @@ export const sidebarData = [
       {
         name: 'Support',
         path: '/admin/dashboard/settings/support',
+      },
+      {
+        name: 'Departments',
+        path: '/admin/dashboard/settings/departments',
+      },
+      {
+        name: 'Brands',
+        path: '/admin/dashboard/settings/brands',
       },
       {
         name: 'SMTP',

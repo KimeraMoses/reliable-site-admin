@@ -1,3 +1,24 @@
 {
-  "title": "Bills"
+  "title": "Bills",
+  "invoiceId": "Invoice ID",
+  "issueDate": "Issue Date",
+  "dueDate": "Due Date",
+  "issuedFor": "Issued For",
+  "issuedBy": "Issued By",
+  "status": "Status",
+  "actions": "Actions",
+  "payNow": "Pay Now",
+  "description": "Description",
+  "amount": "Amount",
+  "subTotal": "Sub Total",
+  "vat": "VAT",
+  "total": "Total",
+  "paymentDetails": "Payment Details",
+  "payPal": "PayPal",
+  "account": "Account",
+  "paymentTerms": "Payment Terms",
+  "overview": "Overview",
+  "productName": "Product Name",
+  "viewProduct": "View Product",
+  "completedBy": "Completed By"
 }

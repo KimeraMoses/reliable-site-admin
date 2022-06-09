@@ -11,10 +11,6 @@ export const registerAdminConfig = () => ({
   url: '/api/identity/register-admin',
   config: identityConfig('Create'),
 });
-export const registerClientConfig = () => ({
-  url: '/api/identity/register-client-user',
-  config: identityConfig('Create'),
-});
 export const updateUserProfileConfig = () => ({
   url: `/api/identity/profile`,
   config: identityConfig('Update'),

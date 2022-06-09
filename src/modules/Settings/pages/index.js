@@ -1,5 +1,5 @@
 import { lazy } from 'react';
-
+import '../style.scss';
 export const pages = [
   { path: 'general', Component: lazy(() => import('./General/General.page')) },
   { path: 'billing', Component: lazy(() => import('./Billing/Billing.page')) },
@@ -30,5 +30,13 @@ export const pages = [
   {
     path: 'portal',
     Component: lazy(() => import('./Portal/Portal.page')),
+  },
+  {
+    path: 'brands',
+    Component: lazy(() => import('./Brands/Brands.page')),
+  },
+  {
+    path: 'departments',
+    Component: lazy(() => import('./Departments/Departments.page')),
   },
 ];
