@@ -111,6 +111,16 @@ export const sidebarData = [
           },
         ],
       },
+      {
+        name: 'UserSubmissions',
+        path: '/admin/dashboard/knowledge-base/user-submissions',
+        subLinks: [
+          {
+            name: 'Submission Details',
+            path: '/admin/dashboard/knowledge-base/user-submissions/view/:id',
+          },
+        ],
+      },
     ],
   },
   {

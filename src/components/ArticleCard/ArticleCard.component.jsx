@@ -24,24 +24,30 @@ export const ArticleCard = ({
           placement="bottomRight"
           overlay={
             <div className="rounded-[8px] custom-article-card__more-dd z-50 flex flex-col gap-[20px] min-w-[120px] py-[20px] px-[12px]">
-              <button
-                className="text-[#6D6D80] text-[12px] hover:text-[#3699FF] text-left"
-                onClick={onView}
-              >
-                View
-              </button>
-              <button
-                className="text-[#6D6D80] text-[12px] hover:text-[#3699FF] text-left"
-                onClick={onEdit}
-              >
-                Edit
-              </button>
-              <button
-                className="text-[#6D6D80] text-[12px] hover:text-[#3699FF] text-left"
-                onClick={onDelete}
-              >
-                Delete
-              </button>
+              {onView && (
+                <button
+                  className="text-[#6D6D80] text-[12px] hover:text-[#3699FF] text-left"
+                  onClick={onView}
+                >
+                  View
+                </button>
+              )}
+              {onEdit && (
+                <button
+                  className="text-[#6D6D80] text-[12px] hover:text-[#3699FF] text-left"
+                  onClick={onEdit}
+                >
+                  Edit
+                </button>
+              )}
+              {onDelete && (
+                <button
+                  className="text-[#6D6D80] text-[12px] hover:text-[#3699FF] text-left"
+                  onClick={onDelete}
+                >
+                  Delete
+                </button>
+              )}
             </div>
           }
         >
