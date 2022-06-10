@@ -25,7 +25,7 @@ export {
 export {
   getInvoices as getInvoicesDispatch,
   setInvoiceLoading,
-  getInvoice
+  getInvoice,
 } from './invoicesSlice';
 export * from './apiKeysSlice';
 export * from './appSettings';
@@ -33,3 +33,6 @@ export * from './paymentGateways';
 export * from './smtp';
 export * from './emailTemplates';
 export * from './transactions';
+export * from './articles';
+export * from './articlesFeedback';
+export * from './articleFeedbackComments';
