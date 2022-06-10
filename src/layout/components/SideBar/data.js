@@ -158,6 +158,24 @@ export const sidebarData = [
     module: 'Reports',
     path: '/admin/dashboard/reports',
     icon: (fill) => <Reports fill={fill} />,
+    subLinks: [
+      {
+        name: 'Annual Income Report',
+        path: '/admin/dashboard/reports/anuual/income',
+      },
+      {
+        name: 'Support Response Time',
+        path: '/admin/dashboard/reports/support-response/time',
+      },
+      {
+        name: 'Support Ticket Duration',
+        path: '/admin/dashboard/reports/support-ticket/duration',
+      },
+      {
+        name: 'Support Ticket Reply Count',
+        path: '/admin/dashboard/reports/support-ticket-reply/count',
+      },
+    ],
   },
   {
     name: 'Admin Users',
