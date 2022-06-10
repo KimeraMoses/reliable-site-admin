@@ -1,7 +1,6 @@
 import { Button } from 'antd';
 import { useEffect, useState } from 'react';
 import moment from 'moment';
-import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkModule } from 'lib/checkModule';
@@ -10,7 +9,6 @@ import { getInvoices } from 'store';
 import { AddCategory } from './sections';
 
 export const CategoryList = () => {
-  const navigate = useNavigate();
   const { t } = useTranslation('/Bills/ns');
 
   const dispatch = useDispatch();
@@ -85,7 +83,7 @@ export const CategoryList = () => {
   }, [invoices]);
 
   return (
-    <div className="p-[40px]">
+    <div className="mt-[20px]">
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
         <AddCategory show={addModalShow} setShow={setAddModalShow} />
         <Table

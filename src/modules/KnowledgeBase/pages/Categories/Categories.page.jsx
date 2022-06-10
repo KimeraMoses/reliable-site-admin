@@ -1,12 +1,11 @@
 import { Route, Routes } from 'react-router-dom';
-import { CategoryList } from './pages';
-import { ChildCategoryList } from './pages/ChildCategory';
+import { List } from './pages';
 
 const Categories = () => {
   return (
     <Routes>
-      {/* <Route index element={<CategoryList />} /> */}
-      <Route index element={<ChildCategoryList />} />
+      <Route index element={<List />} />
+      {/* <Route index element={<ChildCategoryList />} /> */}
     </Routes>
   );
 };

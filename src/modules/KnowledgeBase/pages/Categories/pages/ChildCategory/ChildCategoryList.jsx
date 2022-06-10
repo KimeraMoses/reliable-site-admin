@@ -102,7 +102,7 @@ export const ChildCategoryList = () => {
   }, [invoices]);
 
   return (
-    <div className="p-[40px]">
+    <div className="mt-[20px]">
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
         <AddChildCategory show={addModalShow} setShow={setAddModalShow} />
         <Table
