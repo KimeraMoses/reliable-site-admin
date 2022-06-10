@@ -4,6 +4,7 @@ import {
   ClientDetails,
   MassEmailClients,
   ClientNotifications,
+  AddNewNotification,
 } from './pages';
 
 const Clients = () => {
@@ -18,6 +19,10 @@ const Clients = () => {
       <Route
         path="show-notifications/client-notifications"
         element={<ClientNotifications />}
+      />
+      <Route
+        path="show-notifications/client-notifications/add/new"
+        element={<AddNewNotification />}
       />
     </Routes>
   );

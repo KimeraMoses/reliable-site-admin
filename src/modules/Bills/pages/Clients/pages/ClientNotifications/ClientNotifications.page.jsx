@@ -1,5 +1,4 @@
 import { Button } from 'antd';
-import * as Yup from 'yup';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import { Table } from 'components';
@@ -9,7 +8,6 @@ import { useSelector } from 'react-redux';
 import { checkModule } from 'lib/checkModule';
 
 export const ClientNotifications = () => {
-  const [showAdd, setShowAdd] = useState(false);
   const navigate = useNavigate();
 
   const { t } = useTranslation('/Bills/ns');
@@ -118,7 +116,10 @@ export const ClientNotifications = () => {
           fieldToFilter="name"
           btnData={{
             text: 'Add New',
-            onClick: () => setShowAdd(true),
+            onClick: () =>
+              navigate(
+                '/admin/dashboard/billing/clients/show-notifications/client-notifications/add/new'
+              ),
             customClass: 'w-[fit_content]',
           }}
           rowSelection={rowSelection}
