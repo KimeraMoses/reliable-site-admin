@@ -1,5 +1,10 @@
 import { Route, Routes } from 'react-router-dom';
-import { ClientList, ClientDetails, MassEmailClients } from './pages';
+import {
+  ClientList,
+  ClientDetails,
+  MassEmailClients,
+  ClientNotifications,
+} from './pages';
 
 const Clients = () => {
   return (
@@ -9,6 +14,10 @@ const Clients = () => {
       <Route
         path="send-email/mass-email-clients"
         element={<MassEmailClients />}
+      />
+      <Route
+        path="show-notifications/client-notifications"
+        element={<ClientNotifications />}
       />
     </Routes>
   );
