@@ -27,6 +27,12 @@ export {
   setInvoiceLoading,
   getInvoice
 } from './invoicesSlice';
+
+export {
+  getOrders as getOrdersDispatch,
+  setOrderLoading
+} from './ordersSlice';
+
 export * from './apiKeysSlice';
 export * from './appSettings';
 export * from './paymentGateways';

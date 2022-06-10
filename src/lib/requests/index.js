@@ -40,3 +40,5 @@ export * from './brands';
 export * from './departments';
 // Invoices End-Points
 export * from './invoices';
+// Orders End-Points
+export * from './orders';

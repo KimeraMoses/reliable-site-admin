@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { element, bool } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
-import { SideBar, TopBar } from './components';
+import { SideBar, TopBar, Notifications } from './components';
 import { sidebarData } from './components/SideBar/data';
 import { GetMFAUri } from 'store/Actions/AuthActions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,6 +20,7 @@ export function DashboardLayout({ children, hide }) {
     query: '(max-width: 900px)',
   });
   const [hideSide, setHideSide] = useState(!!lessThanDesktop);
+  const [hideNoti, setHideNoti] = useState(false);
 
   useEffect(() => {
     const activeLink = sidebarData.filter((sideItem) => {
@@ -39,11 +40,11 @@ export function DashboardLayout({ children, hide }) {
         return pathname.includes(path);
       });
       setActiveSub(activeSubLink[0]);
-
+     
       if (activeSubLink?.length && activeSubLink[0]?.subLinks?.length) {
         const activeInnerSubLink = activeSubLink[0]?.subLinks?.filter(
           ({ path }) => {
-            const trimmedPathname = path.substring(0, path.lastIndexOf('/'));
+            const trimmedPathname = path.substring(0, path.lastIndexOf('/'));  
             return pathname.includes(trimmedPathname);
           }
         );
@@ -78,12 +79,17 @@ export function DashboardLayout({ children, hide }) {
     setHideSide((state) => !state);
   };
 
+  const toggleNotification = () => {
+    setHideNoti((state) => !state);
+  };
+
   return (
     <div className="w-full md:min-h-screen">
       <TopBar
         hide={hide}
         hideSide={hideSide}
         toggleSide={toggleSide}
+        toggleNotification={toggleNotification}
         innerSubLinks={
           activeSub && activeSub.showDropdown ? activeSub.subLinks : []
         }
@@ -100,6 +106,7 @@ export function DashboardLayout({ children, hide }) {
 
             {activeSub?.name && !active.hideBread ? (
               <>
+              
                 <div className="h-5 w-[1px] bg-[#323248]" />
                 <h6 className="text-white text-[12px]">
                   <Link
@@ -108,7 +115,6 @@ export function DashboardLayout({ children, hide }) {
                   >{`${activeSub?.name} ${
                     activeInnerSub?.name ? '-' : ''
                   } `}</Link>
-
                   {activeInnerSub?.name && !activeDeepInnerSub ? (
                     <span>{`${activeInnerSub?.name} ${
                       activeDeepInnerSub ? '-' : ''
@@ -138,6 +144,9 @@ export function DashboardLayout({ children, hide }) {
           {children}
         </div>
       </div>
+      {
+        hideNoti && <Notifications toggleNotification={hideNoti} />
+      }
     </div>
   );
 }

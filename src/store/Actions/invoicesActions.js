@@ -20,7 +20,6 @@ export const getInvoices = (params = []) => {
             }
             console.log(params);
             if (params?.startDate && params?.endDate) {
-                console.log('test');
                 defaultData['startDate'] = params?.startDate;
                 defaultData['endDate'] = params?.endDate;
             }

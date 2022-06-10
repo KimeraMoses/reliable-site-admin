@@ -21,7 +21,21 @@ export const sidebarData = [
     path: '/admin/dashboard/billing',
     icon: (fill) => <Billing fill={fill} />,
     subLinks: [
-      { name: 'Orders', path: '/admin/dashboard/billing/orders' },
+      {
+        name: 'Orders',
+        path: '/admin/dashboard/billing/orders',
+        showDropdown: true,
+        subLinks: [
+          {
+            name: 'Your Orders',
+            path: '/admin/dashboard/billing/orders/your-orders/list',
+          },
+          {
+            name: 'All Orders',
+            path: '/admin/dashboard/billing/orders/all-orders/list',
+          },
+        ]
+      },
       {
         name: 'Clients',
         path: '/admin/dashboard/billing/clients',

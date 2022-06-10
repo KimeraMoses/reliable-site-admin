@@ -1,10 +1,11 @@
 import { getConfig } from 'lib';
-const invoicesConfig = (action) =>
+
+const ordersConfig = (action) =>
     getConfig({ module: 'Users', action });
 
-const prefix = `/api/v1/admin/bills`;
+const prefix = `/api/v1/admin/orders`;
 
-export const getInvoicesConfig = () => ({
+export const getOrdersConfig = () => ({
     url: `${prefix}/search`,
     defaultData: {
         advancedSearch: {
@@ -16,10 +17,5 @@ export const getInvoicesConfig = () => ({
         pageSize: 0,
         orderBy: ['']
     },
-    config: invoicesConfig('View'),
-});
-
-export const getInvoiceConfig = (id) => ({
-    url: `${prefix}/${id}`,
-    config: invoicesConfig('View'),
+    config: ordersConfig('View'),
 });
