@@ -1,3 +1,4 @@
+import { Notifications } from 'components';
 import { useOutside } from 'hooks';
 import React, { useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -16,12 +17,20 @@ function UserTop() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [notifications, setNotifications] = useState(false);
   const links = [
     {
       name: 'Settings',
       onClick: () => {
         setDropdown((dropdownValue) => !dropdownValue);
         navigate('/admin/dashboard/account-settings/general');
+      },
+    },
+    {
+      name: 'Notifications',
+      onClick: () => {
+        setDropdown((dropdownValue) => !dropdownValue);
+        setNotifications((notificationValue) => !notificationValue);
       },
     },
     {
@@ -40,6 +49,10 @@ function UserTop() {
       onClick={() => setDropdown((prevDropdown) => !prevDropdown)}
       ref={dropDownRef}
     >
+      <Notifications
+        visible={notifications}
+        onClose={() => setNotifications(false)}
+      />
       <div className="h-12 w-12 rounded-lg border-2 border-[#3699FF] p-1 userName">
         {user?.base64Image ? (
           <img
