@@ -1,6 +1,11 @@
 import { DashboardLayout } from 'layout';
 import { Routes, Route, Navigate } from 'react-router-dom';
-import { AnnualIncomeReport, SupportResponseTime } from './pages';
+import {
+  AnnualIncomeReport,
+  SupportResponseTime,
+  SupportTicketDuration,
+  SupportTicketReplyCount,
+} from './pages';
 
 export const Reports = () => {
   return (
@@ -12,6 +17,14 @@ export const Reports = () => {
         />
         <Route path="anuual/income" element={<AnnualIncomeReport />} />
         <Route path="support-response/time" element={<SupportResponseTime />} />
+        <Route
+          path="support-ticket/duration"
+          element={<SupportTicketDuration />}
+        />
+        <Route
+          path="support-ticket-reply/count"
+          element={<SupportTicketReplyCount />}
+        />
       </Routes>
     </DashboardLayout>
   );
