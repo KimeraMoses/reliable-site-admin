@@ -67,7 +67,7 @@ export const updateArticle = ({ id, data }) => {
       const { url, config } = updateArticleConfig(id);
       const res = await axios.put(url, data, config);
       if (res.status === 200) {
-        const { url, config } = getArticleByIDConfig(id);
+        const { url, config } = getArticlesConfig();
         const res = await axios.get(url, config);
         dispatch(updateArticleConfig(res?.data?.data));
         toast.success('Article updated successfully');
@@ -88,7 +88,7 @@ export const deleteArticle = ({ id }) => {
       const { url, config } = deleteArticleConfig(id);
       const res = await axios.delete(url, config);
       if (res.status === 200) {
-        const { url, config } = getArticleByIDConfig(id);
+        const { url, config } = getArticlesConfig();
         const res = await axios.get(url, config);
         dispatch(updateArticleConfig(res?.data?.data));
         toast.success('Article deleted successfully');
