@@ -2,14 +2,11 @@ import * as Yup from 'yup';
 import { Modal } from 'components';
 import { useDispatch, useSelector } from 'react-redux';
 import { createProduct } from 'store';
+import moment from 'moment';
 
 const addSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),
 });
-
-const initialValues = {
-  name: '',
-};
 
 export const Add = ({ show, setShow }) => {
   const { categories } = useSelector((state) => state?.categories);
@@ -71,6 +68,19 @@ export const Add = ({ show, setShow }) => {
       placeholder: 'Enter Comma Separated Tags',
     },
   ];
+
+  const initialValues = {
+    name: '',
+    description: '',
+    productCategories: categories[0]?.id,
+    paymentType: 0,
+    status: 0,
+    registrationDate: moment().toISOString(),
+    nextDueDate: moment().add(5, 'days').toISOString(),
+    terminationDate: moment().add(10, 'days').toISOString(),
+    overrideSuspensionDate: moment().add(10, 'days').toISOString(),
+    overrideTerminationDate: moment().add(10, 'days').toISOString(),
+  };
 
   const dispatch = useDispatch();
   return (

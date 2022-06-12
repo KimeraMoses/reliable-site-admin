@@ -45,14 +45,20 @@ export const PSDetails = () => {
     thumbnail: product?.thumbnail,
     status: product?.status,
     // TODO: Add departments once merged with task-116
+    productDepartments: product?.productDepartments?.map(
+      (department) => department?.departmentId
+    ),
     productCategories: product?.productCategories?.map(
       (category) => category?.categoryId
     ),
     tags: product?.tags?.split(','),
     name: product?.name,
     description: product?.description,
-    descriptionHolder: convertHTMLToDraftState(product?.headerContent),
-    productLineItems: product?.productLineItems,
+    // descriptionHolder: convertHTMLToDraftState(product?.headerContent),
+    productLineItems: product?.productLineItems?.map((item) => ({
+      ...item,
+      isDeleted: item?.isDeleted || false,
+    })),
     notes: product?.notes,
     paymentType: product?.paymentType,
     registrationDate: moment(product?.registrationDate),
@@ -69,11 +75,7 @@ export const PSDetails = () => {
       onSubmit={async (values) => {
         const img = await createServerImage(values.thumbnail);
         const newValues = {
-          thumbnail: img || {
-            name: null,
-            extension: null,
-            data: null,
-          },
+          thumbnail: img,
           status: values?.status,
           productCategories: values?.productCategories?.map((item) => ({
             categoryId: item,
@@ -82,7 +84,11 @@ export const PSDetails = () => {
           tags: `${values?.tags}`,
           name: values?.name,
           description: values?.description,
-          productLineItems: values?.productLineItems,
+          productLineItems: values?.productLineItems?.map((item) => ({
+            name: item?.name,
+            price: item?.price,
+            isDeleted: item?.isDeleted,
+          })),
           notes: values?.notes,
           registrationDate: values?.registrationDate?.toISOString(),
           nextDueDate: values?.nextDueDate?.toISOString(),
@@ -90,9 +96,10 @@ export const PSDetails = () => {
           overrideSuspensionDate: values?.overrideSuspensionDate?.toISOString(),
           overrideTerminationDate:
             values?.overrideTerminationDate?.toISOString(),
+          productDepartments: values?.productDepartments,
         };
-        // await dispatch(updateProductByID(id, newValues));
-        console.log(newValues);
+        await dispatch(updateProductByID(id, newValues));
+        // console.log(newValues);
       }}
     >
       {({ values }) => {

@@ -51,9 +51,14 @@ export const LineItems = () => {
 
   const { values, setFieldValue } = useFormikContext();
 
+  console.log(values);
+
   const addLineItem = (item) => {
     const currentLineItems = values?.productLineItems;
-    const newLineItems = [...currentLineItems, { ...item, id: nanoid() }];
+    const newLineItems = [
+      ...currentLineItems,
+      { ...item, id: item?.id || nanoid(), isDeleted: false },
+    ];
     setFieldValue('productLineItems', newLineItems);
   };
   const editLineItem = (id, editItem) => {
@@ -67,20 +72,40 @@ export const LineItems = () => {
   };
 
   const deleteLineItem = (id) => {
-    if (values?.productLineItems?.length <= 1) {
+    const newItems = values?.productLineItems?.filter(
+      (item) => item.id !== id && item?.isDeleted === false
+    );
+    const lineItemDeleted = values?.productLineItems?.filter(
+      (item) => item?.id === id || item?.isDeleted === true
+    );
+    const newItemsFinal = newItems?.map((item) => {
+      return {
+        ...item,
+        isDeleted: false,
+      };
+    });
+    const deletedItemsFinal = lineItemDeleted?.map((item) => {
+      return {
+        ...item,
+        isDeleted: true,
+      };
+    });
+    if (newItems?.length < 1) {
       toast.error('At least one item is required');
     } else {
-      const newItems = values?.productLineItems?.filter(
-        (item) => item.id !== id
-      );
-      setFieldValue('productLineItems', newItems);
+      setFieldValue('productLineItems', [
+        ...newItemsFinal,
+        ...deletedItemsFinal,
+      ]);
     }
   };
 
   useEffect(() => {
     let sum = 0;
     values?.productLineItems?.forEach((item) => {
-      sum += item?.price;
+      if (item?.isDeleted === false) {
+        sum += item?.price;
+      }
     });
     setTotal(sum);
   }, [values?.productLineItems]);
@@ -92,16 +117,22 @@ export const LineItems = () => {
           <h6 className="text-white text-[16px]">Line Items & Price</h6>
           <Button onClick={() => setAdd(true)}>Add New Item</Button>
         </div>
-        {values?.productLineItems?.map((item, idx) => (
-          <LineItem
-            key={`item-${idx}`}
-            item={item}
-            setDel={setDel}
-            setId={setId}
-            setEdit={setEdit}
-            setEditData={setEditData}
-          />
-        ))}
+        {values?.productLineItems?.map((item, idx) => {
+          if (!item?.isDeleted) {
+            return (
+              <LineItem
+                key={`item-${idx}`}
+                item={item}
+                setDel={setDel}
+                setId={setId}
+                setEdit={setEdit}
+                setEditData={setEditData}
+              />
+            );
+          } else {
+            return null;
+          }
+        })}
         <div className="mt-[32px] rounded-[8px] border-[#3699FF] border-[1px] border-dashed bg-[#212E48] flex items-center justify-between p-[32px]">
           <div className="text-white text-[20px] font-medium">
             Total - ${total.toFixed(2)}

@@ -78,7 +78,9 @@ export const PSList = () => {
       render: (text, record) => {
         let sum = 0;
         record?.productLineItems?.forEach((item) => {
-          sum += item?.price;
+          if (!item?.isDeleted) {
+            sum += item?.price;
+          }
         });
         return <>${sum}</>;
       },

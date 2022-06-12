@@ -35,7 +35,9 @@ export const MultiSelect = ({
               value={meta?.value}
               onChange={(value, option) => {
                 setFieldValue(name, value);
-                onChange(value, option);
+                if (onChange) {
+                  onChange(value, option);
+                }
               }}
               onBlur={() => {
                 setFieldTouched(name, true);
