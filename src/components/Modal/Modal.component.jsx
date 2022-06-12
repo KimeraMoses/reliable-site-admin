@@ -6,6 +6,7 @@ import './Modal.styles.scss';
 import { DatePicker } from 'components';
 import { Switch, Button, Checkbox } from 'antd';
 import { Fragment } from 'react';
+import { MultiSelect } from 'components/formFields';
 
 const demoFields = [];
 
@@ -67,7 +68,8 @@ export function Modal({
                             disableTime,
                             disabled,
                             users,
-                            subText
+                            subText,
+                            mode,
                           },
                           index
                         ) => {
@@ -129,40 +131,44 @@ export function Modal({
                                     />
                                     <div className="modal__form-el-password-strength">
                                       <div
-                                        className={`modal__form-el-password-strength-box transition-all ${strength === 'Too weak'
-                                          ? 'bg-red-600'
-                                          : strength === 'Weak'
+                                        className={`modal__form-el-password-strength-box transition-all ${
+                                          strength === 'Too weak'
+                                            ? 'bg-red-600'
+                                            : strength === 'Weak'
                                             ? 'bg-yellow-600'
                                             : strength === 'Medium'
-                                              ? 'bg-blue-600'
-                                              : strength === 'Strong'
-                                                ? 'bg-green-600'
-                                                : 'bg-[#323248]'
-                                          }`}
-                                      />
-                                      <div
-                                        className={`modal__form-el-password-strength-box transition-all ${strength === 'Weak'
-                                          ? 'bg-yellow-600'
-                                          : strength === 'Medium'
                                             ? 'bg-blue-600'
                                             : strength === 'Strong'
-                                              ? 'bg-green-600'
-                                              : 'bg-[#323248]'
-                                          }`}
-                                      />
-                                      <div
-                                        className={`modal__form-el-password-strength-box transition-all ${strength === 'Medium'
-                                          ? 'bg-blue-600'
-                                          : strength === 'Strong'
                                             ? 'bg-green-600'
                                             : 'bg-[#323248]'
-                                          }`}
+                                        }`}
                                       />
                                       <div
-                                        className={`modal__form-el-password-strength-box transition-all ${strength === 'Strong'
-                                          ? 'bg-green-600'
-                                          : 'bg-[#323248]'
-                                          }`}
+                                        className={`modal__form-el-password-strength-box transition-all ${
+                                          strength === 'Weak'
+                                            ? 'bg-yellow-600'
+                                            : strength === 'Medium'
+                                            ? 'bg-blue-600'
+                                            : strength === 'Strong'
+                                            ? 'bg-green-600'
+                                            : 'bg-[#323248]'
+                                        }`}
+                                      />
+                                      <div
+                                        className={`modal__form-el-password-strength-box transition-all ${
+                                          strength === 'Medium'
+                                            ? 'bg-blue-600'
+                                            : strength === 'Strong'
+                                            ? 'bg-green-600'
+                                            : 'bg-[#323248]'
+                                        }`}
+                                      />
+                                      <div
+                                        className={`modal__form-el-password-strength-box transition-all ${
+                                          strength === 'Strong'
+                                            ? 'bg-green-600'
+                                            : 'bg-[#323248]'
+                                        }`}
                                       />
                                     </div>
                                     <div className="modal__form-el-password-strength-text">
@@ -176,164 +182,209 @@ export function Modal({
                                     )}
                                   </div>
                                 ) : // Select
-                                  type === 'select' ? (
-                                    <Field name={name}>
-                                      {({
-                                        field,
-                                        meta,
-                                        form: { setFieldValue, values },
-                                      }) => {
-                                        return (
-                                          <div className="w-full">
-                                            <select
-                                              value={values[name]}
-                                              disabled={disabled}
-                                              onChange={(e) =>
-                                                setFieldValue(
-                                                  name,
-                                                  e.target.value
-                                                )
-                                              }
-                                              className="form-select appearance-none block w-full px-[16px] h-[52px] text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0 focus:bg-[#171723] focus:border-none focus:outline-none"
-                                            >
-                                              {options?.map((option) => (
-                                                <option
-                                                  value={option?.value}
-                                                  key={option?.value}
-                                                >
-                                                  {option?.label}
-                                                </option>
-                                              ))}
-                                            </select>
-                                            {meta.touched && meta.error && (
-                                              <div className="error mt-[8px]">
-                                                {meta.error}
-                                              </div>
-                                            )}
-                                          </div>
-                                        );
-                                      }}
-                                    </Field>
-                                  ) : type === "file" ? ( // sorry, I wrote my own JSX for input type file because ImageUpload component doesn't look like on the Adobe design
-                                    <Field name={name}>
-                                      {({
-                                        field,
-                                        meta,
-                                        form: { setFieldValue, values },
-                                      }) => {
-                                        return (
-                                          <div className="modal__form-el-password">
-                                            <label
-                                              style={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                flexDirection: "row-reverse",
-                                                justifyContent: "space-between",
-                                              }}
-                                              key={name}
-                                              htmlFor="typeFile"
-                                              className="w-full px-[16px] h-[52px] text-[#92928f] bg-[#171723] rounded-[8px] transition ease-in-out focus:bg-[#171723] focus:border-none focus:outline-none"
-                                            >
-                                              <div
-                                                style={{
-                                                  color: "#3699FF",
-                                                  fontSize: "10px",
-                                                }}
+                                type === 'select' ? (
+                                  <Field name={name}>
+                                    {({
+                                      field,
+                                      meta,
+                                      form: { setFieldValue, values },
+                                    }) => {
+                                      const finalOptions = [
+                                        ...options,
+                                        { label: placeholder, value: '' },
+                                      ];
+                                      return (
+                                        <div className="w-full">
+                                          <select
+                                            value={values[name]}
+                                            disabled={disabled}
+                                            placeholder={placeholder}
+                                            onChange={(e) =>
+                                              setFieldValue(
+                                                name,
+                                                e.target.value
+                                              )
+                                            }
+                                            className="form-select appearance-none block w-full px-[16px] h-[52px] text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0 focus:bg-[#171723] focus:border-none focus:outline-none"
+                                          >
+                                            {finalOptions?.map((option) => (
+                                              <option
+                                                value={option?.value}
+                                                key={option?.value}
                                               >
-                                                {subText}
-                                              </div>
-                                              <div>
-                                                <img
-                                                  src={values[name]}
-                                                  alt=""
-                                                  id="img"
-                                                  style={{
-                                                    border: "none",
-                                                    outline: "none",
-                                                    width: `${values[name] && '50px'}`,
-                                                    height: `${values[name] && '35px'}`
-                                                  }}
-                                                />
-                                              </div>
-                                              <input
-                                                type="file"
-                                                id="typeFile"
-                                                name={name}
-                                                style={{ display: "none" }}
-                                                onChange={(event) => {
-                                                  const [file] = event.target.files;
-                                                  let logo = event.target.files[0];
-                                                  let url = URL.createObjectURL(logo);
-                                                  let img = document.getElementById("img");
-                                                  if (file) {
-                                                    setFieldValue(name, url);
-                                                    setFieldValue('image', event.target.files[0]);
-                                                  }
-                                                  img.src = url;
-                                                  img.style.width = '50px';
-                                                  img.style.height = '35px';
+                                                {option?.label}
+                                              </option>
+                                            ))}
+                                          </select>
+                                          {meta.touched && meta.error && (
+                                            <div className="error mt-[8px]">
+                                              {meta.error}
+                                            </div>
+                                          )}
+                                        </div>
+                                      );
+                                    }}
+                                  </Field>
+                                ) : type === 'file' ? ( // sorry, I wrote my own JSX for input type file because ImageUpload component doesn't look like on the Adobe design
+                                  <Field name={name}>
+                                    {({
+                                      field,
+                                      meta,
+                                      form: { setFieldValue, values },
+                                    }) => {
+                                      return (
+                                        <div className="modal__form-el-password">
+                                          <label
+                                            style={{
+                                              display: 'flex',
+                                              alignItems: 'center',
+                                              flexDirection: 'row-reverse',
+                                              justifyContent: 'space-between',
+                                            }}
+                                            key={name}
+                                            htmlFor="typeFile"
+                                            className="w-full px-[16px] h-[52px] text-[#92928f] bg-[#171723] rounded-[8px] transition ease-in-out focus:bg-[#171723] focus:border-none focus:outline-none"
+                                          >
+                                            <div
+                                              style={{
+                                                color: '#3699FF',
+                                                fontSize: '10px',
+                                              }}
+                                            >
+                                              {subText}
+                                            </div>
+                                            <div>
+                                              <img
+                                                src={values[name]}
+                                                alt=""
+                                                id="img"
+                                                style={{
+                                                  border: 'none',
+                                                  outline: 'none',
+                                                  width: `${
+                                                    values[name] && '50px'
+                                                  }`,
+                                                  height: `${
+                                                    values[name] && '35px'
+                                                  }`,
                                                 }}
                                               />
-                                            </label>
-                                          </div>
-                                        );
-                                      }}
-                                    </Field>
-                                  ) : type === 'userList' ? (
-                                    <Field name={name}>
-                                      {({
-                                        field,
-                                        meta,
-                                        form: { setFieldValue, values },
-                                      }) => {
-                                        return (
-                                          <div className="w-full">
-                                            <div className="bg_col">
-                                              <Checkbox.Group
-                                                defaultValue={values[name]}
-                                                onChange={(checkedValues) => {
-                                                  values[`${name}`] = checkedValues;
-                                                }}>
-                                                {users?.map((user) => (
+                                            </div>
+                                            <input
+                                              type="file"
+                                              id="typeFile"
+                                              name={name}
+                                              style={{ display: 'none' }}
+                                              onChange={(event) => {
+                                                const [file] =
+                                                  event.target.files;
+                                                let logo =
+                                                  event.target.files[0];
+                                                let url =
+                                                  URL.createObjectURL(logo);
+                                                let img =
+                                                  document.getElementById(
+                                                    'img'
+                                                  );
+                                                if (file) {
+                                                  setFieldValue(name, url);
+                                                  setFieldValue(
+                                                    'image',
+                                                    event.target.files[0]
+                                                  );
+                                                }
+                                                img.src = url;
+                                                img.style.width = '50px';
+                                                img.style.height = '35px';
+                                              }}
+                                            />
+                                          </label>
+                                        </div>
+                                      );
+                                    }}
+                                  </Field>
+                                ) : type === 'userList' ? (
+                                  <Field name={name}>
+                                    {({
+                                      field,
+                                      meta,
+                                      form: { setFieldValue, values },
+                                    }) => {
+                                      return (
+                                        <div className="w-full">
+                                          <div className="bg_col">
+                                            <Checkbox.Group
+                                              defaultValue={values[name]}
+                                              onChange={(checkedValues) => {
+                                                values[`${name}`] =
+                                                  checkedValues;
+                                              }}
+                                            >
+                                              {users?.map(
+                                                (user) =>
                                                   user.fullName && (
-                                                    <Checkbox value={user.id} className="custdes">
+                                                    <Checkbox
+                                                      value={user.id}
+                                                      className="custdes"
+                                                    >
                                                       <div className="image_wr">
                                                         <div className="imgwrap">
-                                                          {user.imageUrl ? <img src={user.imageUrl} /> : <img src={'https://via.placeholder.com/200'} />}
+                                                          {user.imageUrl ? (
+                                                            <img
+                                                              src={
+                                                                user.imageUrl
+                                                              }
+                                                            />
+                                                          ) : (
+                                                            <img
+                                                              src={
+                                                                'https://via.placeholder.com/200'
+                                                              }
+                                                            />
+                                                          )}
                                                         </div>
-                                                        <div className="lablwrap">{user.fullName}</div>
+                                                        <div className="lablwrap">
+                                                          {user.fullName}
+                                                        </div>
                                                       </div>
                                                     </Checkbox>
                                                   )
-                                                ))}
-                                              </Checkbox.Group>
-                                            </div>
-                                            {meta.touched && meta.error && (
-                                              <div className="error mt-[8px]">
-                                                {meta.error}
-                                              </div>
-                                            )}
+                                              )}
+                                            </Checkbox.Group>
                                           </div>
-                                        );
-                                      }}
-                                    </Field>
-                                  ) : (
-                                    <>
-                                      <Field
-                                        className="modal__form-el-field"
-                                        key={name}
-                                        type={type}
-                                        name={name}
-                                        placeholder={placeholder}
-                                        disabled={disabled}
-                                      />
-                                      {touched[name] && errors[name] && (
-                                        <div className="error mt-[8px]">
-                                          {errors[name]}
+                                          {meta.touched && meta.error && (
+                                            <div className="error mt-[8px]">
+                                              {meta.error}
+                                            </div>
+                                          )}
                                         </div>
-                                      )}
-                                    </>
-                                  )}
+                                      );
+                                    }}
+                                  </Field>
+                                ) : type === 'multiselect' ? (
+                                  <MultiSelect
+                                    name={name}
+                                    options={options}
+                                    placeholder={placeholder}
+                                    mode={mode}
+                                  />
+                                ) : (
+                                  <>
+                                    <Field
+                                      className="modal__form-el-field"
+                                      key={name}
+                                      type={type}
+                                      name={name}
+                                      placeholder={placeholder}
+                                      disabled={disabled}
+                                    />
+                                    {touched[name] && errors[name] && (
+                                      <div className="error mt-[8px]">
+                                        {errors[name]}
+                                      </div>
+                                    )}
+                                  </>
+                                )}
                               </div>
                             </Fragment>
                           );

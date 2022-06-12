@@ -38,6 +38,7 @@ export const Table = ({
   statusFilter = [],
   handleStatus,
   handleDateRange,
+  rowKey,
 }) => {
   const [dataSource, setDataSource] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
@@ -222,6 +223,7 @@ export const Table = ({
           >
             <AntTable
               columns={tableColumns}
+              rowKey={rowKey}
               dataSource={dataSource}
               pagination={
                 pagination !== undefined && pagination !== null

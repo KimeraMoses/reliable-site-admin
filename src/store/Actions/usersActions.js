@@ -12,6 +12,7 @@ import {
   getUserAppSettingsConfig,
   updateUserAppSettings,
   addUserAppSettings,
+  registerClientConfig,
 } from 'lib';
 import { toast } from 'react-toastify';
 import {
@@ -83,6 +84,27 @@ export const addUser = (data) => {
         const res = await axios.get(url, config);
         dispatch(getUsers(res?.data?.data));
         toast.success('User Added Successfully');
+      }
+    } catch (e) {
+      toast.error(getError(e));
+    } finally {
+      dispatch(setUserLoading(false));
+    }
+  };
+};
+
+// Add Client User
+export const addClientUser = (data) => {
+  return async (dispatch) => {
+    dispatch(setUserLoading(true));
+    try {
+      const { url, config } = registerClientConfig();
+      const res = await axios.post(url, data, config);
+      if (res.status === 200) {
+        const { url, config } = getClientsConfig();
+        const res = await axios.get(url, config);
+        dispatch(getClients(res?.data?.data));
+        toast.success('Client Added Successfully');
       }
     } catch (e) {
       toast.error(getError(e));
