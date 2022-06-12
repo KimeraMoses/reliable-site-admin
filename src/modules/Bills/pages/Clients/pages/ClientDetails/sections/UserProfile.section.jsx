@@ -1,24 +1,37 @@
 import { getName } from 'lib';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
+// import { EditUser } from '../../sections';
 
 export const UserProfileCard = () => {
   const [showName, setShowName] = useState(true);
+  // const [showEdit, setShowEdit] = useState(false);
   const { user, loading } = useSelector((state) => state.users);
+  const { t } = useTranslation('Users/ns');
 
   const userInfo = {
-    name: 'John Doe',
-    img: '',
+    name: user?.fullName,
+    img: user?.base64Image,
     designation: 'Client',
     details: [
-      { title: 'Account ID', value: '123' },
-      { title: 'Email', value: 'Paul@Fakemail.com' },
-      { title: 'Language', value: 'English' },
+      { title: t('accountID'), value: user?.id },
+      { title: t('billingEmail'), value: user?.email },
+      {
+        title: t('billingAddress'),
+        value:
+          user?.address1 && user?.address2
+            ? `${user?.address1} ${user?.address2}`
+            : '101 Collin Street, Melbourne 3000, Australia',
+      },
+      { title: t('language'), value: 'English' },
+      // { title: t('upcomingInvoice'), value: '54238-8693' },
     ],
   };
 
   return (
     <>
+      {/* <EditUser show={showEdit} setShow={setShowEdit} user={user} t={t} /> */}
       {loading ? (
         <></>
       ) : (
@@ -36,13 +49,13 @@ export const UserProfileCard = () => {
                 />
               ) : (
                 <div className="text-[36px] text-white">
-                  {showName && getName({ user: { fullName: userInfo?.name } })}
+                  {user && showName && getName({ user })}
                 </div>
               )}
             </div>
             {/* NAME */}
             <div className="admin-details__user-card-name">
-              <h6 className="text-xl text-[#fff]">{user?.name}</h6>
+              <h6 className="text-xl text-[#fff]">{userInfo?.name}</h6>
             </div>
             {/* DESIGNATION */}
             <div className="admin-details__user-card-designation">
@@ -55,10 +68,13 @@ export const UserProfileCard = () => {
           <div className="admin-details__user-card-details px-8">
             {/* FIRST ROW WITH EDIT BUTTON */}
             <div className="flex justify-between items-center">
-              <h6 className="text-white text-[16px] mb-0">{'Details'}</h6>
-              <button className="bg-[#212E48] rounded-lg px-4 py-2 text-[#3699FF] mb-0">
+              <h6 className="text-white text-[16px] mb-0">{t('details')}</h6>
+              {/* <button
+                className="bg-[#212E48] rounded-lg px-4 py-2 text-[#3699FF] mb-0"
+                // onClick={() => setShowEdit(true)}
+              >
                 Edit
-              </button>
+              </button> */}
             </div>
             <div className="h-0 w-full border-t-[1px] border-dashed border-[#323248] mt-4 mb-4" />
             {/* INFO ROW */}

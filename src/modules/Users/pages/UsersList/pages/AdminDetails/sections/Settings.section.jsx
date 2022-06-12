@@ -100,7 +100,12 @@ export const Settings = () => {
                     return (
                       <Fragment key={el?.name}>
                         {el?.type === 'date' ? (
-                          <DatePicker name={el?.name} />
+                          <div className="w-full">
+                            <div className="text-white mb-[12px] text-[14px]">
+                              {el?.label}
+                            </div>
+                            <DatePicker name={el?.name} />
+                          </div>
                         ) : el?.type === 'switch' ? (
                           <Field name={el?.name}>
                             {({

@@ -74,7 +74,9 @@ export const ClientList = () => {
             <>
               <Button
                 onClick={() => {
-                  navigate('/admin/dashboard/billing/clients/list/details/123');
+                  navigate(
+                    `/admin/dashboard/billing/clients/list/details/${record?.id}`
+                  );
                 }}
               >
                 View
