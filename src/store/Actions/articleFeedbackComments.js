@@ -4,6 +4,7 @@ import {
   deletearticleFeedbackCommentsConfig,
   getArticleFeedbackCommentsByIDConfig,
   updateArticleFeedbackCommentsConfig,
+  getArticleFeedbackCommentsConfig,
 } from 'lib/requests/articleFeedbackComments';
 
 import { toast } from 'react-toastify';
@@ -18,7 +19,7 @@ export const getAllArticleFeedbackComments = () => {
   return async (dispatch) => {
     dispatch(setArticlesFeedbackCommentsLoading(true));
     try {
-      const { url, defaultData, config } = getArticleFeedbackComments();
+      const { url, defaultData, config } = getArticleFeedbackCommentsConfig();
       const res = await axios.post(url, defaultData, config);
       dispatch(getArticleFeedbackComment(res?.data?.data));
     } catch (e) {
@@ -71,7 +72,7 @@ export const updateArticleFeedbackComment = ({ id, data }) => {
       const { url, config } = updateArticleFeedbackCommentsConfig(id);
       const res = await axios.put(url, data, config);
       if (res.status === 200) {
-        const { url, config } = getArticleFeedbackCommentsByIDConfig(id);
+        const { url, config } = getArticleFeedbackCommentsConfig();
         const res = await axios.get(url, config);
         dispatch(updateArticleFeedbackCommentsConfig(res?.data?.data));
         toast.success('Article Feedback Comment updated successfully');
@@ -92,7 +93,7 @@ export const deleteArticleComment = ({ id }) => {
       const { url, config } = deletearticleFeedbackCommentsConfig(id);
       const res = await axios.delete(url, config);
       if (res.status === 200) {
-        const { url, config } = getArticleFeedbackCommentsByIDConfig(id);
+        const { url, config } = getArticleFeedbackCommentsConfig();
         const res = await axios.get(url, config);
         dispatch(updateArticleFeedbackCommentsConfig(res?.data?.data));
         toast.success('Article Feedback Comment deleted successfully');
