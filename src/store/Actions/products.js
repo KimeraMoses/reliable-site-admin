@@ -5,6 +5,7 @@ import {
   getProductsByIDCall,
   getProductsCall,
   updateProductsByIDCall,
+  getProductsByClientIDCall,
 } from 'lib';
 import { toast } from 'react-toastify';
 import {
@@ -19,6 +20,21 @@ export const getProducts = () => {
     dispatch(setProductsLoading(true));
     try {
       const products = await getProductsCall();
+      dispatch(getProductsDispatch(products?.data?.data));
+    } catch (error) {
+      toast.error(getError(error));
+    } finally {
+      dispatch(setProductsLoading(false));
+    }
+  };
+};
+
+// Get Products by Client ID
+export const getProductsByClientID = ({ clientId }) => {
+  return async (dispatch) => {
+    dispatch(setProductsLoading(true));
+    try {
+      const products = await getProductsByClientIDCall({ clientId });
       dispatch(getProductsDispatch(products?.data?.data));
     } catch (error) {
       toast.error(getError(error));
