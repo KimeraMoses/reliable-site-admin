@@ -8,6 +8,7 @@ import { checkModule } from 'lib/checkModule';
 import { Table } from 'components';
 import { getInvoices } from 'store';
 import { statusList } from 'lib';
+import { getAllArticleFeedbacks } from 'store';
 
 export const FeedbackList = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ export const FeedbackList = () => {
 
   useEffect(() => {
     (async () => {
-      await dispatch(getInvoices());
+      await dispatch(getAllArticleFeedbacks());
     })();
   }, [dispatch]);
 

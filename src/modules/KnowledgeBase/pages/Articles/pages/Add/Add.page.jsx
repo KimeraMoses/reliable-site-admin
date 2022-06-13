@@ -2,14 +2,16 @@ import { EditorState, convertToRaw } from 'draft-js';
 import { convertToHTML } from 'draft-convert';
 import * as Yup from 'yup';
 import { Formik, Form, Field } from 'formik';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 // Custom Modules
 import { Input, MultiSelect, SMTPEditor, Button } from 'components';
-import { addEmailTemplate } from 'store';
+import { createArticle } from 'store';
 import './Add.styles.scss';
+import { useEffect } from 'react';
+import { getAllArticleCategories } from 'store';
 
 const ConfigurationEditor = ({ editorState, onEditorStateChange, onBlur }) => {
   return (
@@ -89,17 +91,27 @@ export const Add = () => {
     title: '',
     categories: [],
     visibility: 'public',
-    body: '',
+    bodyText: '',
     status: 'draft',
     bodyHolder: EditorState.createEmpty(),
     articleStatus: true,
   };
 
   const validationSchema = Yup.object().shape({
-    title: Yup.string().required('This field is required!'),
-    visibility: Yup.string().required('This field is required!'),
-    body: Yup.string().required('This field is required!'),
+    // title: Yup.string().required('This field is required!'),
+    // visibility: Yup.string().required('This field is required!'),
+    // body: Yup.string().required('This field is required!'),
   });
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAllArticleCategories());
+  }, []);
+
+  const { loading, articleCategories } = useSelector(
+    (state) => state?.articleCategories
+  );
 
   const fields = [
     {
@@ -110,10 +122,10 @@ export const Add = () => {
     {
       name: 'categories',
       type: 'multiselect',
-      options: [
-        { label: 'Category 1', value: '1' },
-        { label: 'Category 2', value: '2' },
-      ],
+      options: articleCategories?.map((category) => ({
+        label: category.name,
+        value: category.id,
+      })),
       label: 'Categories',
     },
     {
@@ -121,8 +133,8 @@ export const Add = () => {
       type: 'select',
       label: 'Visibility',
       options: [
-        { label: 'Public', value: 'public' },
-        { label: 'Private', value: 'private' },
+        { label: 'Public', value: 0 },
+        { label: 'Private', value: 1 },
       ],
     },
     {
@@ -130,8 +142,8 @@ export const Add = () => {
       type: 'select',
       label: 'Status',
       options: [
-        { label: 'Draft', value: 'draft' },
-        { label: 'Publish', value: 'publish' },
+        { label: 'Draft', value: 0 },
+        { label: 'Publish', value: 1 },
       ],
     },
     // {
@@ -146,7 +158,6 @@ export const Add = () => {
     // },
   ];
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   return (
     <Formik
@@ -154,15 +165,14 @@ export const Add = () => {
       validationSchema={validationSchema}
       enableReinitialize
       onSubmit={async (values) => {
-        await dispatch(addEmailTemplate({ data: values }));
+        await dispatch(createArticle(values));
         navigate('/admin/dashboard/settings/email-templates');
       }}
     >
       {({ values, errors, touched, setFieldValue, setFieldTouched }) => {
         return (
           <Form>
-            {/* TODO: Change Spinning When Integration */}
-            <Spin spinning={false}>
+            <Spin spinning={loading}>
               <div className="grid grid-cols-[1fr] gap-[20px] px-[32px] py-[40px]">
                 <div className="flex flex-col gap-[20px]">
                   <div className="bg-[#1E1E2D] rounded-[8px]">
@@ -188,7 +198,7 @@ export const Add = () => {
                     </div>
                     <ConfigurationEditor
                       editorState={values.bodyHolder}
-                      onBlur={() => setFieldTouched('body', true)}
+                      onBlur={() => setFieldTouched('bodyText', true)}
                       onEditorStateChange={(state) => {
                         setFieldValue('bodyHolder', state);
                         const currentContentAsHTML = convertToHTML(
@@ -200,9 +210,9 @@ export const Add = () => {
                           convertToRaw(state.getCurrentContent()).blocks[0]
                             .text === ''
                         ) {
-                          setFieldValue('body', '');
+                          setFieldValue('bodyText', '');
                         } else {
-                          setFieldValue('body', currentContentAsHTML);
+                          setFieldValue('bodyText', currentContentAsHTML);
                         }
                       }}
                     />

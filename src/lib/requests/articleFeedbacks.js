@@ -11,13 +11,13 @@ export const getArticleFeedbackConfig = () => ({
   url: `${prefix}/search`,
   defaultData: {
     advancedSearch: {
-      fields: '',
+      fields: [''],
       keyword: '',
     },
     keyword: '',
     pageNumber: 0,
     pageSize: 0,
-    orderBy: '',
+    orderBy: [''],
   },
   config: articleFeedbackConfig('View'),
 });

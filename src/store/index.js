@@ -18,6 +18,7 @@ import invoicesReducer from './Slices/invoicesSlice';
 import articlesReducer from './Slices/articles';
 import articlesFeedbackReducer from './Slices/articlesFeedback';
 import getArticleFeedbackCommentsReducer from './Slices/articleFeedbackComments';
+import articleCategoriesReducer from './Slices/articleCategories';
 
 const store = configureStore({
   reducer: {
@@ -40,6 +41,7 @@ const store = configureStore({
     articles: articlesReducer,
     articlesFeedback: articlesFeedbackReducer,
     articlesFeedbackComments: getArticleFeedbackCommentsReducer,
+    articleCategories: articleCategoriesReducer,
   },
 });
 

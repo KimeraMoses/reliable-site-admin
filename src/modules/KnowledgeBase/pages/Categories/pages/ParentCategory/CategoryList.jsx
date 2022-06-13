@@ -5,8 +5,10 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkModule } from 'lib/checkModule';
 import { Table } from 'components';
-import { getInvoices } from 'store';
-import { AddCategory } from './sections';
+import { getAllArticleCategories } from 'store';
+import { AddCategory, Delete } from './sections';
+import { EditCategory } from './sections/EditCategory.section';
+import { getArticleCategoryByID } from 'store';
 
 export const CategoryList = () => {
   const { t } = useTranslation('/Bills/ns');
@@ -15,11 +17,13 @@ export const CategoryList = () => {
 
   useEffect(() => {
     (async () => {
-      await dispatch(getInvoices());
+      await dispatch(getAllArticleCategories());
     })();
   }, [dispatch]);
 
-  const { invoices, loading } = useSelector((state) => state?.invoices);
+  const { articleCategories, loading } = useSelector(
+    (state) => state?.articleCategories
+  );
   const { userModules } = useSelector((state) => state?.modules);
 
   const { permissions } = checkModule({
@@ -30,12 +34,12 @@ export const CategoryList = () => {
   const columns = [
     {
       title: 'Category ID',
-      dataIndex: 'categoryid',
-      key: 'categoryid',
-      render: () => {
+      dataIndex: 'id',
+      key: 'id',
+      render: (text) => {
         return (
           <div className="">
-            <p className="text-sm">255656</p>
+            <p className="text-sm">{text.substring(0, 4)}</p>
           </div>
         );
       },
@@ -46,9 +50,9 @@ export const CategoryList = () => {
       dataIndex: 'name',
       key: 'name',
       width: 600,
-      render: () => {
-        return <div className="text-sm">Category Name</div>;
-      },
+      // render: () => {
+      //   return <div className="text-sm">Category Name</div>;
+      // },
     },
     {
       title: 'Articles Under Category',
@@ -71,21 +75,27 @@ export const CategoryList = () => {
   const [data, setData] = useState([]);
   useEffect(() => {
     setData([]);
-    if (invoices.length) {
-      const dataToSet = invoices.map((b) => {
-        return {
-          ...b,
-          key: b?.id,
-        };
+    if (articleCategories.length) {
+      let dataToSet = [];
+      articleCategories?.forEach((b) => {
+        if (b?.parentCategoryId === '00000000-0000-0000-0000-000000000000') {
+          dataToSet.push({ ...b, key: b?.id });
+        }
       });
       setData(dataToSet);
     }
-  }, [invoices]);
+  }, [articleCategories]);
 
+  // Edit Category
+  const [edit, setEdit] = useState(false);
+  const [del, setDel] = useState(false);
+  const [id, setId] = useState('');
   return (
     <div className="mt-[20px]">
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
         <AddCategory show={addModalShow} setShow={setAddModalShow} />
+        <EditCategory show={edit} setShow={setEdit} id={id} />
+        <Delete show={del} setShow={setDel} id={id} />
         <Table
           columns={columns}
           data={data}
@@ -96,10 +106,28 @@ export const CategoryList = () => {
             text: 'Add Category',
             onClick: () => setAddModalShow(true),
           }}
-          handleDateRange={() => {}}
-          editAction={() => <Button>Edit</Button>}
-          deleteAction={() => (
-            <Button className="focus:bg-[unset]">Delete</Button>
+          // handleDateRange={() => {}}
+          editAction={(record) => (
+            <Button
+              onClick={async () => {
+                await dispatch(getArticleCategoryByID(record.id));
+                setId(record?.id);
+                setEdit(true);
+              }}
+            >
+              Edit
+            </Button>
+          )}
+          deleteAction={(record) => (
+            <Button
+              className="focus:bg-[unset]"
+              onClick={async () => {
+                setId(record?.id);
+                setDel(true);
+              }}
+            >
+              Delete
+            </Button>
           )}
           permissions={permissions}
           t={t}

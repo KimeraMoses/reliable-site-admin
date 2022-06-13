@@ -3,8 +3,9 @@ import {
   createArticleFeedbackConfig,
   deleteArticleFeedbackConfig,
   getArticleFeedbackByIDConfig,
+  getArticleFeedbackConfig,
   updateArticleFeedbackConfig,
-} from 'lib/requests/ArticleFeedbacks';
+} from 'lib/requests/articleFeedbacks';
 
 import { toast } from 'react-toastify';
 import {
@@ -18,9 +19,9 @@ export const getAllArticleFeedbacks = () => {
   return async (dispatch) => {
     dispatch(setArticlesFeedbackLoading(true));
     try {
-      const { url, defaultData, config } = getArticleFeedbacks();
+      const { url, defaultData, config } = getArticleFeedbackConfig();
       const res = await axios.post(url, defaultData, config);
-      dispatch(getArticleFeedback(res?.data?.data));
+      dispatch(getArticleFeedbacks(res?.data?.data));
     } catch (e) {
       toast.error(getError(e));
     } finally {
@@ -85,7 +86,7 @@ export const updateArticleFeedback = ({ id, data }) => {
 };
 
 // Delete an Article Feedback
-export const deleteArticle = ({ id }) => {
+export const deleteArticleFeedback = ({ id }) => {
   return async (dispatch) => {
     dispatch(setArticlesFeedbackLoading(true));
     try {

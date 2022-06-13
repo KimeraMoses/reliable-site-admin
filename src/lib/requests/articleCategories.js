@@ -1,11 +1,11 @@
 import { getConfig } from 'lib';
 
 const Articles = 'Users';
-const prefix = '/api/v1/admin/articles';
+const prefix = 'api/v1/admin/categories';
 const articlesConfig = (action) => getConfig({ module: Articles, action });
 
 // Get Articles
-export const getArticlesConfig = () => ({
+export const getArticleCategoriesConfig = () => ({
   url: `${prefix}/search`,
   defaultData: {
     advancedSearch: {
@@ -16,33 +16,31 @@ export const getArticlesConfig = () => ({
     pageNumber: 0,
     pageSize: 0,
     orderBy: [''],
-    categoryId: '927b0000-624d-80ce-b6fe-08da3264c288',
-    minimumRate: 0,
-    maximumRate: 0,
+    categoryType: 1,
   },
   config: articlesConfig('View'),
 });
 
-// Create Article
-export const createArticleConfig = () => ({
+// Create Article Category
+export const createArticleCategoryConfig = () => ({
   url: prefix,
   config: articlesConfig('Create'),
 });
 
-// Delete Article
-export const deleteArticleConfig = (id) => ({
+// Delete Article Category
+export const deleteArticleCategoryConfig = (id) => ({
   url: `${prefix}/${id}`,
   config: articlesConfig('Remove'),
 });
 
-// Update Article
-export const updateArticleConfig = (id) => ({
+// Update Article Category
+export const updateArticleCategoryConfig = (id) => ({
   url: `${prefix}/${id}`,
   config: articlesConfig('Update'),
 });
 
-// Get Article By ID
-export const getArticleByIDConfig = (id) => ({
+// Get Article Category By ID
+export const getArticleCategoryByIDConfig = (id) => ({
   url: `${prefix}/${id}`,
   config: articlesConfig('View'),
 });

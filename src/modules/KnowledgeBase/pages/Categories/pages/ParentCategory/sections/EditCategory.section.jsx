@@ -1,6 +1,6 @@
 import { Modal } from 'components';
 import { useDispatch, useSelector } from 'react-redux';
-import { createArticleCategory } from 'store';
+import { updateArticleCategory } from 'store';
 import * as Yup from 'yup';
 
 const fields = [
@@ -12,21 +12,24 @@ const fields = [
   },
 ];
 
-const initialValues = {
-  name: '',
-};
-
 const validationSchema = Yup.object().shape({
   name: Yup.string().required('This field is required!'),
 });
 
-export const AddCategory = ({ show, setShow }) => {
+export const EditCategory = ({ show, setShow, id }) => {
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state?.articleCategories);
+  const { articleCategory, loading } = useSelector(
+    (state) => state?.articleCategories
+  );
+
+  const initialValues = {
+    name: articleCategory?.name,
+  };
+
   return (
     <Modal
-      heading="Add Parent Category"
-      submitText="Add Category"
+      heading="Edit Parent Category"
+      submitText="Edit Category"
       show={show}
       loading={loading}
       setShow={setShow}
@@ -38,7 +41,7 @@ export const AddCategory = ({ show, setShow }) => {
           ...values,
           categoryType: 1,
         };
-        await dispatch(createArticleCategory(newValues));
+        await dispatch(updateArticleCategory({ id, data: newValues }));
         setShow(false);
       }}
     />

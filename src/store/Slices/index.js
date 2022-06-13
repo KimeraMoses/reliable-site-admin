@@ -36,3 +36,4 @@ export * from './transactions';
 export * from './articles';
 export * from './articlesFeedback';
 export * from './articleFeedbackComments';
+export * from './articleCategories';
