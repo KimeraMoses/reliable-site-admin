@@ -95,6 +95,10 @@ export const sidebarData = [
           },
         ],
       },
+      {
+        name: 'WHMCS Import Tool',
+        path: '/admin/dashboard/billing/WHMCS-import',
+      },
     ],
   },
   {
