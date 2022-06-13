@@ -5,9 +5,10 @@ import { useMediaQuery } from 'react-responsive';
 import { useNavigate } from 'react-router-dom';
 import { logout } from 'store/Slices/authSlice';
 import UserName from './UserProfileCard/UserName';
+import { getNotifications } from 'store';
 import './UserTop.css';
 
-function UserTop() {
+function UserTop({ toggleNotification }) {
   const [dropdown, setDropdown] = useState(false);
   const [showName, setShowName] = useState(false);
   const { user, isLoggedIn } = useSelector((state) => state.auth);
@@ -26,10 +27,23 @@ function UserTop() {
       },
     },
     {
+      name: 'Notifications',
+      onClick: () => {
+        handleNotification();
+      },
+    },
+    {
       name: 'Sign Out',
       onClick: () => dispatch(logout()),
     },
   ];
+
+  const handleNotification = () => {
+    toggleNotification(true);
+    (async () => {
+      await dispatch(getNotifications());
+    })();
+  }
 
   const handleOutsideClick = () => setDropdown(false);
   const dropDownRef = useRef(null);
@@ -55,9 +69,8 @@ function UserTop() {
         )}
         {/* Dropdown */}
         <div
-          className={`w-[278px] bg-[#1E1E2D] ${
-            dropdown ? '' : 'hidden'
-          } rounded-lg text-gray-300`}
+          className={`w-[278px] bg-[#1E1E2D] ${dropdown ? '' : 'hidden'
+            } rounded-lg text-gray-300`}
           style={{
             position: 'absolute',
             bottom: '-254px',
@@ -72,9 +85,9 @@ function UserTop() {
               {/* Image + Status */}
               <div className="h-12 w-12 rounded-lg border-2 border-[#3699FF] p-1 userName">
                 {user &&
-                user.imageUrl &&
-                user.imageUrl.length > 0 &&
-                !showName ? (
+                  user.imageUrl &&
+                  user.imageUrl.length > 0 &&
+                  !showName ? (
                   <img
                     src={user && user.imageUrl}
                     alt={user && user.userName}

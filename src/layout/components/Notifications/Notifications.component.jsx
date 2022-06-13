@@ -1,158 +1,73 @@
-import React, { Fragment } from 'react';
+import { useOutside } from 'hooks';
+import { useSelector } from 'react-redux';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './Notifications.styles.scss';
+import { Spin } from 'antd';
 import { Bell } from 'icons/Notifications/Bell.icon';
 import { Book } from 'icons/Notifications/Book.icon';
+import {
+  NewUserRegistered, TicketCreated, TickedUpdated,
+  OrderCreated, OrderUpdated, TicketNewComments, TicketNewReply,
+  CategoryGenerator, Bills
+} from './sections';
+import { groupBy } from 'lib';
 
 export function Notifications({ toggleNotification }) {
+  const notificationRef = useRef(null);
+  useOutside(notificationRef, toggleNotification);
+  const { notifications, loading } = useSelector((state) => state?.notifications);
+  const { user } = useSelector((state) => state?.auth);
 
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    if (notifications.length) {
+      const dataToSet = groupBy(notifications, 'type');
+      setData(dataToSet);
+    }
+  }, [notifications]);
   return (
-    <div className={`notifications absolute top-0 right-0 w-6/12 h-full bg-[#1E1E2D] text-white`}>
+    <div
+      className={`notifications fixed top-0 right-0 w-6/12 bg-[#1E1E2D] text-white `} ref={notificationRef}>
       <div className={`text-xl p-[32px] border-b-2 border-current border-dashed border-[#474761]`}>Notiffications</div>
-      <div className={`notifications-wrap px-[32px] pt-[32px]`}>
-        <div className={`notification-block pl-[60px] pt-[13px] pb-[13px] relative`}>
-          <div className={`noti-icon`}>
-            <Bell fill={'#fff'} />
-          </div>
-          <div className={`noti-content`}>
-            <div className="flex justify-between">
-              <div className={`text-white`}>There Are 2 New Tasks For You In Air Plus Mobile App</div>
-              <div className={`flex`}>
-                <div className={`ur-icon`}></div>
-                <div className={`text-[#474761] ml-2`}>Paul Elliott added at 4:23 PM</div>
-              </div>
+      <div className={`notifications-wrap px-[32px] pt-[32px] pb-[32px]`}>
+        {
+          loading || data === null ? (
+            <div className={`notification-block pl-[60px] pt-[13px] pb-[13px] relative text-center`}>
+              <Spin
+                size="large"
+                style={{ gridColumn: '1/3', alignSelf: 'center' }}
+              />
             </div>
-            <div className={`book-blocks`}>
-              <div className={`book-block p-[16px] border-1 border-current border-dashed border-[#474761]`}>
-                <div className="flex items-center justify-between w-full">
-                  <div className="wid _1"><div className="text-[12px]">Meeting With Customer</div></div>
-                  <div className="wid _2"><div className="bg-txt text-[10px]">APPLICATION DESIGN</div></div>
-                  <div className="imgs">
-                    <div className='img-single'>
-                      <img src='https://dummyimage.com/40x40/000/fff' alt='' />
-                    </div>
-                    <div className='img-single'>
-                      <img src='https://dummyimage.com/40x40/000/fff' alt='' />
-                    </div>
-                    <div className='img-single'>
-                      <img src='https://dummyimage.com/40x40/000/fff' alt='' />
-                    </div>
-                  </div>
-                  <div className="book-status text-[10px]"><span>IN PROGRESS</span></div>
-                  <div className="btn-wrap">
-                    <button
-                      type="button"
-                      className="ant-btn ant-btn-default py-[12px] px-[24px] border-0 rounded-[4px] bg-[#323248] text-[#fff] text-[14px]"
-                    >
-                      View
-                    </button>
-                  </div>
-                </div>
+          ) : (
+            <>
+              {
+                Object.entries(data).map(([key, value]) => {
+                  return (
+                    <React.Fragment key={key}>
+                      {
+                        parseInt(key) === 0 ?
+                          <NewUserRegistered value={value} user={user} /> : parseInt(key) === 1 ?
+                            <TicketCreated value={value} user={user} /> : parseInt(key) === 2 ?
+                              <TickedUpdated value={value} user={user} /> : parseInt(key) === 3 ?
+                                <OrderCreated value={value} user={user} /> : parseInt(key) === 4 ?
+                                  <OrderUpdated value={value} user={user} /> : parseInt(key) === 5 ?
+                                    <TicketNewComments value={value} user={user} /> : parseInt(key) === 6 ?
+                                      <TicketNewReply value={value} user={user} /> : parseInt(key) === 7 ?
+                                        <CategoryGenerator value={value} user={user} /> : <Bills value={value} user={user} />
+                      }
+
+                    </React.Fragment>
+
+                  )
+                })
+              }
+              <div className={`fixed bottom-0 left-0 w-full p-[32px] border-t-2 border-current border-dashed border-[#474761] text-center`}>
+                <Link to={''} className={`text-[#3699FF]`}>View All Notifications</Link>
               </div>
-              <div className={`book-block p-[16px] border-1 border-current border-dashed border-[#474761]`}>
-                <div className="flex items-center justify-between w-full">
-                  <div className="wid _1"><div className="text-[12px]">Project Delivery Preperation</div></div>
-                  <div className="wid _2"><div className="bg-txt text-[10px]">CRM SYSTEM DEVELOPMENT</div></div>
-                  <div className="imgs">
-                    <div className='img-single'>
-                      <img src='https://dummyimage.com/40x40/000/fff' alt='' />
-                    </div>
-                    <div className='img-single'>
-                      <img src='https://dummyimage.com/40x40/000/fff' alt='' />
-                    </div>
-                    <div className='img-single'>
-                      <img src='https://dummyimage.com/40x40/000/fff' alt='' />
-                    </div>
-                  </div>
-                  <div className="book-status text-[10px]"><span>IN PROGRESS</span></div>
-                  <div className="btn-wrap">
-                    <button
-                      type="button"
-                      className="ant-btn ant-btn-default py-[12px] px-[24px] border-0 rounded-[4px] bg-[#323248] text-[#fff] text-[14px]"
-                    >
-                      View
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className={`notification-block pl-[60px] pt-[13px] pb-[13px] relative`}>
-          <div className={`noti-icon`}>
-            <Bell fill={'#fff'} />
-          </div>
-          <div className={`noti-content`}>
-            <div className="flex justify-between">
-              <div className={`text-white`}>Invitation For Crafting Engaging Designs That Speak Human Workshop</div>
-              <div className={`flex`}>
-                <div className={`ur-icon`}></div>
-                <div className={`text-[#474761] ml-2`}>Paul Elliott added at 4:23 PM</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className={`notification-block pl-[60px] pt-[13px] pb-[13px] relative`}>
-          <div className={`noti-icon`}>
-            <Bell fill={'#fff'} />
-          </div>
-          <div className={`noti-content`}>
-            <div className="flex justify-between">
-              <div className={`text-white`}>3 New Incoming Project Files</div>
-              <div className={`flex`}>
-                <div className={`ur-icon`}></div>
-                <div className={`text-[#474761] ml-2`}>Paul Elliott added at 4:23 PM</div>
-              </div>
-            </div>
-            <div className={`book-block p-[16px] border-1 border-current border-dashed border-[#474761]`}>
-              <div className="flex">
-                <div className={`book-icon`}>
-                  <Book fill={'#fff'} />
-                </div>
-                <div className=''>
-                  <Link className={`text-[#1890ff]`} to={''}>Finance KPI App Guidelines</Link>
-                  <div className={`file-size text-[#474761]`}>2 MB</div>
-                </div>
-              </div>
-            </div>
-            <div className={`book-block p-[16px] border-1 border-current border-dashed border-[#474761]`}>
-              <div className="flex">
-                <div className={`book-icon`}>
-                  <Book fill={'#fff'} />
-                </div>
-                <div className=''>
-                  <Link className={`text-[#1890ff]`} to={''}>Client UAT Testing Results</Link>
-                  <div className={`file-size text-[#474761]`}>2 MB</div>
-                </div>
-              </div>
-            </div>
-            <div className={`book-block p-[16px] border-1 border-current border-dashed border-[#474761]`}>
-              <div className="flex">
-                <div className={`book-icon`}>
-                  <Book fill={'#fff'} />
-                </div>
-                <div className=''>
-                  <Link className={`text-[#1890ff]`} to={''}>Finance Reports</Link>
-                  <div className={`file-size text-[#474761]`}>2 MB</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className={`notification-block pl-[60px] pt-[13px] pb-[13px] relative`}>
-          <div className={`noti-icon`}>
-            <Bell fill={'#fff'} />
-          </div>
-          <div className={`noti-content`}>
-            <div className="flex justify-between">
-              <div className={`text-white`}>Task <Link className={`text-[#1890ff]`} to={''}>#45890</Link> Merged With <Link className={`text-[#1890ff]`} to={''}>#45890</Link> In Ads Pro Admin Dashboard Project</div>
-              <div className={`flex`}>
-                <div className={`ur-icon`}></div>
-                <div className={`text-[#474761] ml-2`}>Paul Elliott added at 4:23 PM</div>
-              </div>
-            </div>
-          </div>
-        </div>
+            </>
+          )
+        }
       </div>
     </div>
   );

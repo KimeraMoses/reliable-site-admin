@@ -42,3 +42,5 @@ export * from './departments';
 export * from './invoices';
 // Orders End-Points
 export * from './orders';
+// Notifications End-Points
+export * from './notifications';

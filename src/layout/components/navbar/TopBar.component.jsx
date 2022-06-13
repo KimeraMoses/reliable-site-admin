@@ -23,7 +23,6 @@ export function TopBar({ hide = false, hideSide, toggleSide, innerSubLinks, togg
   return (
     <div className="h-20 w-full bg-custom-secondary flex items-center">
       <Logo hide={hide} hideSide={hideSide} toggleSide={toggleSide} />
-      <div onClick={toggleNotification}>test</div>
       <div
         className={`flex items-center ${
           active?.subLinks?.length ? 'justify-between' : 'justify-end'
@@ -92,7 +91,7 @@ export function TopBar({ hide = false, hideSide, toggleSide, innerSubLinks, togg
         ) : (
           <></>
         )}
-        <UserTop />
+        <UserTop toggleNotification={(v) => toggleNotification(v)} />
       </div>
     </div>
   );

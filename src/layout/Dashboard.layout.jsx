@@ -19,6 +19,7 @@ export function DashboardLayout({ children, hide }) {
   const lessThanDesktop = useMediaQuery({
     query: '(max-width: 900px)',
   });
+
   const [hideSide, setHideSide] = useState(!!lessThanDesktop);
   const [hideNoti, setHideNoti] = useState(false);
 
@@ -40,11 +41,11 @@ export function DashboardLayout({ children, hide }) {
         return pathname.includes(path);
       });
       setActiveSub(activeSubLink[0]);
-     
+
       if (activeSubLink?.length && activeSubLink[0]?.subLinks?.length) {
         const activeInnerSubLink = activeSubLink[0]?.subLinks?.filter(
           ({ path }) => {
-            const trimmedPathname = path.substring(0, path.lastIndexOf('/'));  
+            const trimmedPathname = path.substring(0, path.lastIndexOf('/'));
             return pathname.includes(trimmedPathname);
           }
         );
@@ -79,17 +80,17 @@ export function DashboardLayout({ children, hide }) {
     setHideSide((state) => !state);
   };
 
-  const toggleNotification = () => {
-    setHideNoti((state) => !state);
+  const toggleNotification = (v) => {
+    setHideNoti(v);
   };
 
   return (
-    <div className="w-full md:min-h-screen">
+    <div className={`w-full md:min-h-screen ${hideNoti ? 'notificationShow' : ''}`}>
       <TopBar
         hide={hide}
         hideSide={hideSide}
         toggleSide={toggleSide}
-        toggleNotification={toggleNotification}
+        toggleNotification={(v) => toggleNotification(v)}
         innerSubLinks={
           activeSub && activeSub.showDropdown ? activeSub.subLinks : []
         }
@@ -106,26 +107,23 @@ export function DashboardLayout({ children, hide }) {
 
             {activeSub?.name && !active.hideBread ? (
               <>
-              
+
                 <div className="h-5 w-[1px] bg-[#323248]" />
                 <h6 className="text-white text-[12px]">
                   <Link
                     to={activeSub?.path}
                     className={activeSub?.name ? 'text-[#92928f]' : ''}
-                  >{`${activeSub?.name} ${
-                    activeInnerSub?.name ? '-' : ''
-                  } `}</Link>
+                  >{`${activeSub?.name} ${activeInnerSub?.name ? '-' : ''
+                    } `}</Link>
                   {activeInnerSub?.name && !activeDeepInnerSub ? (
-                    <span>{`${activeInnerSub?.name} ${
-                      activeDeepInnerSub ? '-' : ''
-                    } `}</span>
+                    <span>{`${activeInnerSub?.name} ${activeDeepInnerSub ? '-' : ''
+                      } `}</span>
                   ) : activeInnerSub?.name && activeDeepInnerSub ? (
                     <Link
                       to={activeInnerSub?.path}
                       className={activeInnerSub?.name ? 'text-[#92928f]' : ''}
-                    >{`${activeInnerSub?.name} ${
-                      activeInnerSub?.name ? '-' : ''
-                    } `}</Link>
+                    >{`${activeInnerSub?.name} ${activeInnerSub?.name ? '-' : ''
+                      } `}</Link>
                   ) : (
                     ''
                   )}
@@ -144,9 +142,7 @@ export function DashboardLayout({ children, hide }) {
           {children}
         </div>
       </div>
-      {
-        hideNoti && <Notifications toggleNotification={hideNoti} />
-      }
+      <Notifications hideNoti={hideNoti} toggleNotification={() => toggleNotification(false)} />
     </div>
   );
 }

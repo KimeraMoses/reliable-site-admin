@@ -1,0 +1,21 @@
+import { getConfig } from 'lib';
+
+const notificationsConfig = (action) =>
+    getConfig({ module: 'Users', action });
+
+const prefix = `/api/v1/admin/notifications`;
+
+export const getNotificationsConfig = () => ({
+    url: `${prefix}/search`,
+    defaultData: {
+        advancedSearch: {
+            fields: [],
+            keyword: '',
+        },
+        keyword: '',
+        pageNumber: 0,
+        pageSize: 0,
+        orderBy: ['']
+    },
+    config: notificationsConfig('View'),
+});

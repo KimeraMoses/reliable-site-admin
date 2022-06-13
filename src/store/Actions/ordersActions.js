@@ -18,11 +18,9 @@ export const getOrders = (params = {}) => {
                 defaultData.advancedSearch.keyword = params?.status;
             }
             if (params?.userId) {
-                defaultData.advancedSearch.fields.push('userId');
-                defaultData.advancedSearch.keyword = params?.userId;
+                defaultData['userId'] = params?.userId;
             }
             if (params?.startDate && params?.endDate) {
-
                 defaultData['startDate'] = params?.startDate;
                 defaultData['endDate'] = params?.endDate;
             }

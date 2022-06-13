@@ -211,7 +211,6 @@ export const Table = ({
           </div>
           {/* Header End */}
           {/* Table */}
-          {console.log(dataSource)}
           <div
             className={`custom-table__table ${hideHeaders ? 'custom-table__table-hide-headers' : ''
               }`}

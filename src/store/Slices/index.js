@@ -33,6 +33,11 @@ export {
   setOrderLoading
 } from './ordersSlice';
 
+export {
+  getNotifications as getNotificationsDispatch,
+  setNotificationLoading
+} from './notificationsSlice';
+
 export * from './apiKeysSlice';
 export * from './appSettings';
 export * from './paymentGateways';

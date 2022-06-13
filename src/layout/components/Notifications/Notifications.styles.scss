@@ -76,24 +76,42 @@
 .notifications-wrap {
   position: relative;
 }
-.notifications-wrap::before {
-  content: '';
+.notification-block::before {
+  content: "";
   position: absolute;
   top: 45px;
-  bottom: 45px;
-  left: 55px;
+  height: 100%;
+  left: 24px;
   width: 1px;
-  border-left: 1px dashed rgb(71 71 97);
+  border-left: 1px dashed #474761;
 }
 .notifications-wrap {
   overflow: auto;
-  max-height: calc(100% - 95px);
+  max-height: calc(100% - 180px);
 }
-.notifications {
-  animation: slide 0.5s forwards;
-  transform: translateX(100%);
+.notifications {  
+  transform: translateX(100%);  
+  transition: transform .5s;
+  height: 100%;
+}
+.notificationShow {
+  & .notifications {
+    transform: translateX(0);  
+  }
 }
 
+.notificationShow {
+  position: relative;
+  &:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgb(0 0 0 / 50%);
+    height: 100%;
+  }
+}
 @-webkit-keyframes slide {
   100% { transform: translateX(0%); }
 }

@@ -150,8 +150,10 @@ export const YourOrders = () => {
                     handleStatus={async (values) => {
                         setStatus(values);
                         let details = {
-                            status: values
+                            "status": values,
+                            "userId": user?.id
                         }
+
                         if (startDate && endDate) {
                             details["startDate"] = startDate;
                             details["endDate"] = endDate;
@@ -161,7 +163,9 @@ export const YourOrders = () => {
                     handleDateRange={async (date, dateString, id) => {
                         let startDate = '';
                         let endDate = '';
-                        let details = {};
+                        let details = {
+                            "userId": user?.id
+                        }
                         if (date) {
                             startDate = date[0]._d;
                             endDate = date[1]._d;
