@@ -5,6 +5,53 @@
   }
 }
 
+.custom-table.custom-table-dark {
+  // Input in Header
+  .custom-table__input {
+    background: #1e1e2d;
+    border-color: #1e1e2d;
+    // Input
+    input {
+      background: #1e1e2d;
+      color: #92928f;
+      &::placeholder {
+        color: #92928f;
+      }
+    }
+  }
+  // Table
+
+  .custom-table__table {
+    margin-top: 18px;
+  }
+
+  // For Both Header & Body
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td {
+    background: #171723;
+    border-bottom: 1px dashed #474761;
+    font-family: Poppins;
+  }
+
+  // Table Header
+  .ant-table-thead > tr > th {
+    text-transform: uppercase;
+    color: #474761;
+    font-size: 12px;
+  }
+
+  // Table Body
+  .ant-table-tbody > tr > td {
+    color: #fff;
+    font-size: 14px;
+  }
+  // Table Body Hover Effects
+  .ant-table-tbody > tr.ant-table-row:hover > td,
+  .ant-table-tbody > tr > td.ant-table-cell-row-hover {
+    background: #1e1e2d;
+  }
+}
+
 .custom-table {
   // Input in Header
   &__input {

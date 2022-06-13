@@ -23,6 +23,7 @@ export const Table = ({
   btnData,
   pagination,
   rowSelection,
+  emptyText,
   customFilterSort,
   loading,
   permissions,
@@ -38,6 +39,7 @@ export const Table = ({
   statusFilter = [],
   handleStatus,
   handleDateRange,
+  theme,
   rowKey,
 }) => {
   const [dataSource, setDataSource] = useState([]);
@@ -124,7 +126,9 @@ export const Table = ({
   }, []);
   const { RangePicker } = DatePicker;
   return (
-    <div className="custom-table">
+    <div
+      className={`custom-table ${theme === 'dark' ? 'custom-table-dark' : ''}`}
+    >
       {/* Header */}
       {permissions !== undefined && permissions !== null ? (
         <>
@@ -234,7 +238,7 @@ export const Table = ({
               loading={permissions?.View ? loading : false}
               locale={{
                 emptyText: permissions?.View
-                  ? 'No Data'
+                  ? emptyText || 'No Data'
                   : 'You are not authorized to view this data.',
               }}
             />
