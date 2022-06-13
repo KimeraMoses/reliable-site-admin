@@ -166,7 +166,7 @@ export const Add = () => {
       enableReinitialize
       onSubmit={async (values) => {
         await dispatch(createArticle(values));
-        navigate('/admin/dashboard/settings/email-templates');
+        // navigate('/admin/dashboard/settings/email-templates');
       }}
     >
       {({ values, errors, touched, setFieldValue, setFieldTouched }) => {

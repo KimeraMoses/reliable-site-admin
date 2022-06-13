@@ -5,7 +5,7 @@ import {
   getArticleFeedbackByIDConfig,
   getArticleFeedbackConfig,
   updateArticleFeedbackConfig,
-} from 'lib/requests/ArticleFeedbacks';
+} from 'lib/requests/articleFeedbacks';
 
 import { toast } from 'react-toastify';
 import {

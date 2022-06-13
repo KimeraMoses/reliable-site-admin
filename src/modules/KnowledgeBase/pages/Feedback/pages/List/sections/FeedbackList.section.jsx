@@ -101,6 +101,15 @@ export const FeedbackList = () => {
   return (
     <div className="p-[40px]">
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
+        {/* <Button
+          onClick={() => {
+            navigate(
+              `/admin/dashboard/knowledge-base/feedback/view/${record.id}`
+            );
+          }}
+        >
+          View
+        </Button> */}
         <Table
           columns={columns}
           data={data}
@@ -108,6 +117,14 @@ export const FeedbackList = () => {
           dateRageFilter={true}
           statusFilter={statusList()}
           fieldToFilter="billNo"
+          // btnData={{
+          //   text: 'Add Category',
+          //   onClick: (record) => {
+          //     navigate(
+          //       `/admin/dashboard/knowledge-base/feedback/view/${record.id}`
+          //     );
+          //   },
+          // }}
           handleStatus={async (values) => {
             setStatus(values);
             let details = {

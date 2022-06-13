@@ -11,10 +11,16 @@ import { Input, MultiSelect, SMTPEditor, Button } from 'components';
 import { addEmailTemplate } from 'store';
 import './FeedbackDetails.styles.scss';
 
-const CommentCard = ({ imgSrc, imgTxt, author }) => {
+const CommentCard = ({ imgSrc, imgTxt, author, isActive, reply }) => {
   return (
     <>
-      <div className="p-[20px] border-[#323248] border-[1px] border-solid rounded-[8px]">
+      <div
+        className={` ${
+          reply
+            ? 'p-[20px] border-[#323248] border-[1px] border-solid rounded-[8px] ml-[40px]'
+            : 'p-[20px] border-[#323248] border-[1px] border-solid rounded-[8px]'
+        }`}
+      >
         <div className="flex justify-between">
           <div className="flex gap-[16px]">
             {imgSrc && (
@@ -42,7 +48,17 @@ const CommentCard = ({ imgSrc, imgTxt, author }) => {
               <p className="text-xs text-[#474761]">1 hour</p>
             </div>
           </div>
-          <div className="text-base text-[#474761]">Reply</div>
+          <div
+            className={`
+              ${
+                isActive
+                  ? 'text-base text-[#3699FF]'
+                  : 'text-base text-[#474761]'
+              }
+            `}
+          >
+            Reply
+          </div>
         </div>
         <div className="mt-[20px]">
           <p className=" text-base text-[#92928F]">
@@ -52,6 +68,35 @@ const CommentCard = ({ imgSrc, imgTxt, author }) => {
             et ea rebum.
           </p>
         </div>
+        {isActive && (
+          <div className="mt-[20px]">
+            <Formik
+              initialValues={{
+                writeSometing: '',
+              }}
+              enableReinitialize
+            >
+              {() => {
+                return (
+                  <Form className="">
+                    <div className="relative">
+                      <Input
+                        type="text"
+                        name="text"
+                        placeholder="write Something"
+                      />
+                      <img
+                        src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij4KICA8ZyBpZD0idnVlc2F4X2J1bGtfc2VuZC0yIiBkYXRhLW5hbWU9InZ1ZXNheC9idWxrL3NlbmQtMiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTMwMCAtMzE2KSI+CiAgICA8ZyBpZD0ic2VuZC0yIj4KICAgICAgPHBhdGggaWQ9IlZlY3RvciIgZD0iTTQuNTU0LDMuNDA3LDEzLjU3NC40YzQuMDUtMS4zNSw2LjI1Ljg2LDQuOTEsNC45MWwtMy4wMSw5LjAyYy0yLjAyLDYuMDctNS4zNCw2LjA3LTcuMzYsMGwtLjg5LTIuNjgtMi42OC0uODlDLTEuNTE2LDguNzQ3LTEuNTE2LDUuNDM3LDQuNTU0LDMuNDA3WiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzAyLjU1NiAzMTguNTUzKSIgZmlsbD0iIzM2OTlmZiIgb3BhY2l0eT0iMC40Ii8+CiAgICAgIDxwYXRoIGlkPSJWZWN0b3ItMiIgZGF0YS1uYW1lPSJWZWN0b3IiIGQ9Ik0wLDMuODIsMy44MSwwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzMTIuMTIgMzIzLjgxKSIgZmlsbD0iIzM2OTlmZiIvPgogICAgICA8cGF0aCBpZD0iVmVjdG9yLTMiIGRhdGEtbmFtZT0iVmVjdG9yIiBkPSJNLjc0Nyw1LjMxOGEuNzQyLjc0MiwwLDAsMS0uNTMtLjIyLjc1NC43NTQsMCwwLDEsMC0xLjA2bDMuOC0zLjgyYS43NS43NSwwLDAsMSwxLjA2LDEuMDZMMS4yNzcsNS4xQS43ODYuNzg2LDAsMCwxLC43NDcsNS4zMThaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzMTEuMzcyIDMyMy4wNjMpIiBmaWxsPSIjMzY5OWZmIi8+CiAgICAgIDxwYXRoIGlkPSJWZWN0b3ItNCIgZGF0YS1uYW1lPSJWZWN0b3IiIGQ9Ik0wLDBIMjRWMjRIMFoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMwMCAzMTYpIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwIi8+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4K"
+                        alt="send"
+                        className="absolute bottom-[14px] right-[14px]"
+                      />
+                    </div>
+                  </Form>
+                );
+              }}
+            </Formik>
+          </div>
+        )}
       </div>
     </>
   );
@@ -149,94 +194,12 @@ export const FeedbackDetails = () => {
           <div className="mt-[40px] flex flex-col gap-[20px]">
             <CommentCard imgTxt="P" />
             <CommentCard imgSrc="/article.jpg" author />
-            <div className="ml-[40px]">
-              <CommentCard imgTxt="P" />
-            </div>
+
+            <CommentCard imgTxt="P" reply />
+            <CommentCard imgTxt="P" isActive />
           </div>
         </div>
       </Spin>
     </>
-    // <Formik
-    //   initialValues={initialValues}
-    //   validationSchema={validationSchema}
-    //   enableReinitialize
-    //   onSubmit={async (values) => {
-    //     await dispatch(addEmailTemplate({ data: values }));
-    //     navigate('/admin/dashboard/settings/email-templates');
-    //   }}
-    // >
-    //   {({ values, errors, touched, setFieldValue, setFieldTouched }) => {
-    //     return (
-    //       <Form>
-    //         {/* TODO: Change Spinning When Integration */}
-    //         <Spin spinning={false}>
-    //           <div className="grid grid-cols-[1fr] gap-[20px] px-[32px] py-[40px]">
-    //             <div className="flex flex-col gap-[20px]">
-    //               <div className="bg-[#1E1E2D] rounded-[8px]">
-    //                 <h6 className="text-white font-medium p-[32px] text-[16px]">
-    //                   Submission Details
-    //                 </h6>
-    //                 {/* Other Inputs */}
-    //                 <div className="flex flex-col gap-[2px]">
-    //                   {fields?.map((field, idx) => {
-    //                     return (
-    //                       <EmailBodyInput
-    //                         key={`field-${idx}`}
-    //                         options={field?.options}
-    //                         name={field?.name}
-    //                         label={field?.label}
-    //                         type={field?.type}
-    //                         placeholder={field?.placeholder}
-    //                         touched={touched}
-    //                         errors={errors}
-    //                       />
-    //                     );
-    //                   })}
-    //                 </div>
-    //                 <ConfigurationEditor
-    //                   editorState={values.bodyHolder}
-    //                   onBlur={() => setFieldTouched('body', true)}
-    //                   onEditorStateChange={(state) => {
-    //                     setFieldValue('bodyHolder', state);
-    //                     const currentContentAsHTML = convertToHTML(
-    //                       state.getCurrentContent()
-    //                     );
-    //                     if (
-    //                       convertToRaw(state.getCurrentContent()).blocks
-    //                         .length === 1 &&
-    //                       convertToRaw(state.getCurrentContent()).blocks[0]
-    //                         .text === ''
-    //                     ) {
-    //                       setFieldValue('body', '');
-    //                     } else {
-    //                       setFieldValue('body', currentContentAsHTML);
-    //                     }
-    //                   }}
-    //                 />
-    //                 {touched['body'] && errors['body'] && (
-    //                   <div className="error whitespace-nowrap ml-[32px] mb-[16px] w-[20%]">
-    //                     {errors['body']}
-    //                   </div>
-    //                 )}
-    //                 <div className="p-[32px] pt-[10px] flex items-center gap-[16px]">
-    //                   <Button htmlType="submit" className="w-[fit_content]">
-    //                     Approve Submission
-    //                   </Button>
-    //                   <Button
-    //                     type="ghost"
-    //                     htmlType="submit"
-    //                     className="w-[fit_content]"
-    //                   >
-    //                     Generate Ticket
-    //                   </Button>
-    //                 </div>
-    //               </div>
-    //             </div>
-    //           </div>
-    //         </Spin>
-    //       </Form>
-    //     );
-    //   }}
-    // </Formik>
   );
 };
