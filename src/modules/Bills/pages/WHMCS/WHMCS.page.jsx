@@ -1,5 +1,10 @@
 import { useState } from 'react';
-import { StepsSection, ValidateForm, WhatToImport } from './sections';
+import {
+  StepsSection,
+  ValidateForm,
+  WhatToImport,
+  ReviewAndImport,
+} from './sections';
 
 const WHMCS = () => {
   const [step, setStep] = useState(1);
@@ -9,7 +14,7 @@ const WHMCS = () => {
       <StepsSection current={step} />
       {step === 1 ? <ValidateForm setStep={setStep} /> : <></>}
       {step === 2 ? <WhatToImport setStep={setStep} /> : <></>}
-      {step === 3 ? <ValidateForm setStep={setStep} /> : <></>}
+      {step === 3 ? <ReviewAndImport setStep={setStep} /> : <></>}
     </div>
   );
 };

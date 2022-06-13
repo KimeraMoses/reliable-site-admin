@@ -39,6 +39,7 @@ export const Table = ({
   statusFilter = [],
   handleStatus,
   handleDateRange,
+  hideSearch,
   theme,
   rowKey,
 }) => {
@@ -142,12 +143,18 @@ export const Table = ({
                       {customFilterSort ? (
                         customFilterSort
                       ) : (
-                        <Input
-                          placeholder={'Search Here'}
-                          prefix={<Search />}
-                          className="custom-table__input"
-                          onChange={(e) => setSearch(e.target.value)}
-                        />
+                        <>
+                          {hideSearch ? (
+                            <></>
+                          ) : (
+                            <Input
+                              placeholder={'Search Here'}
+                              prefix={<Search />}
+                              className="custom-table__input"
+                              onChange={(e) => setSearch(e.target.value)}
+                            />
+                          )}
+                        </>
                       )}
                     </>
                   ) : (
@@ -170,7 +177,6 @@ export const Table = ({
                   className="custom-date-picker w-full h-[52px] bg-[#171723] rounded-[8px] text-[#92928F] flex items-center justify-between px-[16px]"
                 />
               )}
-              {console.log(statusFilter)}
               {statusFilter?.length ? (
                 <select
                   onChange={(e) => handleStatus(e.target.value)}
