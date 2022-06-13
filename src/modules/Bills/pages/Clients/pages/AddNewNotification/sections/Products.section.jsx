@@ -3,9 +3,6 @@ import { Input, Button } from 'components';
 export const Products = () => {
   return (
     <>
-      {/* <h6 className="text-white mb-[32px]">
-        <Button className="w-full h-[52px]">New Message</Button>
-      </h6> */}
       <div className="flex flex-col gap-[20px]">
         <Input
           name="userType"
@@ -13,19 +10,21 @@ export const Products = () => {
           type="select"
           label="User Type"
           options={[
-            { label: 'Admins', value: 0 },
-            { label: 'Clients', value: 1 },
+            { label: 'Admins', value: 1 },
+            { label: 'Clients', value: 0 },
           ]}
         />
-        {/* <h6 className="text-white text-[16px] mb-[12px]">Targeted Clients</h6> */}
         <Input
           label="Property"
           type="select"
           name="property"
           placeholder="Select Property"
           options={[
-            { label: 'Bills', value: 'bills' },
-            { label: 'Bills2', value: 'bills2' },
+            { label: 'Bills', value: 0 },
+            { label: 'Tickets', value: 1 },
+            { label: 'Orders', value: 2 },
+            { label: 'Products', value: 3 },
+            { label: 'Refunds', value: 4 },
           ]}
         />
         <Input
@@ -46,7 +45,7 @@ export const Products = () => {
           label="Value"
           type="number"
           name="value"
-          placeholder="Enter Value $"
+          placeholder="Enter Value"
         />
         <Button type="ghost" className="h-[52px] w-full">
           Apply
