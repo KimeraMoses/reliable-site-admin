@@ -1,2 +1,3 @@
 export { StepsSection } from './Steps.section';
-export { WhatToImport } from './WhatToImport.section';
+export * from './ValidateForm';
+export * from './WhatToImport';

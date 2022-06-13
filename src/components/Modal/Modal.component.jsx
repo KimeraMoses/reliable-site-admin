@@ -28,13 +28,19 @@ export function Modal({
   additionalBody,
   loading,
   disableSubmit,
+  centered,
   handleSubmit = (values) => console.log(values),
 }) {
   const handleClose = () => {
     setShow(false);
   };
   return (
-    <BSModal show={show} onHide={handleClose} className={`custom-modal`}>
+    <BSModal
+      show={show}
+      onHide={handleClose}
+      className={`custom-modal`}
+      centered={centered}
+    >
       <BSModal.Body className="modal__bg">
         <div className="modal__header">
           <h3>{heading}</h3>
@@ -393,7 +399,11 @@ export function Modal({
                     </div>
                   )}
                   {additionalBody ? additionalBody : <></>}
-                  <div className="modal__buttons">
+                  <div
+                    className={`modal__buttons grid ${
+                      submitText ? 'grid-cols-2' : 'grid-cols-1'
+                    }`}
+                  >
                     <button
                       onClick={handleCancel ? handleCancel : handleClose}
                       type="button"
@@ -401,14 +411,16 @@ export function Modal({
                     >
                       {cancelButtonText}
                     </button>
-                    <Button
-                      htmlType="submit"
-                      loading={loading}
-                      className="modal__buttons-btn modal__buttons-btn-primary"
-                      disabled={disableSubmit}
-                    >
-                      {submitText}
-                    </Button>
+                    {submitText && (
+                      <Button
+                        htmlType="submit"
+                        loading={loading}
+                        className="modal__buttons-btn modal__buttons-btn-primary"
+                        disabled={disableSubmit}
+                      >
+                        {submitText}
+                      </Button>
+                    )}
                   </div>
                 </Form>
               );

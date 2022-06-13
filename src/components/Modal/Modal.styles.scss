@@ -165,8 +165,8 @@
   }
 
   &__buttons {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    // display: grid;
+    // grid-template-columns: 1fr 1fr;
     gap: 16px;
 
     &-btn {
@@ -210,100 +210,100 @@
   }
 }
 
-.bg_col{
+.bg_col {
   background-color: #171723;
   border-radius: 8px;
   padding: 16px;
   height: 235px;
   overflow: auto;
   & > .ant-checkbox-group {
-      width: 100%;
+    width: 100%;
   }
 }
 
 .custom_checkb {
-  & input{
+  & input {
     display: none;
   }
-  
-  & .imgwrap {
-      width: 40px;
-      height: 40px;
-      border-radius: 5px;
-      background-color: #ccc;
-      overflow: hidden;
-      position: relative;
 
-      & img{
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-      }
+  & .imgwrap {
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    background-color: #ccc;
+    overflow: hidden;
+    position: relative;
+
+    & img {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
   }
 
   & + .custom_checkb {
-      margin-top: 16px;
+    margin-top: 16px;
   }
   & .lablwrap {
-      color: #fff;
-      font-size: 14px;
-      padding-left: 10px;
+    color: #fff;
+    font-size: 14px;
+    padding-left: 10px;
   }
 
   & label {
-      display: block;
-      width: 100%;
-      position: relative;
-      cursor: pointer;
+    display: block;
+    width: 100%;
+    position: relative;
+    cursor: pointer;
   }
 
   & label::after {
-      content: '';
-      position: absolute;
-      top: 50%;
-      right: 0;
-      transform: translateY(-50%);
-      width: 24px;
-      height: 24px;
-      background-color: transparent;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    background-color: transparent;
+    border: 1px solid #ccc;
+    border-radius: 4px;
   }
   & label::before {
-      content: "";
-      position: absolute;
-      right: 8px;
-      top: 11px;
-      width: 8px;
-      height: 14px;
-      border-right: 2px solid #fff;
-      border-bottom: 2px solid #fff;
-      z-index: 1;
-      transform: rotate(45deg);
-      opacity: 0;
-      transition: opacity 0.4s;
-    }
+    content: '';
+    position: absolute;
+    right: 8px;
+    top: 11px;
+    width: 8px;
+    height: 14px;
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    z-index: 1;
+    transform: rotate(45deg);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
 
-    & input:checked + label::after {
-      background-color: rgb(54, 153, 255);
-      border: 1px solid rgb(54, 153, 255);
-    }
+  & input:checked + label::after {
+    background-color: rgb(54, 153, 255);
+    border: 1px solid rgb(54, 153, 255);
+  }
 
-    & input:checked + label::before {
-      opacity: 1;
-    }
+  & input:checked + label::before {
+    opacity: 1;
+  }
 
-    & .image_wr {
-        display: flex;
-        align-items: center;
-        padding-right: 40px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+  & .image_wr {
+    display: flex;
+    align-items: center;
+    padding-right: 40px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 .custdes {
@@ -313,42 +313,42 @@
   font-size: 0;
 
   & .imgwrap {
-      width: 40px;
-      height: 40px;
-      border-radius: 5px;
-      background-color: #ccc;
-      overflow: hidden;
-      position: relative;
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    background-color: #ccc;
+    overflow: hidden;
+    position: relative;
 
-      & img{
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 100%;
-          height: 100%;
-          object-fit: contain;
-      }
+    & img {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
   }
   & .image_wr {
-      display: flex;
-      align-items: center;
-      padding-right: 40px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    padding-right: 40px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   & .lablwrap {
-      color: #fff;
-      font-size: 14px;
-      padding-left: 10px;
+    color: #fff;
+    font-size: 14px;
+    padding-left: 10px;
   }
   & .ant-checkbox {
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
   }
-  & + .custdes{
+  & + .custdes {
     margin: 16px 0 0 0;
   }
 }

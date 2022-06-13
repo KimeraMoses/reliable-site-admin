@@ -7,9 +7,10 @@ export const StepsSection = ({ current }) => {
     <div className="relative custom-steps">
       <div className="custom-steps__line" />
       <div className="flex flex-col items-center gap-[40px] mt-[40px]">
-        {steps?.map((step) => {
+        {steps?.map((step, idx) => {
           return (
             <div
+              key={`step-${idx}`}
               className={`${
                 current === step ? 'custom-steps__step-active' : ''
               } ${

@@ -233,34 +233,33 @@ export const convertHTMLToDraftState = (html) => {
   }
 };
 
-
 export const statusList = (i = '') => {
   let v = [
     {
-      'name': "Pending",
-      'bg': '#392F28',
-      'text': "#FFA800"
+      name: 'Pending',
+      bg: '#392F28',
+      text: '#FFA800',
     },
     {
-      'name': "Confirmed",
-      'bg': '#1C3238',
-      'text': "#0BB783"
+      name: 'Confirmed',
+      bg: '#1C3238',
+      text: '#0BB783',
     },
     {
-      'name': "Paid",
-      'bg': '#1C3238',
-      'text': "#0BB783"
+      name: 'Paid',
+      bg: '#1C3238',
+      text: '#0BB783',
     },
     {
-      'name': "Completed",
-      'bg': '#1C3238',
-      'text': "#0BB783"
+      name: 'Completed',
+      bg: '#1C3238',
+      text: '#0BB783',
     },
     {
-      'name': "Cancelled",
-      'bg': '#3A2434',
-      'text': "#F64E60"
-    }
+      name: 'Cancelled',
+      bg: '#3A2434',
+      text: '#F64E60',
+    },
   ];
   return i !== '' ? v[i] : v;
-}
+};
