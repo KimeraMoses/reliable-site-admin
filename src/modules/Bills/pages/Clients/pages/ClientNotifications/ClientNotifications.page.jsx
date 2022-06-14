@@ -7,6 +7,8 @@ import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { checkModule } from 'lib/checkModule';
 import { getNotificationTemplates } from 'store';
+import { getNotificationTemplateByID } from 'store';
+import { Delete } from './sections/Delete.section';
 
 export const ClientNotifications = () => {
   const navigate = useNavigate();
@@ -118,15 +120,19 @@ export const ClientNotifications = () => {
     (state) => state?.notificationTemplates
   );
 
+  const [del, setDel] = useState(false);
+  const [id, setId] = useState('');
+
   return (
     <div className="p-[40px]">
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
+        <Delete show={del} setShow={setDel} id={id} />
         <Table
           columns={columns}
           data={templates}
           rowKey="id"
           loading={loading}
-          fieldToFilter="name"
+          fieldToFilter="title"
           btnData={{
             text: 'Add New',
             onClick: () =>
@@ -147,10 +153,34 @@ export const ClientNotifications = () => {
               : []
           }
           editAction={(record) => {
-            return <Button>Edit</Button>;
+            return (
+              <>
+                <Button onClick={() => {}}>
+                  Send Notification Using Template
+                </Button>
+                <Button
+                  onClick={() =>
+                    navigate(
+                      `/admin/dashboard/billing/clients/show-notifications/client-notifications/edit/${record?.id}`
+                    )
+                  }
+                >
+                  Edit
+                </Button>
+              </>
+            );
           }}
           deleteAction={(record) => {
-            return <Button>Delete</Button>;
+            return (
+              <Button
+                onClick={() => {
+                  setId(record?.id);
+                  setDel(true);
+                }}
+              >
+                Delete
+              </Button>
+            );
           }}
           permissions={permissions}
           t={t}

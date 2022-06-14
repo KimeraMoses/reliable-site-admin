@@ -19,18 +19,26 @@ export const getNotificationTemplatesConfig = () => ({
   config: getConfig({ module: NotificationTemplate, action: 'View' }),
 });
 
-// // Add Payment Gateway
-// export const addPaymentGatewayConfig = () => ({
-//   url: `/api/paymentgateways`,
-//   config: getConfig({ module: PaymentGateway, action: 'Create' }),
-// });
-// // Edit Payment Gateway
-// export const editPaymentGatewayConfig = ({ id }) => ({
-//   url: `/api/paymentgateways/${id}`,
-//   config: getConfig({ module: PaymentGateway, action: 'Update' }),
-// });
-// // Delete Payment Gateway
-// export const deletePaymentGatewayConfig = ({ id }) => ({
-//   url: `/api/paymentgateways/${id}`,
-//   config: getConfig({ module: PaymentGateway, action: 'Remove' }),
-// });
+// Add Notification Template
+export const addNotificationTemplateConfig = () => ({
+  url: `${prefix}`,
+  config: getConfig({ module: NotificationTemplate, action: 'Create' }),
+});
+
+// Edit Notification Template
+export const editNotificationTemplateConfig = ({ id }) => ({
+  url: `${prefix}/${id}`,
+  config: getConfig({ module: NotificationTemplate, action: 'Update' }),
+});
+
+// Get Notification Template By ID
+export const getNotificationTemplateByIDConfig = ({ id }) => ({
+  url: `${prefix}/${id}`,
+  config: getConfig({ module: NotificationTemplate, action: 'View' }),
+});
+
+// Delete Notification Template
+export const deleteNotificationTemplateConfig = ({ id }) => ({
+  url: `${prefix}/${id}`,
+  config: getConfig({ module: NotificationTemplate, action: 'Remove' }),
+});

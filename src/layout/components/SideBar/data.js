@@ -49,6 +49,10 @@ export const sidebarData = [
                 name: 'Add New',
                 path: '/admin/dashboard/billing/clients/show-notifications/client-notifications/add/new',
               },
+              {
+                name: 'Edit',
+                path: '/admin/dashboard/billing/clients/show-notifications/client-notifications/edit/:id',
+              },
             ],
           },
         ],

@@ -1,36 +1,45 @@
-import { EditorState } from 'draft-js';
 import * as Yup from 'yup';
 import { Spin } from 'antd';
 import { Formik, Form } from 'formik';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Left, Right } from './sections';
+import { convertHTMLToDraftState } from 'lib';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
-import { addNotificationTemplate } from 'store';
-
-const initialValues = {
-  property: 3,
-  operatorType: '<=',
-  value: '10',
-  address: '',
-  body: '',
-  bodyHolder: EditorState.createEmpty(),
-  clientName: '',
-  company: '',
-  startDate: moment(),
-  endDate: moment(),
-  title: '',
-  targetUserType: 0,
-};
+import { editNotificationTemplate, getNotificationTemplateByID } from 'store';
+import { useEffect } from 'react';
 
 const validationSchema = Yup.object().shape({});
 
-export const AddNewNotification = () => {
+export const EditNotification = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { specificUsers } = useSelector((state) => state?.users);
-  const { loading } = useSelector((state) => state?.notificationTemplates);
+  const { template, loading } = useSelector(
+    (state) => state?.notificationTemplates
+  );
+
+  const { id } = useParams();
+  useEffect(() => {
+    dispatch(getNotificationTemplateByID({ id }));
+  }, []);
+
+  const initialValues = {
+    property: template?.property,
+    operatorType: template?.operatorType,
+    value: template?.value,
+    address: template?.address,
+    body: template?.body,
+    bodyHolder: convertHTMLToDraftState(template?.body),
+    clientName: template?.clientName,
+    company: template?.company,
+    startDate: moment(template?.startDate),
+    endDate: moment(template?.endDate),
+    title: template?.title,
+    targetUserType: template?.targetUserType,
+  };
+
   return (
     <>
       <Formik
@@ -51,7 +60,11 @@ export const AddNewNotification = () => {
               value: values?.value,
             };
 
-            await dispatch(addNotificationTemplate({ data: finalValues }));
+            await dispatch(
+              editNotificationTemplate({
+                data: { ...finalValues, id },
+              })
+            );
             navigate(
               '/admin/dashboard/billing/clients/show-notifications/client-notifications'
             );

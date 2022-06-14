@@ -1,6 +1,14 @@
-import { axios, getError, getNotificationTemplatesConfig } from 'lib';
+import {
+  axios,
+  getError,
+  addNotificationTemplateConfig,
+  editNotificationTemplateConfig,
+  getNotificationTemplatesConfig,
+  getNotificationTemplateByIDConfig,
+  deleteNotificationTemplateConfig,
+} from 'lib';
 import { toast } from 'react-toastify';
-import { getTemplates, setNTLoading } from 'store/Slices';
+import { getTemplates, getTemplate, setNTLoading } from 'store/Slices';
 
 export const getNotificationTemplates = () => {
   return async (dispatch) => {
@@ -17,62 +25,79 @@ export const getNotificationTemplates = () => {
   };
 };
 
-// export const addPaymentGateway = ({ data }) => {
-//   return async (dispatch) => {
-//     dispatch(setPaymentGatewaysLoading(true));
-//     try {
-//       const { url, config } = addPaymentGatewayConfig();
-//       const response = await axios.post(url, data, config);
-//       if (response.status === 200) {
-//         const { url, defaultData, config } = getPaymentGatewaysConfig();
-//         const response = await axios.post(url, defaultData, config);
-//         dispatch(getPaymentGateways(response?.data?.data));
-//         toast.success('Payment Gateway Added Successfully');
-//       }
-//     } catch (error) {
-//       toast.error(getError(error));
-//     } finally {
-//       dispatch(setPaymentGatewaysLoading(false));
-//     }
-//   };
-// };
+export const getNotificationTemplateByID = ({ id }) => {
+  return async (dispatch) => {
+    dispatch(setNTLoading(true));
+    try {
+      const { url, defaultData, config } = getNotificationTemplateByIDConfig({
+        id,
+      });
+      const response = await axios.get(url, defaultData, config);
+      dispatch(getTemplate(response?.data?.data));
+    } catch (error) {
+      toast.error(getError(error));
+    } finally {
+      dispatch(setNTLoading(false));
+    }
+  };
+};
 
-// export const editPaymentGateway = ({ data }) => {
-//   return async (dispatch) => {
-//     dispatch(setPaymentGatewaysLoading(true));
-//     try {
-//       const { url, config } = editPaymentGatewayConfig({ id: data?.id });
-//       const response = await axios.put(url, data, config);
-//       if (response.status === 200) {
-//         const { url, defaultData, config } = getPaymentGatewaysConfig();
-//         const response = await axios.post(url, defaultData, config);
-//         dispatch(getPaymentGateways(response?.data?.data));
-//         toast.success('Payment Gateway Updated Successfully');
-//       }
-//     } catch (error) {
-//       toast.error(getError(error));
-//     } finally {
-//       dispatch(setPaymentGatewaysLoading(false));
-//     }
-//   };
-// };
+export const addNotificationTemplate = ({ data }) => {
+  return async (dispatch) => {
+    dispatch(setNTLoading(true));
+    try {
+      const { url, config } = addNotificationTemplateConfig();
+      const response = await axios.post(url, data, config);
+      if (response.status === 200) {
+        const { url, defaultData, config } = getNotificationTemplatesConfig();
+        const response = await axios.post(url, defaultData, config);
+        dispatch(getTemplates(response?.data?.data));
+        toast.success('Notification Template Added Successfully');
+      }
+    } catch (error) {
+      toast.error(getError(error));
+    } finally {
+      dispatch(setNTLoading(false));
+    }
+  };
+};
 
-// export const deletePaymentGateway = ({ id }) => {
-//   return async (dispatch) => {
-//     dispatch(setPaymentGatewaysLoading(true));
-//     try {
-//       const { url, config } = deletePaymentGatewayConfig({ id });
-//       const response = await axios.delete(url, config);
-//       if (response.status === 200) {
-//         const { url, defaultData, config } = getPaymentGatewaysConfig();
-//         const response = await axios.post(url, defaultData, config);
-//         dispatch(getPaymentGateways(response?.data?.data));
-//         toast.success('Payment Gateway Deleted Successfully');
-//       }
-//     } catch (error) {
-//       toast.error(getError(error));
-//     } finally {
-//       dispatch(setPaymentGatewaysLoading(false));
-//     }
-//   };
-// };
+export const editNotificationTemplate = ({ data }) => {
+  return async (dispatch) => {
+    dispatch(setNTLoading(true));
+    try {
+      const { url, config } = editNotificationTemplateConfig({ id: data?.id });
+      const response = await axios.put(url, data, config);
+      if (response.status === 200) {
+        const { url, defaultData, config } = getNotificationTemplatesConfig();
+        const response = await axios.post(url, defaultData, config);
+        dispatch(getTemplates(response?.data?.data));
+        toast.success('Notification Template Updated Successfully');
+      }
+    } catch (error) {
+      toast.error(getError(error));
+    } finally {
+      dispatch(setNTLoading(false));
+    }
+  };
+};
+
+export const deleteNotificationTemplate = ({ id }) => {
+  return async (dispatch) => {
+    dispatch(setNTLoading(true));
+    try {
+      const { url, config } = deleteNotificationTemplateConfig({ id });
+      const response = await axios.delete(url, config);
+      if (response.status === 200) {
+        const { url, defaultData, config } = getNotificationTemplatesConfig();
+        const response = await axios.post(url, defaultData, config);
+        dispatch(getTemplates(response?.data?.data));
+        toast.success('Notification Template Deleted Successfully');
+      }
+    } catch (error) {
+      toast.error(getError(error));
+    } finally {
+      dispatch(setNTLoading(false));
+    }
+  };
+};
