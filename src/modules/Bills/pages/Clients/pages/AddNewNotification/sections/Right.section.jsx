@@ -3,7 +3,7 @@ import { useFormikContext } from 'formik';
 import { convertToHTML } from 'draft-convert';
 import { convertToRaw } from 'draft-js';
 
-import { Input, MultiSelect, SMTPEditor, Button } from 'components';
+import { Input, MultiSelect, SMTPEditor, Button, DatePicker } from 'components';
 import './Right.styles.scss';
 
 const getInputEl = ({ options, name, placeholder, type }) => {
@@ -47,6 +47,8 @@ const getInputEl = ({ options, name, placeholder, type }) => {
           />
         </div>
       );
+    case 'date':
+      return <DatePicker name={name} />;
     default:
       break;
   }
@@ -140,22 +142,6 @@ export function Right() {
                 errors={errors}
                 type="text"
               />
-              <EmailBodyInput
-                name="startDate"
-                label="Start Date"
-                placeholder="[Enter Start Date]"
-                touched={touched}
-                errors={errors}
-                type="text"
-              />
-              <EmailBodyInput
-                name="endDate"
-                label="End Date"
-                placeholder="[Enter End Date]"
-                touched={touched}
-                errors={errors}
-                type="text"
-              />
             </div>
             <ConfigurationEditor
               editorState={values?.bodyHolder}
@@ -180,8 +166,26 @@ export function Right() {
                 {errors['body']}
               </div>
             )}
+            <div className="flex flex-col gap-[2px]">
+              <EmailBodyInput
+                name="startDate"
+                label="Start Date"
+                placeholder="[Enter Start Date]"
+                touched={touched}
+                errors={errors}
+                type="date"
+              />
+              <EmailBodyInput
+                name="endDate"
+                label="End Date"
+                placeholder="[Enter End Date]"
+                touched={touched}
+                errors={errors}
+                type="date"
+              />
+            </div>
             <div className="p-[32px]">
-              <Button>Save Template</Button>
+              <Button htmlType="submit">Save Template</Button>
             </div>
           </div>
         </div>

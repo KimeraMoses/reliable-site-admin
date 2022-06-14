@@ -31,3 +31,6 @@ export * from './departmentsActions';
 export * from './transactions';
 // Invoices Actions
 export * from './invoicesActions';
+
+// Notification Templates
+export * from './notification-templates';

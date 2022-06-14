@@ -4,6 +4,7 @@ export {
   setUserLoading,
   getUser,
   getUserModule,
+  getSpecificUsersDispatch,
 } from './usersSlice';
 export {
   getUserGroups as getUserGroupsDispatch,
@@ -35,3 +36,4 @@ export * from './emailTemplates';
 export * from './products';
 export * from './categories';
 export * from './transactions';
+export * from './notification-templates';

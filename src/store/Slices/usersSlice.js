@@ -3,10 +3,11 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   users: [],
   user: null,
-  clients:[],
+  clients: [],
   userSettings: null,
   loading: false,
   userModules: [],
+  specificUsers: [],
 };
 const usersSlice = createSlice({
   name: 'users',
@@ -30,6 +31,9 @@ const usersSlice = createSlice({
     getUserModule: (state, { payload }) => {
       state.userModules = payload;
     },
+    getSpecificUsersDispatch: (state, { payload }) => {
+      state.specificUsers = payload;
+    },
   },
 });
 
@@ -41,6 +45,7 @@ export const {
   setUserLoading,
   getUserModule,
   getUserSettingsSlice,
+  getSpecificUsersDispatch,
 } = actions;
 
 export default reducer;

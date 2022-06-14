@@ -17,6 +17,7 @@ import brandsReducer from './Slices/brandsSlice';
 import departmentsReducer from './Slices/departmentsSlice';
 import transactionsReducer from './Slices/transactions';
 import invoicesReducer from './Slices/invoicesSlice';
+import notificationTemplatesReducer from './Slices/notification-templates';
 
 const store = configureStore({
   reducer: {
@@ -38,6 +39,7 @@ const store = configureStore({
     departments: departmentsReducer,
     transactions: transactionsReducer,
     invoices: invoicesReducer,
+    notificationTemplates: notificationTemplatesReducer,
   },
 });
 

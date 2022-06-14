@@ -2,10 +2,11 @@ import { Button } from 'antd';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import { Table } from 'components';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { checkModule } from 'lib/checkModule';
+import { getNotificationTemplates } from 'store';
 
 export const ClientNotifications = () => {
   const navigate = useNavigate();
@@ -21,17 +22,18 @@ export const ClientNotifications = () => {
       title: 'ID',
       dataIndex: 'id',
       key: 'id',
+      render: (text) => text.substring(0, 4),
     },
     {
       title: 'Title',
       dataIndex: 'title',
       key: 'title',
     },
-    {
-      title: 'Total Clients',
-      dataIndex: 'totalUsers',
-      key: 'totalUsers',
-    },
+    // {
+    //   title: 'Total Clients',
+    //   dataIndex: 'totalUsers',
+    //   key: 'totalUsers',
+    // },
     {
       title: 'Starts',
       dataIndex: 'startDate',
@@ -106,13 +108,24 @@ export const ClientNotifications = () => {
     },
   };
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getNotificationTemplates());
+  }, []);
+
+  const { templates, loading } = useSelector(
+    (state) => state?.notificationTemplates
+  );
+
   return (
     <div className="p-[40px]">
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
         <Table
           columns={columns}
-          data={data}
-          // loading={loading}
+          data={templates}
+          rowKey="id"
+          loading={loading}
           fieldToFilter="name"
           btnData={{
             text: 'Add New',

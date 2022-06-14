@@ -13,12 +13,14 @@ import {
   updateUserAppSettings,
   addUserAppSettings,
   registerClientConfig,
+  getSpecificConfig,
 } from 'lib';
 import { toast } from 'react-toastify';
 import {
   getUser,
   getUserModule,
   getUsersDispatch,
+  getSpecificUsersDispatch,
   getClientsDispatch,
   setUserLoading,
 } from 'store/Slices';
@@ -231,9 +233,19 @@ export const updateUserSettings = ({ data }) => {
 };
 
 // Find Specific Users
-export const findSpecificUsers = (values) => {
+export const findSpecificUsers = (data) => {
   return async (dispatch) => {
+    dispatch(setUserLoading(true));
     try {
-    } catch (e) {}
+      const { url, config } = getSpecificConfig();
+      const res = await axios.post(url, data, config);
+      if (res?.status === 200) {
+        dispatch(getSpecificUsersDispatch(res?.data?.data));
+      }
+    } catch (e) {
+      toast.error(getError(e));
+    } finally {
+      dispatch(setUserLoading(false));
+    }
   };
 };

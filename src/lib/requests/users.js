@@ -10,8 +10,11 @@ export const getUserConfig = (id) => ({
   url: `/api/users/${id}`,
   config: getConfig({ module: Users, action: 'View' }),
 });
-
 export const getClientsConfig = () => ({
   url: `/api/users/getallusersbyrolename/client`,
+  config: getConfig({ module: Users, action: 'View' }),
+});
+export const getSpecificConfig = () => ({
+  url: `/api/users/find/specific`,
   config: getConfig({ module: Users, action: 'View' }),
 });
