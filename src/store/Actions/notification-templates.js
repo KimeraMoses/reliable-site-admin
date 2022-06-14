@@ -7,6 +7,7 @@ import {
   getNotificationTemplateByIDConfig,
   deleteNotificationTemplateConfig,
   getNotificationsConfig,
+  sendNotificatoinConfig,
 } from 'lib';
 import { toast } from 'react-toastify';
 import {
@@ -50,10 +51,10 @@ export const getNotificationTemplateByID = ({ id }) => {
   return async (dispatch) => {
     dispatch(setNTLoading(true));
     try {
-      const { url, defaultData, config } = getNotificationTemplateByIDConfig({
+      const { url, config } = getNotificationTemplateByIDConfig({
         id,
       });
-      const response = await axios.get(url, defaultData, config);
+      const response = await axios.get(url, config);
       dispatch(getTemplate(response?.data?.data));
     } catch (error) {
       toast.error(getError(error));
@@ -114,6 +115,26 @@ export const deleteNotificationTemplate = ({ id }) => {
         const response = await axios.post(url, defaultData, config);
         dispatch(getTemplates(response?.data?.data));
         toast.success('Notification Template Deleted Successfully');
+      }
+    } catch (error) {
+      toast.error(getError(error));
+    } finally {
+      dispatch(setNTLoading(false));
+    }
+  };
+};
+
+export const sendNotification = ({ data }) => {
+  return async (dispatch) => {
+    dispatch(setNTLoading(true));
+    try {
+      const { url, config } = sendNotificatoinConfig();
+      const response = await axios.post(url, data, config);
+      if (response.status === 200) {
+        const { url, defaultData, config } = getNotificationsConfig();
+        const response = await axios.post(url, defaultData, config);
+        dispatch(getNotifications(response?.data?.data));
+        toast.success('Notification Sent Successfully');
       }
     } catch (error) {
       toast.error(getError(error));

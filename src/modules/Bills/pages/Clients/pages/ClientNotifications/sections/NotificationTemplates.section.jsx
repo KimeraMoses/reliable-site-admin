@@ -3,11 +3,19 @@ import { Button } from 'antd';
 import moment from 'moment';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Table } from 'components';
 import { checkModule } from 'lib/checkModule';
-import { Delete } from '.';
+import { Delete, Send } from '.';
+import { getNotificationTemplateByID } from 'store';
+import { findSpecificUsers } from 'store';
+import { toast } from 'react-toastify';
+import {
+  axios,
+  getNotificationTemplateByIDConfig,
+  getSpecificConfig,
+} from 'lib';
 
 export const NotificationTemplates = () => {
   const navigate = useNavigate();
@@ -82,12 +90,16 @@ export const NotificationTemplates = () => {
     (state) => state?.notificationTemplates
   );
 
+  const dispatch = useDispatch();
+
   const [del, setDel] = useState(false);
   const [id, setId] = useState('');
+  const [showSend, setShowSend] = useState(false);
 
   return (
     <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
       <Delete show={del} setShow={setDel} id={id} />
+      <Send show={showSend} setShow={setShowSend} id={id} />
       <Table
         columns={columns}
         data={templates}
@@ -105,7 +117,44 @@ export const NotificationTemplates = () => {
         editAction={(record) => {
           return (
             <>
-              <Button onClick={() => {}}>
+              <Button
+                onClick={async () => {
+                  // Get Notification Templates
+                  await dispatch(
+                    getNotificationTemplateByID({ id: record?.id })
+                  );
+                  // Notification Template By ID
+                  const { url, config } = getNotificationTemplateByIDConfig({
+                    id: record?.id,
+                  });
+                  const response = await axios.get(url, config);
+                  // Check Users Length
+                  const specificBody = {
+                    property: response?.data?.data?.property,
+                    operatorType: response?.data?.data?.operatorType,
+                    value: response?.data?.data?.value,
+                  };
+
+                  const getSpecificUrl = getSpecificConfig().url;
+                  const getSpecificConf = getSpecificConfig().config;
+
+                  const res = await axios.post(
+                    getSpecificUrl,
+                    specificBody,
+                    getSpecificConf
+                  );
+                  // Get Specific Users
+                  await dispatch(findSpecificUsers(specificBody));
+                  if (res?.data?.data?.length) {
+                    setId(record?.id);
+                    setShowSend(true);
+                  } else {
+                    toast.error(
+                      'This template does not have users. Please edit to proceed.'
+                    );
+                  }
+                }}
+              >
                 Send Notification Using Template
               </Button>
               <Button

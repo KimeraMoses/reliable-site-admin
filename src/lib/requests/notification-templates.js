@@ -60,3 +60,9 @@ export const deleteNotificationTemplateConfig = ({ id }) => ({
   url: `${prefix}/${id}`,
   config: getConfig({ module: NotificationTemplate, action: 'Remove' }),
 });
+
+// Send Notification
+export const sendNotificatoinConfig = () => ({
+  url: `/send`,
+  config: getConfig({ module: NotificationTemplate, action: 'Create' }),
+});
