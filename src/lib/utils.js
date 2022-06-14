@@ -263,3 +263,39 @@ export const statusList = (i = '') => {
   ];
   return i !== '' ? v[i] : v;
 };
+
+export const getNotificationType = ({ type }) => {
+  switch (type) {
+    case 0:
+      return 'New User Registered';
+    case 1:
+      return 'New Ticket Created';
+    case 2:
+      return 'Ticket Updated';
+    case 3:
+      return 'New Order Created';
+    case 4:
+      return 'Order Updated';
+    case 5:
+      return 'New Comment Added on Ticket';
+    case 6:
+      return 'New Reply Added on Ticket Comment';
+    case 7:
+      return 'Category Generated';
+    case 8:
+      return 'Bills';
+    default:
+      return '';
+  }
+};
+
+export const getNotificationTarget = ({ target }) => {
+  switch (target) {
+    case 0:
+      return 'Clients';
+    case 1:
+      return 'Admins';
+    default:
+      return '';
+  }
+};

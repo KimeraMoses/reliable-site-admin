@@ -6,9 +6,15 @@ import {
   getNotificationTemplatesConfig,
   getNotificationTemplateByIDConfig,
   deleteNotificationTemplateConfig,
+  getNotificationsConfig,
 } from 'lib';
 import { toast } from 'react-toastify';
-import { getTemplates, getTemplate, setNTLoading } from 'store/Slices';
+import {
+  getTemplates,
+  getTemplate,
+  setNTLoading,
+  getNotifications,
+} from 'store/Slices';
 
 export const getNotificationTemplates = () => {
   return async (dispatch) => {
@@ -17,6 +23,21 @@ export const getNotificationTemplates = () => {
       const { url, defaultData, config } = getNotificationTemplatesConfig();
       const response = await axios.post(url, defaultData, config);
       dispatch(getTemplates(response?.data?.data));
+    } catch (error) {
+      toast.error(getError(error));
+    } finally {
+      dispatch(setNTLoading(false));
+    }
+  };
+};
+
+export const getAllNotifications = () => {
+  return async (dispatch) => {
+    dispatch(setNTLoading(true));
+    try {
+      const { url, defaultData, config } = getNotificationsConfig();
+      const response = await axios.post(url, defaultData, config);
+      dispatch(getNotifications(response?.data?.data));
     } catch (error) {
       toast.error(getError(error));
     } finally {
