@@ -48,3 +48,5 @@ export * from './transactions';
 export * from './invoices';
 // Notification Templates End-Points
 export * from './notification-templates';
+// Reports End-Points
+export * from './reports';

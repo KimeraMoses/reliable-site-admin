@@ -175,10 +175,10 @@ export const sidebarData = [
         name: 'Support Response Time',
         path: '/admin/dashboard/reports/support-response/time',
       },
-      {
-        name: 'Support Ticket Duration',
-        path: '/admin/dashboard/reports/support-ticket/duration',
-      },
+      // {
+      //   name: 'Support Ticket Duration',
+      //   path: '/admin/dashboard/reports/support-ticket/duration',
+      // },
       {
         name: 'Support Ticket Reply Count',
         path: '/admin/dashboard/reports/support-ticket-reply/count',

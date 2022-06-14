@@ -30,8 +30,8 @@ export const Send = ({ show, setShow, id }) => {
   const initialValues = {
     notificationType: 0,
     notificationTemplateId: id,
-    targetUserTypes: template?.targetUserTypes,
-    userIds: specificUsers.map((user) => user?.id),
+    targetUserTypes: template?.targetUserType,
+    toUserIds: specificUsers.map((user) => user?.id),
   };
 
   const validationSchema = Yup.object().shape({
