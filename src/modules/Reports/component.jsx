@@ -5,6 +5,7 @@ import {
   SupportResponseTime,
   SupportTicketDuration,
   SupportTicketReplyCount,
+  TicketsByFilter,
 } from './pages';
 
 export const Reports = () => {
@@ -25,6 +26,7 @@ export const Reports = () => {
           path="support-ticket-reply/count"
           element={<SupportTicketReplyCount />}
         />
+        <Route path="tickets-by/filters" element={<TicketsByFilter />} />
       </Routes>
     </DashboardLayout>
   );

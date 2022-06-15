@@ -183,6 +183,10 @@ export const sidebarData = [
         name: 'Support Ticket Reply Count',
         path: '/admin/dashboard/reports/support-ticket-reply/count',
       },
+      {
+        name: 'Reports By Filters',
+        path: '/admin/dashboard/reports/tickets-by/filters',
+      },
     ],
   },
   {

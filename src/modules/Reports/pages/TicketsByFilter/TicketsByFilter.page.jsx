@@ -1,11 +1,11 @@
 // import { useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
 import moment from 'moment';
-// import { FilterCheck, FilterIndicator } from '../../components';
+import { FilterCheck, FilterIndicator } from '../../components';
 import { Button, DateRangePicker } from 'components';
 import { Form, Formik } from 'formik';
-// import { useEffect } from 'react';
-import { getReplyReports } from 'store';
+import { useEffect, useState } from 'react';
+import { getResponseReports } from 'store';
 import { useDispatch, useSelector } from 'react-redux';
 import { Spin } from 'antd';
 
@@ -13,65 +13,70 @@ let dataHolder = [];
 for (let i = 1; i <= 12; i++) {
   dataHolder.push({
     createdOn: moment(`${i}`, 'M').format('MMM'),
+    byCustomer: 400,
+    byAgent: 300,
+    byStatus: 200,
+    byDepartment: 500,
+    byPriority: 100,
   });
 }
 
-// const getLabel = ({ filterName }) => {
-//   switch (filterName) {
-//     case 'byCustomer':
-//       return 'Tickets by Customer';
-//     case 'byAgent':
-//       return 'Tickets by Agent';
-//     case 'byStatus':
-//       return 'Tickets by Status';
-//     case 'byDepartment':
-//       return 'Tickets by Department';
-//     case 'byPriority':
-//       return 'Tickets by Priority';
-//     default:
-//       return '';
-//   }
-// };
+const getLabel = ({ filterName }) => {
+  switch (filterName) {
+    case 'byCustomer':
+      return { label: 'Tickets by Customer', color: 'bg-[#FFA800]' };
+    case 'byAgent':
+      return { label: 'Tickets by Agent', color: 'bg-[#8950FC]' };
+    case 'byStatus':
+      return { label: 'Tickets by Status', color: 'bg-[#53a739]' };
+    case 'byDepartment':
+      return { label: 'Tickets by Department', color: 'bg-[#fc8c50]' };
+    case 'byPriority':
+      return { label: 'Tickets by Priority', color: 'bg-[#5095fc]' };
+    default:
+      return '';
+  }
+};
 
-export const SupportTicketReplyCount = () => {
-  // const [filters, setFilters] = useState({
-  //   byCustomer: true,
-  //   byAgent: true,
-  //   byStatus: false,
-  //   byDepartment: false,
-  //   byPriority: false,
-  // });
+export const TicketsByFilter = () => {
+  const [filters, setFilters] = useState({
+    byCustomer: true,
+    byAgent: true,
+    byStatus: false,
+    byDepartment: false,
+    byPriority: false,
+  });
 
   const dispatch = useDispatch();
-  const { replyReports, loading } = useSelector((state) => state?.reports);
+  const { responseReports, loading } = useSelector((state) => state?.reports);
 
   return (
     <div className="m-[40px] max-w-[1367px]">
       {/* Filters */}
-      {/* <div className="w-full p-[18px] bg-[#1E1E2D] rounded-[8px]">
+      <div className="w-full p-[18px] bg-[#1E1E2D] rounded-[8px]">
         {Object.keys(filters).map((filter) => {
           return (
             <FilterCheck
               checked={filters?.[filter]}
               name={filter}
-              label={getLabel({ filterName: filter })}
+              label={getLabel({ filterName: filter })?.label}
               setFilters={setFilters}
             />
           );
         })}
-      </div> */}
+      </div>
       {/* Chart */}
       <Spin spinning={loading}>
         <div className="bg-[#1E1E2D] p-[32px] mt-[40px] rounded-[8px]">
           {/* Filter Indicator */}
-          <div className="h-[52px] flex items-center justify-between">
+          <div className="h-[52px] flex items-center justify-between gap-[12px]">
             <div>
               <Formik
                 onSubmit={async (values) => {
                   const startDate = moment(values?.dates[0]).toISOString();
                   const endDate = moment(values?.dates[1])?.toISOString();
                   await dispatch(
-                    getReplyReports({
+                    getResponseReports({
                       startDate,
                       endDate,
                     })
@@ -80,7 +85,7 @@ export const SupportTicketReplyCount = () => {
                 initialValues={{ dates: '' }}
               >
                 <Form className="flex items-center gap-[20px]">
-                  <div className="min-w-[350px]">
+                  <div className="min-w-[200px]">
                     <DateRangePicker name="dates" />
                   </div>
                   <div>
@@ -91,37 +96,37 @@ export const SupportTicketReplyCount = () => {
                 </Form>
               </Formik>
             </div>
-            <div className="flex items-center gap-[20px]">
-              {/* {Object.keys(filters).map((filter, idx) => {
-              return (
-                <>
-                  {filters?.[filter] ? (
-                    <FilterIndicator
-                      title={getLabel({ filterName: filter })}
-                      bg={idx % 2 === 0 ? 'bg-[#FFA800]' : 'bg-[#8950FC]'}
-                    />
-                  ) : null}
-                </>
-              );
-            })} */}
+            <div className="flex items-center gap-[20px] max-w-[800px]">
+              {Object.keys(filters).map((filter, idx) => {
+                return (
+                  <>
+                    {filters?.[filter] ? (
+                      <FilterIndicator
+                        title={getLabel({ filterName: filter })?.label}
+                        bg={getLabel({ filterName: filter })?.color}
+                      />
+                    ) : null}
+                  </>
+                );
+              })}
             </div>
           </div>
           {/* Chart Component */}
           <div className="mt-[32px]">
             {/* Heading */}
             <h5 className="text-[24px] text-white mb-[32px]">
-              Support Ticket Reply Count
+              Support Response Time
             </h5>
             {/* Chart */}
             <div className="w-full">
-              {replyReports?.length ? (
+              {true ? (
                 <ResponsiveContainer width="100%" height={437}>
                   <BarChart
-                    barSize={30}
-                    // barGap={1}
+                    barSize={8}
+                    barGap={1}
                     width={500}
                     height={300}
-                    data={replyReports?.length ? replyReports : dataHolder}
+                    data={dataHolder}
                     margin={{
                       top: 0,
                       right: 0,
@@ -132,9 +137,9 @@ export const SupportTicketReplyCount = () => {
                     <XAxis
                       dataKey="createdOn"
                       strokeDasharray="3 3"
-                      tickFormatter={(text) => moment(text)?.format('MMM-YYYY')}
                       stroke="#323248"
                       tick={{ fill: '#474761' }}
+                      // tickFormatter={(text) => moment(text)?.format('MMM-YYYY')}
                     />
                     <YAxis
                       width={35}
@@ -142,16 +147,18 @@ export const SupportTicketReplyCount = () => {
                       stroke="#323248"
                       tick={{ fill: '#474761' }}
                     />
-                    <Bar dataKey="ticketReplies" fill={'#FFA800'} />
-                    {/* {Object.keys(filters).map((filter, idx) => {
-                  return (
-                    <Bar
-                      dataKey={filter}
-                      fill={idx % 2 === 0 ? '#FFA800' : '#8950FC'}
-                      hide={!filters?.[filter]}
-                    />
-                  );
-                })} */}
+                    {Object.keys(filters).map((filter, idx) => {
+                      const color = getLabel({ filterName: filter })?.color;
+                      const fillColor = color?.substring(4, 11);
+                      console.log(fillColor);
+                      return (
+                        <Bar
+                          dataKey={filter}
+                          fill={fillColor}
+                          hide={!filters?.[filter]}
+                        />
+                      );
+                    })}
                   </BarChart>
                 </ResponsiveContainer>
               ) : (

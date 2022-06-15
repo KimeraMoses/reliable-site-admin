@@ -15,7 +15,9 @@ export const DateRangePicker = ({
           <$DatePicker.RangePicker
             onChange={(date) => {
               setFieldValue(name, date);
-              onChange(date);
+              if (onChange) {
+                onChange(date);
+              }
             }}
             value={values[name]}
             dropdownClassName="custom-date-picker-dd"

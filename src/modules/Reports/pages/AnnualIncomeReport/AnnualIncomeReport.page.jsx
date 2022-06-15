@@ -130,6 +130,7 @@ export const AnnualIncomeReport = () => {
                   >
                     <XAxis
                       dataKey="month"
+                      tickFormatter={(text) => moment(text)?.format('MMM-YYYY')}
                       strokeDasharray="3 3"
                       stroke="#323248"
                       tick={{ fill: '#474761' }}

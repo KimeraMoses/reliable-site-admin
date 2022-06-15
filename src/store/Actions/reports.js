@@ -8,6 +8,7 @@ import {
 import { toast } from 'react-toastify';
 import {
   getAnnualReportsDispatch,
+  getReplyReportsDispatch,
   getResponseReportsDispatch,
   setReportsLoading,
 } from 'store/Slices';
@@ -54,9 +55,7 @@ export const getReplyReports = ({ startDate, endDate }) => {
       const { url, config } = getReportsByReplyCount({ startDate, endDate });
       const res = await axios.get(url, config);
       dispatch(
-        getResponseReportsDispatch(
-          res?.data?.data?.noOfRepliesPerTicketsDetails
-        )
+        getReplyReportsDispatch(res?.data?.data?.noOfRepliesPerTicketsDetails)
       );
     } catch (error) {
       toast.error(getError(error));

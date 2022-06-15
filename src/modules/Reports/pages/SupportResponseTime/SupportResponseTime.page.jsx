@@ -69,9 +69,8 @@ export const SupportResponseTime = () => {
             <div>
               <Formik
                 onSubmit={async (values) => {
-                  const startDate = moment(values[0]).toISOString();
-                  const endDate = moment(values[1])?.toISOString();
-                  console.log(startDate, endDate);
+                  const startDate = moment(values?.dates[0]).toISOString();
+                  const endDate = moment(values?.dates[1])?.toISOString();
                   await dispatch(
                     getResponseReports({
                       startDate,
@@ -138,6 +137,7 @@ export const SupportResponseTime = () => {
                       strokeDasharray="3 3"
                       stroke="#323248"
                       tick={{ fill: '#474761' }}
+                      tickFormatter={(text) => moment(text)?.format('MMM-YYYY')}
                     />
                     <YAxis
                       width={35}
