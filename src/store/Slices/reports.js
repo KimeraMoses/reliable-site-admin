@@ -6,6 +6,11 @@ const initialState = {
   filteredReports: [],
   replyReports: [],
   responseReports: [],
+  reportsByCustomer: [],
+  reportsByAgent: [],
+  reportsByStatus: [],
+  reportsByDepartment: [],
+  reportsByPriority: [],
   loading: false,
 };
 const productsSlice = createSlice({
@@ -24,6 +29,21 @@ const productsSlice = createSlice({
     getResponseReportsDispatch: (state, { payload }) => {
       state.responseReports = payload;
     },
+    getReportsByCustomerDispatch: (state, { payload }) => {
+      state.reportsByCustomer = payload;
+    },
+    getReportsByAgentDispatch: (state, { payload }) => {
+      state.reportsByAgent = payload;
+    },
+    getReportsByStatusDispatch: (state, { payload }) => {
+      state.reportsByStatus = payload;
+    },
+    getReportsByDepartmentDispatch: (state, { payload }) => {
+      state.reportsByDepartment = payload;
+    },
+    getReportsByPriorityDispatch: (state, { payload }) => {
+      state.reportsByPriority = payload;
+    },
     setReportsLoading: (state, { payload }) => {
       state.loading = payload;
     },
@@ -37,6 +57,13 @@ export const {
   getReplyReportsDispatch,
   getResponseReportsDispatch,
   setReportsLoading,
+
+  // Filter Reports
+  getReportsByAgentDispatch,
+  getReportsByCustomerDispatch,
+  getReportsByStatusDispatch,
+  getReportsByDepartmentDispatch,
+  getReportsByPriorityDispatch,
 } = actions;
 
 export default reducer;

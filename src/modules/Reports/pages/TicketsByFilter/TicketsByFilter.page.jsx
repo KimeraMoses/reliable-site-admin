@@ -5,9 +5,15 @@ import { FilterCheck, FilterIndicator } from '../../components';
 import { Button, DateRangePicker } from 'components';
 import { Form, Formik } from 'formik';
 import { useEffect, useState } from 'react';
-import { getResponseReports } from 'store';
 import { useDispatch, useSelector } from 'react-redux';
 import { Spin } from 'antd';
+import {
+  getReportsByCustomer,
+  getReportsByAgent,
+  getReportsByDepartment,
+  getReportsByPriority,
+  getReportsByStatus,
+} from 'store';
 
 let dataHolder = [];
 for (let i = 1; i <= 12; i++) {
@@ -48,7 +54,57 @@ export const TicketsByFilter = () => {
   });
 
   const dispatch = useDispatch();
-  const { responseReports, loading } = useSelector((state) => state?.reports);
+  const {
+    reportsByCustomer,
+    reportsByAgent,
+    reportsByStatus,
+    reportsByDepartment,
+    reportsByPriority,
+    loading,
+  } = useSelector((state) => state?.reports);
+
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    let data = [];
+    reportsByCustomer.forEach((report) => {
+      data.push({
+        createdOn: report?.createdOn,
+        byCustomer: report?.count,
+      });
+    });
+    reportsByAgent.forEach((report) => {
+      data.push({
+        createdOn: report?.createdOn,
+        byAgent: report?.count,
+      });
+    });
+    reportsByStatus.forEach((report) => {
+      data.push({
+        createdOn: report?.createdOn,
+        byStatus: report?.count,
+      });
+    });
+    reportsByPriority.forEach((report) => {
+      data.push({
+        createdOn: report?.createdOn,
+        byPriority: report?.count,
+      });
+    });
+    reportsByDepartment.forEach((report) => {
+      data.push({
+        createdOn: report?.createdOn,
+        byDepartment: report?.count,
+      });
+    });
+    setData(data);
+  }, [
+    reportsByCustomer,
+    reportsByAgent,
+    reportsByStatus,
+    reportsByDepartment,
+    reportsByPriority,
+  ]);
 
   return (
     <div className="m-[40px] max-w-[1367px]">
@@ -76,7 +132,31 @@ export const TicketsByFilter = () => {
                   const startDate = moment(values?.dates[0]).toISOString();
                   const endDate = moment(values?.dates[1])?.toISOString();
                   await dispatch(
-                    getResponseReports({
+                    getReportsByCustomer({
+                      startDate,
+                      endDate,
+                    })
+                  );
+                  await dispatch(
+                    getReportsByAgent({
+                      startDate,
+                      endDate,
+                    })
+                  );
+                  await dispatch(
+                    getReportsByDepartment({
+                      startDate,
+                      endDate,
+                    })
+                  );
+                  await dispatch(
+                    getReportsByPriority({
+                      startDate,
+                      endDate,
+                    })
+                  );
+                  await dispatch(
+                    getReportsByStatus({
                       startDate,
                       endDate,
                     })
@@ -126,7 +206,7 @@ export const TicketsByFilter = () => {
                     barGap={1}
                     width={500}
                     height={300}
-                    data={dataHolder}
+                    data={data}
                     margin={{
                       top: 0,
                       right: 0,
@@ -139,7 +219,7 @@ export const TicketsByFilter = () => {
                       strokeDasharray="3 3"
                       stroke="#323248"
                       tick={{ fill: '#474761' }}
-                      // tickFormatter={(text) => moment(text)?.format('MMM-YYYY')}
+                      tickFormatter={(text) => moment(text)?.format('MMM-YYYY')}
                     />
                     <YAxis
                       width={35}
