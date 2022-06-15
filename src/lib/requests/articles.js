@@ -23,6 +23,63 @@ export const getArticlesConfig = () => ({
   config: articlesConfig('View'),
 });
 
+// Get Public Articles
+export const getPublicArticlesConfig = () => ({
+  url: `${prefix}/search`,
+  defaultData: {
+    advancedSearch: {
+      fields: ['visibility'],
+      keyword: 'true',
+    },
+    keyword: '',
+    pageNumber: 0,
+    pageSize: 0,
+    orderBy: [''],
+    categoryId: null,
+    minimumRate: 0,
+    maximumRate: 0,
+  },
+  config: articlesConfig('View'),
+});
+
+// Get Private Articles
+export const getPrivateArticlesConfig = () => ({
+  url: `${prefix}/search`,
+  defaultData: {
+    advancedSearch: {
+      fields: ['visibility'],
+      keyword: 'false',
+    },
+    keyword: '',
+    pageNumber: 0,
+    pageSize: 0,
+    orderBy: [''],
+    categoryId: null,
+    minimumRate: 0,
+    maximumRate: 0,
+  },
+  config: articlesConfig('View'),
+});
+
+// Get Draft Articles
+export const getDraftArticlesConfig = () => ({
+  url: `${prefix}/search`,
+  defaultData: {
+    advancedSearch: {
+      fields: ['articleStatus'],
+      keyword: 'draft',
+    },
+    keyword: '',
+    pageNumber: 0,
+    pageSize: 0,
+    orderBy: [''],
+    categoryId: null,
+    minimumRate: 0,
+    maximumRate: 0,
+  },
+  config: articlesConfig('View'),
+});
+
 // Create Article
 export const createArticleConfig = () => ({
   url: prefix,

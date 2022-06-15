@@ -1,5 +1,5 @@
 import { Dropdown, Spin } from 'antd';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { getArticleByID } from 'store';
@@ -14,7 +14,7 @@ export const Article = () => {
   }, []);
 
   const { article, loading } = useSelector((state) => state?.articles);
-
+  const [imgError, setImgError] = useState(false);
   return (
     <Spin spinning={loading}>
       <div>
@@ -39,10 +39,11 @@ export const Article = () => {
           </p>
         </div>
         <div className="relative w-full mt-[32px]">
-          {article?.imagePath ? (
+          {article?.imagePath && !imgError ? (
             <img
               className="h-[492px] w-full rounded-[8px] object-cover"
               src={article?.imagePath}
+              onError={() => setImgError(true)}
               alt="article"
             />
           ) : (
@@ -77,17 +78,12 @@ export const Article = () => {
           </Dropdown>
         </div>
         <div className="mt-[32px]">
-          <p className="text-[#92928F] text-[16px]">
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-            nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-            erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-            et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est
-            Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-            sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore
-            et dolore magna aliquyam erat, sed diam voluptua. At vero eos et
-            accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren,
-            no sea takimata sanctus est Lorem ipsum dolor sit amet.
-          </p>
+          <p
+            className="text-[#92928F] text-[16px]"
+            dangerouslySetInnerHTML={{ __html: article?.bodyText }}
+          />
+
+          {/* </p> */}
         </div>
       </div>
     </Spin>

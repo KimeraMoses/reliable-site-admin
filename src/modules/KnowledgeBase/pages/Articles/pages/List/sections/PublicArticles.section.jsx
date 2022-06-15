@@ -4,10 +4,11 @@ import { ArticleCard } from 'components';
 import { Delete } from './Delete.section';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getAllArticles } from 'store';
+import { getPublicArticles } from 'store';
 
 export function PublicArticles() {
   const [showDel, setShowDel] = useState(false);
+  const [id, setId] = useState('');
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -15,12 +16,12 @@ export function PublicArticles() {
   const { articles, loading } = useSelector((state) => state?.articles);
 
   useEffect(() => {
-    dispatch(getAllArticles());
+    dispatch(getPublicArticles());
   }, []);
 
   return (
     <div className="mt-[20px]">
-      <Delete show={showDel} setShow={setShowDel} />
+      <Delete show={showDel} setShow={setShowDel} id={id} />
       <List
         grid={{ gutter: 16, column: 4 }}
         dataSource={articles}
@@ -40,6 +41,7 @@ export function PublicArticles() {
                 )
               }
               onDelete={() => {
+                setId(item?.id);
                 setShowDel(true);
               }}
               {...item}

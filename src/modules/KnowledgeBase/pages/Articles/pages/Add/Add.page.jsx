@@ -7,11 +7,18 @@ import { Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 // Custom Modules
-import { Input, MultiSelect, SMTPEditor, Button } from 'components';
+import {
+  Input,
+  MultiSelect,
+  SMTPEditor,
+  Button,
+  ImageUpload,
+} from 'components';
 import { createArticle } from 'store';
 import './Add.styles.scss';
 import { useEffect } from 'react';
 import { getAllArticleCategories } from 'store';
+import { createServerImage } from 'lib';
 
 const ConfigurationEditor = ({ editorState, onEditorStateChange, onBlur }) => {
   return (
@@ -35,7 +42,12 @@ const getInputEl = ({ options, name, placeholder, type }) => {
     case 'multiselect':
       return (
         <div className="custom-multiselect-kba w-full">
-          <MultiSelect name={name} options={options} mode="multiple" />
+          <MultiSelect
+            name={name}
+            options={options}
+            mode="multiple"
+            placeholder={placeholder}
+          />
         </div>
       );
     case 'text':
@@ -55,6 +67,12 @@ const getInputEl = ({ options, name, placeholder, type }) => {
             name={name}
             options={options}
           />
+        </div>
+      );
+    case 'image':
+      return (
+        <div className="custom-select-kba w-full">
+          <ImageUpload name={name} />
         </div>
       );
     default:
@@ -90,18 +108,11 @@ export const Add = () => {
   const initialValues = {
     title: '',
     categories: [],
-    visibility: 'public',
+    visibility: true,
+    articleStatus: 'draft',
     bodyText: '',
-    status: 'draft',
     bodyHolder: EditorState.createEmpty(),
-    articleStatus: true,
   };
-
-  const validationSchema = Yup.object().shape({
-    // title: Yup.string().required('This field is required!'),
-    // visibility: Yup.string().required('This field is required!'),
-    // body: Yup.string().required('This field is required!'),
-  });
 
   const dispatch = useDispatch();
 
@@ -112,16 +123,19 @@ export const Add = () => {
   const { loading, articleCategories } = useSelector(
     (state) => state?.articleCategories
   );
+  const articleLoading = useSelector((state) => state?.articles?.loading);
 
   const fields = [
     {
       name: 'title',
       type: 'text',
       label: 'Article Ttitle',
+      placeholder: 'Enter Article Title Here',
     },
     {
       name: 'categories',
       type: 'multiselect',
+      placeholder: 'Select Categories',
       options: articleCategories?.map((category) => ({
         label: category.name,
         value: category.id,
@@ -133,46 +147,51 @@ export const Add = () => {
       type: 'select',
       label: 'Visibility',
       options: [
-        { label: 'Public', value: 0 },
-        { label: 'Private', value: 1 },
+        { label: 'Public', value: true },
+        { label: 'Private', value: false },
       ],
     },
     {
-      name: 'status',
+      name: 'articleStatus',
       type: 'select',
       label: 'Status',
       options: [
-        { label: 'Draft', value: 0 },
-        { label: 'Publish', value: 1 },
+        { label: 'Draft', value: 'draft' },
+        { label: 'Publish', value: 'publish' },
       ],
     },
-    // {
-    //   name: 'articleStatus',
-    //   type: 'switch',
-    //   label: 'Article Status',
-    // },
-    // {
-    //   name: 'image',
-    //   type: 'file',
-    //   label: 'Choose Image',
-    // },
+    {
+      name: 'image',
+      type: 'image',
+      label: 'Select Image',
+    },
   ];
 
   const navigate = useNavigate();
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={validationSchema}
+      // validationSchema={validationSchema}
       enableReinitialize
       onSubmit={async (values) => {
-        await dispatch(createArticle(values));
-        // navigate('/admin/dashboard/settings/email-templates');
+        const serverImage = await createServerImage(values?.image);
+        const finalVisibility = values?.visibility === 'false' ? false : true;
+        const finalValues = {
+          visibility: finalVisibility,
+          image: serverImage,
+          categories: values?.categories,
+          bodyText: values?.bodyText,
+          title: values?.title,
+          articleStatus: values?.articleStatus,
+        };
+        await dispatch(createArticle(finalValues));
+        navigate('/admin/dashboard/knowledge-base/articles');
       }}
     >
       {({ values, errors, touched, setFieldValue, setFieldTouched }) => {
         return (
           <Form>
-            <Spin spinning={loading}>
+            <Spin spinning={loading || articleLoading}>
               <div className="grid grid-cols-[1fr] gap-[20px] px-[32px] py-[40px]">
                 <div className="flex flex-col gap-[20px]">
                   <div className="bg-[#1E1E2D] rounded-[8px]">
@@ -216,13 +235,23 @@ export const Add = () => {
                         }
                       }}
                     />
-                    {touched['body'] && errors['body'] && (
+                    {touched['bodyText'] && errors['bodyText'] && (
                       <div className="error whitespace-nowrap ml-[32px] mb-[16px] w-[20%]">
-                        {errors['body']}
+                        {errors['bodyText']}
                       </div>
                     )}
                     <div className="p-[32px] pt-[10px]">
-                      <Button htmlType="submit" className="w-[fit_content]">
+                      <Button
+                        htmlType="submit"
+                        className="w-[fit_content]"
+                        disabled={
+                          !values?.title ||
+                          !values?.articleStatus ||
+                          !values?.bodyText ||
+                          !values?.categories?.length ||
+                          !values?.visibility
+                        }
+                      >
                         Create New Article
                       </Button>
                     </div>

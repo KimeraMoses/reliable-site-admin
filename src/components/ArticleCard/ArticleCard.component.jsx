@@ -1,4 +1,5 @@
 import { Dropdown } from 'antd';
+import { useState } from 'react';
 import './ArticleCard.styles.scss';
 
 export const ArticleCard = ({
@@ -11,12 +12,14 @@ export const ArticleCard = ({
   onDelete,
   articleType,
 }) => {
+  const [imgError, setImgError] = useState(false);
   return (
     <div className="p-[32px] bg-[#1e1e2d] flex flex-col gap-[32px] custom-article-card rounded-[8px]">
       <div className="relative h-[204px] w-full">
-        {imagePath ? (
+        {imagePath && !imgError ? (
           <img
             className="h-[204px] w-full rounded-[8px] object-cover"
+            onError={() => setImgError(true)}
             src={imagePath}
             alt={title}
           />
@@ -76,9 +79,10 @@ export const ArticleCard = ({
         </div>
       </div>
       <div>
-        <p className="text-[#92928F] text-[16px]">
-          {bodyText.substring(0, 155)}...
-        </p>
+        <p
+          className="text-[#92928F] text-[16px]"
+          dangerouslySetInnerHTML={{ __html: bodyText?.substring(0, 155) }}
+        />
       </div>
       <div>
         <p className="text-[#474761] text-[14px]">

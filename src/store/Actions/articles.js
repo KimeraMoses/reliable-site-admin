@@ -4,6 +4,9 @@ import {
   deleteArticleConfig,
   getArticleByIDConfig,
   getArticlesConfig,
+  getDraftArticlesConfig,
+  getPrivateArticlesConfig,
+  getPublicArticlesConfig,
   updateArticleConfig,
 } from 'lib/requests/articles';
 import { toast } from 'react-toastify';
@@ -15,6 +18,54 @@ export const getAllArticles = () => {
     dispatch(setArticlesLoading(true));
     try {
       const { url, defaultData, config } = getArticlesConfig();
+      const res = await axios.post(url, defaultData, config);
+      dispatch(getArticles(res?.data?.data));
+    } catch (e) {
+      toast.error(getError(e));
+    } finally {
+      dispatch(setArticlesLoading(false));
+    }
+  };
+};
+
+// Get Public Articles
+export const getPublicArticles = () => {
+  return async (dispatch) => {
+    dispatch(setArticlesLoading(true));
+    try {
+      const { url, defaultData, config } = getPublicArticlesConfig();
+      const res = await axios.post(url, defaultData, config);
+      dispatch(getArticles(res?.data?.data));
+    } catch (e) {
+      toast.error(getError(e));
+    } finally {
+      dispatch(setArticlesLoading(false));
+    }
+  };
+};
+
+// Get Private Articles
+export const getPrivateArticles = () => {
+  return async (dispatch) => {
+    dispatch(setArticlesLoading(true));
+    try {
+      const { url, defaultData, config } = getPrivateArticlesConfig();
+      const res = await axios.post(url, defaultData, config);
+      dispatch(getArticles(res?.data?.data));
+    } catch (e) {
+      toast.error(getError(e));
+    } finally {
+      dispatch(setArticlesLoading(false));
+    }
+  };
+};
+
+// Get Draft Articles
+export const getDraftArticles = () => {
+  return async (dispatch) => {
+    dispatch(setArticlesLoading(true));
+    try {
+      const { url, defaultData, config } = getDraftArticlesConfig();
       const res = await axios.post(url, defaultData, config);
       dispatch(getArticles(res?.data?.data));
     } catch (e) {
@@ -67,9 +118,9 @@ export const updateArticle = ({ id, data }) => {
       const { url, config } = updateArticleConfig(id);
       const res = await axios.put(url, data, config);
       if (res.status === 200) {
-        const { url, config } = getArticlesConfig();
-        const res = await axios.get(url, config);
-        dispatch(updateArticleConfig(res?.data?.data));
+        const { url, defaultData, config } = getPublicArticlesConfig();
+        const res = await axios.post(url, defaultData, config);
+        dispatch(getArticles(res?.data?.data));
         toast.success('Article updated successfully');
       }
     } catch (e) {
@@ -88,9 +139,9 @@ export const deleteArticle = ({ id }) => {
       const { url, config } = deleteArticleConfig(id);
       const res = await axios.delete(url, config);
       if (res.status === 200) {
-        const { url, config } = getArticlesConfig();
-        const res = await axios.get(url, config);
-        dispatch(updateArticleConfig(res?.data?.data));
+        const { url, defaultData, config } = getPublicArticlesConfig();
+        const res = await axios.post(url, defaultData, config);
+        dispatch(getArticles(res?.data?.data));
         toast.success('Article deleted successfully');
       }
     } catch (e) {
