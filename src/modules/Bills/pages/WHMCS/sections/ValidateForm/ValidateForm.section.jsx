@@ -2,6 +2,8 @@ import { Button, ImageUpload, Input } from 'components';
 import { Formik, Form } from 'formik';
 import { createServerImage } from 'lib';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { validateWHMCSData } from 'store';
 import { InvalidFileUpload } from '.';
 
 const initialValues = {
@@ -21,20 +23,23 @@ const invalid = false;
 
 export const ValidateForm = ({ setStep }) => {
   const [showInvalid, setShowInvalid] = useState(false);
+
+  const dispatch = useDispatch();
+
   return (
     <Formik
       initialValues={initialValues}
       onSubmit={async (values) => {
         const jsonFile = await createServerImage(values?.jsonFile);
         const final = {
-          ...values,
+          whmcsFileType: Number(values?.whmcsFileType),
           jsonFile,
         };
+        await dispatch(validateWHMCSData({ data: final }));
         // TODO: Add validation logic here
         if (invalid) {
           setShowInvalid(true);
         } else {
-          console.log(final);
           setStep(2);
         }
       }}
@@ -65,9 +70,9 @@ export const ValidateForm = ({ setStep }) => {
                 </label>
                 <ImageUpload
                   name="jsonFile"
-                  accept=".json"
+                  accept=".csv"
                   hidePreview
-                  placeholder="Select JSON File"
+                  placeholder="Select CSV File"
                 />
               </div>
             </div>

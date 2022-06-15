@@ -38,3 +38,4 @@ export * from './categories';
 export * from './transactions';
 export * from './notification-templates';
 export * from './reports';
+export * from './whmcs';

@@ -19,6 +19,7 @@ import transactionsReducer from './Slices/transactions';
 import invoicesReducer from './Slices/invoicesSlice';
 import notificationTemplatesReducer from './Slices/notification-templates';
 import reportsReducer from './Slices/reports';
+import whmcsReducer from './Slices/whmcs';
 
 const store = configureStore({
   reducer: {
@@ -42,6 +43,7 @@ const store = configureStore({
     invoices: invoicesReducer,
     notificationTemplates: notificationTemplatesReducer,
     reports: reportsReducer,
+    whmcs: whmcsReducer,
   },
 });
 
