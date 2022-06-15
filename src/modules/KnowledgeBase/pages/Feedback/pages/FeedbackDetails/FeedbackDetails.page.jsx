@@ -1,17 +1,14 @@
-import { EditorState, convertToRaw } from 'draft-js';
-import { convertToHTML } from 'draft-convert';
-import * as Yup from 'yup';
-import { Formik, Form, Field } from 'formik';
-import { useDispatch } from 'react-redux';
+import { Formik, Form } from 'formik';
 import { Spin } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { Button as AntButton } from 'antd';
 
 // Custom Modules
-import { Input, MultiSelect, SMTPEditor, Button } from 'components';
-import { addEmailTemplate } from 'store';
+import { Input, Button } from 'components';
 import './FeedbackDetails.styles.scss';
+import { useState } from 'react';
 
-const CommentCard = ({ imgSrc, imgTxt, author, isActive, reply }) => {
+const CommentCard = ({ imgSrc, imgTxt, author, reply }) => {
+  const [active, setActive] = useState(false);
   return (
     <>
       <div
@@ -49,13 +46,10 @@ const CommentCard = ({ imgSrc, imgTxt, author, isActive, reply }) => {
             </div>
           </div>
           <div
-            className={`
-              ${
-                isActive
-                  ? 'text-base text-[#3699FF] cursor-pointer'
-                  : 'text-base text-[#474761] cursor-pointer'
-              }
+            className={`cursor-pointer text-base hover:text-[#3699FF]
+              ${active ? 'text-[#3699FF]' : 'text-[#474761]'}
             `}
+            onClick={() => setActive((prevState) => !prevState)}
           >
             Reply
           </div>
@@ -68,11 +62,14 @@ const CommentCard = ({ imgSrc, imgTxt, author, isActive, reply }) => {
             et ea rebum.
           </p>
         </div>
-        {isActive && (
+        {active && (
           <div className="mt-[20px]">
             <Formik
               initialValues={{
                 writeSometing: '',
+              }}
+              onSubmit={() => {
+                setActive(false);
               }}
               enableReinitialize
             >
@@ -83,13 +80,17 @@ const CommentCard = ({ imgSrc, imgTxt, author, isActive, reply }) => {
                       <Input
                         type="text"
                         name="text"
-                        placeholder="write Something"
+                        placeholder="Write Something"
                       />
-                      <img
-                        src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij4KICA8ZyBpZD0idnVlc2F4X2J1bGtfc2VuZC0yIiBkYXRhLW5hbWU9InZ1ZXNheC9idWxrL3NlbmQtMiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTMwMCAtMzE2KSI+CiAgICA8ZyBpZD0ic2VuZC0yIj4KICAgICAgPHBhdGggaWQ9IlZlY3RvciIgZD0iTTQuNTU0LDMuNDA3LDEzLjU3NC40YzQuMDUtMS4zNSw2LjI1Ljg2LDQuOTEsNC45MWwtMy4wMSw5LjAyYy0yLjAyLDYuMDctNS4zNCw2LjA3LTcuMzYsMGwtLjg5LTIuNjgtMi42OC0uODlDLTEuNTE2LDguNzQ3LTEuNTE2LDUuNDM3LDQuNTU0LDMuNDA3WiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzAyLjU1NiAzMTguNTUzKSIgZmlsbD0iIzM2OTlmZiIgb3BhY2l0eT0iMC40Ii8+CiAgICAgIDxwYXRoIGlkPSJWZWN0b3ItMiIgZGF0YS1uYW1lPSJWZWN0b3IiIGQ9Ik0wLDMuODIsMy44MSwwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzMTIuMTIgMzIzLjgxKSIgZmlsbD0iIzM2OTlmZiIvPgogICAgICA8cGF0aCBpZD0iVmVjdG9yLTMiIGRhdGEtbmFtZT0iVmVjdG9yIiBkPSJNLjc0Nyw1LjMxOGEuNzQyLjc0MiwwLDAsMS0uNTMtLjIyLjc1NC43NTQsMCwwLDEsMC0xLjA2bDMuOC0zLjgyYS43NS43NSwwLDAsMSwxLjA2LDEuMDZMMS4yNzcsNS4xQS43ODYuNzg2LDAsMCwxLC43NDcsNS4zMThaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzMTEuMzcyIDMyMy4wNjMpIiBmaWxsPSIjMzY5OWZmIi8+CiAgICAgIDxwYXRoIGlkPSJWZWN0b3ItNCIgZGF0YS1uYW1lPSJWZWN0b3IiIGQ9Ik0wLDBIMjRWMjRIMFoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMwMCAzMTYpIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwIi8+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4K"
-                        alt="send"
-                        className="absolute cursor-pointer bottom-[14px] right-[14px]"
-                      />
+                      <AntButton
+                        htmlType="submit"
+                        className="border-none flex items-center justify-center absolute right-[14px] top-[50%] translate-y-[-50%] cursor-pointer p-[0px] hover:bg-[transparent] active:bg-[transparent] focus:bg-[transparent]"
+                      >
+                        <img
+                          src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij4KICA8ZyBpZD0idnVlc2F4X2J1bGtfc2VuZC0yIiBkYXRhLW5hbWU9InZ1ZXNheC9idWxrL3NlbmQtMiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTMwMCAtMzE2KSI+CiAgICA8ZyBpZD0ic2VuZC0yIj4KICAgICAgPHBhdGggaWQ9IlZlY3RvciIgZD0iTTQuNTU0LDMuNDA3LDEzLjU3NC40YzQuMDUtMS4zNSw2LjI1Ljg2LDQuOTEsNC45MWwtMy4wMSw5LjAyYy0yLjAyLDYuMDctNS4zNCw2LjA3LTcuMzYsMGwtLjg5LTIuNjgtMi42OC0uODlDLTEuNTE2LDguNzQ3LTEuNTE2LDUuNDM3LDQuNTU0LDMuNDA3WiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzAyLjU1NiAzMTguNTUzKSIgZmlsbD0iIzM2OTlmZiIgb3BhY2l0eT0iMC40Ii8+CiAgICAgIDxwYXRoIGlkPSJWZWN0b3ItMiIgZGF0YS1uYW1lPSJWZWN0b3IiIGQ9Ik0wLDMuODIsMy44MSwwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzMTIuMTIgMzIzLjgxKSIgZmlsbD0iIzM2OTlmZiIvPgogICAgICA8cGF0aCBpZD0iVmVjdG9yLTMiIGRhdGEtbmFtZT0iVmVjdG9yIiBkPSJNLjc0Nyw1LjMxOGEuNzQyLjc0MiwwLDAsMS0uNTMtLjIyLjc1NC43NTQsMCwwLDEsMC0xLjA2bDMuOC0zLjgyYS43NS43NSwwLDAsMSwxLjA2LDEuMDZMMS4yNzcsNS4xQS43ODYuNzg2LDAsMCwxLC43NDcsNS4zMThaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzMTEuMzcyIDMyMy4wNjMpIiBmaWxsPSIjMzY5OWZmIi8+CiAgICAgIDxwYXRoIGlkPSJWZWN0b3ItNCIgZGF0YS1uYW1lPSJWZWN0b3IiIGQ9Ik0wLDBIMjRWMjRIMFoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMwMCAzMTYpIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwIi8+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4K"
+                          alt="send"
+                        />
+                      </AntButton>
                     </div>
                   </Form>
                 );
@@ -196,7 +197,7 @@ export const FeedbackDetails = () => {
             <CommentCard imgSrc="/article.jpg" author />
 
             <CommentCard imgTxt="P" reply />
-            <CommentCard imgTxt="P" isActive />
+            <CommentCard imgTxt="P" />
           </div>
         </div>
       </Spin>
