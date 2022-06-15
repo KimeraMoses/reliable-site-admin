@@ -18,7 +18,6 @@ export const getInvoices = (params = []) => {
                 defaultData.advancedSearch.fields.push('status');
                 defaultData.advancedSearch.keyword = params?.status;
             }
-            console.log(params);
             if (params?.startDate && params?.endDate) {
                 defaultData['startDate'] = params?.startDate;
                 defaultData['endDate'] = params?.endDate;

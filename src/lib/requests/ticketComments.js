@@ -1,11 +1,10 @@
 import { getConfig } from 'lib';
-
-const notificationsConfig = (action) =>
+const ticketCommentsConfig = (action) =>
     getConfig({ module: 'Users', action });
 
-const prefix = `/api/v1/admin/notifications`;
+const prefix = `/api/ticketcomments`;
 
-export const getNotificationsConfig = () => ({
+export const getTicketCommentsConfig = () => ({
     url: `${prefix}/search`,
     defaultData: {
         advancedSearch: {
@@ -17,11 +16,11 @@ export const getNotificationsConfig = () => ({
         pageSize: 0,
         orderBy: ['']
     },
-    config: notificationsConfig('View'),
+    config: ticketCommentsConfig('View'),
 });
 
-export const notificationsReadConfig = () => ({
-    url: `${prefix}/read`,
-    config: notificationsConfig('View'),
-});
 
+export const addTicketCommentConfig = () => ({
+    url: `${prefix}`,
+    config: ticketCommentsConfig('Create')
+});

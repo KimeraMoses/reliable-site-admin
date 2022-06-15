@@ -16,6 +16,9 @@ import departmentsReducer from './Slices/departmentsSlice';
 import invoicesReducer from './Slices/invoicesSlice';
 import ordersReducer from './Slices/ordersSlice';
 import notificationsReducer from './Slices/notificationsSlice';
+import ticketsReducer from './Slices/ticketsSlice';
+import ticketCommentsReducer from './Slices/ticketCommentsSlice';
+import ticketRepliesReducer from './Slices/ticketRepliesSlice';
 
 const store = configureStore({
   reducer: {
@@ -35,7 +38,10 @@ const store = configureStore({
     departments: departmentsReducer,
     invoices: invoicesReducer,
     orders: ordersReducer,
-    notifications: notificationsReducer
+    notifications: notificationsReducer,
+    tickets: ticketsReducer,
+    ticketComments: ticketCommentsReducer,
+    ticketReplies: ticketRepliesReducer
   },
 });
 

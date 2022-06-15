@@ -1,17 +1,18 @@
 import { useOutside } from 'hooks';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { useNavigate } from 'react-router-dom';
 import { logout } from 'store/Slices/authSlice';
 import UserName from './UserProfileCard/UserName';
-import { getNotifications } from 'store';
+import { getNotifications, notificationsRead } from 'store';
 import './UserTop.css';
 
 function UserTop({ toggleNotification }) {
   const [dropdown, setDropdown] = useState(false);
   const [showName, setShowName] = useState(false);
   const { user, isLoggedIn } = useSelector((state) => state.auth);
+  const { notifications } = useSelector((state) => state?.notifications);
   const lessThanDesktop = useMediaQuery({
     query: '(max-width: 900px)',
   });
@@ -41,9 +42,22 @@ function UserTop({ toggleNotification }) {
   const handleNotification = () => {
     toggleNotification(true);
     (async () => {
-      await dispatch(getNotifications());
+      await dispatch(getNotifications({
+        toUserId: user?.id
+      }));
     })();
   }
+
+  useEffect(() => {
+    if (notifications.length) {
+      let ids = [];
+      notifications?.filter(function (el) { return el.isRead !== true })?.map((b) => {
+        ids.push(b?.id);
+      });
+      if (ids.length)
+        dispatch(notificationsRead(ids));
+    }
+  }, [notifications]);
 
   const handleOutsideClick = () => setDropdown(false);
   const dropDownRef = useRef(null);

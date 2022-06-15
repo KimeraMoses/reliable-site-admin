@@ -1,7 +1,8 @@
 import {
     getError,
     axios,
-    getNotificationsConfig
+    getNotificationsConfig,
+    notificationsReadConfig
 } from 'lib';
 import { toast } from 'react-toastify';
 import { getNotificationsDispatch, setNotificationLoading } from 'store/Slices';
@@ -11,8 +12,13 @@ export const getNotifications = (params = {}) => {
     return async (dispatch) => {
         dispatch(setNotificationLoading(true));
         try {
-            const { url, config } = getNotificationsConfig(params);
-            const res = await axios.post(url, config);
+            const { url, defaultData, config } = getNotificationsConfig();
+            if (params?.toUserId) {
+                defaultData.advancedSearch.fields.push('toUserId');
+                defaultData.advancedSearch.keyword = params?.toUserId;
+            }
+            
+            const res = await axios.post(url, defaultData, config);
             dispatch(getNotificationsDispatch(res?.data?.data));
             dispatch(setNotificationLoading(false));
         } catch (e) {
@@ -21,3 +27,20 @@ export const getNotifications = (params = {}) => {
         }
     };
 };
+
+
+export const notificationsRead = (ids) => {
+    return async (dispatch) => {
+        dispatch(setNotificationLoading(true));
+        try {
+            const { url, config } = notificationsReadConfig();
+            console.log(ids);
+            const res = await axios.put(url, ids, config);
+            dispatch(getNotificationsDispatch(res?.data?.data));
+            dispatch(setNotificationLoading(false));
+        } catch (e) {
+            toast.error(getError(e));
+            dispatch(setNotificationLoading(false));
+        }
+    };
+}

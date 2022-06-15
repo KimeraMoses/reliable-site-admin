@@ -1,11 +1,10 @@
 import { getConfig } from 'lib';
-
-const notificationsConfig = (action) =>
+const ticketsConfig = (action) =>
     getConfig({ module: 'Users', action });
 
-const prefix = `/api/v1/admin/notifications`;
+const prefix = `/api/tickets`;
 
-export const getNotificationsConfig = () => ({
+export const getTicketsConfig = () => ({
     url: `${prefix}/search`,
     defaultData: {
         advancedSearch: {
@@ -17,11 +16,10 @@ export const getNotificationsConfig = () => ({
         pageSize: 0,
         orderBy: ['']
     },
-    config: notificationsConfig('View'),
+    config: ticketsConfig('View'),
 });
 
-export const notificationsReadConfig = () => ({
-    url: `${prefix}/read`,
-    config: notificationsConfig('View'),
+export const getTicketConfig = (id) => ({
+    url: `${prefix}/${id}`,
+    config: ticketsConfig('View'),
 });
-

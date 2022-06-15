@@ -38,6 +38,22 @@ export {
   setNotificationLoading
 } from './notificationsSlice';
 
+export {
+  getTickets as getTicketsDispatch,
+  setTicketLoading,
+  getTicket
+} from './ticketsSlice';
+
+export {
+  getTicketComments as getTicketCommentsDispatch,
+  setTicketCommentLoading
+} from './ticketCommentsSlice';
+
+export {
+  getTicketReplies as getTicketRepliesDispatch,
+  setTicketRepliesLoading
+} from './ticketRepliesSlice';
+
 export * from './apiKeysSlice';
 export * from './appSettings';
 export * from './paymentGateways';

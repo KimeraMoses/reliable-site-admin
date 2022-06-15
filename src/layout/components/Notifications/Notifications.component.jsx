@@ -1,31 +1,35 @@
 import { useOutside } from 'hooks';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import React, { useEffect, useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './Notifications.styles.scss';
 import { Spin } from 'antd';
-import { Bell } from 'icons/Notifications/Bell.icon';
-import { Book } from 'icons/Notifications/Book.icon';
 import {
   NewUserRegistered, TicketCreated, TickedUpdated,
   OrderCreated, OrderUpdated, TicketNewComments, TicketNewReply,
   CategoryGenerator, Bills
 } from './sections';
 import { groupBy } from 'lib';
+//import { getNotifications } from 'store';
 
 export function Notifications({ toggleNotification }) {
   const notificationRef = useRef(null);
+ 
+  //const dispatch = useDispatch();
   useOutside(notificationRef, toggleNotification);
+  //let page = 1;
+
   const { notifications, loading } = useSelector((state) => state?.notifications);
   const { user } = useSelector((state) => state?.auth);
-
   const [data, setData] = useState([]);
+
   useEffect(() => {
     if (notifications.length) {
       const dataToSet = groupBy(notifications, 'type');
       setData(dataToSet);
     }
   }, [notifications]);
+
   return (
     <div
       className={`notifications fixed top-0 right-0 w-6/12 bg-[#1E1E2D] text-white `} ref={notificationRef}>

@@ -1,4 +1,10 @@
 {
   "heading": "Tickets",
-  "desc": "Tickets Assigned To You"
+  "desc": "Tickets Assigned To You",
+  "active": "Active",
+  "waiting": "Waiting",
+  "closed": "Closed",
+  "assignTo": "Assign to",
+  "status": "Status",
+  "priority": "Priority"
 }

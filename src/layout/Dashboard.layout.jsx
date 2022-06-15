@@ -27,6 +27,9 @@ export function DashboardLayout({ children, hide }) {
     const activeLink = sidebarData.filter((sideItem) => {
       const { name, path } = sideItem;
       if (name === 'Dashboard') {
+        if (pathname.includes('tickets')) {
+          return pathname.includes(path);
+        }
         return path === pathname;
       } else {
         return pathname.includes(path);
@@ -80,8 +83,8 @@ export function DashboardLayout({ children, hide }) {
     setHideSide((state) => !state);
   };
 
-  const toggleNotification = (v) => {
-    setHideNoti(v);
+  const toggleNotification = (f, page) => {
+    setHideNoti(f);
   };
 
   return (
@@ -142,7 +145,7 @@ export function DashboardLayout({ children, hide }) {
           {children}
         </div>
       </div>
-      <Notifications hideNoti={hideNoti} toggleNotification={() => toggleNotification(false)} />
+      <Notifications hideNoti={hideNoti} toggleNotification={(f, page) => toggleNotification(f, page)} />
     </div>
   );
 }

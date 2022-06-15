@@ -3,7 +3,11 @@ import { Bell } from 'icons/Notifications/Bell.icon';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 
-export function NewUserRegistered({ value, user }) {
+export const NewUserRegistered = ({ value, user }) => {
+    let Obj = {
+        '[[firstName]]': user?.fullName,
+        '[[fullName]]': user?.fullName,
+    };
     return (
         <>
             {
@@ -14,9 +18,11 @@ export function NewUserRegistered({ value, user }) {
                         </div>
                         <div className={`noti-content`}>
                             <div className="flex justify-between">
-                                <div className={`text-white`}>{value[0]?.body.replace("[[firstName]]", user.fullName)}</div>
+                                <div className={`text-white`}>{value[0]?.body.replace("[[firstName]]", user.fullName).replace("[[fullName]]", user.fullName)}</div>
                                 <div className={`flex`}>
-                                    <img src={value[0]?.userImage} className="w-[20px] h-[20px] object-cover rounded-[50%]" />
+                                    {
+                                        value[0]?.userImage && <img alt={value[0]?.fullName} src={value[0]?.userImage} className="w-[20px] h-[20px] object-cover rounded-[50%]" />
+                                    }
                                     <div className={`text-[#474761] ml-2`}>{`${value[0]?.fullName} added at ${moment(value[0]?.sentAt).format('hh:mm A')}`}</div>
                                 </div>
                             </div>
@@ -29,24 +35,24 @@ export function NewUserRegistered({ value, user }) {
                             <div className="flex justify-between">
                                 <div className={`text-white`}>{`There are ${Object.keys(value).length} new client users created.`}</div>
                                 <div className={`flex`}>
-                                    <img src={value[0]?.userImage} className="w-[20px] h-[20px] object-cover rounded-[50%]" />
+                                    {
+                                        value[0]?.userImage && <img alt={value[0]?.fullName} src={value[0]?.userImage} className="w-[20px] h-[20px] object-cover rounded-[50%]" />
+                                    }
                                     <div className={`text-[#474761] ml-2`}>{`${value[0]?.fullName} added at ${moment(value[0]?.sentAt).format('hh:mm A')}`}</div>
                                 </div>
                             </div>
                             <div className={`book-blocks`}>
                                 {
                                     Object.entries(value).map(([k, d]) => {
-                                        if (k < 3) {
-                                            return (
-                                                <div key={k} className={`book-block p-[16px] border-1 border-current border-dashed border-[#474761]`}>
-                                                    <div className="flex">
-                                                        <div className=''>
-                                                            <Link className={`text-[#1890ff]`} to={''}>{d?.body.replace("[[firstName]]", user.fullName)}</Link>
-                                                        </div>
+                                        return (
+                                            <div key={k} className={`book-block p-[16px] border-1 border-current border-dashed border-[#474761]`}>
+                                                <div className="flex">
+                                                    <div className=''>
+                                                        <Link className={`text-[#1890ff]`} to={'#'}>{d?.body.replace("[[firstName]]", user.fullName).replace("[[fullName]]", user.fullName)}</Link>
                                                     </div>
                                                 </div>
-                                            )
-                                        }
+                                            </div>
+                                        )
                                     })
                                 }
                             </div>
