@@ -52,8 +52,8 @@ const CommentCard = ({ imgSrc, imgTxt, author, isActive, reply }) => {
             className={`
               ${
                 isActive
-                  ? 'text-base text-[#3699FF]'
-                  : 'text-base text-[#474761]'
+                  ? 'text-base text-[#3699FF] cursor-pointer'
+                  : 'text-base text-[#474761] cursor-pointer'
               }
             `}
           >
@@ -88,7 +88,7 @@ const CommentCard = ({ imgSrc, imgTxt, author, isActive, reply }) => {
                       <img
                         src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij4KICA8ZyBpZD0idnVlc2F4X2J1bGtfc2VuZC0yIiBkYXRhLW5hbWU9InZ1ZXNheC9idWxrL3NlbmQtMiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTMwMCAtMzE2KSI+CiAgICA8ZyBpZD0ic2VuZC0yIj4KICAgICAgPHBhdGggaWQ9IlZlY3RvciIgZD0iTTQuNTU0LDMuNDA3LDEzLjU3NC40YzQuMDUtMS4zNSw2LjI1Ljg2LDQuOTEsNC45MWwtMy4wMSw5LjAyYy0yLjAyLDYuMDctNS4zNCw2LjA3LTcuMzYsMGwtLjg5LTIuNjgtMi42OC0uODlDLTEuNTE2LDguNzQ3LTEuNTE2LDUuNDM3LDQuNTU0LDMuNDA3WiIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzAyLjU1NiAzMTguNTUzKSIgZmlsbD0iIzM2OTlmZiIgb3BhY2l0eT0iMC40Ii8+CiAgICAgIDxwYXRoIGlkPSJWZWN0b3ItMiIgZGF0YS1uYW1lPSJWZWN0b3IiIGQ9Ik0wLDMuODIsMy44MSwwIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzMTIuMTIgMzIzLjgxKSIgZmlsbD0iIzM2OTlmZiIvPgogICAgICA8cGF0aCBpZD0iVmVjdG9yLTMiIGRhdGEtbmFtZT0iVmVjdG9yIiBkPSJNLjc0Nyw1LjMxOGEuNzQyLjc0MiwwLDAsMS0uNTMtLjIyLjc1NC43NTQsMCwwLDEsMC0xLjA2bDMuOC0zLjgyYS43NS43NSwwLDAsMSwxLjA2LDEuMDZMMS4yNzcsNS4xQS43ODYuNzg2LDAsMCwxLC43NDcsNS4zMThaIiB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzMTEuMzcyIDMyMy4wNjMpIiBmaWxsPSIjMzY5OWZmIi8+CiAgICAgIDxwYXRoIGlkPSJWZWN0b3ItNCIgZGF0YS1uYW1lPSJWZWN0b3IiIGQ9Ik0wLDBIMjRWMjRIMFoiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDMwMCAzMTYpIiBmaWxsPSJub25lIiBvcGFjaXR5PSIwIi8+CiAgICA8L2c+CiAgPC9nPgo8L3N2Zz4K"
                         alt="send"
-                        className="absolute bottom-[14px] right-[14px]"
+                        className="absolute cursor-pointer bottom-[14px] right-[14px]"
                       />
                     </div>
                   </Form>

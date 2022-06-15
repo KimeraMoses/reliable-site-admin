@@ -12,7 +12,7 @@ export function PublicArticles() {
 
   const dispatch = useDispatch();
 
-  const { articles, loading } = useSelector((state) => state.articles);
+  const { articles, loading } = useSelector((state) => state?.articles);
 
   useEffect(() => {
     dispatch(getAllArticles());

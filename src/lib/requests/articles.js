@@ -16,7 +16,7 @@ export const getArticlesConfig = () => ({
     pageNumber: 0,
     pageSize: 0,
     orderBy: [''],
-    categoryId: '927b0000-624d-80ce-b6fe-08da3264c288',
+    categoryId: null,
     minimumRate: 0,
     maximumRate: 0,
   },

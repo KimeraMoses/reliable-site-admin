@@ -14,11 +14,17 @@ export const ArticleCard = ({
   return (
     <div className="p-[32px] bg-[#1e1e2d] flex flex-col gap-[32px] custom-article-card rounded-[8px]">
       <div className="relative h-[204px] w-full">
-        <img
-          className="h-[204px] w-full rounded-[8px] object-cover"
-          src={imagePath}
-          alt={title}
-        />
+        {imagePath ? (
+          <img
+            className="h-[204px] w-full rounded-[8px] object-cover"
+            src={imagePath}
+            alt={title}
+          />
+        ) : (
+          <div className="h-[204px] w-full rounded-[8px] object-cover border-1 border-blue-600 flex items-center justify-center text-white text-[16px] font-medium">
+            No Image Available
+          </div>
+        )}
         <Dropdown
           trigger="click"
           placement="bottomRight"
@@ -63,7 +69,9 @@ export const ArticleCard = ({
             {articleType}
           </div>
           <div className="px-[8px] py-[4px] bg-[#2F264F] rounded-[4px] text-[#8950FC] font-medium text-[10px] uppercase">
-            {articleCategories[0]?.category?.name}
+            {articleCategories?.length
+              ? articleCategories[0]?.category?.name
+              : 'Category N/A'}
           </div>
         </div>
       </div>
@@ -74,7 +82,7 @@ export const ArticleCard = ({
       </div>
       <div>
         <p className="text-[#474761] text-[14px]">
-          By Paul Elliott On Feb 20th, 2022
+          {/* By Paul Elliott On Feb 20th, 2022 */}
         </p>
       </div>
     </div>
