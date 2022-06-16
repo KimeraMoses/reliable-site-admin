@@ -1,8 +1,11 @@
 import { Button } from 'components';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { clearWHMCSState } from 'store';
 import { SelectData, Tables } from './sub-sections';
 
 export const WhatToImport = ({ setStep }) => {
+  const dispatch = useDispatch();
   const [selectedData, setSelectedData] = useState([]);
   const [showSelect, setShowSelect] = useState(false);
   return (
@@ -22,7 +25,14 @@ export const WhatToImport = ({ setStep }) => {
       </div>
       {/* Footer Section */}
       <div className="p-[32px] border-t-[1px] border-t-[#323248] border-dashed flex gap-[12px]">
-        <Button type="secondary" htmlType="button" onClick={() => setStep(1)}>
+        <Button
+          type="secondary"
+          htmlType="button"
+          onClick={async () => {
+            await dispatch(clearWHMCSState());
+            setStep(1);
+          }}
+        >
           Go Back
         </Button>
         <Button

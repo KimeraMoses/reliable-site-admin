@@ -1,8 +1,9 @@
+import { Spin } from 'antd';
 import { Button, ImageUpload, Input } from 'components';
 import { Formik, Form } from 'formik';
 import { createServerImage } from 'lib';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { validateWHMCSData } from 'store';
 import { InvalidFileUpload } from '.';
 
@@ -26,6 +27,10 @@ export const ValidateForm = ({ setStep }) => {
 
   const dispatch = useDispatch();
 
+  const { validatedData, error, loading } = useSelector(
+    (state) => state?.whmcs
+  );
+
   return (
     <Formik
       initialValues={initialValues}
@@ -35,9 +40,8 @@ export const ValidateForm = ({ setStep }) => {
           whmcsFileType: Number(values?.whmcsFileType),
           jsonFile,
         };
-        await dispatch(validateWHMCSData({ data: final }));
-        // TODO: Add validation logic here
-        if (invalid) {
+        const res = await dispatch(validateWHMCSData({ data: final }));
+        if (res?.status !== 200 || res?.data?.rowValidationErrors?.length) {
           setShowInvalid(true);
         } else {
           setStep(2);
@@ -45,49 +49,57 @@ export const ValidateForm = ({ setStep }) => {
       }}
       enableReinitialize
     >
-      <Form>
-        <div className="w-full rounded-[8px] bg-[#1E1E2D] min-h-[75vh] flex flex-col justify-between">
-          {/* Invalid Modal */}
-          <InvalidFileUpload show={showInvalid} setShow={setShowInvalid} />
-          {/* Top Section */}
-          <div>
-            <h6 className="text-white text-[16px] font-medium my-[32px] px-[32px]">
-              What Do You Want To Import?
-            </h6>
-            <div className="px-[32px] grid grid-cols-2 gap-[20px]">
-              <Input
-                type="select"
-                label="Select Table"
-                options={whmcsFileTypeOptions}
-                name="whmcsFileType"
-              />
-              <div className="w-full">
-                <label
-                  htmlFor="jsonFile"
-                  className="mb-[16px] text-white text-[14px]"
+      {({ values }) => (
+        <Form>
+          <Spin spinning={loading}>
+            <div className="w-full rounded-[8px] bg-[#1E1E2D] min-h-[75vh] flex flex-col justify-between">
+              {/* Invalid Modal */}
+              <InvalidFileUpload show={showInvalid} setShow={setShowInvalid} />
+              {/* Top Section */}
+              <div>
+                <h6 className="text-white text-[16px] font-medium my-[32px] px-[32px]">
+                  What Do You Want To Import?
+                </h6>
+                <div className="px-[32px] grid grid-cols-2 gap-[20px]">
+                  <Input
+                    type="select"
+                    label="Select Table"
+                    options={whmcsFileTypeOptions}
+                    name="whmcsFileType"
+                  />
+                  <div className="w-full">
+                    <label
+                      htmlFor="jsonFile"
+                      className="mb-[16px] text-white text-[14px]"
+                    >
+                      Upload JSON File
+                    </label>
+                    <ImageUpload
+                      name="jsonFile"
+                      accept=".csv"
+                      hidePreview
+                      placeholder="Select CSV File"
+                    />
+                  </div>
+                </div>
+              </div>
+              {/* Footer Section */}
+              <div className="p-[32px] border-t-[1px] border-t-[#323248] border-dashed flex gap-[12px]">
+                <Button type="secondary" htmlType="button">
+                  Cancel
+                </Button>
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  disabled={!values?.jsonFile}
                 >
-                  Upload JSON File
-                </label>
-                <ImageUpload
-                  name="jsonFile"
-                  accept=".csv"
-                  hidePreview
-                  placeholder="Select CSV File"
-                />
+                  Next
+                </Button>
               </div>
             </div>
-          </div>
-          {/* Footer Section */}
-          <div className="p-[32px] border-t-[1px] border-t-[#323248] border-dashed flex gap-[12px]">
-            <Button type="secondary" htmlType="button">
-              Cancel
-            </Button>
-            <Button type="primary" htmlType="submit">
-              Next
-            </Button>
-          </div>
-        </div>
-      </Form>
+          </Spin>
+        </Form>
+      )}
     </Formik>
   );
 };

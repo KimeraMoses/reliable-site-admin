@@ -6,3 +6,6 @@ export * from './Users';
 export * from './UserProfile';
 // Client List
 export * from './ClientList';
+
+// All Other Icons
+export { Right } from './Right.icon';
