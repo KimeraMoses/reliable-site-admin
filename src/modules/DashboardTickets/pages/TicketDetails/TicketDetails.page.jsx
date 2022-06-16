@@ -5,12 +5,13 @@ import { Formik, Form, Field } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input } from 'components';
 import { List, Spin } from 'antd';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getTicketById, addTicketReplies, addTicketComments } from 'store';
 import * as Yup from 'yup';
 import moment from 'moment';
 import { genrateFirstLetterName, getDifference } from 'lib';
+
 
 const initialValues = {
     commentText: ''
@@ -35,10 +36,15 @@ export const TicketDetails = () => {
     const { loading, ticket } = useSelector((state) => state?.tickets);
     const { commentLoading } = useSelector((state) => state?.ticketComments);
     const { repliesLoading } = useSelector((state) => state?.ticketReplies);
+    const isSelected = (id) => selected.indexOf(id) !== -1;
+    let search = window.location.search;
+    let params = new URLSearchParams(search);
+    let repliesId = params.get('id');
 
     useEffect(() => {
         (async () => {
             await dispatch(getTicketById(id));
+            goToViolation(repliesId);
         })();
     }, []);
 
@@ -63,7 +69,14 @@ export const TicketDetails = () => {
         setSelected(newSelected);
     }
 
-    const isSelected = (id) => selected.indexOf(id) !== -1;
+
+    const goToViolation = (id) => {
+        const violation = document.getElementById(id);
+        if (violation) {
+            violation.scrollIntoView();
+        }
+    };
+
     return (
         <div className="p-4 md:px-6">
             <div className="ticket-wrap bg-[#1E1E2D] text-[#ffffff] p-[40px] rounded-lg">
@@ -138,7 +151,7 @@ export const TicketDetails = () => {
                                             actions={''}
                                             extra={''}
                                         >
-                                            <div className="p-[20px] border-[1px] rounded-[8px] border-[#323248]">
+                                            <div id={item.id} className="p-[20px] border-[1px] rounded-[8px] border-[#323248]">
                                                 <div className={'w-full relative'}>
                                                     <div className="flex">
                                                         <div className="image w-[47px] rounded-[5px] overflow-hidden">
@@ -220,7 +233,7 @@ export const TicketDetails = () => {
                                             <div className="ml-[40px]">
                                                 {
                                                     item?.ticketCommentReplies.map((data, i) => (
-                                                        <div key={i} className="p-[20px] border-[1px] rounded-[8px] mt-[20px] border-[#323248]">
+                                                        <div key={i} id={data?.id} className="p-[20px] border-[1px] rounded-[8px] mt-[20px] border-[#323248]">
                                                             <div className={'w-full relative'}>
                                                                 <div className="flex">
                                                                     <div className="image w-[47px] rounded-[5px] overflow-hidden">
