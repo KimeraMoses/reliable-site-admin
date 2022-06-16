@@ -10,7 +10,7 @@ import { groupBy } from 'lib';
 import { useNavigate } from 'react-router-dom';
 
 export const TicketList = () => {
-    const { t } = useTranslation('/Users/ns');
+    const { t } = useTranslation('/Tickets/ns');
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { tickets, loading } = useSelector((state) => state?.tickets);
@@ -63,7 +63,7 @@ export const TicketList = () => {
                         }}>
                         <TicketIcon />
                         <div className="ml-[8px]">
-                            <h3 className={`text-[#FFFFFF]`}>{`Ticket Title`} <span className={`uppercase ml-[12px] text-[10px] bg-[#323248] pt-[4px] pb-[4px] pl-[8px] pr-[8px]`}>Tag title</span></h3>
+                            <h3 className={`text-[#FFFFFF]`}>{record?.ticketTitle} {`${record?.tagTitle ? <span className={`uppercase ml-[12px] text-[10px] bg-[#323248] pt-[4px] pb-[4px] pl-[8px] pr-[8px]`}>${record?.tagTitle}</span> : ''}`}</h3>
                             <p className={'text-[#474761] text-[14px] mt-[12px]'}>{description}</p>
                         </div>
                     </div >
@@ -95,9 +95,10 @@ export const TicketList = () => {
                     columns={columns}
                     data={data}
                     loading={loading}
-                    fieldToFilter="billNo"
+                    fieldToFilter="ticketRelatedTo"
                     permissions={permissions}
                     hideActions={true}
+                    headingTitle={t('publicTickets')}
                     t={t}
                 />
             </div>

@@ -35,7 +35,8 @@ export const Table = ({
   dateRageFilter = false,
   statusFilter = [],
   handleStatus,
-  handleDateRange
+  handleDateRange,
+  headingTitle
 }) => {
   const [dataSource, setDataSource] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
@@ -209,6 +210,10 @@ export const Table = ({
               )}
             </div>
           </div>
+          {
+            headingTitle && <h3 className={'text-[#fff] text-[32px] mt-[40px]'}>{headingTitle}</h3>
+          }
+
           {/* Header End */}
           {/* Table */}
           <div

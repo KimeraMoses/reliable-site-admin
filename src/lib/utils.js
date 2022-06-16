@@ -155,6 +155,7 @@ export const getDifference = (date) => {
   const diffInWeeks = Math.round(diffInDays / 7);
   const diffInMonths = Math.round(diffInDays / 30);
   const diffInYears = Math.round(diffInDays / 365);
+  console.log(date);
   if (diffInMinutes < 1) {
     return 'Just Now';
   }
@@ -263,14 +264,27 @@ export const statusList = (i = '') => {
 
 export const groupBy = (objectArray, property) => {
   if (objectArray.length > 0) {
-      return objectArray.reduce((acc, obj) => {
-          const key = obj[property];
-          if (!acc[key]) {
-              acc[key] = [];
-          }
-          // Add object to list for given key's value
-          acc[key].push(obj);
-          return acc;
-      }, {});
+    return objectArray.reduce((acc, obj) => {
+      const key = obj[property];
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      // Add object to list for given key's value
+      acc[key].push(obj);
+      return acc;
+    }, {});
+  }
+}
+
+export const genrateFirstLetterName = (value) => {
+  let name = '';
+  if (value) {
+    let userN = value.split(' ');
+    if (userN.length < 2) {
+      name = userN[0].charAt(0);
+    } else {
+      name = userN[0].charAt(0) + userN[1].charAt(0);
+    }
+    return name;
   }
 }

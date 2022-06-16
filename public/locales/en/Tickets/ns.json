@@ -6,5 +6,6 @@
   "closed": "Closed",
   "assignTo": "Assign to",
   "status": "Status",
-  "priority": "Priority"
+  "priority": "Priority",
+  "publicTickets":"Public Tickets"
 }

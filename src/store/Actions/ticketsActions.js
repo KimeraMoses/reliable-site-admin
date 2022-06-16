@@ -36,6 +36,7 @@ export const getTicketById = (id) => {
             dispatch(setTicketLoading(false));
         } catch (e) {
             toast.error(getError(e));
+            dispatch(getTicket(null));
             dispatch(setTicketLoading(false));
         }
     };
