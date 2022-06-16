@@ -2,40 +2,45 @@ import { Table } from 'components';
 import { checkModule } from 'lib/checkModule';
 import { useSelector } from 'react-redux';
 
-const dummyData = [
-  { clientName: 'Sam', email: 'sam@gmail.com' },
-  { clientName: 'Paul', email: 'paul@gmail.com' },
-  { clientName: 'Paul Elliot', email: 'paul.elliot@gmail.com' },
-];
-
-export const Tables = ({ selectedData, setSelectedData }) => {
+export const Tables = () => {
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
     module: 'Settings',
     modules: userModules,
   });
 
-  const columns = Object?.keys(dummyData[0])?.map((key) => {
-    return {
-      title: key,
-      dataIndex: key,
-      key: key,
-    };
+  const { selectedData } = useSelector((state) => state?.whmcs);
+
+  const columns = Object?.keys(selectedData[0])?.map((key, index) => {
+    console.log(key?.length);
+    if (index === 0) {
+      return {
+        title: key,
+        dataIndex: key,
+        key: key,
+      };
+    } else {
+      return {
+        title: key,
+        dataIndex: key,
+        key: key,
+        width: 200,
+      };
+    }
   });
 
   return (
-    <div className="grid grid-cols-2 gap-[20px]">
-      {/* Table All Data */}
+    <div className="grid grid-cols-1 gap-[20px]">
+      {/* Table Selected Data */}
       <div className="bg-[#171723] p-[32px] rounded-[8px]">
         <Table
           columns={columns}
-          rowKey={columns[0]?.key}
+          data={selectedData}
+          scroll={{ x: 1500, y: 600 }}
           theme="dark"
-          data={dummyData}
-          pagination={false}
           permissions={permissions}
           hideActions
-          hideSearch
+          emptyText="No Data Selected"
           fieldToFilter="name"
         />
       </div>

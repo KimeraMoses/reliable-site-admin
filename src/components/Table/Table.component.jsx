@@ -42,6 +42,8 @@ export const Table = ({
   hideSearch,
   theme,
   rowKey,
+  scroll,
+  size,
 }) => {
   const [dataSource, setDataSource] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
@@ -234,7 +236,9 @@ export const Table = ({
             <AntTable
               columns={tableColumns}
               rowKey={rowKey}
+              scroll={scroll}
               dataSource={dataSource}
+              size={size}
               pagination={
                 pagination !== undefined && pagination !== null
                   ? pagination

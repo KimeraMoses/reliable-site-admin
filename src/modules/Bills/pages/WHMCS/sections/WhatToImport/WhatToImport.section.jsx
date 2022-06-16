@@ -1,6 +1,7 @@
 import { Button } from 'components';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { selectData } from 'store';
 import { clearWHMCSState } from 'store';
 import { SelectData, Tables } from './sub-sections';
 
@@ -38,8 +39,9 @@ export const WhatToImport = ({ setStep }) => {
         <Button
           type="primary"
           htmlType="button"
-          onClick={() => {
+          onClick={async () => {
             if (selectedData?.length) {
+              await dispatch(selectData({ data: selectedData }));
               setStep(3);
             } else {
               setShowSelect(true);

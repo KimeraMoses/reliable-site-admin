@@ -3,9 +3,7 @@ import { Modal } from 'components';
 
 // status === 'importing' || 'success' || 'failed'
 
-export const Progress = ({ show, setShow }) => {
-  const status = 'failed';
-
+export const Progress = ({ show, setShow, status, percent }) => {
   let statusText;
   switch (status) {
     case 'importing':
@@ -39,7 +37,7 @@ export const Progress = ({ show, setShow }) => {
             {statusText}
           </div>
           <ProgressBar
-            percent={50}
+            percent={percent}
             format={(percent) => <div className="text-white">{percent}%</div>}
             strokeColor={status === 'failed' ? '#F64E60' : '#0BB783'}
             trailColor="#323248"

@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   validatedData: [],
+  selectedData: [],
   error: false,
   loading: false,
   whmcsFileType: 0,
@@ -10,6 +11,9 @@ const whmcsSlice = createSlice({
   name: 'whmcs',
   initialState,
   reducers: {
+    getSelectedData: (state, { payload }) => {
+      state.selectedData = payload;
+    },
     getValidateData: (state, { payload }) => {
       state.validatedData = payload;
     },
@@ -27,6 +31,7 @@ const whmcsSlice = createSlice({
 
 const { reducer, actions } = whmcsSlice;
 export const {
+  getSelectedData,
   getValidateData,
   setWHMCSFileType,
   setWHMCSLoading,

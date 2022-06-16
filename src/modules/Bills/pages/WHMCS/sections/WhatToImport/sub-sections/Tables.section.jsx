@@ -2,11 +2,11 @@ import { Table } from 'components';
 import { checkModule } from 'lib/checkModule';
 import { useSelector } from 'react-redux';
 
-const dummyData = [
-  { clientName: 'Sam', email: 'sam@gmail.com' },
-  { clientName: 'Paul', email: 'paul@gmail.com' },
-  { clientName: 'Paul Elliot', email: 'paul.elliot@gmail.com' },
-];
+// const validatedData = [
+//   { clientName: 'Sam', email: 'sam@gmail.com' },
+//   { clientName: 'Paul', email: 'paul@gmail.com' },
+//   { clientName: 'Paul Elliot', email: 'paul.elliot@gmail.com' },
+// ];
 
 export const Tables = ({ selectedData, setSelectedData }) => {
   const { userModules } = useSelector((state) => state?.modules);
@@ -15,12 +15,24 @@ export const Tables = ({ selectedData, setSelectedData }) => {
     modules: userModules,
   });
 
-  const columns = Object?.keys(dummyData[0])?.map((key) => {
-    return {
-      title: key,
-      dataIndex: key,
-      key: key,
-    };
+  const { validatedData } = useSelector((state) => state?.whmcs);
+
+  const columns = Object?.keys(validatedData[0])?.map((key, index) => {
+    console.log(key?.length);
+    if (index === 0) {
+      return {
+        title: key,
+        dataIndex: key,
+        key: key,
+      };
+    } else {
+      return {
+        title: key,
+        dataIndex: key,
+        key: key,
+        width: 200,
+      };
+    }
   });
 
   const rowSelection = {
@@ -46,15 +58,16 @@ export const Tables = ({ selectedData, setSelectedData }) => {
   // });
 
   return (
-    <div className="grid grid-cols-2 gap-[20px]">
+    <div className="grid grid-cols-1 gap-[20px]">
       {/* Table All Data */}
       <div className="bg-[#171723] p-[32px] rounded-[8px]">
         <Table
           rowSelection={rowSelection}
           columns={columns}
+          scroll={{ x: 1500, y: 300 }}
           rowKey={columns[0]?.key}
           theme="dark"
-          data={dummyData}
+          data={validatedData}
           permissions={permissions}
           hideActions
           fieldToFilter="name"
@@ -64,6 +77,7 @@ export const Tables = ({ selectedData, setSelectedData }) => {
       <div className="bg-[#171723] p-[32px] rounded-[8px]">
         <Table
           columns={columns}
+          scroll={{ x: 1500, y: 300 }}
           theme="dark"
           data={selectedData}
           permissions={permissions}

@@ -2,7 +2,7 @@ import { Spin } from 'antd';
 import { Button, ImageUpload, Input } from 'components';
 import { Formik, Form } from 'formik';
 import { createServerImage } from 'lib';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { validateWHMCSData } from 'store';
 import { InvalidFileUpload } from '.';
@@ -20,16 +20,12 @@ const whmcsFileTypeOptions = [
   { label: 'Services', value: 4 },
 ];
 
-const invalid = false;
-
 export const ValidateForm = ({ setStep }) => {
   const [showInvalid, setShowInvalid] = useState(false);
 
   const dispatch = useDispatch();
 
-  const { validatedData, error, loading } = useSelector(
-    (state) => state?.whmcs
-  );
+  const { loading } = useSelector((state) => state?.whmcs);
 
   return (
     <Formik

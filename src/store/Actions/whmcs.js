@@ -5,6 +5,7 @@ import {
   setWHMCSError,
   setWHMCSLoading,
   setWHMCSFileType,
+  getSelectedData,
 } from 'store/Slices';
 
 export const clearWHMCSState = () => {
@@ -25,11 +26,28 @@ export const validateWHMCSData = ({ data }) => {
       const response = await axios.post(url, data, config);
       if (response?.data?.content) {
         dispatch(getValidateData(JSON.parse(response?.data?.content)));
+        dispatch(setWHMCSError(false));
       }
       if (response?.data?.rowValidationErrors?.length) {
         dispatch(setWHMCSError(response?.data?.rowValidationErrors));
+      } else {
+        dispatch(setWHMCSError(false));
       }
       return response;
+    } catch (error) {
+      dispatch(setWHMCSError(error));
+    } finally {
+      dispatch(setWHMCSLoading(false));
+    }
+  };
+};
+
+export const selectData = ({ data }) => {
+  console.log(data);
+  return async (dispatch) => {
+    dispatch(setWHMCSLoading(true));
+    try {
+      dispatch(getSelectedData(data));
     } catch (error) {
       dispatch(setWHMCSError(error));
     } finally {
