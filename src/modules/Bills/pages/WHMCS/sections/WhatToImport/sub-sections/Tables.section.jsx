@@ -18,7 +18,6 @@ export const Tables = ({ selectedData, setSelectedData }) => {
   const { validatedData } = useSelector((state) => state?.whmcs);
 
   const columns = Object?.keys(validatedData[0])?.map((key, index) => {
-    console.log(key?.length);
     if (index === 0) {
       return {
         title: key,

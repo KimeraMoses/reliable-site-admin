@@ -2,7 +2,6 @@ import { Button } from 'components';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { selectData } from 'store';
-import { clearWHMCSState } from 'store';
 import { SelectData, Tables } from './sub-sections';
 
 export const WhatToImport = ({ setStep }) => {
@@ -30,7 +29,6 @@ export const WhatToImport = ({ setStep }) => {
           type="secondary"
           htmlType="button"
           onClick={async () => {
-            await dispatch(clearWHMCSState());
             setStep(1);
           }}
         >

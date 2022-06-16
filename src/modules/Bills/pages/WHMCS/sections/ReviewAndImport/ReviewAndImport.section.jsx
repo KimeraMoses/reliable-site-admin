@@ -1,19 +1,32 @@
 import { Button } from 'components';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { importData } from 'store';
 import { Progress, Tables } from './sub-sections';
 
 export const ReviewAndImport = ({ setStep }) => {
-  // const [selectedData, setSelectedData] = useState([]);
   const [showProgress, setShowProgress] = useState(false);
 
-  const { selectedData } = useSelector((state) => state?.whmcs);
+  const { selectedData, jsonFile, whmcsFileType, importProgress, importError } =
+    useSelector((state) => state?.whmcs);
 
   const dispatch = useDispatch();
 
   return (
     <div className="w-full rounded-[8px] bg-[#1E1E2D] min-h-[75vh] flex flex-col justify-between">
-      <Progress show={showProgress} setShow={setShowProgress} />
+      <Progress
+        show={showProgress}
+        setShow={setShowProgress}
+        percent={importProgress}
+        setStep={setStep}
+        status={
+          importProgress < 100 && !importError
+            ? 'importing'
+            : importError
+            ? 'failed'
+            : 'imported'
+        }
+      />
       {/* Top Section */}
       <div>
         <h6 className="text-white text-[16px] font-medium my-[32px] px-[32px]">
@@ -32,7 +45,6 @@ export const ReviewAndImport = ({ setStep }) => {
           type="secondary"
           htmlType="button"
           onClick={async () => {
-            await dispatch(selectedData({ data: [] }));
             setStep(2);
           }}
         >
@@ -41,8 +53,17 @@ export const ReviewAndImport = ({ setStep }) => {
         <Button
           type="primary"
           htmlType="button"
-          onClick={() => {
+          onClick={async () => {
             setShowProgress(true);
+            await dispatch(
+              importData({
+                data: {
+                  content: JSON.stringify(selectedData),
+                  whmcsFileType,
+                  jsonFile,
+                },
+              })
+            );
           }}
         >
           Start Importing

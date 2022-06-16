@@ -1,11 +1,14 @@
 import { axios } from 'lib';
-import { validateDataConfig } from 'lib/requests/whmcs';
+import { importDataConfig, validateDataConfig } from 'lib/requests/whmcs';
 import {
   getValidateData,
   setWHMCSError,
   setWHMCSLoading,
   setWHMCSFileType,
   getSelectedData,
+  setImportProgres,
+  setWHMCSFile,
+  setImportError,
 } from 'store/Slices';
 
 export const clearWHMCSState = () => {
@@ -23,6 +26,7 @@ export const validateWHMCSData = ({ data }) => {
     try {
       const { url, config } = validateDataConfig();
       dispatch(setWHMCSFileType(data?.whmcsFileType));
+      dispatch(setWHMCSFile(data?.jsonFile));
       const response = await axios.post(url, data, config);
       if (response?.data?.content) {
         dispatch(getValidateData(JSON.parse(response?.data?.content)));
@@ -43,13 +47,37 @@ export const validateWHMCSData = ({ data }) => {
 };
 
 export const selectData = ({ data }) => {
-  console.log(data);
   return async (dispatch) => {
     dispatch(setWHMCSLoading(true));
     try {
       dispatch(getSelectedData(data));
     } catch (error) {
       dispatch(setWHMCSError(error));
+    } finally {
+      dispatch(setWHMCSLoading(false));
+    }
+  };
+};
+
+export const importData = ({ data }) => {
+  return async (dispatch) => {
+    dispatch(setWHMCSLoading(true));
+    try {
+      const { url, config } = importDataConfig();
+      const newConfig = {
+        ...config,
+        onUploadProgress: function (progressEvent) {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+          dispatch(setImportProgres(percentCompleted));
+        },
+      };
+      const res = await axios.post(url, data, newConfig);
+      console.log(res);
+    } catch (error) {
+      dispatch(setImportProgres(90));
+      dispatch(setImportError(error?.response?.data));
     } finally {
       dispatch(setWHMCSLoading(false));
     }

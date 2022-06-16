@@ -6,6 +6,9 @@ const initialState = {
   error: false,
   loading: false,
   whmcsFileType: 0,
+  importProgress: 0,
+  importError: null,
+  jsonFile: null,
 };
 const whmcsSlice = createSlice({
   name: 'whmcs',
@@ -20,11 +23,20 @@ const whmcsSlice = createSlice({
     setWHMCSFileType: (state, { payload }) => {
       state.whmcsFileType = payload;
     },
+    setWHMCSFile: (state, { payload }) => {
+      state.jsonFile = payload;
+    },
     setWHMCSLoading: (state, { payload }) => {
       state.loading = payload;
     },
     setWHMCSError: (state, { payload }) => {
       state.error = payload;
+    },
+    setImportProgres: (state, { payload }) => {
+      state.importProgress = payload;
+    },
+    setImportError: (state, { payload }) => {
+      state.importError = payload;
     },
   },
 });
@@ -34,8 +46,11 @@ export const {
   getSelectedData,
   getValidateData,
   setWHMCSFileType,
+  setWHMCSFile,
   setWHMCSLoading,
   setWHMCSError,
+  setImportError,
+  setImportProgres,
 } = actions;
 
 export default reducer;

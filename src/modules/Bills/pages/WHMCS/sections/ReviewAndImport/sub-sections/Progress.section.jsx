@@ -1,9 +1,12 @@
 import { Progress as ProgressBar } from 'antd';
 import { Modal } from 'components';
+import { useDispatch, useSelector } from 'react-redux';
+import { setImportError } from 'store';
+import { setImportProgres } from 'store';
 
 // status === 'importing' || 'success' || 'failed'
 
-export const Progress = ({ show, setShow, status, percent }) => {
+export const Progress = ({ show, setShow, status, percent, setStep }) => {
   let statusText;
   switch (status) {
     case 'importing':
@@ -20,12 +23,24 @@ export const Progress = ({ show, setShow, status, percent }) => {
       break;
   }
 
+  const dispatch = useDispatch();
+  const { importError } = useSelector((state) => state?.whmcs);
+
   return (
     <Modal
       show={show}
       setShow={setShow}
       heading="Import Progress"
       submitText=""
+      handleCancel={async () => {
+        if (!importError) {
+          setStep(1);
+        } else {
+          await dispatch(setImportProgres(0));
+          await dispatch(setImportError(null));
+        }
+        setShow(false);
+      }}
       centered
       customBody={
         <div className="mb-[32px]">
