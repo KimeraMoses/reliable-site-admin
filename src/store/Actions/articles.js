@@ -1,4 +1,5 @@
-import { axios, getError } from 'lib';
+import { asyncForEach, axios, getError } from 'lib';
+import { getArticleFeedbacksByArticleIDConfig } from 'lib/requests/articleFeedbacks';
 import {
   createArticleConfig,
   deleteArticleConfig,
@@ -20,6 +21,32 @@ export const getAllArticles = () => {
       const { url, defaultData, config } = getArticlesConfig();
       const res = await axios.post(url, defaultData, config);
       dispatch(getArticles(res?.data?.data));
+    } catch (e) {
+      toast.error(getError(e));
+    } finally {
+      dispatch(setArticlesLoading(false));
+    }
+  };
+};
+
+// Get All Articles with Feedback
+export const getAllArticlesWithFeedbacks = () => {
+  return async (dispatch) => {
+    dispatch(setArticlesLoading(true));
+    try {
+      const { url, defaultData, config } = getArticlesConfig();
+      const res = await axios.post(url, defaultData, config);
+      const articles = res?.data?.data;
+      if (articles?.length) {
+        await asyncForEach(articles, async (article, index) => {
+          const { url, config } = getArticleFeedbacksByArticleIDConfig({
+            id: article?.id,
+          });
+          const res = await axios.get(url, config);
+          articles[index].articleFeedbacks = res?.data?.data;
+        });
+        dispatch(getArticles(articles));
+      }
     } catch (e) {
       toast.error(getError(e));
     } finally {

@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
-import { FeedbackDetails, List } from './pages';
+import { List } from './pages/List/List.page';
+import { FeedbackDetails } from './pages/FeedbackDetails/FeedbackDetails.page';
 
 const Feedback = () => {
   return (

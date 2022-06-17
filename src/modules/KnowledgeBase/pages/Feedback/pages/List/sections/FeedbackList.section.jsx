@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkModule } from 'lib/checkModule';
 import { Table } from 'components';
-import { getAllArticleFeedbacks } from 'store';
+import { getAllArticlesWithFeedbacks } from 'store';
 
 export const FeedbackList = () => {
   const navigate = useNavigate();
@@ -15,13 +15,11 @@ export const FeedbackList = () => {
 
   useEffect(() => {
     (async () => {
-      await dispatch(getAllArticleFeedbacks());
+      await dispatch(getAllArticlesWithFeedbacks());
     })();
   }, [dispatch]);
 
-  const { articlesFeedbacks, loading } = useSelector(
-    (state) => state?.articlesFeedback
-  );
+  const { articles, loading } = useSelector((state) => state?.articles);
   const { userModules } = useSelector((state) => state?.modules);
 
   const { permissions } = checkModule({
@@ -32,13 +30,13 @@ export const FeedbackList = () => {
   const columns = [
     {
       title: 'Article Title',
-      dataIndex: 'titile',
+      dataIndex: 'title',
       key: 'title',
-      render: () => {
+      render: (text, record) => {
         return (
           <div className="flex items-center gap-[12px] rounded-[8px]">
             <img className="w-[40px]" src="/article.jpg" alt="article title" />
-            <p className="text-sm">Article Title</p>
+            <p className="text-sm">{text}</p>
           </div>
         );
       },
@@ -46,14 +44,11 @@ export const FeedbackList = () => {
 
     {
       title: 'Article Description',
-      dataIndex: 'description',
-      key: 'description',
-      render: () => {
+      dataIndex: 'bodyText',
+      key: 'bodyText',
+      render: (text) => {
         return (
-          <div className="text-sm">
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-            nonumy.
-          </div>
+          <div className="text-sm" dangerouslySetInnerHTML={{ __html: text }} />
         );
       },
     },
@@ -61,18 +56,23 @@ export const FeedbackList = () => {
       title: 'Number of Feedbacks',
       dataIndex: 'feedbacknumbers',
       key: 'feedbacknumbers',
-      render: () => {
-        return <div className="text-sm">4 User Feedbacks</div>;
+      render: (text, record) => {
+        return (
+          <div className="text-sm">
+            {record?.articleFeedbacks?.length} User Feedbacks
+          </div>
+        );
       },
     },
     {
       title: 'Category',
       dataIndex: 'categoryName',
       key: 'categoryName',
-      render: (text) => {
+      render: (text, record) => {
+        const category = record?.articleCategories?.[0]?.category?.name;
         return (
           <div className="bg-[#2F264F] px-[8px] py-[4px] uppercase text-[#8950FC] w-[fit-content] rounded-[4px]">
-            {text ? text : 'Uncategorized'}
+            {category ? category : 'Uncategorized'}
           </div>
         );
       },
@@ -81,22 +81,18 @@ export const FeedbackList = () => {
 
   // Setting data properly
   const [data, setData] = useState([]);
-  const [status, setStatus] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
   useEffect(() => {
     setData([]);
-    if (articlesFeedbacks?.length) {
-      const dataToSet = articlesFeedbacks.map((b) => {
+    if (articles?.length) {
+      const dataToSet = articles.map((b) => {
         return {
           ...b,
           key: b?.id,
         };
       });
-      console.log(dataToSet);
       setData(dataToSet);
     }
-  }, [articlesFeedbacks]);
+  }, [articles]);
 
   return (
     <div className="p-[40px]">
@@ -105,51 +101,28 @@ export const FeedbackList = () => {
           columns={columns}
           data={data}
           loading={loading}
-          // dateRageFilter={true}
-          statusFilter={[
-            { name: 'Active' },
-            { name: 'Closed' },
-            { name: 'Disabled' },
-          ]}
+          // statusFilter={[
+          //   { name: 'Active' },
+          //   { name: 'Closed' },
+          //   { name: 'Disabled' },
+          // ]}
           // fieldToFilter="articleTitle"
-          handleStatus={async (values) => {
-            setStatus(values);
-            let details = {
-              status: values,
-            };
-            if (startDate && endDate) {
-              details['startDate'] = startDate;
-              details['endDate'] = endDate;
-            }
-            await dispatch(getAllArticleFeedbacks(details));
-          }}
-          // handleDateRange={async (date, dateString, id) => {
-          //   let startDate = '';
-          //   let endDate = '';
-          //   let details = {};
-          //   if (date) {
-          //     startDate = date[0]._d;
-          //     endDate = date[1]._d;
-          //     details['startDate'] = startDate;
-          //     details['endDate'] = endDate;
-          //   }
-          //   if (status) {
-          //     details['status'] = status;
-          //   }
-          //   setStartDate(startDate);
-          //   setEndDate(endDate);
-          //   await dispatch(getAllArticleFeedbacks(details));
-          // }}
           editAction={(record) => (
-            <Button
-              onClick={() => {
-                navigate(
-                  `/admin/dashboard/knowledge-base/feedback/view/${record?.id}`
+            <>
+              {record?.articleFeedbacks?.map((feedback, idx) => {
+                return (
+                  <Button
+                    onClick={() => {
+                      navigate(
+                        `/admin/dashboard/knowledge-base/feedback/view/${feedback?.id}`
+                      );
+                    }}
+                  >
+                    View Feedback {idx + 1}
+                  </Button>
                 );
-              }}
-            >
-              View
-            </Button>
+              })}
+            </>
           )}
           permissions={permissions}
           t={t}

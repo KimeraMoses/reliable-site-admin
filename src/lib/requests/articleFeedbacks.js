@@ -22,6 +22,12 @@ export const getArticleFeedbackConfig = () => ({
   config: articleFeedbackConfig('View'),
 });
 
+// Get Article Feedbacks By Article ID
+export const getArticleFeedbacksByArticleIDConfig = ({ id }) => ({
+  url: `${prefix}/getarticlefeedbackagainstarticle/${id}`,
+  config: articleFeedbackConfig('View'),
+});
+
 // Create Article Feedback
 export const createArticleFeedbackConfig = () => ({
   url: prefix,

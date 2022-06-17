@@ -1,5 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
-import { List } from './pages';
+// import { List } from './pages';
+import { List } from './pages/List/List.page';
 
 const Categories = () => {
   return (

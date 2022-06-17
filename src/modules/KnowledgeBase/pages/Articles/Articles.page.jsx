@@ -1,5 +1,9 @@
 import { Route, Routes } from 'react-router-dom';
-import { Add, Edit, List, View } from './pages';
+import { List } from './pages/List/List.page';
+import { Add } from './pages/Add/Add.page';
+import { View } from './pages/View/View.page';
+import { Edit } from './pages/Edit/Edit.page';
+// import { Add, Edit, List, View } from './pages';
 
 const Articles = () => {
   return (
