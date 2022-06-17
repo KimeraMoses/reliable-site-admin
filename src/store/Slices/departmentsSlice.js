@@ -16,7 +16,7 @@ const departmentsSlice = createSlice({
       state.loading = payload;
     },
     getUsersDepartmentsDispatch: (state, { payload }) => {
-      state.departments = payload;
+      state.userDepartments = payload;
     },
   },
 });

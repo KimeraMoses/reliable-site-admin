@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { logout } from 'store/Slices/authSlice';
 import { Departments } from './Departments.component';
 import UserName from './UserProfileCard/UserName';
-import { getNotifications, notificationsRead } from 'store';
+import { getNotificationss, notificationsRead } from 'store';
 import './UserTop.css';
 
 function UserTop({ toggleNotification }) {
@@ -44,6 +44,7 @@ function UserTop({ toggleNotification }) {
     {
       name: 'Notifications',
       onClick: () => {
+        setDropdown((dropdownValue) => !dropdownValue);
         handleNotification();
       },
     },
@@ -61,7 +62,7 @@ function UserTop({ toggleNotification }) {
     toggleNotification(true);
     (async () => {
       await dispatch(
-        getNotifications({
+        getNotificationss({
           toUserId: user?.id,
         })
       );

@@ -28,6 +28,16 @@ export const addDepartmentConfig = () => ({
   config: departmentsConfig('Create'),
 });
 
+export const assignDepartmentConfig = () => ({
+  url: `${prefix}/assigndepartmentasync`,
+  config: departmentsConfig('Create'),
+});
+
+export const unAssignDepartmentConfig = () => ({
+  url: `${prefix}/unassigndepartmentasync`,
+  config: departmentsConfig('Create'),
+});
+
 // Edit Departemnt
 export const editDepartmentConfig = ({ id }) => ({
   url: `${prefix}/${id}`,

@@ -1,29 +1,47 @@
 import { Switch } from 'antd';
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getDepartmentsByUserId } from 'store';
-import { getDepartments } from 'store';
+import { unAssignDepartmentByUserId } from 'store';
+import { assignDepartmentByUserId } from 'store';
 
-const DepartmentSelector = ({ name, value }) => {
+const DepartmentSelector = ({ name, value, checked }) => {
+  const [loading, setLoading] = useState(false);
+  const [checkValue, setCheckValue] = useState(checked);
+  const { id } = useSelector((state) => state?.auth?.user);
+  const dispatch = useDispatch();
   return (
     <div className="flex justify-between items-center">
       <div className="text-[rgb(146,_146,_143)] text-[12px]">{name}</div>
-      <Switch />
+      <Switch
+        loading={loading}
+        onChange={async () => {
+          setLoading(true);
+          if (!checkValue) {
+            await dispatch(
+              assignDepartmentByUserId({
+                data: { userId: id, departmentId: value },
+              })
+            );
+            setCheckValue(true);
+          } else {
+            await dispatch(
+              unAssignDepartmentByUserId({
+                data: { userId: id, departmentId: value },
+              })
+            );
+            setCheckValue(false);
+          }
+          setLoading(false);
+        }}
+        checked={checkValue}
+      />
     </div>
   );
 };
 
 export const Departments = ({ showDepartments }) => {
-  const dispatch = useDispatch();
-
-  const { id } = useSelector((state) => state?.auth?.user);
-  const { userDepartments, departments } = useSelector(
-    (state) => state?.departments
-  );
-  useEffect(() => {
-    dispatch(getDepartments());
-    dispatch(getDepartmentsByUserId({ id }));
-  }, []);
+  // const { id } = useSelector((state) => state?.auth?.user);
+  const { userDepartments } = useSelector((state) => state?.departments);
 
   return (
     <div
@@ -42,12 +60,21 @@ export const Departments = ({ showDepartments }) => {
         Departments
       </div>
       <div className="p-[20px] flex flex-col gap-[20px]">
-        <DepartmentSelector name="Department 1" value="2876ajsy1=21ejd" />
+        {userDepartments?.map((department) => {
+          return (
+            <DepartmentSelector
+              name={department?.departmentName}
+              value={department?.departmentId}
+              checked={department?.isAssign}
+            />
+          );
+        })}
+        {/* <DepartmentSelector name="Department 1" value="2876ajsy1=21ejd" />
         <DepartmentSelector name="Department 2" value="2876ajsy1=21ejd" />
         <DepartmentSelector name="Department 3" value="2876ajsy1=21ejd" />
         <DepartmentSelector name="Department 4" value="2876ajsy1=21ejd" />
         <DepartmentSelector name="Department 5" value="2876ajsy1=21ejd" />
-        <DepartmentSelector name="Department 6" value="2876ajsy1=21ejd" />
+        <DepartmentSelector name="Department 6" value="2876ajsy1=21ejd" /> */}
       </div>
     </div>
   );
