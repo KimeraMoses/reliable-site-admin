@@ -14,7 +14,6 @@ export const TicketList = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { tickets, loading } = useSelector((state) => state?.tickets);
-
     const { userModules } = useSelector((state) => state?.modules);
 
     let activeTicket = tickets ? groupBy(tickets, 'ticketStatus') : {};

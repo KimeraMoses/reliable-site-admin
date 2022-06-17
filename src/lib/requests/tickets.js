@@ -14,7 +14,8 @@ export const getTicketsConfig = () => ({
         keyword: '',
         pageNumber: 0,
         pageSize: 0,
-        orderBy: ['']
+        orderBy: ['ticketPriority'],
+        ticketPriority: 0
     },
     config: ticketsConfig('View'),
 });

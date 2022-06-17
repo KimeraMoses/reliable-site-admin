@@ -5,20 +5,42 @@ import { Formik, Form, Field } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input } from 'components';
 import { List, Spin } from 'antd';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { getTicketById, addTicketReplies, addTicketComments, getUsers, editTicket } from 'store';
 import * as Yup from 'yup';
 import { useTranslation } from "react-i18next";
 import moment from 'moment';
 import { genrateFirstLetterName, getDifference, } from 'lib';
+import { checkModule } from 'lib/checkModule';
 
+
+const CustomSelectUpdate = ({ label, name, options, value, disabled, onChange, className }) => {
+    return (
+        <div className={`w-full ${className}`}>
+            <label htmlFor={name} className="mb-[16px] text-white text-[14px]">
+                {label}
+            </label>
+            <select
+                name={name}
+                disabled={disabled}
+                value={value}
+                onChange={(e) => {
+                    onChange(e);
+                }}
+                className="form-select appearance-none block w-full px-[16px] h-[52px] text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0 focus:bg-[#171723] focus:border-none focus:outline-none"
+            >
+                {options?.map((option) => (
+                    <option value={option?.value} key={option?.value}>
+                        {option?.label}
+                    </option>
+                ))}
+            </select>
+        </div>
+    )
+}
 
 const initialValues = {
-    assignedTo: '',
-    ticketStatus: '',
-    ticketPriority: '',
-    description: '',
     commentText: ''
 };
 
@@ -39,9 +61,11 @@ export const TicketDetails = () => {
     const { t } = useTranslation("/Tickets/ns");
     const [selected, setSelected] = useState([]);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { loading, ticket } = useSelector((state) => state?.tickets);
     const { commentLoading } = useSelector((state) => state?.ticketComments);
     const { repliesLoading } = useSelector((state) => state?.ticketReplies);
+    const { userModules } = useSelector((state) => state?.modules);
     const { users } = useSelector((state) => state?.users);
     const isSelected = (id) => selected.indexOf(id) !== -1;
     let search = window.location.search;
@@ -53,6 +77,7 @@ export const TicketDetails = () => {
             name: 'assignedTo',
             label: t('assignTo'),
             type: 'select',
+            value: ticket?.assignedTo,
             options: () => {
                 let usersData = [{ 'value': '', 'label': 'Select' }];
                 users.forEach((user) => {
@@ -68,6 +93,7 @@ export const TicketDetails = () => {
             name: 'ticketStatus',
             label: t('status'),
             type: 'select',
+            value: ticket?.ticketStatus,
             options: () => {
                 return [{ 'value': '', 'label': 'Select' }, { 'value': 0, 'label': 'Active' }, { 'value': 1, 'label': 'Closed' }, { 'value': 2, 'label': 'Disabled' }]
             }
@@ -76,11 +102,17 @@ export const TicketDetails = () => {
             name: 'ticketPriority',
             label: t('priority'),
             type: 'select',
+            value: ticket?.ticketPriority,
             options: () => {
                 return [{ 'value': '', 'label': 'Select' }, { 'value': 0, 'label': 'Urgent' }, { 'value': 1, 'label': 'NotUrgent ' }]
             }
         },
     ];
+
+    const { permissions } = checkModule({
+        module: 'Users',
+        modules: userModules,
+    });
 
     useEffect(() => {
         (async () => {
@@ -93,7 +125,6 @@ export const TicketDetails = () => {
     const handleReplyInput = (id) => {
         const selectedIndex = selected.indexOf(id);
         let newSelected = [];
-
         if (selectedIndex === -1) {
             newSelected = newSelected.concat(selected, id);
         } else if (selectedIndex === 0) {
@@ -116,6 +147,41 @@ export const TicketDetails = () => {
             violation.scrollIntoView();
         }
     };
+
+    const handleUpdateTicket = (e) => {
+        if (e.target.value !== '') {
+            const newValues = {
+                description: ticket?.description,
+                id: id,
+                ticketRelatedTo: ticket?.ticketRelatedTo,
+                ticketRelatedToId: ticket?.ticketRelatedToId,
+                departmentId: ticket?.departmentId
+            };
+
+            if (e.target.name === 'assignedTo') {
+                newValues[e.target.name] = e.target.value;
+                newValues['ticketPriority'] = parseInt(ticket?.ticketPriority);
+                newValues['ticketStatus'] = parseInt(ticket?.ticketStatus);
+            } else if (e.target.name === 'ticketStatus') {
+                newValues[e.target.name] = parseInt(e.target.value);
+                newValues['assignedTo'] = ticket?.assignedTo;
+                newValues['ticketPriority'] = parseInt(ticket?.ticketPriority);
+            } else {
+                newValues[e.target.name] = parseInt(e.target.value);
+                newValues['assignedTo'] = ticket?.assignedTo;
+                newValues['ticketStatus'] = parseInt(ticket?.ticketStatus);
+            }
+
+            (async () => {
+                await dispatch(editTicket({ data: newValues }));
+                if (e.target.name === 'assignedTo') {
+                    navigate(`/admin/dashboard/tickets/list/show`);
+                } else {
+                    await dispatch(getTicketById(id));
+                }
+            })();
+        }
+    }
 
     return (
         <div className="p-4 md:px-6">
@@ -140,57 +206,41 @@ export const TicketDetails = () => {
                                 </div>
                             </div>
                             <div className={'text-[16px] mt-[40px] mb-[40px]'}>{ticket?.description} </div>
-                            <div className={`form ticket-form ${ticket?.ticketStatus > 0 && 'pointer-events-none opacity-30'}`}>
+                            <div className={`form ticket-form `}>
+                                <div className="grid grid-cols-3 gap-[20px] mb-[32px] items-end">
+                                    {fields.map((field) => (
+                                        <div className="flex items-end" key={field?.name}>
+                                            <CustomSelectUpdate
+                                                key={field.name}
+                                                name={field.name}
+                                                label={field?.label}
+                                                placeholder={field.placeholder}
+                                                type={field.type}
+                                                options={field.options()}
+                                                className={'custom-select'}
+                                                value={field.value}
+                                                onChange={(e) => handleUpdateTicket(e)}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
                                 <Formik
                                     initialValues={initialValues}
                                     validationSchema={validationSchema}
                                     enableReinitialize
                                     onSubmit={async (values) => {
-
-                                        if (values?.assignedTo !== '' && values?.ticketPriority !== '' && values?.commentText !== '') {
-                                            const newValues = {
-                                                description: values?.commentText,
-                                                assignedTo: values?.assignedTo,
-                                                ticketPriority: parseInt(values?.ticketPriority),
-                                                ticketStatus: parseInt(values?.ticketStatus),
-                                                id: id,
-                                                ticketRelatedTo: ticket?.ticketRelatedTo,
-                                                ticketRelatedToId: ticket?.ticketRelatedToId,
-                                                departmentId: ticket?.departmentId
-                                            };
-                                            (async () => {
-                                                await dispatch(editTicket({ data: newValues }));
-                                                await dispatch(getTicketById(id));
-                                            })();
-                                        } else {
-                                            const newValues = {
-                                                commentText: values?.commentText,
-                                                ticketId: id
-                                            };
-                                            (async () => {
-                                                await dispatch(addTicketComments(newValues));
-                                                await dispatch(getTicketById(id));
-                                            })();
-                                        }
+                                        const newValues = {
+                                            commentText: values?.commentText,
+                                            ticketId: id
+                                        };
+                                        (async () => {
+                                            await dispatch(addTicketComments(newValues));
+                                            await dispatch(getTicketById(id));
+                                        })();
                                     }}
                                 >
                                     <Form>
-                                        <div className="grid grid-cols-3 gap-[20px] mb-[32px] items-end">
-                                            {fields.map((field) => (
-                                                <div className="flex items-end" key={field?.name}>
-                                                    <Input
-                                                        key={field.name}
-                                                        name={field.name}
-                                                        label={field?.label}
-                                                        placeholder={field.placeholder}
-                                                        type={field.type}
-                                                        options={field.options()}
-                                                        className={'custom-select'}
-                                                    />
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <div className="relative mb-[32px] items-end">
+                                        <div className={`relative mb-[32px] items-end ${ticket?.ticketStatus > 0 && 'pointer-events-none opacity-30'}`}>
                                             <Input
                                                 key={'commentText'}
                                                 name={'commentText'}
