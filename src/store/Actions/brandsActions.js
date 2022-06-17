@@ -30,7 +30,7 @@ export const getBrands = () => {
     };
 };
 
-// Add User
+// Add Brand
 export const addBrand = (data) => {
     return async (dispatch) => {
         dispatch(setBrandsLoading(true));

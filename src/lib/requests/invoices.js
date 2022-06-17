@@ -4,7 +4,7 @@ const invoicesConfig = (action) =>
 
 const prefix = `/api/v1/admin/bills`;
 
-export const getInvoicesConfig = (params) => ({
+export const getInvoicesConfig = () => ({
     url: `${prefix}/search`,
     defaultData: {
         advancedSearch: {

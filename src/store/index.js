@@ -20,6 +20,15 @@ import invoicesReducer from './Slices/invoicesSlice';
 import notificationTemplatesReducer from './Slices/notification-templates';
 import reportsReducer from './Slices/reports';
 import whmcsReducer from './Slices/whmcs';
+import articlesReducer from './Slices/articles';
+import articlesFeedbackReducer from './Slices/articlesFeedback';
+import getArticleFeedbackCommentsReducer from './Slices/articleFeedbackComments';
+import articleCategoriesReducer from './Slices/articleCategories';
+import ordersReducer from './Slices/ordersSlice';
+import notificationsReducer from './Slices/notificationsSlice';
+import ticketsReducer from './Slices/ticketsSlice';
+import ticketCommentsReducer from './Slices/ticketCommentsSlice';
+import ticketRepliesReducer from './Slices/ticketRepliesSlice';
 
 const store = configureStore({
   reducer: {
@@ -40,10 +49,19 @@ const store = configureStore({
     brands: brandsReducer,
     departments: departmentsReducer,
     transactions: transactionsReducer,
+    articles: articlesReducer,
+    articlesFeedback: articlesFeedbackReducer,
+    articlesFeedbackComments: getArticleFeedbackCommentsReducer,
+    articleCategories: articleCategoriesReducer,
     invoices: invoicesReducer,
     notificationTemplates: notificationTemplatesReducer,
     reports: reportsReducer,
     whmcs: whmcsReducer,
+    orders: ordersReducer,
+    notifications: notificationsReducer,
+    tickets: ticketsReducer,
+    ticketComments: ticketCommentsReducer,
+    ticketReplies: ticketRepliesReducer,
   },
 });
 

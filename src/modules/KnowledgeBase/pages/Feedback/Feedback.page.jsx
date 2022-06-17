@@ -1,11 +1,12 @@
 import { Route, Routes } from 'react-router-dom';
-import { FeedbackDetails, List } from './pages';
+import { List } from './pages/List/List.page';
+import { FeedbackDetails } from './pages/FeedbackDetails/FeedbackDetails.page';
 
 const Feedback = () => {
   return (
     <Routes>
       <Route index element={<List />} />
-      <Route path="view/:id" element={<FeedbackDetails />} />
+      <Route path="view/:articleId/:id" element={<FeedbackDetails />} />
     </Routes>
   );
 };

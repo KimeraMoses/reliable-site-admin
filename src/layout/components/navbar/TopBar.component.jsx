@@ -5,7 +5,7 @@ import { sidebarData } from '../SideBar/data';
 import { Link, useLocation } from 'react-router-dom';
 import { Dropdown } from 'antd';
 
-export function TopBar({ hide = false, hideSide, toggleSide, innerSubLinks }) {
+export function TopBar({ hide = false, hideSide, toggleSide, innerSubLinks, toggleNotification }) {
   const [active, setActive] = useState(null);
   const { pathname } = useLocation();
 
@@ -91,7 +91,7 @@ export function TopBar({ hide = false, hideSide, toggleSide, innerSubLinks }) {
         ) : (
           <></>
         )}
-        <UserTop />
+        <UserTop toggleNotification={(v) => toggleNotification(v)} />
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import Invoices from './Invoices/Invoices.page';
 import WHMCS from './WHMCS/WHMCS.page';
 
 export const pages = [
-  { path: '/orders', Component: Orders },
+  { path: '/orders/*', Component: Orders },
   { path: '/clients/*', Component: Clients },
   { path: '/products-services/*', Component: ProductsServices },
   { path: '/invoices/*', Component: Invoices },

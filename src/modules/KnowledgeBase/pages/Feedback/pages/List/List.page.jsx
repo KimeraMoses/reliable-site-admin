@@ -1,4 +1,4 @@
-import { FeedbackList, Submissions } from './sections';
+import { FeedbackList } from './sections';
 
 const data = [];
 for (let i = 0; i <= 20; i++) {
@@ -27,9 +27,6 @@ for (let i = 0; i <= 20; i++) {
 export const List = () => {
   return (
     <div className="p-[40px]">
-      {/* <div>hello</div> */}
-      {/* Current Active Screen */}
-      {/* <Submissions articles={data} /> */}
       <FeedbackList />
     </div>
   );

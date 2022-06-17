@@ -38,18 +38,19 @@ export const Table = ({
   dateRageFilter = false,
   statusFilter = [],
   handleStatus,
+  statusFilterPlaceholder,
   handleDateRange,
   hideSearch,
   theme,
   rowKey,
   scroll,
   size,
+  headingTitle,
 }) => {
   const [dataSource, setDataSource] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [search, setSearch] = useState('');
-
   useEffect(() => {
     if (fieldToFilter !== null && fieldToFilter !== undefined) {
       const filteredData = data.filter((item) => {
@@ -184,9 +185,11 @@ export const Table = ({
                   onChange={(e) => handleStatus(e.target.value)}
                   className="custom-select form-select appearance-none block w-full px-[16px] h-[52px] text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0"
                 >
-                  <option value="">Status</option>
+                  <option value="">
+                    {statusFilterPlaceholder || 'Status'}
+                  </option>
                   {statusFilter.map((data, i) => (
-                    <option value={i} key={i}>
+                    <option value={data?.value || i} key={i}>
                       {data.name}
                     </option>
                   ))}
@@ -226,6 +229,12 @@ export const Table = ({
               )}
             </div>
           </div>
+          {headingTitle && (
+            <h3 className={'text-[#fff] text-[32px] mt-[40px]'}>
+              {headingTitle}
+            </h3>
+          )}
+
           {/* Header End */}
           {/* Table */}
           <div

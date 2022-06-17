@@ -14,6 +14,26 @@ export const sidebarData = [
     module: 'Dashboard',
     path: '/admin/dashboard',
     icon: (fill) => <Dashboard fill={fill} />,
+    subLinks: [
+      {
+        name: 'Tickets',
+        module: 'Tickets',
+        path: '/admin/dashboard/tickets',
+        showDropdown: true,
+        subLinks: [
+          {
+            name: 'Tickets List',
+            path: '/admin/dashboard/tickets/list/show',
+            subLinks: [
+              {
+                name: 'Tickets Details',
+                path: '/admin/dashboard/tickets/list/details/:id',
+              },
+            ],
+          },
+        ],
+      },
+    ],
   },
   {
     name: 'Billing',
@@ -21,7 +41,21 @@ export const sidebarData = [
     path: '/admin/dashboard/billing',
     icon: (fill) => <Billing fill={fill} />,
     subLinks: [
-      { name: 'Orders', path: '/admin/dashboard/billing/orders' },
+      {
+        name: 'Orders',
+        path: '/admin/dashboard/billing/orders',
+        showDropdown: true,
+        subLinks: [
+          {
+            name: 'Your Orders',
+            path: '/admin/dashboard/billing/orders/your-orders/list',
+          },
+          {
+            name: 'All Orders',
+            path: '/admin/dashboard/billing/orders/all-orders/list',
+          },
+        ],
+      },
       {
         name: 'Clients',
         path: '/admin/dashboard/billing/clients',
@@ -135,16 +169,16 @@ export const sidebarData = [
           },
         ],
       },
-      {
-        name: 'User Submissions',
-        path: '/admin/dashboard/knowledge-base/user-submissions',
-        subLinks: [
-          {
-            name: 'Submission Details',
-            path: '/admin/dashboard/knowledge-base/user-submissions/view/:id',
-          },
-        ],
-      },
+      // {
+      //   name: 'User Submissions',
+      //   path: '/admin/dashboard/knowledge-base/user-submissions',
+      //   subLinks: [
+      //     {
+      //       name: 'Submission Details',
+      //       path: '/admin/dashboard/knowledge-base/user-submissions/view/:id',
+      //     },
+      //   ],
+      // },
       {
         name: 'Feedback',
         path: '/admin/dashboard/knowledge-base/feedback',

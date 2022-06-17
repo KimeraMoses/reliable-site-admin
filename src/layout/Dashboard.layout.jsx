@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { element, bool } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
-import { SideBar, TopBar } from './components';
+import { SideBar, TopBar, Notifications } from './components';
 import { sidebarData } from './components/SideBar/data';
 import { GetMFAUri } from 'store/Actions/AuthActions';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,12 +19,17 @@ export function DashboardLayout({ children, hide }) {
   const lessThanDesktop = useMediaQuery({
     query: '(max-width: 900px)',
   });
+
   const [hideSide, setHideSide] = useState(!!lessThanDesktop);
+  const [hideNoti, setHideNoti] = useState(false);
 
   useEffect(() => {
     const activeLink = sidebarData.filter((sideItem) => {
       const { name, path } = sideItem;
       if (name === 'Dashboard') {
+        if (pathname.includes('tickets')) {
+          return pathname.includes(path);
+        }
         return path === pathname;
       } else {
         return pathname.includes(path);
@@ -78,12 +83,17 @@ export function DashboardLayout({ children, hide }) {
     setHideSide((state) => !state);
   };
 
+  const toggleNotification = (f, page) => {
+    setHideNoti(f);
+  };
+
   return (
-    <div className="w-full md:min-h-screen">
+    <div className={`w-full md:min-h-screen ${hideNoti ? 'notificationShow' : ''}`}>
       <TopBar
         hide={hide}
         hideSide={hideSide}
         toggleSide={toggleSide}
+        toggleNotification={(v) => toggleNotification(v)}
         innerSubLinks={
           activeSub && activeSub.showDropdown ? activeSub.subLinks : []
         }
@@ -100,26 +110,23 @@ export function DashboardLayout({ children, hide }) {
 
             {activeSub?.name && !active.hideBread ? (
               <>
+
                 <div className="h-5 w-[1px] bg-[#323248]" />
                 <h6 className="text-white text-[12px]">
                   <Link
                     to={activeSub?.path}
                     className={activeSub?.name ? 'text-[#92928f]' : ''}
-                  >{`${activeSub?.name} ${
-                    activeInnerSub?.name ? '-' : ''
-                  } `}</Link>
-
+                  >{`${activeSub?.name} ${activeInnerSub?.name ? '-' : ''
+                    } `}</Link>
                   {activeInnerSub?.name && !activeDeepInnerSub ? (
-                    <span>{`${activeInnerSub?.name} ${
-                      activeDeepInnerSub ? '-' : ''
-                    } `}</span>
+                    <span>{`${activeInnerSub?.name} ${activeDeepInnerSub ? '-' : ''
+                      } `}</span>
                   ) : activeInnerSub?.name && activeDeepInnerSub ? (
                     <Link
                       to={activeInnerSub?.path}
                       className={activeInnerSub?.name ? 'text-[#92928f]' : ''}
-                    >{`${activeInnerSub?.name} ${
-                      activeInnerSub?.name ? '-' : ''
-                    } `}</Link>
+                    >{`${activeInnerSub?.name} ${activeInnerSub?.name ? '-' : ''
+                      } `}</Link>
                   ) : (
                     ''
                   )}
@@ -138,6 +145,7 @@ export function DashboardLayout({ children, hide }) {
           {children}
         </div>
       </div>
+      <Notifications hideNoti={hideNoti} toggleNotification={(f, page) => toggleNotification(f, page)} />
     </div>
   );
 }

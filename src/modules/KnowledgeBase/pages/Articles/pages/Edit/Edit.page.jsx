@@ -1,15 +1,25 @@
 import { EditorState, convertToRaw } from 'draft-js';
 import { convertToHTML } from 'draft-convert';
-import * as Yup from 'yup';
 import { Formik, Form, Field } from 'formik';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Spin } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 // Custom Modules
-import { Input, MultiSelect, SMTPEditor, Button } from 'components';
-import { addEmailTemplate } from 'store';
+import {
+  Input,
+  MultiSelect,
+  SMTPEditor,
+  Button,
+  ImageUpload,
+} from 'components';
+import { createArticle } from 'store';
 import './Edit.styles.scss';
+import { useEffect } from 'react';
+import { getAllArticleCategories } from 'store';
+import { createServerImage } from 'lib';
+import { getArticleByID } from 'store';
+import { updateArticle } from 'store';
 
 const ConfigurationEditor = ({ editorState, onEditorStateChange, onBlur }) => {
   return (
@@ -33,7 +43,12 @@ const getInputEl = ({ options, name, placeholder, type }) => {
     case 'multiselect':
       return (
         <div className="custom-multiselect-kba w-full">
-          <MultiSelect name={name} options={options} mode="multiple" />
+          <MultiSelect
+            name={name}
+            options={options}
+            mode="multiple"
+            placeholder={placeholder}
+          />
         </div>
       );
     case 'text':
@@ -53,6 +68,12 @@ const getInputEl = ({ options, name, placeholder, type }) => {
             name={name}
             options={options}
           />
+        </div>
+      );
+    case 'image':
+      return (
+        <div className="custom-select-kba w-full">
+          <ImageUpload name={name} />
         </div>
       );
     default:
@@ -85,35 +106,44 @@ const EmailBodyInput = ({
 };
 
 export const Edit = () => {
-  const initialValues = {
-    title: '',
-    categories: [],
-    visibility: 'public',
-    body: '',
-    status: 'draft',
-    bodyHolder: EditorState.createEmpty(),
-    articleStatus: true,
-  };
+  const dispatch = useDispatch();
 
-  const validationSchema = Yup.object().shape({
-    title: Yup.string().required('This field is required!'),
-    visibility: Yup.string().required('This field is required!'),
-    body: Yup.string().required('This field is required!'),
-  });
+  const { id } = useParams();
+  useEffect(() => {
+    dispatch(getAllArticleCategories());
+    dispatch(getArticleByID(id));
+  }, []);
+
+  const { loading, articleCategories } = useSelector(
+    (state) => state?.articleCategories
+  );
+  const articleLoading = useSelector((state) => state?.articles?.loading);
+  const { article } = useSelector((state) => state?.articles);
+
+  const initialValues = {
+    title: article?.title,
+    categories: article?.categories,
+    visibility: article?.visibility,
+    articleStatus: article?.articleStatus,
+    bodyText: article?.bodyText,
+    bodyHolder: EditorState.createEmpty(),
+  };
 
   const fields = [
     {
       name: 'title',
       type: 'text',
       label: 'Article Ttitle',
+      placeholder: 'Enter Article Title Here',
     },
     {
       name: 'categories',
       type: 'multiselect',
-      options: [
-        { label: 'Category 1', value: '1' },
-        { label: 'Category 2', value: '2' },
-      ],
+      placeholder: 'Select Categories',
+      options: articleCategories?.map((category) => ({
+        label: category.name,
+        value: category.id,
+      })),
       label: 'Categories',
     },
     {
@@ -121,12 +151,12 @@ export const Edit = () => {
       type: 'select',
       label: 'Visibility',
       options: [
-        { label: 'Public', value: 'public' },
-        { label: 'Private', value: 'private' },
+        { label: 'Public', value: true },
+        { label: 'Private', value: false },
       ],
     },
     {
-      name: 'status',
+      name: 'articleStatus',
       type: 'select',
       label: 'Status',
       options: [
@@ -134,35 +164,38 @@ export const Edit = () => {
         { label: 'Publish', value: 'publish' },
       ],
     },
-    // {
-    //   name: 'articleStatus',
-    //   type: 'switch',
-    //   label: 'Article Status',
-    // },
-    // {
-    //   name: 'image',
-    //   type: 'file',
-    //   label: 'Choose Image',
-    // },
+    {
+      name: 'image',
+      type: 'image',
+      label: 'Select Image',
+    },
   ];
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   return (
     <Formik
       initialValues={initialValues}
-      validationSchema={validationSchema}
+      // validationSchema={validationSchema}
       enableReinitialize
       onSubmit={async (values) => {
-        await dispatch(addEmailTemplate({ data: values }));
-        navigate('/admin/dashboard/settings/email-templates');
+        const serverImage = await createServerImage(values?.image);
+        const finalVisibility = values?.visibility === 'false' ? false : true;
+        const finalValues = {
+          visibility: finalVisibility,
+          image: serverImage,
+          categories: values?.categories,
+          bodyText: values?.bodyText,
+          title: values?.title,
+          articleStatus: values?.articleStatus,
+        };
+        await dispatch(updateArticle({ id: article?.id, data: finalValues }));
+        navigate('/admin/dashboard/knowledge-base/articles');
       }}
     >
       {({ values, errors, touched, setFieldValue, setFieldTouched }) => {
         return (
           <Form>
-            {/* TODO: Change Spinning When Integration */}
-            <Spin spinning={false}>
+            <Spin spinning={loading || articleLoading}>
               <div className="grid grid-cols-[1fr] gap-[20px] px-[32px] py-[40px]">
                 <div className="flex flex-col gap-[20px]">
                   <div className="bg-[#1E1E2D] rounded-[8px]">
@@ -188,7 +221,7 @@ export const Edit = () => {
                     </div>
                     <ConfigurationEditor
                       editorState={values.bodyHolder}
-                      onBlur={() => setFieldTouched('body', true)}
+                      onBlur={() => setFieldTouched('bodyText', true)}
                       onEditorStateChange={(state) => {
                         setFieldValue('bodyHolder', state);
                         const currentContentAsHTML = convertToHTML(
@@ -200,19 +233,29 @@ export const Edit = () => {
                           convertToRaw(state.getCurrentContent()).blocks[0]
                             .text === ''
                         ) {
-                          setFieldValue('body', '');
+                          setFieldValue('bodyText', '');
                         } else {
-                          setFieldValue('body', currentContentAsHTML);
+                          setFieldValue('bodyText', currentContentAsHTML);
                         }
                       }}
                     />
-                    {touched['body'] && errors['body'] && (
+                    {touched['bodyText'] && errors['bodyText'] && (
                       <div className="error whitespace-nowrap ml-[32px] mb-[16px] w-[20%]">
-                        {errors['body']}
+                        {errors['bodyText']}
                       </div>
                     )}
                     <div className="p-[32px] pt-[10px]">
-                      <Button htmlType="submit" className="w-[fit_content]">
+                      <Button
+                        htmlType="submit"
+                        className="w-[fit_content]"
+                        disabled={
+                          !values?.title ||
+                          !values?.articleStatus ||
+                          !values?.bodyText ||
+                          !values?.categories?.length ||
+                          !values?.visibility
+                        }
+                      >
                         Edit Article
                       </Button>
                     </div>

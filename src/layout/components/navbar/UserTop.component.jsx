@@ -1,28 +1,30 @@
 import { Switch } from 'antd';
-import { Input, Notifications } from 'components';
+import { Input } from 'components';
 import { Formik } from 'formik';
 import { useOutside } from 'hooks';
 import { Right } from 'icons';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { useNavigate } from 'react-router-dom';
 import { logout } from 'store/Slices/authSlice';
 import { Departments } from './Departments.component';
 import UserName from './UserProfileCard/UserName';
+import { getNotifications, notificationsRead } from 'store';
 import './UserTop.css';
 
-function UserTop() {
+function UserTop({ toggleNotification }) {
   const [dropdown, setDropdown] = useState(false);
   const [showDepartments, setShowDepartments] = useState(false);
   const { user, isLoggedIn } = useSelector((state) => state.auth);
+  const { notifications } = useSelector((state) => state?.notifications);
   const lessThanDesktop = useMediaQuery({
     query: '(max-width: 900px)',
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [notifications, setNotifications] = useState(false);
+  // const [notifications, setNotifications] = useState(false);
   const links = [
     {
       name: 'Active Departments',
@@ -42,8 +44,7 @@ function UserTop() {
     {
       name: 'Notifications',
       onClick: () => {
-        setDropdown((dropdownValue) => !dropdownValue);
-        setNotifications((notificationValue) => !notificationValue);
+        handleNotification();
       },
     },
     {
@@ -56,6 +57,31 @@ function UserTop() {
     setDropdown(false);
     setShowDepartments(false);
   };
+  const handleNotification = () => {
+    toggleNotification(true);
+    (async () => {
+      await dispatch(
+        getNotifications({
+          toUserId: user?.id,
+        })
+      );
+    })();
+  };
+
+  useEffect(() => {
+    if (notifications.length) {
+      let ids = [];
+      notifications
+        ?.filter(function (el) {
+          return el.isRead !== true;
+        })
+        ?.map((b) => {
+          ids.push(b?.id);
+        });
+      if (ids.length) dispatch(notificationsRead(ids));
+    }
+  }, [notifications]);
+
   const dropDownRef = useRef(null);
   useOutside(dropDownRef, handleOutsideClick);
 
@@ -65,10 +91,10 @@ function UserTop() {
       // onClick={() => setDropdown((prevDropdown) => !prevDropdown)}
       ref={dropDownRef}
     >
-      <Notifications
+      {/* <Notifications
         visible={notifications}
         onClose={() => setNotifications(false)}
-      />
+      /> */}
       <div className="h-12 w-12 rounded-lg border-2 border-[#3699FF] p-1 userName">
         {user?.base64Image ? (
           <img
@@ -99,7 +125,8 @@ function UserTop() {
             <div className="flex items-start justify-between">
               {/* Image + Status */}
               <div className="h-12 w-12 rounded-lg border-2 border-[#3699FF] p-1 userName">
-                {user?.base64Image ? (
+                {user && user.imageUrl && user.imageUrl.length > 0 ? (
+                  // !showName
                   <img
                     src={user?.base64Image}
                     alt={user.userName}
