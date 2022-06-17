@@ -6,7 +6,7 @@ const Feedback = () => {
   return (
     <Routes>
       <Route index element={<List />} />
-      <Route path="view/:id" element={<FeedbackDetails />} />
+      <Route path="view/:articleId/:id" element={<FeedbackDetails />} />
     </Routes>
   );
 };

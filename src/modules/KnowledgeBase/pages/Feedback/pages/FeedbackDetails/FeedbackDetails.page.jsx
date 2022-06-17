@@ -1,14 +1,33 @@
 import { Formik, Form } from 'formik';
 import { Spin } from 'antd';
 import { Button as AntButton } from 'antd';
-
+import moment from 'moment';
 // Custom Modules
 import { Input, Button } from 'components';
 import './FeedbackDetails.styles.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getArticleByID } from 'store';
+import { getArticleFeedbackByID } from 'store';
+import { useNavigate, useParams } from 'react-router-dom';
+import { createArticleFeedbackCommentReply } from 'store/Actions/articleFeedbackCommentReplies';
+import { getUsers } from 'store';
+import { createTicket } from 'store';
+import { toast } from 'react-toastify';
+import { createArticleFeedbackComment } from 'store/Actions/articleFeedbackComments';
 
-const CommentCard = ({ imgSrc, imgTxt, author, reply }) => {
+const CommentCard = ({
+  imgSrc,
+  imgTxt,
+  reply,
+  commentText,
+  userFullName,
+  createdOn,
+  id,
+}) => {
   const [active, setActive] = useState(false);
+  const dispatch = useDispatch();
+  const params = useParams();
   return (
     <>
       <div
@@ -24,51 +43,65 @@ const CommentCard = ({ imgSrc, imgTxt, author, reply }) => {
               <img
                 src={imgSrc}
                 alt="detail"
-                className="w-[48px] rounded-[8px]"
+                className="w-[48px] h-[48px] object-cover rounded-[8px]"
               />
             )}
             {imgTxt && (
-              <p className="py-[10px] px-[18px] bg-[#171723] text-[#0BB783] rounded-[8px]">
+              <p className="w-[48px] h-[48px] flex items-center justify-center bg-[#171723] text-[#0BB783] rounded-[8px]">
                 {imgTxt}
               </p>
             )}
 
             <div className="flex flex-col gap-[4px]">
               <div className="flex gap-[8px]">
-                <h5 className="text-sm text-[#FFFFFF]">Paul Elliot</h5>
-                {author && (
+                <h5 className="text-sm text-[#FFFFFF]">
+                  {userFullName || 'Anonymous'}
+                </h5>
+                {/* {author && (
                   <p className="bg-[#3A2434] py-[4px] px-[8px] text-[#F64E60] rounded-[8px] text-xs">
                     Author
                   </p>
-                )}
+                )} */}
               </div>
-              <p className="text-xs text-[#474761]">1 hour</p>
+              <p className="text-xs text-[#474761]">
+                {createdOn
+                  ? moment(createdOn)?.format('MMM, DD, YYYY [at] h:mm A')
+                  : null}
+              </p>
             </div>
           </div>
-          <div
-            className={`cursor-pointer text-base hover:text-[#3699FF]
+          {!reply && (
+            <div
+              className={`cursor-pointer text-base hover:text-[#3699FF]
               ${active ? 'text-[#3699FF]' : 'text-[#474761]'}
             `}
-            onClick={() => setActive((prevState) => !prevState)}
-          >
-            Reply
-          </div>
+              onClick={() => setActive(true)}
+            >
+              Reply
+            </div>
+          )}
         </div>
         <div className="mt-[20px]">
-          <p className=" text-base text-[#92928F]">
-            Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-            nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-            erat, sed diam voluptua. At vero eos et accusam et justo duo dolores
-            et ea rebum.
-          </p>
+          <p className=" text-base text-[#92928F]">{commentText}</p>
         </div>
         {active && (
           <div className="mt-[20px]">
             <Formik
               initialValues={{
-                writeSometing: '',
+                commentText: '',
               }}
-              onSubmit={() => {
+              onSubmit={async (values) => {
+                dispatch(
+                  createArticleFeedbackCommentReply({
+                    // articleFeedbackId: params?.id,
+                    commentText: values?.commentText,
+                    // articleFeedbackCommentParentReplyId:
+                    //   '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+                    articleFeedbackCommentId: id,
+                  })
+                );
+                await dispatch(getArticleByID({ id: params?.articleId }));
+                await dispatch(getArticleFeedbackByID({ id: params?.id }));
                 setActive(false);
               }}
               enableReinitialize
@@ -79,7 +112,7 @@ const CommentCard = ({ imgSrc, imgTxt, author, reply }) => {
                     <div className="relative">
                       <Input
                         type="text"
-                        name="text"
+                        name="commentText"
                         placeholder="Write Something"
                       />
                       <AntButton
@@ -104,63 +137,126 @@ const CommentCard = ({ imgSrc, imgTxt, author, reply }) => {
 };
 
 export const FeedbackDetails = () => {
+  const dispatch = useDispatch();
+  const { articleId, id } = useParams();
+  useEffect(() => {
+    (async () => {
+      await dispatch(getArticleByID({ id: articleId }));
+      await dispatch(getArticleFeedbackByID({ id }));
+      await dispatch(getUsers());
+    })();
+  }, []);
+
+  const { article, loading } = useSelector((state) => state?.articles);
+  const { articlesFeedback } = useSelector((state) => state?.articlesFeedback);
+  const { users } = useSelector((state) => state?.users);
+  let usersData = [{ value: '', label: 'Select' }];
+  users.forEach((user) => {
+    usersData.push({
+      value: user?.id,
+      label: user?.fullName,
+    });
+  });
+  const feedbackLoading = useSelector(
+    (state) => state?.articlesFeedback?.loading
+  );
+  const ticketLoading = useSelector((state) => state?.tickets?.loading);
+
+  const navigate = useNavigate();
+  const [imgError, setImgError] = useState(false);
   return (
     <>
-      <Spin spinning={false}>
+      <Spin spinning={loading || feedbackLoading || ticketLoading}>
         <div className="m-[40px] p-[32px] bg-[#1E1E2D] rounded-[8px]">
           <div className="flex gap-[12px]">
-            <img
-              className="w-[90px] rounded-[8px]"
-              src="/article.jpg"
-              alt="article title"
-            />
+            {article?.imagePath && !imgError ? (
+              <img
+                className="w-[90px] rounded-[8px] object-cover"
+                onError={() => setImgError(true)}
+                src={article?.imagePath}
+                alt={article?.title}
+              />
+            ) : (
+              <div className="w-[90px] rounded-[8px] object-cover border-1 border-blue-600 flex items-center justify-center text-white text-[16px] font-medium">
+                No Image
+              </div>
+            )}
             <div className="flex flex-col gap-[8px] ">
-              <p className="text-[24px] text-[#FFFFFF] ">Article Title</p>
+              <p className="text-[24px] text-[#FFFFFF] ">
+                {article?.title || 'No Title'}
+              </p>
               <p className="text-[#474761] text-[14px]">
-                By Paul Elliott On Feb 20th, 2022
+                Created On{' '}
+                {articlesFeedback?.createdOn
+                  ? moment(articlesFeedback?.createdOn).format('MM/DD/YYYY')
+                  : 'N/A'}
               </p>
             </div>
           </div>
-          <div className="flex gap-[40px] mt-[40px]">
-            <p className="text-base text-[#FFFFFF] ">
-              Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-              nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam
-              erat, sed diam voluptua.
-            </p>
-            <Button
-              type="ghost"
-              htmlType="submit"
-              className="w-[fit_content] h-[55px]"
-            >
-              Generate Ticket
-            </Button>
-          </div>
-          <div className="mt-[40px]">
-            <Formik
-              initialValues={{
-                assignTo: '',
-                status: '',
-                priority: '',
-                shareKnowledge: '',
-              }}
-              enableReinitialize
-            >
-              {() => {
-                return (
-                  <Form className="grid grid-cols-3 gap-[16px]">
+          <Formik
+            initialValues={{
+              assignTo: '',
+              status: 0,
+              priority: 0,
+            }}
+            enableReinitialize
+            onSubmit={async (values) => {
+              if (values?.assignTo) {
+                const final = {
+                  assignedTo: values?.assignTo,
+                  ticketStatus: Number(values?.status),
+                  ticketPriority: Number(values?.priority),
+                  ticketTitle: `Ticket for Article Feedback`,
+                  description: 'Demo Description for Ticket',
+                  ticketRelatedTo: 0,
+                  ticketRelatedToId: id,
+                  departmentId: '641de550-d0e3-458d-b842-0e7461a8301a',
+                };
+                await dispatch(createTicket({ data: final }));
+                navigate('/admin/dashboard/tickets/list/show');
+              } else {
+                toast.error('Please select appropriate values.');
+              }
+            }}
+          >
+            {() => {
+              return (
+                <Form>
+                  <div className="flex justify-between gap-[40px] mt-[40px]">
+                    {article?.bodyText ? (
+                      <p
+                        className="text-base text-[#FFFFFF]"
+                        dangerouslySetInnerHTML={{ __html: article?.bodyText }}
+                      />
+                    ) : (
+                      <p className="text-base text-[#FFFFFF]">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Placeat voluptatem numquam labore illum quo pariatur
+                        tenetur perferendis quaerat dolore? Cum consequatur
+                        voluptatem, aliquid quis delectus provident eius facilis
+                        eos officiis?
+                      </p>
+                    )}
+                    <Button
+                      type="ghost"
+                      htmlType="submit"
+                      className="w-[fit_content] h-[55px]"
+                    >
+                      Generate Ticket
+                    </Button>
+                  </div>
+                  <div className="mt-[40px] grid grid-cols-3 gap-[16px]">
                     <Input
-                      options={[
-                        { label: 'Paul Elliot', value: 'Paul' },
-                        { label: 'Beri Sela', value: 'Sela' },
-                      ]}
+                      options={usersData}
                       type="select"
                       name="assignTo"
                       label="Assign To"
                     />
                     <Input
                       options={[
-                        { label: 'Pending', value: 'pending' },
-                        { label: 'Confirmed', value: 'Confirmed' },
+                        { label: 'Active', value: 0 },
+                        { label: 'Closed', value: 1 },
+                        { label: 'Disabled', value: 2 },
                       ]}
                       type="select"
                       name="status"
@@ -168,21 +264,52 @@ export const FeedbackDetails = () => {
                     />
                     <Input
                       options={[
-                        { label: 'Urgent', value: 'Urgent' },
-                        { label: 'Not Urgent', value: 'Not Urgent' },
+                        { label: 'Urgent', value: 0 },
+                        { label: 'Not Urgent', value: 1 },
                       ]}
                       type="select"
                       name="priority"
                       label="Priority"
                     />
+                  </div>
+                </Form>
+              );
+            }}
+          </Formik>
+          <div>
+            <Formik
+              initialValues={{
+                commentText: '',
+              }}
+              onSubmit={async (values) => {
+                if (!values?.commentText) {
+                  toast.error('You must write something to send.');
+                } else {
+                  const final = {
+                    articleFeedbackId: id,
+                    commentText: values?.commentText,
+                  };
+                  dispatch(createArticleFeedbackComment(final));
+                  await dispatch(getArticleByID({ id: articleId }));
+                  await dispatch(getArticleFeedbackByID({ id }));
+                }
+              }}
+              enableReinitialize
+            >
+              {() => {
+                return (
+                  <Form className="grid grid-cols-3 gap-[16px]">
                     <div className="relative col-span-3 mt-[24px]">
                       <Input
                         type="textarea"
-                        name="shareKnowledge"
+                        name="commentText"
                         placeholder="Share Your Knowledge"
                         rows={10}
                       />
-                      <Button className="absolute bottom-[16px] right-[16px]">
+                      <Button
+                        htmlType="submit"
+                        className="absolute bottom-[16px] right-[16px]"
+                      >
                         Send
                       </Button>
                     </div>
@@ -193,11 +320,50 @@ export const FeedbackDetails = () => {
           </div>
 
           <div className="mt-[40px] flex flex-col gap-[20px]">
-            <CommentCard imgTxt="P" />
+            {articlesFeedback?.articleFeedbackComments?.map((comment) => {
+              const image = comment?.userImagePath;
+              const fullName = comment?.userFullName;
+              return (
+                <>
+                  <CommentCard
+                    imgTxt={
+                      !image && !fullName
+                        ? 'A'
+                        : !image && fullName
+                        ? fullName
+                        : ''
+                    }
+                    imgSrc={image}
+                    {...comment}
+                  />
+                  {comment?.articleFeedbackCommentReplies ? (
+                    comment?.articleFeedbackCommentReplies?.map((reply) => {
+                      return (
+                        <CommentCard
+                          imgTxt={
+                            !image && !fullName
+                              ? 'A'
+                              : !image && fullName
+                              ? fullName
+                              : ''
+                          }
+                          imgSrc={image}
+                          reply
+                          {...reply}
+                        />
+                      );
+                    })
+                  ) : (
+                    <></>
+                  )}
+                </>
+              );
+            })}
+            {/* <CommentCard imgTxt="P" />
             <CommentCard imgSrc="/article.jpg" author />
 
             <CommentCard imgTxt="P" reply />
-            <CommentCard imgTxt="P" />
+            <CommentCard imgTxt="P" /> */}
           </div>
         </div>
       </Spin>

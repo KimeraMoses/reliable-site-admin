@@ -37,11 +37,11 @@ export const createArticleFeedbackComment = (data) => {
     try {
       const { url, config } = createarticleFeedbackCommentsConfig();
       const res = await axios.post(url, data, config);
-      if (res?.status === 200) {
-        const { url, defaultData, config } = getArticleFeedbackComments();
-        const res = await axios.post(url, defaultData, config);
-        dispatch(getArticleFeedbackComment(res?.data?.data));
-      }
+      // if (res?.status === 200) {
+      //   const { url, defaultData, config } = getArticleFeedbackComments();
+      //   const res = await axios.post(url, defaultData, config);
+      //   dispatch(getArticleFeedbackComment(res?.data?.data));
+      // }
     } catch (e) {
       toast.error(getError(e));
     }

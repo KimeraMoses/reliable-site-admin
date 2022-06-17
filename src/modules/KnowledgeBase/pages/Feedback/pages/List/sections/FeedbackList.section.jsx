@@ -114,7 +114,7 @@ export const FeedbackList = () => {
                   <Button
                     onClick={() => {
                       navigate(
-                        `/admin/dashboard/knowledge-base/feedback/view/${feedback?.id}`
+                        `/admin/dashboard/knowledge-base/feedback/view/${record?.id}/${feedback?.id}`
                       );
                     }}
                   >

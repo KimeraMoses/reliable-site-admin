@@ -122,7 +122,7 @@ export const createArticle = (data) => {
 };
 
 // View an Article By Id
-export const getArticleByID = (id) => {
+export const getArticleByID = ({ id }) => {
   return async (dispatch) => {
     dispatch(setArticlesLoading(true));
     try {

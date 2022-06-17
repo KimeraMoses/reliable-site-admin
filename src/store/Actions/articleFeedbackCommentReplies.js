@@ -21,9 +21,9 @@ export const createArticleFeedbackCommentReply = (data) => {
       const { url, config } = createarticleFCReplyConfig();
       const res = await axios.post(url, data, config);
       if (res?.status === 200) {
-        const { url, defaultData, config } = getArticleFeedbackCommentReplies();
-        const res = await axios.post(url, defaultData, config);
-        dispatch(getArticleFeedbackCommentReply(res?.data?.data));
+        // const { url, defaultData, config } = getArticleFeedbackCommentReplies();
+        // const res = await axios.post(url, defaultData, config);
+        // dispatch(getArticleFeedbackCommentReply(res?.data?.data));
       }
     } catch (e) {
       toast.error(getError(e));

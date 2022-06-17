@@ -30,10 +30,10 @@ export const sidebarData = [
                 path: '/admin/dashboard/tickets/list/details/:id',
               },
             ],
-          }
+          },
         ],
-      }
-    ]
+      },
+    ],
   },
   {
     name: 'Billing',
@@ -54,7 +54,7 @@ export const sidebarData = [
             name: 'All Orders',
             path: '/admin/dashboard/billing/orders/all-orders/list',
           },
-        ]
+        ],
       },
       {
         name: 'Clients',
@@ -155,16 +155,16 @@ export const sidebarData = [
           },
         ],
       },
-      {
-        name: 'User Submissions',
-        path: '/admin/dashboard/knowledge-base/user-submissions',
-        subLinks: [
-          {
-            name: 'Submission Details',
-            path: '/admin/dashboard/knowledge-base/user-submissions/view/:id',
-          },
-        ],
-      },
+      // {
+      //   name: 'User Submissions',
+      //   path: '/admin/dashboard/knowledge-base/user-submissions',
+      //   subLinks: [
+      //     {
+      //       name: 'Submission Details',
+      //       path: '/admin/dashboard/knowledge-base/user-submissions/view/:id',
+      //     },
+      //   ],
+      // },
       {
         name: 'Feedback',
         path: '/admin/dashboard/knowledge-base/feedback',

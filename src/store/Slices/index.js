@@ -28,30 +28,27 @@ export {
   getInvoice,
 } from './invoicesSlice';
 
-export {
-  getOrders as getOrdersDispatch,
-  setOrderLoading
-} from './ordersSlice';
+export { getOrders as getOrdersDispatch, setOrderLoading } from './ordersSlice';
 
 export {
   getNotifications as getNotificationsDispatch,
-  setNotificationLoading
+  setNotificationLoading,
 } from './notificationsSlice';
 
 export {
   getTickets as getTicketsDispatch,
   setTicketLoading,
-  getTicket
+  getTicket,
 } from './ticketsSlice';
 
 export {
   getTicketComments as getTicketCommentsDispatch,
-  setTicketCommentLoading
+  setTicketCommentLoading,
 } from './ticketCommentsSlice';
 
 export {
   getTicketReplies as getTicketRepliesDispatch,
-  setTicketRepliesLoading
+  setTicketRepliesLoading,
 } from './ticketRepliesSlice';
 
 export * from './apiKeysSlice';
@@ -63,4 +60,5 @@ export * from './transactions';
 export * from './articles';
 export * from './articlesFeedback';
 export * from './articleFeedbackComments';
+export * from './articleFeedbackCommentReplies';
 export * from './articleCategories';

@@ -58,7 +58,7 @@ export const createArticleFeedback = (data) => {
 };
 
 // View an Article Feedback By Id
-export const getArticleFeedbackByID = (id) => {
+export const getArticleFeedbackByID = ({ id }) => {
   return async (dispatch) => {
     dispatch(setArticlesFeedbackLoading(true));
     try {
