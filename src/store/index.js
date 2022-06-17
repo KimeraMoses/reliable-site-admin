@@ -14,6 +14,11 @@ import emailTemplatesReducer from './Slices/emailTemplates';
 import brandsReducer from './Slices/brandsSlice';
 import departmentsReducer from './Slices/departmentsSlice';
 import invoicesReducer from './Slices/invoicesSlice';
+import ordersReducer from './Slices/ordersSlice';
+import notificationsReducer from './Slices/notificationsSlice';
+import ticketsReducer from './Slices/ticketsSlice';
+import ticketCommentsReducer from './Slices/ticketCommentsSlice';
+import ticketRepliesReducer from './Slices/ticketRepliesSlice';
 
 const store = configureStore({
   reducer: {
@@ -31,7 +36,12 @@ const store = configureStore({
     emailTemplates: emailTemplatesReducer,
     brands: brandsReducer,
     departments: departmentsReducer,
-    invoices: invoicesReducer
+    invoices: invoicesReducer,
+    orders: ordersReducer,
+    notifications: notificationsReducer,
+    tickets: ticketsReducer,
+    ticketComments: ticketCommentsReducer,
+    ticketReplies: ticketRepliesReducer
   },
 });
 

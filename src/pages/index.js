@@ -19,6 +19,10 @@ export const dashboardPages = [
     Component: lazy(() => import('./Dashboard/Home/Home.page')),
   },
   {
+    path: '/dashboard/tickets/*',
+    Component: lazy(() => import('../modules/DashboardTickets/component.jsx')),
+  },
+  {
     path: '/dashboard/about',
     Component: lazy(() => import('./Dashboard/About/About.page')),
   },

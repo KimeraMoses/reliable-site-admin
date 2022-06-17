@@ -35,13 +35,13 @@ export const Table = ({
   dateRageFilter = false,
   statusFilter = [],
   handleStatus,
-  handleDateRange
+  handleDateRange,
+  headingTitle
 }) => {
   const [dataSource, setDataSource] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [search, setSearch] = useState('');
-
   useEffect(() => {
     if (fieldToFilter !== null && fieldToFilter !== undefined) {
       const filteredData = data.filter((item) => {
@@ -160,11 +160,10 @@ export const Table = ({
                     format="YYYY-MM-DD    "
                     placeholder={['Date Range']}
                     className="custom-date-picker w-full h-[52px] bg-[#171723] rounded-[8px] text-[#92928F] flex items-center justify-between px-[16px]"
-                    
+
                   />
                 )
               }
-              {console.log(statusFilter)}
               {statusFilter?.length ? (
                 <select
                   onChange={(e) =>
@@ -211,6 +210,10 @@ export const Table = ({
               )}
             </div>
           </div>
+          {
+            headingTitle && <h3 className={'text-[#fff] text-[32px] mt-[40px]'}>{headingTitle}</h3>
+          }
+
           {/* Header End */}
           {/* Table */}
           <div
