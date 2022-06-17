@@ -5,15 +5,20 @@ import { Formik, Form, Field } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Input } from 'components';
 import { List, Spin } from 'antd';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getTicketById, addTicketReplies, addTicketComments } from 'store';
+import { getTicketById, addTicketReplies, addTicketComments, getUsers, editTicket } from 'store';
 import * as Yup from 'yup';
+import { useTranslation } from "react-i18next";
 import moment from 'moment';
-import { genrateFirstLetterName, getDifference } from 'lib';
+import { genrateFirstLetterName, getDifference, } from 'lib';
 
 
 const initialValues = {
+    assignedTo: '',
+    ticketStatus: '',
+    ticketPriority: '',
+    description: '',
     commentText: ''
 };
 
@@ -31,24 +36,59 @@ const validationSchemaReplies = Yup.object().shape({
 
 export const TicketDetails = () => {
     const { id } = useParams();
+    const { t } = useTranslation("/Tickets/ns");
     const [selected, setSelected] = useState([]);
     const dispatch = useDispatch();
     const { loading, ticket } = useSelector((state) => state?.tickets);
     const { commentLoading } = useSelector((state) => state?.ticketComments);
     const { repliesLoading } = useSelector((state) => state?.ticketReplies);
+    const { users } = useSelector((state) => state?.users);
     const isSelected = (id) => selected.indexOf(id) !== -1;
     let search = window.location.search;
     let params = new URLSearchParams(search);
     let repliesId = params.get('id');
 
+    const fields = [
+        {
+            name: 'assignedTo',
+            label: t('assignTo'),
+            type: 'select',
+            options: () => {
+                let usersData = [{ 'value': '', 'label': 'Select' }];
+                users.forEach((user) => {
+                    usersData.push({
+                        value: user?.id,
+                        label: user?.fullName,
+                    });
+                });
+                return usersData
+            }
+        },
+        {
+            name: 'ticketStatus',
+            label: t('status'),
+            type: 'select',
+            options: () => {
+                return [{ 'value': '', 'label': 'Select' }, { 'value': 0, 'label': 'Active' }, { 'value': 1, 'label': 'Closed' }, { 'value': 2, 'label': 'Disabled' }]
+            }
+        },
+        {
+            name: 'ticketPriority',
+            label: t('priority'),
+            type: 'select',
+            options: () => {
+                return [{ 'value': '', 'label': 'Select' }, { 'value': 0, 'label': 'Urgent' }, { 'value': 1, 'label': 'NotUrgent ' }]
+            }
+        },
+    ];
+
     useEffect(() => {
         (async () => {
             await dispatch(getTicketById(id));
+            await dispatch(getUsers());
             goToViolation(repliesId);
         })();
     }, []);
-
-
 
     const handleReplyInput = (id) => {
         const selectedIndex = selected.indexOf(id);
@@ -106,17 +146,50 @@ export const TicketDetails = () => {
                                     validationSchema={validationSchema}
                                     enableReinitialize
                                     onSubmit={async (values) => {
-                                        const newValues = {
-                                            commentText: values?.commentText,
-                                            ticketId: id
-                                        };
-                                        (async () => {
-                                            await dispatch(addTicketComments(newValues));
-                                            await dispatch(getTicketById(id));
-                                        })();
+
+                                        if (values?.assignedTo !== '' && values?.ticketPriority !== '' && values?.commentText !== '') {
+                                            const newValues = {
+                                                description: values?.commentText,
+                                                assignedTo: values?.assignedTo,
+                                                ticketPriority: parseInt(values?.ticketPriority),
+                                                ticketStatus: parseInt(values?.ticketStatus),
+                                                id: id,
+                                                ticketRelatedTo: ticket?.ticketRelatedTo,
+                                                ticketRelatedToId: ticket?.ticketRelatedToId,
+                                                departmentId: ticket?.departmentId
+                                            };
+                                            (async () => {
+                                                await dispatch(editTicket({ data: newValues }));
+                                                await dispatch(getTicketById(id));
+                                            })();
+                                        } else {
+                                            const newValues = {
+                                                commentText: values?.commentText,
+                                                ticketId: id
+                                            };
+                                            (async () => {
+                                                await dispatch(addTicketComments(newValues));
+                                                await dispatch(getTicketById(id));
+                                            })();
+                                        }
                                     }}
                                 >
                                     <Form>
+                                        <div className="grid grid-cols-3 gap-[20px] mb-[32px] items-end">
+                                            {fields.map((field) => (
+                                                <div className="flex items-end" key={field?.name}>
+                                                    <Input
+                                                        key={field.name}
+                                                        name={field.name}
+                                                        label={field?.label}
+                                                        placeholder={field.placeholder}
+                                                        type={field.type}
+                                                        options={field.options()}
+                                                        className={'custom-select'}
+                                                    />
+                                                </div>
+                                            ))}
+                                        </div>
                                         <div className="relative mb-[32px] items-end">
                                             <Input
                                                 key={'commentText'}
@@ -141,7 +214,7 @@ export const TicketDetails = () => {
                                     itemLayout="vertical"
                                     size="large"
                                     pagination={{
-                                        pageSize: 10,
+                                        pageSize: 20,
                                     }}
                                     dataSource={ticket?.ticketComments}
                                     footer={''}

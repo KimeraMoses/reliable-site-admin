@@ -23,3 +23,9 @@ export const getTicketConfig = (id) => ({
     url: `${prefix}/${id}`,
     config: ticketsConfig('View'),
 });
+
+// Edit Brand
+export const editTicketConfig = ({ id }) => ({
+    url: `${prefix}/${id}`,
+    config: ticketsConfig('Update')
+});

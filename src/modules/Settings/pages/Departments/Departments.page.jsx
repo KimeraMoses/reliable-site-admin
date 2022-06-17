@@ -71,7 +71,7 @@ const Brands = () => {
                         {"ENABLED"}
                     </div>
                 ) : (
-                    <div className="bg-[#1C3238] px-[8px] py-[4px] text-[#F64E60] w-[fit-content] rounded-[4px]">
+                    <div className="bg-[#3A2434] px-[8px] py-[4px] text-[#F64E60] w-[fit-content] rounded-[4px]">
                         {"DISABLED"}
                     </div>
                 ),
