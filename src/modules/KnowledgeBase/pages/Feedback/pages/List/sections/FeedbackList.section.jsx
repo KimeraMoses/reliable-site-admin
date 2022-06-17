@@ -5,8 +5,6 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkModule } from 'lib/checkModule';
 import { Table } from 'components';
-import { getInvoices } from 'store';
-import { statusList } from 'lib';
 import { getAllArticleFeedbacks } from 'store';
 
 export const FeedbackList = () => {
@@ -21,7 +19,9 @@ export const FeedbackList = () => {
     })();
   }, [dispatch]);
 
-  const { invoices, loading } = useSelector((state) => state?.invoices);
+  const { articlesFeedbacks, loading } = useSelector(
+    (state) => state?.articlesFeedback
+  );
   const { userModules } = useSelector((state) => state?.modules);
 
   const { permissions } = checkModule({
@@ -67,12 +67,12 @@ export const FeedbackList = () => {
     },
     {
       title: 'Category',
-      dataIndex: 'category',
-      key: 'category',
-      render: () => {
+      dataIndex: 'categoryName',
+      key: 'categoryName',
+      render: (text) => {
         return (
           <div className="bg-[#2F264F] px-[8px] py-[4px] uppercase text-[#8950FC] w-[fit-content] rounded-[4px]">
-            Article Category
+            {text ? text : 'Uncategorized'}
           </div>
         );
       },
@@ -86,44 +86,32 @@ export const FeedbackList = () => {
   const [endDate, setEndDate] = useState('');
   useEffect(() => {
     setData([]);
-    if (invoices.length) {
-      const dataToSet = invoices.map((b) => {
+    if (articlesFeedbacks?.length) {
+      const dataToSet = articlesFeedbacks.map((b) => {
         return {
           ...b,
           key: b?.id,
         };
       });
+      console.log(dataToSet);
       setData(dataToSet);
     }
-  }, [invoices]);
+  }, [articlesFeedbacks]);
 
   return (
     <div className="p-[40px]">
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
-        {/* <Button
-          onClick={() => {
-            navigate(
-              `/admin/dashboard/knowledge-base/feedback/view/${record.id}`
-            );
-          }}
-        >
-          View
-        </Button> */}
         <Table
           columns={columns}
           data={data}
           loading={loading}
-          dateRageFilter={true}
-          statusFilter={statusList()}
-          fieldToFilter="billNo"
-          // btnData={{
-          //   text: 'Add Category',
-          //   onClick: (record) => {
-          //     navigate(
-          //       `/admin/dashboard/knowledge-base/feedback/view/${record.id}`
-          //     );
-          //   },
-          // }}
+          // dateRageFilter={true}
+          statusFilter={[
+            { name: 'Active' },
+            { name: 'Closed' },
+            { name: 'Disabled' },
+          ]}
+          // fieldToFilter="articleTitle"
           handleStatus={async (values) => {
             setStatus(values);
             let details = {
@@ -133,33 +121,30 @@ export const FeedbackList = () => {
               details['startDate'] = startDate;
               details['endDate'] = endDate;
             }
-            await dispatch(getInvoices(details));
+            await dispatch(getAllArticleFeedbacks(details));
           }}
-          handleDateRange={async (date, dateString, id) => {
-            let startDate = '';
-            let endDate = '';
-            let details = {};
-            if (date) {
-              startDate = date[0]._d;
-              endDate = date[1]._d;
-              details['startDate'] = startDate;
-              details['endDate'] = endDate;
-            }
-
-            if (status) {
-              details['status'] = status;
-            }
-
-            setStartDate(startDate);
-            setEndDate(endDate);
-
-            await dispatch(getInvoices(details));
-          }}
+          // handleDateRange={async (date, dateString, id) => {
+          //   let startDate = '';
+          //   let endDate = '';
+          //   let details = {};
+          //   if (date) {
+          //     startDate = date[0]._d;
+          //     endDate = date[1]._d;
+          //     details['startDate'] = startDate;
+          //     details['endDate'] = endDate;
+          //   }
+          //   if (status) {
+          //     details['status'] = status;
+          //   }
+          //   setStartDate(startDate);
+          //   setEndDate(endDate);
+          //   await dispatch(getAllArticleFeedbacks(details));
+          // }}
           editAction={(record) => (
             <Button
               onClick={() => {
                 navigate(
-                  `/admin/dashboard/knowledge-base/feedback/view/${record.id}`
+                  `/admin/dashboard/knowledge-base/feedback/view/${record?.id}`
                 );
               }}
             >

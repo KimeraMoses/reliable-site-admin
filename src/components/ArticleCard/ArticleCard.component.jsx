@@ -74,7 +74,7 @@ export const ArticleCard = ({
           <div className="px-[8px] py-[4px] bg-[#2F264F] rounded-[4px] text-[#8950FC] font-medium text-[10px] uppercase">
             {articleCategories?.length
               ? articleCategories[0]?.category?.name
-              : 'Category N/A'}
+              : 'Uncategorized'}
           </div>
         </div>
       </div>

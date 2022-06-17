@@ -15,11 +15,20 @@ import {
 } from 'store/Slices';
 
 // Get All Articles Feedback
-export const getAllArticleFeedbacks = () => {
+export const getAllArticleFeedbacks = (params) => {
   return async (dispatch) => {
     dispatch(setArticlesFeedbackLoading(true));
     try {
       const { url, defaultData, config } = getArticleFeedbackConfig();
+      if (params?.status) {
+        defaultData.advancedSearch.fields.push('status');
+        defaultData.advancedSearch.keyword = params?.status;
+      }
+      if (params?.startDate && params?.endDate) {
+        console.log('test');
+        defaultData['startDate'] = params?.startDate;
+        defaultData['endDate'] = params?.endDate;
+      }
       const res = await axios.post(url, defaultData, config);
       dispatch(getArticleFeedbacks(res?.data?.data));
     } catch (e) {

@@ -14,10 +14,10 @@ const articlesFeedbackSlice = createSlice({
       state.loading = payload;
     },
     getArticleFeedbacks: (state, { payload }) => {
-      state.articles = payload;
+      state.articlesFeedbacks = payload;
     },
     getArticleFeedback: (state, { payload }) => {
-      state.article = payload;
+      state.articlesFeedback = payload;
     },
   },
 });

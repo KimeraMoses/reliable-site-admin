@@ -36,6 +36,7 @@ export const Table = ({
   dateRageFilter = false,
   statusFilter = [],
   handleStatus,
+  statusFilterPlaceholder,
   handleDateRange,
 }) => {
   const [dataSource, setDataSource] = useState([]);
@@ -164,15 +165,16 @@ export const Table = ({
                   className="custom-date-picker w-full h-[52px] bg-[#171723] rounded-[8px] text-[#92928F] flex items-center justify-between px-[16px]"
                 />
               )}
-              {console.log(statusFilter)}
               {statusFilter?.length ? (
                 <select
                   onChange={(e) => handleStatus(e.target.value)}
                   className="custom-select form-select appearance-none block w-full px-[16px] h-[52px] text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0"
                 >
-                  <option value="">Status</option>
+                  <option value="">
+                    {statusFilterPlaceholder || 'Status'}
+                  </option>
                   {statusFilter.map((data, i) => (
-                    <option value={i} key={i}>
+                    <option value={data?.value || i} key={i}>
                       {data.name}
                     </option>
                   ))}
