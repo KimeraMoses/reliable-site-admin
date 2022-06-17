@@ -11,7 +11,7 @@ export const ReviewAndImport = ({ setStep }) => {
     useSelector((state) => state?.whmcs);
 
   const dispatch = useDispatch();
-
+  console.log(importProgress);
   return (
     <div className="w-full rounded-[8px] bg-[#1E1E2D] min-h-[75vh] flex flex-col justify-between">
       <Progress
@@ -24,7 +24,7 @@ export const ReviewAndImport = ({ setStep }) => {
             ? 'importing'
             : importError
             ? 'failed'
-            : 'imported'
+            : 'success'
         }
       />
       {/* Top Section */}

@@ -34,6 +34,7 @@ export const Progress = ({ show, setShow, status, percent, setStep }) => {
       submitText=""
       handleCancel={async () => {
         if (!importError) {
+          await dispatch(setImportProgres(0));
           setStep(1);
         } else {
           await dispatch(setImportProgres(0));
