@@ -22,6 +22,7 @@ export {
 export {
   getDepartments as getDepartmentsDispatch,
   setDepartmentsLoading,
+  getUsersDepartmentsDispatch,
 } from './departmentsSlice';
 export {
   getInvoices as getInvoicesDispatch,

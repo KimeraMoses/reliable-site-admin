@@ -1,4 +1,8 @@
 import { Switch } from 'antd';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getDepartmentsByUserId } from 'store';
+import { getDepartments } from 'store';
 
 const DepartmentSelector = ({ name, value }) => {
   return (
@@ -9,11 +13,22 @@ const DepartmentSelector = ({ name, value }) => {
   );
 };
 
-export const Departments = ({ departments }) => {
+export const Departments = ({ showDepartments }) => {
+  const dispatch = useDispatch();
+
+  const { id } = useSelector((state) => state?.auth?.user);
+  const { userDepartments, departments } = useSelector(
+    (state) => state?.departments
+  );
+  useEffect(() => {
+    dispatch(getDepartments());
+    dispatch(getDepartmentsByUserId({ id }));
+  }, []);
+
   return (
     <div
       className={`w-[278px] bg-[#1E1E2D] shadow-lg ${
-        departments ? '' : 'hidden'
+        showDepartments ? '' : 'hidden'
       } rounded-lg text-gray-300`}
       style={{
         position: 'absolute',

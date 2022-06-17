@@ -14,7 +14,7 @@ import './UserTop.css';
 
 function UserTop() {
   const [dropdown, setDropdown] = useState(false);
-  const [departments, setDepartments] = useState(false);
+  const [showDepartments, setShowDepartments] = useState(false);
   const { user, isLoggedIn } = useSelector((state) => state.auth);
   const lessThanDesktop = useMediaQuery({
     query: '(max-width: 900px)',
@@ -26,11 +26,11 @@ function UserTop() {
   const links = [
     {
       name: 'Active Departments',
-      Icon: <Right fill={departments ? '#3699ff' : '#494b74'} />,
+      Icon: <Right fill={showDepartments ? '#3699ff' : '#494b74'} />,
       onClick: () => {
-        setDepartments((dept) => !dept);
+        setShowDepartments((dept) => !dept);
       },
-      active: departments,
+      active: showDepartments,
     },
     {
       name: 'Account Settings',
@@ -54,7 +54,7 @@ function UserTop() {
 
   const handleOutsideClick = () => {
     setDropdown(false);
-    setDepartments(false);
+    setShowDepartments(false);
   };
   const dropDownRef = useRef(null);
   useOutside(dropDownRef, handleOutsideClick);
@@ -80,7 +80,7 @@ function UserTop() {
           <>{user && <UserName isLoggedIn={isLoggedIn} user={user} />}</>
         )}
         {/* Departments Dropdown */}
-        <Departments departments={departments} />
+        <Departments showDepartments={showDepartments} />
         {/* Dropdown */}
         <div
           className={`w-[278px] bg-[#1E1E2D] ${
