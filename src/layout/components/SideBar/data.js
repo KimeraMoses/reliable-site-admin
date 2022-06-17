@@ -30,10 +30,10 @@ export const sidebarData = [
                 path: '/admin/dashboard/tickets/list/details/:id',
               },
             ],
-          }
+          },
         ],
-      }
-    ]
+      },
+    ],
   },
   {
     name: 'Billing',
@@ -54,7 +54,7 @@ export const sidebarData = [
             name: 'All Orders',
             path: '/admin/dashboard/billing/orders/all-orders/list',
           },
-        ]
+        ],
       },
       {
         name: 'Clients',
@@ -115,14 +115,14 @@ export const sidebarData = [
                 name: 'Invoice Details',
                 path: '/admin/dashboard/billing/invoices/list/details/:id',
               },
-            ]
+            ],
           },
           {
             name: 'Transactions',
-            path: '#'
-          }
-        ]
-      }
+            path: '#',
+          },
+        ],
+      },
     ],
   },
   {
@@ -136,6 +136,50 @@ export const sidebarData = [
     module: 'KnowledgeBase',
     path: '/admin/dashboard/knowledge-base',
     icon: (fill) => <Knowledge fill={fill} />,
+    subLinks: [
+      {
+        name: 'Articles',
+        path: '/admin/dashboard/knowledge-base/articles',
+        subLinks: [
+          {
+            name: 'Article Detail',
+            path: '/admin/dashboard/knowledge-base/articles/view/:id',
+          },
+          {
+            name: 'Add New Article',
+            path: '/admin/dashboard/knowledge-base/articles/add/new',
+          },
+          {
+            name: 'Edit Article',
+            path: '/admin/dashboard/knowledge-base/articles/edit/:id',
+          },
+        ],
+      },
+      // {
+      //   name: 'User Submissions',
+      //   path: '/admin/dashboard/knowledge-base/user-submissions',
+      //   subLinks: [
+      //     {
+      //       name: 'Submission Details',
+      //       path: '/admin/dashboard/knowledge-base/user-submissions/view/:id',
+      //     },
+      //   ],
+      // },
+      {
+        name: 'Feedback',
+        path: '/admin/dashboard/knowledge-base/feedback',
+        subLinks: [
+          {
+            name: 'Feedback Details',
+            path: '/admin/dashboard/knowledge-base/feedback/view/:id',
+          },
+        ],
+      },
+      {
+        name: 'Categories',
+        path: '/admin/dashboard/knowledge-base/categories',
+      },
+    ],
   },
   {
     name: 'Reports',
@@ -232,7 +276,6 @@ export const sidebarData = [
         name: 'Portal',
         path: '/admin/dashboard/settings/portal',
       },
-
     ],
   },
   {

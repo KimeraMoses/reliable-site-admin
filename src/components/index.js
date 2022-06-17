@@ -8,3 +8,4 @@ export { List } from './List/List.component';
 export { Card } from './Card/Card.component';
 // Form Fields
 export * from './formFields';
+export { ArticleCard } from './ArticleCard/ArticleCard.component';

@@ -168,6 +168,15 @@
               }
             }
           }
+          td.ant-picker-cell-in-view.ant-picker-cell-in-range {
+            color: #141421;
+            &:hover {
+              div {
+                background: unset !important;
+                border-radius: 4px;
+              }
+            }
+          }
         }
 
         // Header

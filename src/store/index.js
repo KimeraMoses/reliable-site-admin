@@ -13,7 +13,12 @@ import smtpReducer from './Slices/smtp';
 import emailTemplatesReducer from './Slices/emailTemplates';
 import brandsReducer from './Slices/brandsSlice';
 import departmentsReducer from './Slices/departmentsSlice';
+import transactionsReducer from './Slices/transactions';
 import invoicesReducer from './Slices/invoicesSlice';
+import articlesReducer from './Slices/articles';
+import articlesFeedbackReducer from './Slices/articlesFeedback';
+import getArticleFeedbackCommentsReducer from './Slices/articleFeedbackComments';
+import articleCategoriesReducer from './Slices/articleCategories';
 import ordersReducer from './Slices/ordersSlice';
 import notificationsReducer from './Slices/notificationsSlice';
 import ticketsReducer from './Slices/ticketsSlice';
@@ -36,12 +41,17 @@ const store = configureStore({
     emailTemplates: emailTemplatesReducer,
     brands: brandsReducer,
     departments: departmentsReducer,
+    transactions: transactionsReducer,
+    articles: articlesReducer,
+    articlesFeedback: articlesFeedbackReducer,
+    articlesFeedbackComments: getArticleFeedbackCommentsReducer,
+    articleCategories: articleCategoriesReducer,
     invoices: invoicesReducer,
     orders: ordersReducer,
     notifications: notificationsReducer,
     tickets: ticketsReducer,
     ticketComments: ticketCommentsReducer,
-    ticketReplies: ticketRepliesReducer
+    ticketReplies: ticketRepliesReducer,
   },
 });
 
