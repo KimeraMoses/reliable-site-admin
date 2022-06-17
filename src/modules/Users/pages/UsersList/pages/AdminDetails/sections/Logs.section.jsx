@@ -106,7 +106,7 @@ export const Logs = () => {
           permissions={permissions}
           loading={loading}
           customFilterSort={
-            <>
+            <div className="custom-select-component">
               <Select
                 className="min-w-[235px] bg-[#171723]"
                 onChange={onSelectChange}
@@ -120,7 +120,7 @@ export const Logs = () => {
                   </Select.Option>
                 ))}
               </Select>
-            </>
+            </div>
           }
         />
       </div>

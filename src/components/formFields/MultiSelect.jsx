@@ -8,6 +8,7 @@ export const MultiSelect = ({
   placeholder,
   options,
   mode = 'multiple',
+  onChange,
   className,
   dropdownClassName,
 }) => {
@@ -32,8 +33,11 @@ export const MultiSelect = ({
               dropdownClassName={`custom-select__dropdown ${dropdownClassName}`}
               options={options}
               value={meta?.value}
-              onChange={(value) => {
+              onChange={(value, option) => {
                 setFieldValue(name, value);
+                if (onChange) {
+                  onChange(value, option);
+                }
               }}
               onBlur={() => {
                 setFieldTouched(name, true);

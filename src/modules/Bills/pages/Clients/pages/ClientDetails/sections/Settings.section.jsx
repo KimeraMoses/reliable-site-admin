@@ -1,40 +1,76 @@
 import { Formik, Form, Field } from 'formik';
-import { Switch } from 'antd';
+import moment from 'moment';
+import { Spin, Switch } from 'antd';
 import { useTranslation } from 'react-i18next';
+import { useDispatch, useSelector } from 'react-redux';
+import { Fragment, useEffect, useState } from 'react';
+import { getUserSettingsById } from 'store';
+import { updateUserSettings } from 'store';
+import { DatePicker, Input } from 'components';
+import { deepEqual } from 'lib';
 
 export const Settings = () => {
   const { t } = useTranslation('/Users/ns');
+  const [loading, setLoading] = useState(false);
+
+  const { user, userSettings } = useSelector((state) => state?.users);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (user) {
+      (async () => {
+        setLoading(true);
+        await dispatch(getUserSettingsById(user?.id));
+        setLoading(false);
+      })();
+    }
+  }, [user]);
+
+  console.log(userSettings);
 
   const initialValues = {
-    clientStatus: true,
-    reqPerIP: 20,
-    IPRestrictionOverride: 3600,
-    apiKeyLimit: 20,
-    apiKeyInterval: 3600,
-    ipAddress: '253.205.121.39',
-    suspensionDate: '1st April, 2022',
+    clientStatus: userSettings?.clientStatus || false,
+    requestPerIPOverride: userSettings?.requestPerIPOverride || 0,
+    ipRestrictionIntervalOverrideInSeconds:
+      userSettings?.ipRestrictionIntervalOverrideInSeconds || 0,
+    apiKeyLimitOverride: userSettings?.apiKeyLimitOverride || 0,
+    apiKeyIntervalOverrideInSeconds:
+      userSettings?.apiKeyIntervalOverrideInSeconds || 0,
+    restrictAccessToIPAddress: userSettings?.restrictAccessToIPAddress || '',
+    extendSuspensionDate:
+      moment(userSettings?.extendSuspensionDate) || moment(),
+    userId: user?.id,
+    id: userSettings?.id,
   };
 
   const fields = [
     { label: 'Client Status', name: 'clientStatus', type: 'switch' },
-    { label: 'Request Per IP Override', name: 'reqPerIP', type: 'input' },
+    {
+      label: 'Request Per IP Override',
+      name: 'requestPerIPOverride',
+      type: 'number',
+    },
     {
       label: t('IPRestrictionOverride'),
-      name: 'IPRestrictionOverride',
-      type: 'input',
+      name: 'ipRestrictionIntervalOverrideInSeconds',
+      type: 'number',
     },
-    { label: t('apiKeyLimit'), name: 'apiKeyLimit', type: 'input' },
+    { label: t('apiKeyLimit'), name: 'apiKeyLimitOverride', type: 'number' },
     {
       label: t('apiKeyInterval'),
-      name: 'apiKeyInterval',
+      name: 'apiKeyIntervalOverrideInSeconds',
       type: 'input',
     },
     {
       label: t('ipAddress'),
-      name: 'ipAddress',
+      name: 'restrictAccessToIPAddress',
       type: 'input',
     },
-    { label: t('suspensionDate'), name: 'suspensionDate', type: 'input' },
+    {
+      label: 'Extend Suspension Date',
+      name: 'extendSuspensionDate',
+      type: 'date',
+    },
   ];
 
   return (
@@ -46,83 +82,92 @@ export const Settings = () => {
       {/* FORM ROW */}
       <Formik
         initialValues={initialValues}
-        onSubmit={() => {}}
+        onSubmit={async (values) => {
+          setLoading(true);
+          const finalValues = {
+            ...values,
+            extendSuspensionDate: values?.extendSuspensionDate?.toISOString(),
+          };
+          await dispatch(updateUserSettings({ data: finalValues }));
+          setLoading(false);
+        }}
         enableReinitialize
       >
-        <Form className="pb-[32px]">
-          <div className="grid grid-cols-3 p-[32px] gap-[20px] items-end">
-            {fields?.map((el) => {
-              return (
-                <>
-                  {el?.type === 'switch' ? (
-                    <Field name={el?.name}>
-                      {({
-                        field, // { name, value, onChange, onBlur }
-                        form: { setFieldValue }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
-                        meta,
-                      }) => (
-                        <div className="w-full">
-                          <div className="text-white mb-[12px] text-[14px]">
-                            {el?.label}
-                          </div>
-                          <div className="flex items-center justify-between w-full h-[52px] px-[16px] py-[0px] bg-[#171723] text-[#92928F] rounded-[8px]">
-                            <div className="text-[#92928F]">
-                              {field?.value ? 'Enabled' : 'Disabled'}
+        {({ values }) => {
+          return (
+            <Form className="pb-[32px]">
+              <Spin spinning={loading}>
+                <div className="grid grid-cols-3 p-[32px] gap-[20px] items-end">
+                  {fields?.map((el) => {
+                    return (
+                      <Fragment key={el?.name}>
+                        {el?.type === 'date' ? (
+                          <div className="w-full">
+                            <div className="text-white mb-[12px] text-[14px]">
+                              {el?.label}
                             </div>
-                            <Switch
-                              checked={field?.value}
-                              onChange={(e) => {
-                                setFieldValue(el?.name, e);
-                              }}
-                            />
+                            <DatePicker name={el?.name} />
                           </div>
-                          {meta.touched && meta.error && (
-                            <div className="error">{meta.error}</div>
-                          )}
-                        </div>
-                      )}
-                    </Field>
-                  ) : (
-                    <Field name={el?.name}>
-                      {({
-                        field, // { name, value, onChange, onBlur }
-                        meta,
-                      }) => (
-                        <div className="w-full">
-                          <div className="text-white mb-[12px] text-[14px]">
-                            {el?.label}
-                          </div>
-                          <input
-                            type={el?.type}
-                            {...field}
-                            className="w-full h-[52px] px-[16px] py-[0px] bg-[#171723] text-[#92928F] rounded-[8px]"
+                        ) : el?.type === 'switch' ? (
+                          <Field name={el?.name}>
+                            {({
+                              field, // { name, value, onChange, onBlur }
+                              form: { setFieldValue }, // also values, setXXXX, handleXXXX, dirty, isValid, status, etc.
+                              meta,
+                            }) => (
+                              <div className="w-full">
+                                <div className="text-white mb-[12px] text-[14px]">
+                                  {el?.label}
+                                </div>
+                                <div className="flex items-center justify-between w-full h-[52px] px-[16px] py-[0px] bg-[#171723] text-[#92928F] rounded-[8px]">
+                                  <div className="text-[#92928F]">
+                                    {field?.value ? 'Enabled' : 'Disabled'}
+                                  </div>
+                                  <Switch
+                                    checked={field?.value}
+                                    onChange={(e) => {
+                                      setFieldValue(el?.name, e);
+                                    }}
+                                  />
+                                </div>
+                                {meta.touched && meta.error && (
+                                  <div className="error">{meta.error}</div>
+                                )}
+                              </div>
+                            )}
+                          </Field>
+                        ) : (
+                          <Input
+                            key={el.name}
+                            name={el.name}
+                            label={el?.label}
+                            placeholder={el.placeholder}
+                            type={el.type}
                           />
-                          {meta.touched && meta.error && (
-                            <div className="error">{meta.error}</div>
-                          )}
-                        </div>
-                      )}
-                    </Field>
-                  )}
-                </>
-              );
-            })}
-          </div>
-          <div className="flex items-center gap-[10px] px-[32px]">
-            <button
-              type="button"
-              className="bg-[#323248] text-white rounded-[8px] py-[12px] px-[24px]"
-            >
-              {t('discard')}
-            </button>
-            <button
-              type="submit"
-              className="bg-[#3699FF] text-white rounded-[8px] py-[12px] px-[24px]"
-            >
-              {t('saveChanges')}
-            </button>
-          </div>
-        </Form>
+                        )}
+                      </Fragment>
+                    );
+                  })}
+                </div>
+                <div className="flex items-center gap-[10px] px-[32px]">
+                  <button
+                    type="button"
+                    className="bg-[#323248] text-white rounded-[8px] py-[12px] px-[24px]"
+                  >
+                    {t('discard')}
+                  </button>
+                  <button
+                    type="submit"
+                    className="bg-[#3699FF] text-white rounded-[8px] py-[12px] px-[24px] disabled:opacity-70 disabled:cursor-not-allowed"
+                    disabled={deepEqual(initialValues, values)}
+                  >
+                    {t('saveChanges')}
+                  </button>
+                </div>
+              </Spin>
+            </Form>
+          );
+        }}
       </Formik>
     </div>
   );

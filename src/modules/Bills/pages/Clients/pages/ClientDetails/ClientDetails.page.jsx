@@ -1,5 +1,5 @@
 import './ClientDetails.styles.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import {
   UserProfileCard,
   SubUsers,
@@ -9,21 +9,25 @@ import {
   PastEmails,
   ProductsServices,
   // Events & Logs
-  EventsLogs,
+  // EventsLogs,
   AccountStatement,
   Settings,
   UserPermissions,
   APIKeys,
+  Logs,
+  LoginSessions,
 } from './sections';
 // import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Spin } from 'antd';
 import { useParams } from 'react-router-dom';
+import { getUserById } from 'store';
+import { getUserModulesById } from 'store';
 
 export const ClientDetails = () => {
   // const { t } = useTranslation('/Bills/ns');
 
-  const [active, setActive] = useState('ACCOUNT STATEMENT');
+  const [active, setActive] = useState('OVERVIEW');
 
   const links = [
     { label: 'OVERVIEW', onClick: () => setActive('OVERVIEW') },
@@ -37,10 +41,14 @@ export const ClientDetails = () => {
     },
   ];
 
-  const { loading, user } = useSelector((state) => state?.auth);
+  const { loading, user } = useSelector((state) => state?.users);
 
   const { id } = useParams();
-  console.log(id);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getUserById(id));
+    dispatch(getUserModulesById(id));
+  }, []);
 
   return (
     <div className="users">
@@ -73,7 +81,14 @@ export const ClientDetails = () => {
               {active === 'SETTINGS' ? <Settings /> : <></>}
               {active === 'API KEYS' ? <APIKeys /> : <></>}
               {active === 'PERMISSIONS' ? <UserPermissions /> : <></>}
-              {active === 'EVENTS & LOGS' ? <EventsLogs /> : <></>}
+              {active === 'EVENTS & LOGS' ? (
+                <>
+                  <LoginSessions />
+                  <Logs />
+                </>
+              ) : (
+                <></>
+              )}
               {active === 'ACCOUNT STATEMENT' ? <AccountStatement /> : <></>}
             </div>
           </>

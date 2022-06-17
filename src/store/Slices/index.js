@@ -4,6 +4,7 @@ export {
   setUserLoading,
   getUser,
   getUserModule,
+  getSpecificUsersDispatch,
 } from './usersSlice';
 export {
   getUserGroups as getUserGroupsDispatch,
@@ -21,6 +22,7 @@ export {
 export {
   getDepartments as getDepartmentsDispatch,
   setDepartmentsLoading,
+  getUsersDepartmentsDispatch,
 } from './departmentsSlice';
 export {
   getInvoices as getInvoicesDispatch,
@@ -56,7 +58,12 @@ export * from './appSettings';
 export * from './paymentGateways';
 export * from './smtp';
 export * from './emailTemplates';
+export * from './products';
+export * from './categories';
 export * from './transactions';
+export * from './notification-templates';
+export * from './reports';
+export * from './whmcs';
 export * from './articles';
 export * from './articlesFeedback';
 export * from './articleFeedbackComments';

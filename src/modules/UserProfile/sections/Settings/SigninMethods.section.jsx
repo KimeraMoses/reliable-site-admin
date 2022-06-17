@@ -1,6 +1,5 @@
 import { Button } from 'components';
-import { getError } from 'lib';
-import { enableDisable2FA } from 'lib/api-calls';
+import { getError, enableDisable2FA } from 'lib';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';

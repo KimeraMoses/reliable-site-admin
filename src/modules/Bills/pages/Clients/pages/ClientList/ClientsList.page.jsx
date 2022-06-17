@@ -1,15 +1,29 @@
+import { useEffect, useState } from 'react';
 import { Button } from 'antd';
-import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
-import { Table } from 'components';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+
+import { getClients, getUsers, getBrands } from 'store';
 import { checkModule } from 'lib/checkModule';
+import { Table } from 'components';
+import { AddClientUser } from './sections';
 
 export const ClientList = () => {
   const [showAdd, setShowAdd] = useState(false);
   const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    (async () => {
+      await dispatch(getClients());
+      await dispatch(getUsers());
+      await dispatch(getBrands());
+    })();
+  }, []);
+
+  const { clients, loading } = useSelector((state) => state?.users);
+  const brandsLoading = useSelector((state) => state?.brands?.loading);
 
   const { t } = useTranslation('/Bills/ns');
   const { userModules } = useSelector((state) => state?.modules);
@@ -20,8 +34,8 @@ export const ClientList = () => {
   const columns = [
     {
       title: 'Client Name',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'fullName',
+      key: 'fullName',
     },
     {
       title: 'Email Address',
@@ -34,50 +48,23 @@ export const ClientList = () => {
       key: 'companyName',
     },
     {
-      title: 'Payment Method',
-      dataIndex: 'paymentMethod',
-      key: 'paymentMethod',
-      render: (text) => {
-        return (
-          <div className="flex items-center gap-[12px]">
-            <img
-              src="https://i.ibb.co/FVMH8xR/images.png"
-              alt="card"
-              className="w-[32px] h-[20px] object-cover rounded-[4px]"
-            />
-            <p className="text-white">{text}</p>
-          </div>
-        );
-      },
-    },
-    {
       title: 'Created Date',
       dataIndex: 'createdAt',
       key: 'createdAt',
+      render: (text) => (text ? text : 'N/A'),
     },
   ];
 
-  const data = [];
-  for (let i = 0; i <= 40; i++) {
-    data.push({
-      key: i,
-      id: i,
-      name: `Client ${i}`,
-      email: `Paul${i}@Fakemail.com`,
-      companyName: `Mind2Matter ${i}`,
-      paymentMethod: `**** 9783`,
-      createdAt: `05/02/2022`,
-    });
-  }
-
   return (
     <div className="p-[40px]">
+      <AddClientUser show={showAdd} setShow={setShowAdd} />
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
         <Table
           columns={columns}
-          data={data}
-          // loading={loading}
-          fieldToFilter="name"
+          rowKey={(record) => record?.id}
+          data={clients}
+          loading={loading || brandsLoading}
+          fieldToFilter="fullName"
           btnData={{
             text: 'Add Client',
             onClick: () => setShowAdd(true),
@@ -87,7 +74,9 @@ export const ClientList = () => {
             <>
               <Button
                 onClick={() => {
-                  navigate('/admin/dashboard/billing/clients/list/details/123');
+                  navigate(
+                    `/admin/dashboard/billing/clients/list/details/${record?.id}`
+                  );
                 }}
               >
                 View

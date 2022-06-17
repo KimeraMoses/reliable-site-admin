@@ -10,8 +10,10 @@ export { UserPermissions } from './UserPermissions.section';
 // Settings
 export { Settings } from './Settings.section';
 // Events & Logs
-export { EventsLogs } from './EventsLogs.section';
+// export { EventsLogs } from './EventsLogs.section';
+export { Logs } from './Logs.section';
+export { LoginSessions } from './LoginSessions.section';
 // Account Statement
 export { AccountStatement } from './AccountStatement.section';
 // API Keys
-export { APIKeys } from './APIKeys.section';
+export { APIKeys } from './APIKeys/APIKeys.section';

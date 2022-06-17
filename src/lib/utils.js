@@ -222,45 +222,84 @@ export const convertCamelToTitle = (str) => {
 
 // Convert HTML to Draft JS
 export const convertHTMLToDraftState = (html) => {
-  const blocks = convertFromHTML(html);
-  const state = ContentState.createFromBlockArray(
-    blocks?.contentBlocks,
-    blocks?.entityMap
-  );
-  return EditorState.createWithContent(state);
+  if (html) {
+    const blocks = convertFromHTML(html);
+    const state = ContentState.createFromBlockArray(
+      blocks?.contentBlocks,
+      blocks?.entityMap
+    );
+    return EditorState.createWithContent(state);
+  } else {
+    return EditorState.createEmpty();
+  }
 };
-
 
 export const statusList = (i = '') => {
   let v = [
     {
-      'name': "Pending",
-      'bg': '#392F28',
-      'text': "#FFA800"
+      name: 'Pending',
+      bg: '#392F28',
+      text: '#FFA800',
     },
     {
-      'name': "Confirmed",
-      'bg': '#1C3238',
-      'text': "#0BB783"
+      name: 'Confirmed',
+      bg: '#1C3238',
+      text: '#0BB783',
     },
     {
-      'name': "Paid",
-      'bg': '#1C3238',
-      'text': "#0BB783"
+      name: 'Paid',
+      bg: '#1C3238',
+      text: '#0BB783',
     },
     {
-      'name': "Completed",
-      'bg': '#1C3238',
-      'text': "#0BB783"
+      name: 'Completed',
+      bg: '#1C3238',
+      text: '#0BB783',
     },
     {
-      'name': "Cancelled",
-      'bg': '#3A2434',
-      'text': "#F64E60"
-    }
+      name: 'Cancelled',
+      bg: '#3A2434',
+      text: '#F64E60',
+    },
   ];
   return i !== '' ? v[i] : v;
-}
+};
+
+export const getNotificationType = ({ type }) => {
+  switch (type) {
+    case 0:
+      return 'New User Registered';
+    case 1:
+      return 'New Ticket Created';
+    case 2:
+      return 'Ticket Updated';
+    case 3:
+      return 'New Order Created';
+    case 4:
+      return 'Order Updated';
+    case 5:
+      return 'New Comment Added on Ticket';
+    case 6:
+      return 'New Reply Added on Ticket Comment';
+    case 7:
+      return 'Category Generated';
+    case 8:
+      return 'Bills';
+    default:
+      return '';
+  }
+};
+
+export const getNotificationTarget = ({ target }) => {
+  switch (target) {
+    case 0:
+      return 'Clients';
+    case 1:
+      return 'Admins';
+    default:
+      return '';
+  }
+};
 
 export const groupBy = (objectArray, property) => {
   if (objectArray.length > 0) {
@@ -274,7 +313,7 @@ export const groupBy = (objectArray, property) => {
       return acc;
     }, {});
   }
-}
+};
 
 export const genrateFirstLetterName = (value) => {
   let name = '';
@@ -287,4 +326,4 @@ export const genrateFirstLetterName = (value) => {
     }
     return name;
   }
-}
+};

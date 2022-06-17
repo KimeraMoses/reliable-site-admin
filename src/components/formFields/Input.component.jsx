@@ -30,7 +30,7 @@ const InputType = ({
           disabled={disabled}
           value={values[name]}
           onChange={(e) => setFieldValue(name, e.target.value)}
-          className="form-select appearance-none block w-full px-[16px] h-[52px] text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0 focus:bg-[#171723] focus:border-none focus:outline-none"
+          className="form-select appearance-none text-[14px] block w-full px-[16px] h-[52px] text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0 focus:bg-[#171723] focus:border-none focus:outline-none"
         >
           {options?.map((option) => (
             <option value={option?.value} key={option?.value}>

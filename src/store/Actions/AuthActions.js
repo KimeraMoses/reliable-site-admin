@@ -7,6 +7,8 @@ import {
   updateEmailConfig,
   getIPData,
   getDeviceName,
+  updateUserProfileByIDConfig,
+  getUserProfileByIDConfig,
 } from 'lib';
 import { toast } from 'react-toastify';
 import {
@@ -91,17 +93,18 @@ export const changePassword = (values) => {
 };
 
 // Update User Profile
-export const updateUserProfile = (profile) => {
+export const updateUserProfile = (id, profile) => {
   return async function (dispatch) {
     dispatch(initAuthenticationPending());
     try {
-      const { url, config } = updateUserProfileConfig();
+      const { url, config } = updateUserProfileByIDConfig(id);
       await axios.put(url, profile, config);
-      const profileConfig = getProfile();
+      const profileConfig = getUserProfileByIDConfig(id);
       const profileRes = await axios.get(
         profileConfig?.url,
         profileConfig?.config
       );
+      console.log(profileRes);
       dispatch(
         authenticationSuccess({
           user: profileRes?.data?.data,

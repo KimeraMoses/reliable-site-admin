@@ -11,10 +11,15 @@ import appSettingsReducer from './Slices/appSettings';
 import paymentGateways from './Slices/paymentGateways';
 import smtpReducer from './Slices/smtp';
 import emailTemplatesReducer from './Slices/emailTemplates';
+import ProductsReducer from './Slices/products';
+import categoriesReducer from './Slices/categories';
 import brandsReducer from './Slices/brandsSlice';
 import departmentsReducer from './Slices/departmentsSlice';
 import transactionsReducer from './Slices/transactions';
 import invoicesReducer from './Slices/invoicesSlice';
+import notificationTemplatesReducer from './Slices/notification-templates';
+import reportsReducer from './Slices/reports';
+import whmcsReducer from './Slices/whmcs';
 import articlesReducer from './Slices/articles';
 import articlesFeedbackReducer from './Slices/articlesFeedback';
 import getArticleFeedbackCommentsReducer from './Slices/articleFeedbackComments';
@@ -39,6 +44,8 @@ const store = configureStore({
     paymentGateways: paymentGateways,
     smtps: smtpReducer,
     emailTemplates: emailTemplatesReducer,
+    products: ProductsReducer,
+    categories: categoriesReducer,
     brands: brandsReducer,
     departments: departmentsReducer,
     transactions: transactionsReducer,
@@ -47,6 +54,9 @@ const store = configureStore({
     articlesFeedbackComments: getArticleFeedbackCommentsReducer,
     articleCategories: articleCategoriesReducer,
     invoices: invoicesReducer,
+    notificationTemplates: notificationTemplatesReducer,
+    reports: reportsReducer,
+    whmcs: whmcsReducer,
     orders: ordersReducer,
     notifications: notificationsReducer,
     tickets: ticketsReducer,

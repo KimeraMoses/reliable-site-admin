@@ -12,12 +12,15 @@ import {
   getUserAppSettingsConfig,
   updateUserAppSettings,
   addUserAppSettings,
+  registerClientConfig,
+  getSpecificConfig,
 } from 'lib';
 import { toast } from 'react-toastify';
 import {
   getUser,
   getUserModule,
   getUsersDispatch,
+  getSpecificUsersDispatch,
   getClientsDispatch,
   setUserLoading,
 } from 'store/Slices';
@@ -83,6 +86,27 @@ export const addUser = (data) => {
         const res = await axios.get(url, config);
         dispatch(getUsers(res?.data?.data));
         toast.success('User Added Successfully');
+      }
+    } catch (e) {
+      toast.error(getError(e));
+    } finally {
+      dispatch(setUserLoading(false));
+    }
+  };
+};
+
+// Add Client User
+export const addClientUser = (data) => {
+  return async (dispatch) => {
+    dispatch(setUserLoading(true));
+    try {
+      const { url, config } = registerClientConfig();
+      const res = await axios.post(url, data, config);
+      if (res.status === 200) {
+        const { url, config } = getClientsConfig();
+        const res = await axios.get(url, config);
+        dispatch(getClients(res?.data?.data));
+        toast.success('Client Added Successfully');
       }
     } catch (e) {
       toast.error(getError(e));
@@ -204,6 +228,24 @@ export const updateUserSettings = ({ data }) => {
       }
     } catch (e) {
       toast.error(getError(e));
+    }
+  };
+};
+
+// Find Specific Users
+export const findSpecificUsers = (data) => {
+  return async (dispatch) => {
+    dispatch(setUserLoading(true));
+    try {
+      const { url, config } = getSpecificConfig();
+      const res = await axios.post(url, data, config);
+      if (res?.status === 200) {
+        dispatch(getSpecificUsersDispatch(res?.data?.data));
+      }
+    } catch (e) {
+      toast.error(getError(e));
+    } finally {
+      dispatch(setUserLoading(false));
     }
   };
 };

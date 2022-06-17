@@ -22,10 +22,8 @@ export const UserPermissions = () => {
       appModules,
       userModules,
     });
-
-    // TODO: CHANGE WHEN INTEGRATING
-    setModuleForCompare(appModules);
-    setModules(appModules);
+    setModuleForCompare(allModules);
+    setModules(allModules);
     setLocalLoading(false);
   };
   useEffect(() => {

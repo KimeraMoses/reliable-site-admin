@@ -19,6 +19,7 @@ export const ProfileDetails = () => {
   const { user, isLoading } = useSelector((state) => state.auth);
   const initialValues = {
     image: user?.imageUrl,
+    preview: user?.base64Image,
     fullName: user?.fullName,
     status: user?.status,
     ipAddress: user?.restrictAccessIPAddress,
@@ -47,7 +48,7 @@ export const ProfileDetails = () => {
               ipAddress: values?.ipAddress,
             };
             // console.log(newValues);
-            dispatch(updateUserProfile(newValues));
+            dispatch(updateUserProfile(user?.id, newValues));
           }}
         >
           {({ values, handleReset }) => {

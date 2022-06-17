@@ -18,6 +18,7 @@ import { initiateLockScreen } from 'store/Slices/settingSlice';
 import { ChangeMfaStatus } from 'store/Slices/authSlice';
 import { toast } from 'react-toastify';
 import { axios, getCurrentMFAStatus, getError } from 'lib';
+import { getDepartmentsByUserId } from 'store';
 
 const SignIn = React.lazy(() => import('pages/sign-in/SignIn.page'));
 const SignUp = React.lazy(() => import('pages/sign-up/SignUp.page'));
@@ -44,8 +45,8 @@ const LockScreen = React.lazy(() =>
 );
 
 function App() {
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
-  const user = useSelector((state) => state.auth.user);
+  const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn);
+  const user = useSelector((state) => state?.auth?.user);
   const { maintenance, suspended } = useSelector((state) => state.settings);
   const isIdle = useSelector((state) => state.settings.isIdle);
   const Timeout = 1000 * 900;
@@ -61,8 +62,13 @@ function App() {
     dispatch(maintenanceStatus());
     dispatch(getAppModules());
     dispatch(getUserModules());
-    // dispatch(trustedDays())
   }, [dispatch]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      dispatch(getDepartmentsByUserId({ id: user?.id }));
+    }
+  }, [isLoggedIn]);
 
   // Check MFA Status
   const checkMFAStatus = async () => {

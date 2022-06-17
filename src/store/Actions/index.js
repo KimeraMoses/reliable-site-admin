@@ -16,6 +16,10 @@ export * from './paymentGateways';
 export * from './smtp';
 // Email Templates
 export * from './emailTemplates';
+// Products
+export * from './products';
+// Categories
+export * from './categories';
 
 // Brands Actions
 export * from './brandsActions';
@@ -28,6 +32,14 @@ export * from './transactions';
 // Invoices Actions
 export * from './invoicesActions';
 
+// Notification Templates
+export * from './notification-templates';
+
+// Reports Actions
+export * from './reports';
+
+// WHMCS Actions
+export * from './whmcs';
 // Articles
 export * from './articles';
 // Article Categories

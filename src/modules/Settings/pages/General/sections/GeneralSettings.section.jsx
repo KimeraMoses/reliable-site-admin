@@ -58,6 +58,11 @@ export function GeneralSettings() {
       type: 'text',
     },
     {
+      name: 'companyName',
+      label: 'Company Name',
+      type: 'text',
+    },
+    {
       name: 'termsOfServiceAgreement',
       label: 'Terms of Service Agreement',
       type: 'switch',
@@ -156,6 +161,7 @@ export function GeneralSettings() {
     requestsPerIPAdmin: settings?.requestsPerIPAdmin,
     requestsPerIPClient: settings?.requestsPerIPClient,
     vat: settings?.vat,
+    companyName: settings?.companyName,
   };
 
   return (

@@ -128,6 +128,7 @@ export function AddConfiguration() {
                       label="Company Address"
                       placeholder="1244, Reppert Coal Road, Southfield"
                     />
+                    {/* TODO: Add Brands Here Once Done */}
                     <MultiSelect
                       name="bcc"
                       label="BCC"

@@ -33,6 +33,10 @@ export * from './emailTemplates';
 export * from './maintenanceSettings';
 // Support Settings
 export * from './supportSettings';
+// Products
+export * from './products';
+// Categories
+export * from './categories';
 
 // Brands End-Points
 export * from './brands';
@@ -42,6 +46,10 @@ export * from './departments';
 export * from './transactions';
 // Invoices End-Points
 export * from './invoices';
+// Notification Templates End-Points
+export * from './notification-templates';
+// Reports End-Points
+export * from './reports';
 // Orders End-Points
 export * from './orders';
 // Notifications End-Points

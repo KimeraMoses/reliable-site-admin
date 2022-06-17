@@ -78,6 +78,16 @@ export const sidebarData = [
           {
             name: 'Client Notification',
             path: '/admin/dashboard/billing/clients/show-notifications/client-notifications',
+            subLinks: [
+              {
+                name: 'Add New',
+                path: '/admin/dashboard/billing/clients/show-notifications/client-notifications/add/new',
+              },
+              {
+                name: 'Edit',
+                path: '/admin/dashboard/billing/clients/show-notifications/client-notifications/edit/:id',
+              },
+            ],
           },
         ],
       },
@@ -122,6 +132,10 @@ export const sidebarData = [
             path: '#',
           },
         ],
+      },
+      {
+        name: 'WHMCS Import Tool',
+        path: '/admin/dashboard/billing/WHMCS-import',
       },
     ],
   },
@@ -186,6 +200,28 @@ export const sidebarData = [
     module: 'Reports',
     path: '/admin/dashboard/reports',
     icon: (fill) => <Reports fill={fill} />,
+    subLinks: [
+      {
+        name: 'Annual Income Report',
+        path: '/admin/dashboard/reports/anuual/income',
+      },
+      {
+        name: 'Support Response Time',
+        path: '/admin/dashboard/reports/support-response/time',
+      },
+      // {
+      //   name: 'Support Ticket Duration',
+      //   path: '/admin/dashboard/reports/support-ticket/duration',
+      // },
+      {
+        name: 'Support Ticket Reply Count',
+        path: '/admin/dashboard/reports/support-ticket-reply/count',
+      },
+      {
+        name: 'Reports By Filters',
+        path: '/admin/dashboard/reports/tickets-by/filters',
+      },
+    ],
   },
   {
     name: 'Admin Users',

@@ -9,3 +9,4 @@ export { Card } from './Card/Card.component';
 // Form Fields
 export * from './formFields';
 export { ArticleCard } from './ArticleCard/ArticleCard.component';
+export { Notifications } from './Notifications/Notifications.component';

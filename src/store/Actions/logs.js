@@ -37,13 +37,30 @@ export const getLogs = () => {
   };
 };
 
+export const getLogsByUserID = (id) => {
+  return async (dispatch) => {
+    dispatch(setLogsLoading(true));
+    if (token) {
+      try {
+        const { url } = getLogsByUserIDConfig(id);
+        const res = await axios.get(url);
+        await dispatch(getLogsSlice(res?.data?.data));
+        dispatch(setLogsLoading(false));
+      } catch (e) {
+        toast.error(getError(e));
+        dispatch(setLogsLoading(false));
+      }
+    }
+  };
+};
+
 export const getUserLogs = (uid) => {
   return async (dispatch) => {
     dispatch(setLogsLoading(true));
     if (token) {
       try {
-        const { url } = getLogsByUserIDConfig(uid);
-        const res = await axios.get(url);
+        const { url, defaultData, config } = getLogsByUserIDConfig(uid);
+        const res = await axios.post(url, defaultData, config);
         await dispatch(getUserLogsSlice(res?.data?.data));
         dispatch(setLogsLoading(false));
       } catch (e) {

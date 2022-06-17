@@ -1,16 +1,21 @@
+import { Switch } from 'antd';
+import { Input } from 'components';
+import { Formik } from 'formik';
 import { useOutside } from 'hooks';
+import { Right } from 'icons';
 import React, { useRef, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useMediaQuery } from 'react-responsive';
 import { useNavigate } from 'react-router-dom';
 import { logout } from 'store/Slices/authSlice';
+import { Departments } from './Departments.component';
 import UserName from './UserProfileCard/UserName';
-import { getNotifications, notificationsRead } from 'store';
+import { getNotificationss, notificationsRead } from 'store';
 import './UserTop.css';
 
 function UserTop({ toggleNotification }) {
   const [dropdown, setDropdown] = useState(false);
-  const [showName, setShowName] = useState(false);
+  const [showDepartments, setShowDepartments] = useState(false);
   const { user, isLoggedIn } = useSelector((state) => state.auth);
   const { notifications } = useSelector((state) => state?.notifications);
   const lessThanDesktop = useMediaQuery({
@@ -19,9 +24,18 @@ function UserTop({ toggleNotification }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // const [notifications, setNotifications] = useState(false);
   const links = [
     {
-      name: 'Settings',
+      name: 'Active Departments',
+      Icon: <Right fill={showDepartments ? '#3699ff' : '#494b74'} />,
+      onClick: () => {
+        setShowDepartments((dept) => !dept);
+      },
+      active: showDepartments,
+    },
+    {
+      name: 'Account Settings',
       onClick: () => {
         setDropdown((dropdownValue) => !dropdownValue);
         navigate('/admin/dashboard/account-settings/general');
@@ -30,6 +44,7 @@ function UserTop({ toggleNotification }) {
     {
       name: 'Notifications',
       onClick: () => {
+        setDropdown((dropdownValue) => !dropdownValue);
         handleNotification();
       },
     },
@@ -39,55 +54,68 @@ function UserTop({ toggleNotification }) {
     },
   ];
 
+  const handleOutsideClick = () => {
+    setDropdown(false);
+    setShowDepartments(false);
+  };
   const handleNotification = () => {
     toggleNotification(true);
     (async () => {
-      await dispatch(getNotifications({
-        toUserId: user?.id
-      }));
+      await dispatch(
+        getNotificationss({
+          toUserId: user?.id,
+        })
+      );
     })();
-  }
+  };
 
   useEffect(() => {
     if (notifications.length) {
       let ids = [];
-      notifications?.filter(function (el) { return el.isRead !== true })?.map((b) => {
-        ids.push(b?.id);
-      });
-      if (ids.length)
-        dispatch(notificationsRead(ids));
+      notifications
+        ?.filter(function (el) {
+          return el.isRead !== true;
+        })
+        ?.map((b) => {
+          ids.push(b?.id);
+        });
+      if (ids.length) dispatch(notificationsRead(ids));
     }
   }, [notifications]);
 
-  const handleOutsideClick = () => setDropdown(false);
   const dropDownRef = useRef(null);
   useOutside(dropDownRef, handleOutsideClick);
 
   return (
     <div
       className="flex items-center cursor-pointer mr-4 relative"
-      onClick={() => setDropdown((prevDropdown) => !prevDropdown)}
+      // onClick={() => setDropdown((prevDropdown) => !prevDropdown)}
       ref={dropDownRef}
     >
+      {/* <Notifications
+        visible={notifications}
+        onClose={() => setNotifications(false)}
+      /> */}
       <div className="h-12 w-12 rounded-lg border-2 border-[#3699FF] p-1 userName">
-        {user && user.imageUrl && user.imageUrl.length > 0 && !showName ? (
+        {user?.base64Image ? (
           <img
-            src={user && user.imageUrl}
-            alt={user && user.userName}
+            src={user?.base64Image}
+            alt={user.userName}
             className="h-full w-full"
-            onLoad={() => setShowName(false)}
-            onError={() => setShowName(true)}
           />
         ) : (
           <>{user && <UserName isLoggedIn={isLoggedIn} user={user} />}</>
         )}
+        {/* Departments Dropdown */}
+        <Departments showDepartments={showDepartments} />
         {/* Dropdown */}
         <div
-          className={`w-[278px] bg-[#1E1E2D] ${dropdown ? '' : 'hidden'
-            } rounded-lg text-gray-300`}
+          className={`w-[278px] bg-[#1E1E2D] ${
+            dropdown ? '' : 'hidden'
+          } rounded-lg text-gray-300`}
           style={{
             position: 'absolute',
-            bottom: '-254px',
+            top: '58px',
             right: 0,
             boxShadow: '0px 0px 40px #00000066',
             zIndex: 2,
@@ -98,15 +126,11 @@ function UserTop({ toggleNotification }) {
             <div className="flex items-start justify-between">
               {/* Image + Status */}
               <div className="h-12 w-12 rounded-lg border-2 border-[#3699FF] p-1 userName">
-                {user &&
-                  user.imageUrl &&
-                  user.imageUrl.length > 0 &&
-                  !showName ? (
+                {user && user.imageUrl && user.imageUrl.length > 0 ? (
+                  // !showName
                   <img
-                    src={user && user.imageUrl}
-                    alt={user && user.userName}
-                    onLoad={() => setShowName(false)}
-                    onError={() => setShowName(true)}
+                    src={user?.base64Image}
+                    alt={user.userName}
                     className="h-full w-full"
                   />
                 ) : (
@@ -126,13 +150,16 @@ function UserTop({ toggleNotification }) {
             </div>
           </div>
           <div>
-            {links?.map((link, index) => (
+            {links?.map(({ onClick, name, Icon, active }, index) => (
               <p
-                className="pt-[20px] px-[20px] text-[#92928F] hover:text-[#3699FF] transition-all text-[14px] last:pb-[20px]"
-                onClick={link?.onClick}
-                key={link?.name}
+                className={`pt-[20px] px-[20px] ${
+                  active ? 'text-[#3699FF]' : 'text-[#92928F]'
+                } flex items-center justify-between hover:text-[#3699FF] transition-all text-[14px] last:pb-[20px]`}
+                onClick={onClick}
+                key={name}
               >
-                {link?.name}
+                <span>{name}</span>
+                {Icon}
               </p>
             ))}
           </div>
@@ -140,13 +167,19 @@ function UserTop({ toggleNotification }) {
       </div>
       {!lessThanDesktop && (
         <>
-          <div className="text-base mx-3">
+          <div
+            className="text-base mx-3"
+            onClick={() => setDropdown((prevDropdown) => !prevDropdown)}
+          >
             <h3 className="text-white text-base mb-0">
               {user && user.fullName}
             </h3>
             <p className="text-gray-400 mb-0">{user && user.email}</p>
           </div>
-          <div className="h-12 w-12 bg-[#323248] flex items-center justify-center rounded-lg relative">
+          <div
+            className="h-12 w-12 bg-[#323248] flex items-center justify-center rounded-lg relative"
+            onClick={() => setDropdown((prevDropdown) => !prevDropdown)}
+          >
             <img src="/icon/arrow-down.svg" alt="" />
           </div>
         </>
