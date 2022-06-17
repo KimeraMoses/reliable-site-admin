@@ -20,5 +20,15 @@
   "overview": "Overview",
   "productName": "Product Name",
   "viewProduct": "View Product",
-  "completedBy": "Completed By"
+  "completedBy": "Completed By",
+  "orderId": "Order ID",
+  "client": "Client",
+  "dateAdded": "Date Added",
+  "dateModified": "Date Modified",
+  "viewAllOrders": "View All Orders",
+  "customerIp": "Customer IP",
+  "products": "Products",
+  "orderNotes": "Order Notes",
+  "viewNotes": "View Notes",
+  "viewProducts": "View Products"
 }

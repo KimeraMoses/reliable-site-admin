@@ -19,6 +19,11 @@ import articlesReducer from './Slices/articles';
 import articlesFeedbackReducer from './Slices/articlesFeedback';
 import getArticleFeedbackCommentsReducer from './Slices/articleFeedbackComments';
 import articleCategoriesReducer from './Slices/articleCategories';
+import ordersReducer from './Slices/ordersSlice';
+import notificationsReducer from './Slices/notificationsSlice';
+import ticketsReducer from './Slices/ticketsSlice';
+import ticketCommentsReducer from './Slices/ticketCommentsSlice';
+import ticketRepliesReducer from './Slices/ticketRepliesSlice';
 
 const store = configureStore({
   reducer: {
@@ -37,11 +42,16 @@ const store = configureStore({
     brands: brandsReducer,
     departments: departmentsReducer,
     transactions: transactionsReducer,
-    invoices: invoicesReducer,
     articles: articlesReducer,
     articlesFeedback: articlesFeedbackReducer,
     articlesFeedbackComments: getArticleFeedbackCommentsReducer,
     articleCategories: articleCategoriesReducer,
+    invoices: invoicesReducer,
+    orders: ordersReducer,
+    notifications: notificationsReducer,
+    tickets: ticketsReducer,
+    ticketComments: ticketCommentsReducer,
+    ticketReplies: ticketRepliesReducer,
   },
 });
 

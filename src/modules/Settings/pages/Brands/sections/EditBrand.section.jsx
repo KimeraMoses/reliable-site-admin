@@ -23,7 +23,6 @@ export const EditBrand = ({ show, setShow, editValue, users }) => {
         clientAssigned: editValue?.clientAssigned?.split(","),
         status: editValue.status,
     };
-    console.log(initialValues);
     const { t } = useTranslation("/Settings/ns");
     const dispatch = useDispatch();
     const fields = [

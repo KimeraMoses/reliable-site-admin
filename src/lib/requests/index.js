@@ -42,3 +42,13 @@ export * from './departments';
 export * from './transactions';
 // Invoices End-Points
 export * from './invoices';
+// Orders End-Points
+export * from './orders';
+// Notifications End-Points
+export * from './notifications';
+// Tickets End-Points
+export * from './tickets';
+// Ticket Comments End-Points
+export * from './ticketComments';
+// Ticket Replies End-Points
+export * from './ticketReplies';

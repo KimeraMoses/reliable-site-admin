@@ -38,12 +38,12 @@ export const Table = ({
   handleStatus,
   statusFilterPlaceholder,
   handleDateRange,
+  headingTitle,
 }) => {
   const [dataSource, setDataSource] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [search, setSearch] = useState('');
-
   useEffect(() => {
     if (fieldToFilter !== null && fieldToFilter !== undefined) {
       const filteredData = data.filter((item) => {
@@ -212,6 +212,12 @@ export const Table = ({
               )}
             </div>
           </div>
+          {headingTitle && (
+            <h3 className={'text-[#fff] text-[32px] mt-[40px]'}>
+              {headingTitle}
+            </h3>
+          )}
+
           {/* Header End */}
           {/* Table */}
           <div
