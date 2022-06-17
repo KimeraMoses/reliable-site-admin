@@ -39,7 +39,7 @@ export const validateWHMCSData = ({ data }) => {
       }
       return response;
     } catch (error) {
-      dispatch(setWHMCSError(error));
+      dispatch(setWHMCSError(error?.response?.data));
     } finally {
       dispatch(setWHMCSLoading(false));
     }
