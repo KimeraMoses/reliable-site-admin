@@ -105,11 +105,10 @@ function SignIn() {
       }
       // localStorage.removeItem("Account-Suspended");
       dispatch(initAuthenticationSuccess(res.data));
-      console.log(res.data);
       dispatch(getUserProfile(res.data.token));
       localStorage.setItem('AuthToken', JSON.stringify(res.data));
-      dispatch(getAppModules());
-      dispatch(getUserModules());
+      await dispatch(getUserModules());
+      await dispatch(getAppModules());
     };
   };
 
