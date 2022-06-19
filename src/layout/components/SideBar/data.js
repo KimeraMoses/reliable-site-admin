@@ -109,7 +109,7 @@ export const sidebarData = [
           },
           {
             name: 'Transactions',
-            path: '#',
+            path: '/admin/dashboard/billing/invoices/transactions',
           },
         ],
       },

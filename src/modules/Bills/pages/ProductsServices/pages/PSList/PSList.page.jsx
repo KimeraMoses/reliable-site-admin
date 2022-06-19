@@ -114,6 +114,7 @@ export const PSList = () => {
   }, [dispatch]);
 
   const { products, loading } = useSelector((state) => state?.products);
+  const categoriesLoading = useSelector((state) => state?.categories?.loading);
 
   const [showAdd, setShowAdd] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
@@ -129,7 +130,7 @@ export const PSList = () => {
               <Table
                 columns={columns}
                 data={products}
-                loading={loading}
+                loading={categoriesLoading || loading}
                 fieldToFilter={values?.selectFilter}
                 btnData={{
                   onClick: () => setShowAdd(true),
