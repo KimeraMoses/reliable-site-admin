@@ -8,3 +8,4 @@ export { Bills } from './Bills/component.jsx';
 export { Settings } from './Settings/component.jsx';
 export { KnowledgeBase } from './KnowledgeBase/component';
 export { Reports } from './Reports/component';
+export { SupportTickets } from './SupportTickets/component';

@@ -19,10 +19,6 @@ export const dashboardPages = [
     Component: lazy(() => import('./Dashboard/Home/Home.page')),
   },
   {
-    path: '/dashboard/tickets/*',
-    Component: lazy(() => import('../modules/DashboardTickets/component.jsx')),
-  },
-  {
     path: '/dashboard/about',
     Component: lazy(() => import('./Dashboard/About/About.page')),
   },
@@ -57,6 +53,10 @@ export const dashboardPages = [
   {
     path: '/dashboard/reports/*',
     Component: lazy(() => import('./Dashboard/Reports/Reports.page')),
+  },
+  {
+    path: '/dashboard/support/*',
+    Component: lazy(() => import('./Dashboard/Support/Support.page')),
   },
 ];
 

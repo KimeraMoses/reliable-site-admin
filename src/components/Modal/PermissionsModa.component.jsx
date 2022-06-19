@@ -207,7 +207,7 @@ export function Modal({
             )}
           </div>
 
-          <div className="modal__buttons">
+          <div className="modal__buttons flex">
             <button
               onClick={handleCancel ? handleCancel : handleClose}
               type="button"

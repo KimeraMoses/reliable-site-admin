@@ -14,26 +14,6 @@ export const sidebarData = [
     module: 'Dashboard',
     path: '/admin/dashboard',
     icon: (fill) => <Dashboard fill={fill} />,
-    subLinks: [
-      {
-        name: 'Tickets',
-        module: 'Tickets',
-        path: '/admin/dashboard/tickets',
-        showDropdown: true,
-        subLinks: [
-          {
-            name: 'Tickets List',
-            path: '/admin/dashboard/tickets/list/show',
-            subLinks: [
-              {
-                name: 'Tickets Details',
-                path: '/admin/dashboard/tickets/list/details/:id',
-              },
-            ],
-          },
-        ],
-      },
-    ],
   },
   {
     name: 'Billing',
@@ -144,6 +124,18 @@ export const sidebarData = [
     module: 'Support',
     path: '/admin/dashboard/support',
     icon: (fill) => <Support fill={fill} />,
+    subLinks: [
+      {
+        name: 'Tickets List',
+        path: '/admin/dashboard/support/tickets',
+        subLinks: [
+          {
+            name: 'Tickets Details',
+            path: '/admin/dashboard/support/tickets/details/:id',
+          },
+        ],
+      },
+    ],
   },
   {
     name: 'Knowledge Base',

@@ -60,13 +60,13 @@ function App() {
   useEffect(() => {
     AutoAuthenticate(dispatch);
     dispatch(maintenanceStatus());
-    dispatch(getAppModules());
-    dispatch(getUserModules());
   }, [dispatch]);
 
   useEffect(() => {
     if (isLoggedIn) {
       dispatch(getDepartmentsByUserId({ id: user?.id }));
+      dispatch(getAppModules());
+      dispatch(getUserModules());
     }
   }, [isLoggedIn]);
 
@@ -103,7 +103,9 @@ function App() {
             />
             <Route
               path="/admin/lock-screen"
-              element={isIdle ? <LockScreen /> : <Navigate to={-1} />}
+              element={
+                isIdle ? <LockScreen /> : <Navigate to="/admin/dashboard" />
+              }
             />
 
             <Route path="/admin" element={<Navigate to="/admin/sign-in" />} />

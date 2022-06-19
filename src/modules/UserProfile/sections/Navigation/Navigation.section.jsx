@@ -64,13 +64,14 @@ export const Navigation = ({ items, active }) => {
                 </div>
               </div>
               {/* Buttons + Profile Completion */}
-              <div className="flex flex-col justify-between">
+              {/* TODO: Profile Completion + Buttons to be shown in future */}
+              {/* <div className="flex flex-col justify-between">
                 <div className="grid grid-cols-[2fr_2fr_1fr] gap-[8px] min-w-[250px]">
                   <Button type="secondary">Follow</Button>
                   <Button>Hire Me</Button>
                   <Button type="secondary">...</Button>
                 </div>
-                {/* Progress Profile Completion */}
+                // Progress Profile Completion
                 <div>
                   <div className="flex justify-between items-center">
                     <div className="text-[#474761] text-[14px]">
@@ -82,7 +83,7 @@ export const Navigation = ({ items, active }) => {
                     <div className="absolute w-[50%] bg-[#0BB783] h-[4px] rounded-[4px]" />
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
           {/* Divider  */}

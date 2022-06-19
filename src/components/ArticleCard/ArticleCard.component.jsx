@@ -14,7 +14,7 @@ export const ArticleCard = ({
 }) => {
   const [imgError, setImgError] = useState(false);
   return (
-    <div className="p-[32px] bg-[#1e1e2d] flex flex-col gap-[32px] custom-article-card rounded-[8px]">
+    <div className="p-[32px] bg-[#1e1e2d] flex flex-col gap-[32px] custom-article-card rounded-[8px] h-full w-full">
       <div className="relative h-[204px] w-full">
         {imagePath && !imgError ? (
           <img
@@ -24,7 +24,7 @@ export const ArticleCard = ({
             alt={title}
           />
         ) : (
-          <div className="h-[204px] w-full rounded-[8px] object-cover border-1 border-blue-600 flex items-center justify-center text-white text-[16px] font-medium">
+          <div className="h-[204px] w-full rounded-[8px] object-cover border-1 border-blue-600 flex items-center justify-center text-white text-[16px] font-medium text-center">
             No Image Available
           </div>
         )}

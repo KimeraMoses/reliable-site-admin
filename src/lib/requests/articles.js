@@ -19,6 +19,8 @@ export const getArticlesConfig = () => ({
     categoryId: null,
     minimumRate: 0,
     maximumRate: 0,
+    startDate: null,
+    endDate: null,
   },
   config: articlesConfig('View'),
 });
@@ -38,6 +40,8 @@ export const getPublicArticlesConfig = () => ({
     categoryId: null,
     minimumRate: 0,
     maximumRate: 0,
+    startDate: null,
+    endDate: null,
   },
   config: articlesConfig('View'),
 });
@@ -57,6 +61,8 @@ export const getPrivateArticlesConfig = () => ({
     categoryId: null,
     minimumRate: 0,
     maximumRate: 0,
+    startDate: null,
+    endDate: null,
   },
   config: articlesConfig('View'),
 });
