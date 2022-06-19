@@ -10,7 +10,7 @@ export const Article = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getArticleByID(id));
+    dispatch(getArticleByID({ id }));
   }, []);
 
   const { article, loading } = useSelector((state) => state?.articles);

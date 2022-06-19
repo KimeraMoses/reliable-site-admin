@@ -5,6 +5,7 @@ import { Delete } from './Delete.section';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getPrivateArticles } from 'store';
+import './styles.scss';
 
 export function PrivateArticles() {
   const [showDel, setShowDel] = useState(false);
@@ -20,10 +21,9 @@ export function PrivateArticles() {
   }, []);
 
   return (
-    <div className="mt-[20px]">
+    <div className="mt-[20px] custom-articles-list">
       <Delete show={showDel} setShow={setShowDel} id={id} />
       <List
-        grid={{ gutter: 16, column: 4 }}
         dataSource={articles}
         loading={loading}
         rowKey={(article) => article?.id}
