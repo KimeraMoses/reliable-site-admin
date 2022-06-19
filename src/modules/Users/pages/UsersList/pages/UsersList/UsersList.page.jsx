@@ -118,11 +118,11 @@ export const UsersList = () => {
       dataIndex: 'email',
       key: 'email',
     },
-    {
-      title: t('companyName'),
-      dataIndex: 'companyName',
-      key: 'companyName',
-    },
+    // {
+    //   title: t('companyName'),
+    //   dataIndex: 'companyName',
+    //   key: 'companyName',
+    // },
     {
       title: t('createDate'),
       key: 'createdAt',
