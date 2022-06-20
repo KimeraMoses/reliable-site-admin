@@ -77,9 +77,9 @@ export const AddTemplate = () => {
     tenant: 'Admin',
     status: true,
     smtpConfigurationId: smtpOptions[0]?.value || '',
-    clientName: '',
-    company: '',
-    address: '',
+    // clientName: '',
+    // company: '',
+    // address: '',
     bodyHolder: EditorState.createEmpty(),
   };
 

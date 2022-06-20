@@ -35,26 +35,14 @@ export const getAppModules = () => {
   };
 };
 
-export const getUserModules = () => {
+export const getUserModules = ({ id }) => {
   return async (dispatch) => {
     setModuleLoading(true);
-    // Get User Profile
     try {
-      const { url } = getProfile();
-      const userRes = await axios.get(url);
-      const userId = userRes?.data?.data?.id;
-      // Get User Level Modules if UserID exists
-      if (userId) {
-        try {
-          const { url } = getUserModulesConfig(userId);
-          const moduleRes = await axios.get(url);
-          dispatch(getUserLevelModules(moduleRes?.data?.data));
-          setModuleLoading(false);
-        } catch (e) {
-          toast.error(getError(e));
-          setModuleLoading(false);
-        }
-      }
+      const { url } = getUserModulesConfig(id);
+      const res = await axios.get(url);
+      dispatch(getUserLevelModules(res?.data?.data));
+      setModuleLoading(false);
     } catch (e) {
       toast.error(getError(e));
       setModuleLoading(false);

@@ -87,9 +87,9 @@ export const EditTemplate = () => {
     tenant: emailTemplate?.tenant || 'Admin',
     status: emailTemplate?.status || false,
     smtpConfigurationId: emailTemplate?.smtpConfigurationId || '',
-    clientName: emailTemplate?.clientName || '',
-    company: emailTemplate?.company || '',
-    address: emailTemplate?.address || '',
+    // clientName: emailTemplate?.clientName || '',
+    // company: emailTemplate?.company || '',
+    // address: emailTemplate?.address || '',
     bodyHolder: emailTemplate?.body
       ? convertHTMLToDraftState(emailTemplate?.body)
       : EditorState.createEmpty(),

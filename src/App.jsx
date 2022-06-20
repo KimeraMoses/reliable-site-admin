@@ -66,7 +66,7 @@ function App() {
     if (isLoggedIn) {
       dispatch(getDepartmentsByUserId({ id: user?.id }));
       dispatch(getAppModules());
-      dispatch(getUserModules());
+      dispatch(getUserModules({ id: user?.id }));
     }
   }, [isLoggedIn]);
 

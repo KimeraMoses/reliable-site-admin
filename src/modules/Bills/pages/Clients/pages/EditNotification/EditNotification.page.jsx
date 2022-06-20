@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import { editNotificationTemplate, getNotificationTemplateByID } from 'store';
 import { useEffect } from 'react';
 
-const validationSchema = Yup.object().shape({});
+// const validationSchema = Yup.object().shape({});
 
 export const EditNotification = () => {
   const dispatch = useDispatch();
@@ -29,11 +29,11 @@ export const EditNotification = () => {
     property: template?.property,
     operatorType: template?.operatorType,
     value: template?.value,
-    address: template?.address,
+    // address: template?.address,
     body: template?.body,
     bodyHolder: convertHTMLToDraftState(template?.body),
-    clientName: template?.clientName,
-    company: template?.company,
+    // clientName: template?.clientName,
+    // company: template?.company,
     startDate: moment(template?.startDate),
     endDate: moment(template?.endDate),
     title: template?.title,
@@ -44,7 +44,7 @@ export const EditNotification = () => {
     <>
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema}
+        // validationSchema={validationSchema}
         enableReinitialize
         onSubmit={async (values) => {
           if (specificUsers?.length) {

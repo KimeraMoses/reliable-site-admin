@@ -24,7 +24,7 @@ export const Article = () => {
           </h5>
           <div className="flex gap-[8px]">
             <div className="px-[8px] py-[4px] bg-[#323248] rounded-[4px] text-white font-medium text-[10px] uppercase">
-              Public Article
+              {article?.visibility ? 'Public Article' : 'Private Articlew'}
             </div>
             <div className="px-[8px] py-[4px] bg-[#2F264F] rounded-[4px] text-[#8950FC] font-medium text-[10px] uppercase">
               {article?.articleCategories?.length

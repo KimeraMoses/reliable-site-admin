@@ -24,7 +24,7 @@ const initialValues = {
   targetUserType: 0,
 };
 
-const validationSchema = Yup.object().shape({});
+// const validationSchema = Yup.object().shape({});
 
 export const AddNewNotification = () => {
   const dispatch = useDispatch();
@@ -35,7 +35,7 @@ export const AddNewNotification = () => {
     <>
       <Formik
         initialValues={initialValues}
-        validationSchema={validationSchema}
+        // validationSchema={validationSchema}
         enableReinitialize
         onSubmit={async (values) => {
           if (specificUsers?.length) {
