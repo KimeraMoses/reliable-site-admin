@@ -1,9 +1,9 @@
 import { EditorState, convertToRaw } from 'draft-js';
 import { convertToHTML } from 'draft-convert';
 import * as Yup from 'yup';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form } from 'formik';
 
-import { Input, SMTPEditor, Button } from 'components';
+import { Input, ConfigurationEditor, Button, EmailBodyInput } from 'components';
 import './styles.scss';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -17,48 +17,48 @@ const validationSchema = Yup.object().shape({
   subject: Yup.string().required('Subject is required'),
   smtpConfigurationId: Yup.string().required('Configuration is required'),
   status: Yup.boolean().required('Status is required'),
-  clientName: Yup.string().required('Client name is required'),
-  company: Yup.string().required('Company is required'),
-  address: Yup.string().required('Address is required'),
+  // clientName: Yup.string().required('Client name is required'),
+  // company: Yup.string().required('Company is required'),
+  // address: Yup.string().required('Address is required'),
   body: Yup.string().required('Email body is required'),
 });
 
-const ConfigurationEditor = ({ editorState, onEditorStateChange, onBlur }) => {
-  return (
-    <div className="configuration-editor">
-      <div className="configuration-editor__container">
-        <SMTPEditor
-          editorState={editorState}
-          wrapperClassName="configuration-editor__container-wrapper"
-          editorClassName="configuration-editor__container-editor"
-          onChange={onEditorStateChange}
-          placeholder="Start typing here..."
-          onBlur={onBlur}
-        />
-      </div>
-    </div>
-  );
-};
+// const ConfigurationEditor = ({ editorState, onEditorStateChange, onBlur }) => {
+//   return (
+//     <div className="configuration-editor">
+//       <div className="configuration-editor__container">
+//         <SMTPEditor
+//           editorState={editorState}
+//           wrapperClassName="configuration-editor__container-wrapper"
+//           editorClassName="configuration-editor__container-editor"
+//           onChange={onEditorStateChange}
+//           placeholder="Start typing here..."
+//           onBlur={onBlur}
+//         />
+//       </div>
+//     </div>
+//   );
+// };
 
-const EmailBodyInput = ({ touched, errors, name, placeholder, label }) => {
-  return (
-    <div className="flex gap-[20px] bg-[#28283a] items-center">
-      <h6 className="px-[32px] w-[20%] text-white whitespace-nowrap">
-        {label}
-      </h6>
-      <Field
-        name={name}
-        placeholder={placeholder}
-        className="h-[52px] w-[60%] text-[#92928f] placeholder:text-[#92928f] bg-[#28283a] focus-visible:outline-none"
-      />
-      {touched[name] && errors[name] && (
-        <div className="error whitespace-nowrap mr-[12px] mt-[0px] w-[20%]">
-          {errors[name]}
-        </div>
-      )}
-    </div>
-  );
-};
+// const EmailBodyInput = ({ touched, errors, name, placeholder, label }) => {
+//   return (
+//     <div className="flex gap-[20px] bg-[#28283a] items-center">
+//       <h6 className="px-[32px] w-[20%] text-white whitespace-nowrap">
+//         {label}
+//       </h6>
+//       <Field
+//         name={name}
+//         placeholder={placeholder}
+//         className="h-[52px] w-[60%] text-[#92928f] placeholder:text-[#92928f] bg-[#28283a] focus-visible:outline-none"
+//       />
+//       {touched[name] && errors[name] && (
+//         <div className="error whitespace-nowrap mr-[12px] mt-[0px] w-[20%]">
+//           {errors[name]}
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
 
 export const EditTemplate = () => {
   let { id } = useParams();
@@ -145,23 +145,26 @@ export const EditTemplate = () => {
                       <EmailBodyInput
                         name="clientName"
                         label="Client Name"
-                        placeholder="[fullName]"
+                        placeholder="[[fullName]]"
                         touched={touched}
                         errors={errors}
+                        type="readOnly"
                       />
                       <EmailBodyInput
                         name="company"
                         label="Company"
-                        placeholder="[company]"
+                        placeholder="[[company]]"
                         touched={touched}
                         errors={errors}
+                        type="readOnly"
                       />
                       <EmailBodyInput
                         name="address"
                         label="Address"
-                        placeholder="[address]"
+                        placeholder="[[address]]"
                         touched={touched}
                         errors={errors}
+                        type="readOnly"
                       />
                     </div>
                     <ConfigurationEditor

@@ -6,7 +6,7 @@ import { convertToRaw } from 'draft-js';
 import { useDispatch, useSelector } from 'react-redux';
 import { Spin } from 'antd';
 
-import { Input, MultiSelect, SMTPEditor, Button } from 'components';
+import { Input, MultiSelect, ConfigurationEditor, Button } from 'components';
 import { addSMTP } from 'store';
 import './styles.scss';
 import { useNavigate } from 'react-router-dom';
@@ -52,22 +52,22 @@ const validationSchema = Yup.object().shape({
   footerContent: Yup.string().required('Footer Content is required'),
 });
 
-const ConfigurationEditor = ({ editorState, onEditorStateChange, onBlur }) => {
-  return (
-    <div className="configuration-editor">
-      <div className="configuration-editor__container">
-        <SMTPEditor
-          editorState={editorState}
-          wrapperClassName="configuration-editor__container-wrapper"
-          editorClassName="configuration-editor__container-editor"
-          onChange={onEditorStateChange}
-          placeholder="Start typing here..."
-          onBlur={onBlur}
-        />
-      </div>
-    </div>
-  );
-};
+// const ConfigurationEditor = ({ editorState, onEditorStateChange, onBlur }) => {
+//   return (
+//     <div className="configuration-editor">
+//       <div className="configuration-editor__container">
+//         <SMTPEditor
+//           editorState={editorState}
+//           wrapperClassName="configuration-editor__container-wrapper"
+//           editorClassName="configuration-editor__container-editor"
+//           onChange={onEditorStateChange}
+//           placeholder="Start typing here..."
+//           onBlur={onBlur}
+//         />
+//       </div>
+//     </div>
+//   );
+// };
 
 export function AddConfiguration() {
   const dispatch = useDispatch();

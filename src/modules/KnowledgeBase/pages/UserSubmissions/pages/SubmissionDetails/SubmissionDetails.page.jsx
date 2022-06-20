@@ -1,88 +1,88 @@
 import { EditorState, convertToRaw } from 'draft-js';
 import { convertToHTML } from 'draft-convert';
 import * as Yup from 'yup';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form } from 'formik';
 import { useDispatch } from 'react-redux';
 import { Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 // Custom Modules
-import { Input, MultiSelect, SMTPEditor, Button } from 'components';
+import { ConfigurationEditor, EmailBodyInput, Button } from 'components';
 import { addEmailTemplate } from 'store';
 import './SubmissionDetails.styles.scss';
 
-const ConfigurationEditor = ({ editorState, onEditorStateChange, onBlur }) => {
-  return (
-    <div className="configuration-editor">
-      <div className="configuration-editor__container">
-        <SMTPEditor
-          editorState={editorState}
-          wrapperClassName="configuration-editor__container-wrapper"
-          editorClassName="configuration-editor__container-editor"
-          onChange={onEditorStateChange}
-          placeholder="Start typing here..."
-          onBlur={onBlur}
-        />
-      </div>
-    </div>
-  );
-};
+// const ConfigurationEditor = ({ editorState, onEditorStateChange, onBlur }) => {
+//   return (
+//     <div className="configuration-editor">
+//       <div className="configuration-editor__container">
+//         <SMTPEditor
+//           editorState={editorState}
+//           wrapperClassName="configuration-editor__container-wrapper"
+//           editorClassName="configuration-editor__container-editor"
+//           onChange={onEditorStateChange}
+//           placeholder="Start typing here..."
+//           onBlur={onBlur}
+//         />
+//       </div>
+//     </div>
+//   );
+// };
 
-const getInputEl = ({ options, name, placeholder, type }) => {
-  switch (type) {
-    case 'multiselect':
-      return (
-        <div className="custom-multiselect-kba w-full">
-          <MultiSelect name={name} options={options} mode="multiple" />
-        </div>
-      );
-    case 'text':
-      return (
-        <Field
-          name={name}
-          placeholder={placeholder}
-          className="h-[52px] w-[60%] text-[#92928f] placeholder:text-[#92928f] bg-[transparent] focus-visible:outline-none"
-        />
-      );
-    case 'select':
-      return (
-        <div className="custom-select-kba w-full">
-          <Input
-            type={type}
-            placeholder={placeholder}
-            name={name}
-            options={options}
-          />
-        </div>
-      );
-    default:
-      break;
-  }
-};
+// const getInputEl = ({ options, name, placeholder, type }) => {
+//   switch (type) {
+//     case 'multiselect':
+//       return (
+//         <div className="custom-multiselect-kba w-full">
+//           <MultiSelect name={name} options={options} mode="multiple" />
+//         </div>
+//       );
+//     case 'text':
+//       return (
+//         <Field
+//           name={name}
+//           placeholder={placeholder}
+//           className="h-[52px] w-[60%] text-[#92928f] placeholder:text-[#92928f] bg-[transparent] focus-visible:outline-none"
+//         />
+//       );
+//     case 'select':
+//       return (
+//         <div className="custom-select-kba w-full">
+//           <Input
+//             type={type}
+//             placeholder={placeholder}
+//             name={name}
+//             options={options}
+//           />
+//         </div>
+//       );
+//     default:
+//       break;
+//   }
+// };
 
-const EmailBodyInput = ({
-  touched,
-  errors,
-  name,
-  placeholder,
-  type,
-  label,
-  options,
-}) => {
-  return (
-    <div className="flex gap-[20px] bg-[transparent] items-center border-b-[1px] border-b-[#323248] border-dashed">
-      <h6 className="pl-[32px] text-white whitespace-nowrap w-[15%]">
-        {label}
-      </h6>
-      {getInputEl({ options, name, placeholder, type })}
-      {touched[name] && errors[name] && (
-        <div className="error whitespace-nowrap mr-[12px] mt-[0px] w-[20%]">
-          {errors[name]}
-        </div>
-      )}
-    </div>
-  );
-};
+// const EmailBodyInput = ({
+//   touched,
+//   errors,
+//   name,
+//   placeholder,
+//   type,
+//   label,
+//   options,
+// }) => {
+//   return (
+//     <div className="flex gap-[20px] bg-[transparent] items-center border-b-[1px] border-b-[#323248] border-dashed">
+//       <h6 className="pl-[32px] text-white whitespace-nowrap w-[15%]">
+//         {label}
+//       </h6>
+//       {getInputEl({ options, name, placeholder, type })}
+//       {touched[name] && errors[name] && (
+//         <div className="error whitespace-nowrap mr-[12px] mt-[0px] w-[20%]">
+//           {errors[name]}
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
 
 export const SubmissionDetails = () => {
   const initialValues = {

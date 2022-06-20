@@ -9,7 +9,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import {
   Input,
   MultiSelect,
-  SMTPEditor,
+  ConfigurationEditor,
+  EmailBodyInput,
   Button,
   ImageUpload,
 } from 'components';
@@ -21,89 +22,89 @@ import { createServerImage } from 'lib';
 import { getArticleByID } from 'store';
 import { updateArticle } from 'store';
 
-const ConfigurationEditor = ({ editorState, onEditorStateChange, onBlur }) => {
-  return (
-    <div className="configuration-editor">
-      <div className="configuration-editor__container">
-        <SMTPEditor
-          editorState={editorState}
-          wrapperClassName="configuration-editor__container-wrapper"
-          editorClassName="configuration-editor__container-editor"
-          onChange={onEditorStateChange}
-          placeholder="Start typing here..."
-          onBlur={onBlur}
-        />
-      </div>
-    </div>
-  );
-};
+// const ConfigurationEditor = ({ editorState, onEditorStateChange, onBlur }) => {
+//   return (
+//     <div className="configuration-editor">
+//       <div className="configuration-editor__container">
+//         <SMTPEditor
+//           editorState={editorState}
+//           wrapperClassName="configuration-editor__container-wrapper"
+//           editorClassName="configuration-editor__container-editor"
+//           onChange={onEditorStateChange}
+//           placeholder="Start typing here..."
+//           onBlur={onBlur}
+//         />
+//       </div>
+//     </div>
+//   );
+// };
 
-const getInputEl = ({ options, name, placeholder, type }) => {
-  switch (type) {
-    case 'multiselect':
-      return (
-        <div className="custom-multiselect-kba w-full">
-          <MultiSelect
-            name={name}
-            options={options}
-            mode="multiple"
-            placeholder={placeholder}
-          />
-        </div>
-      );
-    case 'text':
-      return (
-        <Field
-          name={name}
-          placeholder={placeholder}
-          className="h-[52px] w-[60%] text-[#92928f] placeholder:text-[#92928f] bg-[transparent] focus-visible:outline-none"
-        />
-      );
-    case 'select':
-      return (
-        <div className="custom-select-kba w-full">
-          <Input
-            type={type}
-            placeholder={placeholder}
-            name={name}
-            options={options}
-          />
-        </div>
-      );
-    case 'image':
-      return (
-        <div className="custom-select-kba w-full">
-          <ImageUpload name={name} />
-        </div>
-      );
-    default:
-      break;
-  }
-};
+// const getInputEl = ({ options, name, placeholder, type }) => {
+//   switch (type) {
+//     case 'multiselect':
+//       return (
+//         <div className="custom-multiselect-kba w-full">
+//           <MultiSelect
+//             name={name}
+//             options={options}
+//             mode="multiple"
+//             placeholder={placeholder}
+//           />
+//         </div>
+//       );
+//     case 'text':
+//       return (
+//         <Field
+//           name={name}
+//           placeholder={placeholder}
+//           className="h-[52px] w-[60%] text-[#92928f] placeholder:text-[#92928f] bg-[transparent] focus-visible:outline-none"
+//         />
+//       );
+//     case 'select':
+//       return (
+//         <div className="custom-select-kba w-full">
+//           <Input
+//             type={type}
+//             placeholder={placeholder}
+//             name={name}
+//             options={options}
+//           />
+//         </div>
+//       );
+//     case 'image':
+//       return (
+//         <div className="custom-select-kba w-full">
+//           <ImageUpload name={name} />
+//         </div>
+//       );
+//     default:
+//       break;
+//   }
+// };
 
-const EmailBodyInput = ({
-  touched,
-  errors,
-  name,
-  placeholder,
-  type,
-  label,
-  options,
-}) => {
-  return (
-    <div className="flex gap-[20px] bg-[transparent] items-center border-b-[1px] border-b-[#323248] border-dashed">
-      <h6 className="pl-[32px] text-white whitespace-nowrap w-[15%]">
-        {label}
-      </h6>
-      {getInputEl({ options, name, placeholder, type })}
-      {touched[name] && errors[name] && (
-        <div className="error whitespace-nowrap mr-[12px] mt-[0px] w-[20%]">
-          {errors[name]}
-        </div>
-      )}
-    </div>
-  );
-};
+// const EmailBodyInput = ({
+//   touched,
+//   errors,
+//   name,
+//   placeholder,
+//   type,
+//   label,
+//   options,
+// }) => {
+//   return (
+//     <div className="flex gap-[20px] bg-[transparent] items-center border-b-[1px] border-b-[#323248] border-dashed">
+//       <h6 className="pl-[32px] text-white whitespace-nowrap w-[15%]">
+//         {label}
+//       </h6>
+//       {getInputEl({ options, name, placeholder, type })}
+//       {touched[name] && errors[name] && (
+//         <div className="error whitespace-nowrap mr-[12px] mt-[0px] w-[20%]">
+//           {errors[name]}
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
 
 export const Edit = () => {
   const dispatch = useDispatch();

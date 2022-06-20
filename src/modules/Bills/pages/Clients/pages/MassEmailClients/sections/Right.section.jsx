@@ -1,97 +1,96 @@
-import { Field } from 'formik';
 import { useFormikContext } from 'formik';
 import { convertToHTML } from 'draft-convert';
 import { convertToRaw } from 'draft-js';
 
-import { Input, MultiSelect, SMTPEditor, Button } from 'components';
-import './Right.styles.scss';
+import { EmailBodyInput, ConfigurationEditor, Button } from 'components';
+// import './Right.styles.scss';
 
-const getInputEl = ({ options, name, placeholder, type }) => {
-  switch (type) {
-    case 'multiselect':
-      return (
-        <div className="custom-multiselect-mass-email-clients w-full">
-          <MultiSelect
-            name={name}
-            options={options}
-            mode="multiple"
-            placeholder={placeholder}
-          />
-        </div>
-      );
-    case 'text':
-      return (
-        <Field
-          name={name}
-          placeholder={placeholder}
-          className="h-[52px] w-[60%] text-[#92928f] placeholder:text-[#92928f] bg-[transparent] focus-visible:outline-none"
-        />
-      );
-    case 'number':
-      return (
-        <Field
-          name={name}
-          type="number"
-          placeholder={placeholder}
-          className="h-[52px] w-[60%] text-[#92928f] placeholder:text-[#92928f] bg-[transparent] focus-visible:outline-none"
-        />
-      );
-    case 'select':
-      return (
-        <div className="custom-select-mass-email-clients w-full">
-          <Input
-            type={type}
-            placeholder={placeholder}
-            name={name}
-            options={options}
-          />
-        </div>
-      );
-    default:
-      break;
-  }
-};
+// const getInputEl = ({ options, name, placeholder, type }) => {
+//   switch (type) {
+//     case 'multiselect':
+//       return (
+//         <div className="custom-multiselect-mass-email-clients w-full">
+//           <MultiSelect
+//             name={name}
+//             options={options}
+//             mode="multiple"
+//             placeholder={placeholder}
+//           />
+//         </div>
+//       );
+//     case 'text':
+//       return (
+//         <Field
+//           name={name}
+//           placeholder={placeholder}
+//           className="h-[52px] w-[60%] text-[#92928f] placeholder:text-[#92928f] bg-[transparent] focus-visible:outline-none"
+//         />
+//       );
+//     case 'number':
+//       return (
+//         <Field
+//           name={name}
+//           type="number"
+//           placeholder={placeholder}
+//           className="h-[52px] w-[60%] text-[#92928f] placeholder:text-[#92928f] bg-[transparent] focus-visible:outline-none"
+//         />
+//       );
+//     case 'select':
+//       return (
+//         <div className="custom-select-mass-email-clients w-full">
+//           <Input
+//             type={type}
+//             placeholder={placeholder}
+//             name={name}
+//             options={options}
+//           />
+//         </div>
+//       );
+//     default:
+//       break;
+//   }
+// };
 
-const EmailBodyInput = ({
-  touched,
-  errors,
-  name,
-  placeholder,
-  label,
-  options,
-  type,
-}) => {
-  return (
-    <div className="flex gap-[20px] bg-[#28283a] items-center">
-      <h6 className="px-[32px] w-[20%] text-white whitespace-nowrap">
-        {label}
-      </h6>
-      {getInputEl({ options, name, placeholder, type })}
-      {touched[name] && errors[name] && (
-        <div className="error whitespace-nowrap mr-[12px] mt-[0px] w-[20%]">
-          {errors[name]}
-        </div>
-      )}
-    </div>
-  );
-};
+// const EmailBodyInput = ({
+//   touched,
+//   errors,
+//   name,
+//   placeholder,
+//   label,
+//   options,
+//   type,
+// }) => {
+//   return (
+//     <div className="flex gap-[20px] bg-[#28283a] items-center">
+//       <h6 className="px-[32px] w-[20%] text-white whitespace-nowrap">
+//         {label}
+//       </h6>
+//       {getInputEl({ options, name, placeholder, type })}
+//       {touched[name] && errors[name] && (
+//         <div className="error whitespace-nowrap mr-[12px] mt-[0px] w-[20%]">
+//           {errors[name]}
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
 
-const ConfigurationEditor = ({ editorState, onEditorStateChange, onBlur }) => {
-  return (
-    <div className="configuration-editor">
-      <div className="configuration-editor__container">
-        <SMTPEditor
-          editorState={editorState}
-          wrapperClassName="configuration-editor__container-wrapper"
-          editorClassName="configuration-editor__container-editor"
-          onChange={onEditorStateChange}
-          placeholder="Start typing here..."
-          onBlur={onBlur}
-        />
-      </div>
-    </div>
-  );
-};
+// const ConfigurationEditor = ({ editorState, onEditorStateChange, onBlur }) => {
+//   return (
+//     <div className="configuration-editor">
+//       <div className="configuration-editor__container">
+//         <SMTPEditor
+//           editorState={editorState}
+//           wrapperClassName="configuration-editor__container-wrapper"
+//           editorClassName="configuration-editor__container-editor"
+//           onChange={onEditorStateChange}
+//           placeholder="Start typing here..."
+//           onBlur={onBlur}
+//         />
+//       </div>
+//     </div>
+//   );
+// };
 
 export function Right() {
   const { values, setFieldValue, setFieldTouched, touched, errors } =
@@ -195,26 +194,26 @@ export function Right() {
               <EmailBodyInput
                 name="clientName"
                 label="Client Name"
-                placeholder="[fullName]"
+                placeholder="[[fullName]]"
                 touched={touched}
                 errors={errors}
-                type="text"
+                type="readOnly"
               />
               <EmailBodyInput
                 name="company"
                 label="Company"
-                placeholder="[company]"
+                placeholder="[[company]]"
                 touched={touched}
                 errors={errors}
-                type="text"
+                type="readOnly"
               />
               <EmailBodyInput
                 name="address"
                 label="Address"
-                placeholder="[address]"
+                placeholder="[[address]]"
                 touched={touched}
                 errors={errors}
-                type="text"
+                type="readOnly"
               />
               <EmailBodyInput
                 name="emailTo"
@@ -227,6 +226,7 @@ export function Right() {
                 touched={touched}
                 errors={errors}
                 type="multiselect"
+                darkBg
               />
             </div>
             <ConfigurationEditor
@@ -260,6 +260,7 @@ export function Right() {
                 touched={touched}
                 errors={errors}
                 type="number"
+                darkBg
               />
               <EmailBodyInput
                 name="interval"
@@ -268,6 +269,7 @@ export function Right() {
                 touched={touched}
                 errors={errors}
                 type="number"
+                darkBg
               />
             </div>
             <div className="p-[32px]">
