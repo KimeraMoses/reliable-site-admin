@@ -16,7 +16,7 @@ function getCurrentTokenState() {
 
 function refreshToken() {
   const current = getCurrentTokenState();
-  return axios.post(
+  return axiosMain.post(
     '/api/tokens/refresh',
     {
       token: current?.token,

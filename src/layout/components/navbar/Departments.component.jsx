@@ -60,9 +60,10 @@ export const Departments = ({ showDepartments }) => {
         Departments
       </div>
       <div className="p-[20px] flex flex-col gap-[20px]">
-        {userDepartments?.map((department) => {
+        {userDepartments?.map((department, idx) => {
           return (
             <DepartmentSelector
+              key={`department-${idx}-${idx}1`}
               name={department?.departmentName}
               value={department?.departmentId}
               checked={department?.isAssign}

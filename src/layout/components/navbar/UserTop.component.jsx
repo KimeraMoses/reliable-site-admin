@@ -76,7 +76,7 @@ function UserTop({ toggleNotification }) {
         ?.filter(function (el) {
           return el.isRead !== true;
         })
-        ?.map((b) => {
+        ?.forEach((b) => {
           ids.push(b?.id);
         });
       if (ids.length) dispatch(notificationsRead(ids));

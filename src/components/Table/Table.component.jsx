@@ -189,7 +189,7 @@ export const Table = ({
                     {statusFilterPlaceholder || 'Status'}
                   </option>
                   {statusFilter.map((data, i) => (
-                    <option value={data?.value || i} key={i}>
+                    <option value={data?.value || i} key={'status-' + i}>
                       {data.name}
                     </option>
                   ))}

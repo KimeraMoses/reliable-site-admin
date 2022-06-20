@@ -59,8 +59,8 @@ export const Notifications = ({ onClose, visible }) => {
           <div>Notification Type</div>
           <div>Target</div>
         </div>
-        {notifications.map((notification) => {
-          return <Notification {...notification} />;
+        {notifications.map((notification, idx) => {
+          return <Notification key={`notification-${idx}`} {...notification} />;
         })}
       </div>
     </Drawer>
