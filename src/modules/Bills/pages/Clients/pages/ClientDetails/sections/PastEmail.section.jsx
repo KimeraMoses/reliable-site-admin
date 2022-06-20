@@ -26,6 +26,8 @@ const Email = ({
   );
 };
 
+let pastEmails = [];
+
 export const PastEmails = () => {
   const { t } = useTranslation('/Users/ns');
 
@@ -33,12 +35,18 @@ export const PastEmails = () => {
     <div className="mt-4 p-[32px] bg-[#1E1E2D] rounded-[8px]">
       <h6 className="text-white mb-[32px] text-[16px]">{t('pastEmails')}</h6>
 
-      <div className="flex flex-col gap-[16px] justify-center">
-        <Email />
-        <Email />
-        <Email />
-        <Email />
-      </div>
+      {pastEmails?.length ? (
+        <div className="flex flex-col gap-[16px] justify-center">
+          <Email />
+          <Email />
+          <Email />
+          <Email />
+        </div>
+      ) : (
+        <h4 className="text-white mt-[16px] text-center w-full">
+          No Emails Available!
+        </h4>
+      )}
     </div>
   );
 };

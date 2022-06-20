@@ -5,44 +5,44 @@ let data2019 = [];
 let data2020 = [];
 let data2021 = [];
 let data2022 = [];
-for (let i = 0; i < 20; i++) {
-  data2019.push({
-    date: '05/02/2019',
-    orderNo: `021${i}`,
-    details:
-      'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor.',
-    amount: 100,
-    invoice: '1234',
-    type: i % 2 === 0 ? 'loss' : 'profit',
-  });
-  data2020.push({
-    date: '05/02/2020',
-    orderNo: `021${i}`,
-    details:
-      'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor.',
-    amount: 100,
-    invoice: '1234',
-    type: i % 2 === 0 ? 'loss' : 'profit',
-  });
-  data2021.push({
-    date: '05/02/2021',
-    orderNo: `021${i}`,
-    details:
-      'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor.',
-    amount: 100,
-    invoice: '1234',
-    type: i % 2 === 0 ? 'loss' : 'profit',
-  });
-  data2022.push({
-    date: '05/02/2022',
-    orderNo: `021${i}`,
-    details:
-      'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor.',
-    amount: 100,
-    invoice: '1234',
-    type: i % 2 === 0 ? 'loss' : 'profit',
-  });
-}
+// for (let i = 0; i < 20; i++) {
+//   data2019.push({
+//     date: '05/02/2019',
+//     orderNo: `021${i}`,
+//     details:
+//       'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor.',
+//     amount: 100,
+//     invoice: '1234',
+//     type: i % 2 === 0 ? 'loss' : 'profit',
+//   });
+//   data2020.push({
+//     date: '05/02/2020',
+//     orderNo: `021${i}`,
+//     details:
+//       'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor.',
+//     amount: 100,
+//     invoice: '1234',
+//     type: i % 2 === 0 ? 'loss' : 'profit',
+//   });
+//   data2021.push({
+//     date: '05/02/2021',
+//     orderNo: `021${i}`,
+//     details:
+//       'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor.',
+//     amount: 100,
+//     invoice: '1234',
+//     type: i % 2 === 0 ? 'loss' : 'profit',
+//   });
+//   data2022.push({
+//     date: '05/02/2022',
+//     orderNo: `021${i}`,
+//     details:
+//       'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor.',
+//     amount: 100,
+//     invoice: '1234',
+//     type: i % 2 === 0 ? 'loss' : 'profit',
+//   });
+// }
 
 const allData = [
   { year: 'This Year', data: data2022 },
