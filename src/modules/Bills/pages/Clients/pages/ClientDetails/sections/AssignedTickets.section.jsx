@@ -33,6 +33,8 @@ const Ticket = ({
   );
 };
 
+const tickets = [];
+
 export const AssignedTickets = () => {
   const { t } = useTranslation('Users/ns');
 
@@ -42,12 +44,18 @@ export const AssignedTickets = () => {
         {t('supportTickets')}
       </h6>
 
-      <div className="flex flex-col gap-[16px] justify-center">
-        <Ticket />
-        <Ticket />
-        <Ticket />
-        <Ticket />
-      </div>
+      {tickets?.length ? (
+        <div className="flex flex-col gap-[16px] justify-center">
+          <Ticket />
+          <Ticket />
+          <Ticket />
+          <Ticket />
+        </div>
+      ) : (
+        <h4 className="text-white mt-[16px] text-center w-full">
+          No Tickets Created Yet!
+        </h4>
+      )}
     </div>
   );
 };
