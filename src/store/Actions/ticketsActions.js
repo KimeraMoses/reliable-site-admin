@@ -5,6 +5,8 @@ import {
   getTicketConfig,
   editTicketConfig,
   createTicketConfig,
+  getTicketsByClintIDConfig,
+  getAssignedTicketsByIDConfig,
 } from 'lib';
 import { toast } from 'react-toastify';
 import {
@@ -42,6 +44,39 @@ export const getTicketById = (id) => {
     } catch (e) {
       toast.error(getError(e));
       dispatch(getTicket(null));
+      dispatch(setTicketLoading(false));
+    }
+  };
+};
+
+export const getTicketsByClientID = ({ id }) => {
+  return async (dispatch) => {
+    dispatch(setTicketLoading(true));
+    try {
+      const { url, config } = getTicketsByClintIDConfig({ id });
+      const res = await axios.get(url, config);
+      dispatch(getTicketsDispatch(res?.data?.data));
+    } catch (e) {
+      toast.error(getError(e));
+      dispatch(getTicketsDispatch([]));
+    } finally {
+      dispatch(setTicketLoading(false));
+    }
+  };
+};
+
+export const getTicketsByAdminID = ({ id }) => {
+  // getAssignedTicketsByIDConfig
+  return async (dispatch) => {
+    dispatch(setTicketLoading(true));
+    try {
+      const { url, defaultData, config } = getAssignedTicketsByIDConfig({ id });
+      const res = await axios.post(url, defaultData, config);
+      dispatch(getTicketsDispatch(res?.data?.data));
+    } catch (e) {
+      toast.error(getError(e));
+      dispatch(getTicketsDispatch([]));
+    } finally {
       dispatch(setTicketLoading(false));
     }
   };

@@ -18,6 +18,7 @@ function UserTop({ toggleNotification }) {
   const [showDepartments, setShowDepartments] = useState(false);
   const { user, isLoggedIn } = useSelector((state) => state.auth);
   const { notifications } = useSelector((state) => state?.notifications);
+  const [imgError, setImgError] = useState(false);
   const lessThanDesktop = useMediaQuery({
     query: '(max-width: 900px)',
   });
@@ -126,11 +127,12 @@ function UserTop({ toggleNotification }) {
             <div className="flex items-start justify-between">
               {/* Image + Status */}
               <div className="h-12 w-12 rounded-lg border-2 border-[#3699FF] p-1 userName">
-                {user && user.imageUrl && user.imageUrl.length > 0 ? (
+                {user && user.base64Image && !imgError ? (
                   // !showName
                   <img
                     src={user?.base64Image}
                     alt={user.userName}
+                    onError={() => setImgError(true)}
                     className="h-full w-full"
                   />
                 ) : (

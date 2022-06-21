@@ -36,6 +36,8 @@ const incomelist = [
   },
 ];
 
+const income = false;
+
 export function IncomeForecast() {
   const { t } = useTranslation('/IncomeForecast/ns');
   return (
@@ -45,17 +47,23 @@ export function IncomeForecast() {
           <h3 className="income-forecast__header-heading">{t('title')}</h3>
           <p className="income-forecast__header-text">{t('desc')}</p>
         </div>
-        <div className="income-forecast__header-price">120.000 USD</div>
+        {income ? (
+          <div className="income-forecast__header-price">120.000 USD</div>
+        ) : null}
       </div>
       <div className="income-forecast__box">
-        <ul className="income-forecast__box-list">
-          {incomelist.map(({ id, text, price }) => (
-            <li key={id} className="income-forecast__box-list-item">
-              <p className="income-forecast__box-list-item-txt">{text}</p>
-              <p className="income-forecast__box-list-item-price">{price}</p>
-            </li>
-          ))}
-        </ul>
+        {income ? (
+          <ul className="income-forecast__box-list">
+            {incomelist.map(({ id, text, price }) => (
+              <li key={id} className="income-forecast__box-list-item">
+                <p className="income-forecast__box-list-item-txt">{text}</p>
+                <p className="income-forecast__box-list-item-price">{price}</p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="text-white text-center">No Data Available Yet!</div>
+        )}
       </div>
     </div>
   );

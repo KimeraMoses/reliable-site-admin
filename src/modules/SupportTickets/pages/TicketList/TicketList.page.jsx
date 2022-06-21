@@ -5,21 +5,22 @@ import { Table } from 'components';
 import { checkModule } from 'lib/checkModule';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTickets } from 'store';
 import { groupBy } from 'lib';
 import { useNavigate } from 'react-router-dom';
+import { getTicketsByAdminID } from 'store';
 
 export const TicketList = () => {
   const { t } = useTranslation('/Tickets/ns');
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { tickets, loading } = useSelector((state) => state?.tickets);
+  const { user } = useSelector((state) => state?.auth);
   const { userModules } = useSelector((state) => state?.modules);
 
   let activeTicket = tickets ? groupBy(tickets, 'ticketStatus') : {};
   useEffect(() => {
     (async () => {
-      await dispatch(getTickets());
+      await dispatch(getTicketsByAdminID({ id: user?.id }));
     })();
   }, [dispatch]);
 

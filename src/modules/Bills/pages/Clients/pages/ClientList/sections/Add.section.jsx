@@ -31,7 +31,8 @@ const validationSchema = Yup.object().shape({
 export const AddClientUser = ({ show, setShow }) => {
   const { t } = useTranslation('/Users/ns');
   const dispatch = useDispatch();
-  const { loading, users } = useSelector((state) => state?.users);
+  const { loading, clients } = useSelector((state) => state?.users);
+  // const allUsers = [...users, ...clients];
   const { brands } = useSelector((state) => state?.brands);
   const brandsLoading = useSelector((state) => state?.brands?.loading);
   const initialValues = {
@@ -143,9 +144,9 @@ export const AddClientUser = ({ show, setShow }) => {
     {
       type: 'select',
       name: 'parentID',
-      placeholder: 'Select Parent Admin User',
-      title: 'Parent Admin User',
-      options: users?.map((user) => ({
+      placeholder: 'Select Parent User',
+      title: 'Parent User',
+      options: clients?.map((user) => ({
         label: user?.fullName,
         value: user?.id,
       })),

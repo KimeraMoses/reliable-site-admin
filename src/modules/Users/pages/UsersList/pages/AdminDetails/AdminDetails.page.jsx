@@ -26,7 +26,7 @@ import { getUserModulesById } from 'store';
 export const AdminDetails = () => {
   const { t } = useTranslation('/Users/ns');
 
-  const [active, setActive] = useState(t('userPermissions'));
+  const [active, setActive] = useState(t('overview'));
 
   const links = [
     { label: t('overview'), onClick: () => setActive(t('overview')) },
@@ -61,16 +61,16 @@ export const AdminDetails = () => {
             <div className="admin-details__left">
               {/* USER PROFILE CARD */}
               <UserProfileCard />
-              <div className="mt-4">
+              {/* <div className="mt-4">
                 <SubUsers />
-              </div>
+              </div> */}
             </div>
             <div className="admin-details__right">
               <Navigation active={active} links={links} />
               {active === t('overview') ? (
                 <>
                   <AssignedTickets />
-                  <PastEmails />
+                  {/* <PastEmails /> */}
                 </>
               ) : (
                 <></>

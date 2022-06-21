@@ -2,46 +2,48 @@ import React from 'react';
 import { LineChart, Line, ResponsiveContainer } from 'recharts';
 import { useTranslation } from 'react-i18next';
 import './style.scss';
+import { useNavigate } from 'react-router-dom';
 
 const data = [
   {
     name: '25-Feb',
     all: 50,
-    complete: 80,
+    your: 80,
   },
   {
     name: '26-Feb',
     all: 30,
-    complete: 20,
+    your: 20,
   },
   {
     name: '28-Feb',
     all: 90,
-    complete: 50,
+    your: 50,
   },
   {
     name: '01-Mar',
     all: 30,
-    complete: 20,
+    your: 20,
   },
   {
     name: '02-Mar',
     all: 85,
-    complete: 50,
+    your: 50,
   },
   {
     name: '02-Mar',
     all: 25,
-    complete: 30,
+    your: 30,
   },
   {
     name: '02-Mar',
     all: 90,
-    complete: 50,
+    your: 50,
   },
 ];
 
 export function Orders() {
+  const navigate = useNavigate();
   const { t } = useTranslation('/Orders/ns');
   return (
     <div className="order">
@@ -66,7 +68,7 @@ export function Orders() {
             />
             <Line
               type="monotone"
-              dataKey="complete"
+              dataKey="your"
               stroke="#0BB783"
               strokeWidth={3}
               dot={false}
@@ -76,25 +78,31 @@ export function Orders() {
       </div>
       <div className="order__card">
         <div
-          className="order__card-inner"
+          className="order__card-inner cursor-pointer"
           style={{ background: '#212e48 0% 0% no-repeat padding-box' }}
+          onClick={() => {
+            navigate('/admin/dashboard/billing/orders/all-orders/list');
+          }}
         >
           <div className="order__card-inner-icon">
             <img src="/icon/bulk-blue.svg" alt="" />
           </div>
-          <div className="order__card-inner-text" style={{ color: '#3699FF' }}>
+          <div className="order__card-inner-text " style={{ color: '#3699FF' }}>
             {t('all')}
           </div>
         </div>
         <div
-          className="order__card-inner"
+          className="order__card-inner cursor-pointer"
           style={{ background: '#1C3238 0% 0% no-repeat padding-box' }}
+          onClick={() => {
+            navigate('/admin/dashboard/billing/orders/your-orders/list');
+          }}
         >
           <div className="order__card-inner-icon">
             <img src="/icon/bulk-green.svg" alt="" />
           </div>
-          <div className="order__card-inner-text" style={{ color: '#0BB783' }}>
-            {t('complete')}
+          <div className="order__card-inner-text " style={{ color: '#0BB783' }}>
+            Your Orders
           </div>
         </div>
       </div>
