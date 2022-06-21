@@ -116,9 +116,10 @@ function LockScreen() {
   return (
     <div className="d-flex w-screen py-20 md:py-2 md:h-screen relative">
       <div
-        className="absolute right-[20px] top-[20px] text-white underline text-[20px] cursor-pointer"
+        className="absolute left-[20px] top-[20px] text-white underline text-[20px] cursor-pointer"
         onClick={() => {
           dispatch(logout());
+          navigate('/admin/sign-in');
         }}
       >
         Not {user && user.fullName}? Sign in here.
