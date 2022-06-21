@@ -13,13 +13,14 @@ import {
   initAuthenticationFail,
   initAuthenticationPending,
   initAuthenticationSuccess,
+  logout,
 } from 'store/Slices/authSlice';
 import { accountSuspended, closeLockScreen } from 'store/Slices/settingSlice';
 import '../../layout/components/navbar/UserTop.css';
 
 function LockScreen() {
   const { user, isLoggedIn } = useSelector((state) => state.auth);
-  const [showName, setShowName] = useState(false);
+  const [imgError, setImgError] = useState(false);
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const isTrustDevice = true;
@@ -90,7 +91,7 @@ function LockScreen() {
       SaveTokenInLocalStorage(res.data);
     };
   };
-
+  console.log(imgError);
   const LoginHandler = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -113,7 +114,15 @@ function LockScreen() {
   };
   const { t } = useTranslation('/LockScreenPage/ns');
   return (
-    <div className="d-flex w-screen py-20 md:py-2 md:h-screen">
+    <div className="d-flex w-screen py-20 md:py-2 md:h-screen relative">
+      <div
+        className="absolute right-[20px] top-[20px] text-white underline text-[20px] cursor-pointer"
+        onClick={() => {
+          dispatch(logout());
+        }}
+      >
+        Not {user && user.fullName}? Sign in here.
+      </div>
       <div className="col-md-6 my-auto px-5  md:p-20">
         <div style={{ maxWidth: '668px' }} className="mx-auto">
           <div className="">
@@ -125,29 +134,25 @@ function LockScreen() {
               {t('desc')}
             </p>
           </div>
-          <div className="flex mb-5">
-            <div className="h-12 w-12 rounded-lg border-2 border-[#3699FF] p-2 userName mr-4">
-              {user &&
-              user.imageUrl &&
-              user.imageUrl.length > 0 &&
-              !showName ? (
+          <div className="flex items-center mb-5">
+            <div className="h-[90px] w-[90px] rounded-[50%] border-[2px] border-[#3699FF] p-[2px] userName mr-4">
+              {user && user?.base64Image && !imgError ? (
+                // !showName
                 <img
-                  src={user && user.imageUrl}
-                  alt={user && user.userName}
-                  onLoad={() => setShowName(false)}
-                  onError={() => setShowName(true)}
-                  className="h-full w-full"
+                  src={user?.base64Image}
+                  alt={user?.fullName}
+                  onError={() => setImgError(true)}
+                  className="h-full w-full rounded-[50%]"
                 />
               ) : (
-                user &&
-                showName && <UserName isLoggedIn={isLoggedIn} user={user} />
+                <>{user && <UserName isLoggedIn={isLoggedIn} user={user} />}</>
               )}
             </div>
             <div>
-              <h3 className="text-sm text-white">
+              <h3 className="text-[22px] text-white">
                 {t('Welcome')} {user && user.fullName}
               </h3>
-              <p className=" text-base custom-text-light">{t('WelcomeTxt')}</p>
+              <p className="text-[16px] custom-text-light">{t('WelcomeTxt')}</p>
             </div>
           </div>
           <div className="col-md-8">
@@ -165,7 +170,7 @@ function LockScreen() {
                 disabled={password.length < 6}
                 className="w-full h-12 custom-blue-bg ease-in duration-200 rounded-lg text-white bg-blue-500 hover:bg-blue-700"
               >
-                {isLoading ? t('Logging In...') : t('Sign In')}
+                {isLoading ? t('unlocking') : t('unlock')}
               </button>
             </form>
           </div>

@@ -1,8 +1,8 @@
 {
   "title": "Lock Screen",
-  "desc": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam",
+  "desc": "You have been redirected here due to inactivity. If you're not the last user signed in, click on the top-right to sign-in with another account.",
   "Welcome": "Welcome back,",
-  "WelcomeTxt": "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed",
-  "LogIn": "Logging In...",
-  "signIn": "Sign In"
+  "WelcomeTxt": "Type your password below to sign in again.",
+  "unlocking": "Unlocking...",
+  "unlock": "Unlock"
 }
