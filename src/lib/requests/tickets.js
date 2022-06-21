@@ -50,7 +50,7 @@ export const getAssignedTicketsByIDConfig = ({ id }) => ({
     pageNumber: 0,
     pageSize: 100,
     orderBy: [''],
-    // ticketStatus: '0 = Active',
+    ticketStatus: 0,
     // ticketPriority: '0 = Urgent',
     // ticketRelatedTo: '0 = KnowledgeBase',
   },

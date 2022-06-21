@@ -61,9 +61,9 @@ export const AdminDetails = () => {
             <div className="admin-details__left">
               {/* USER PROFILE CARD */}
               <UserProfileCard />
-              <div className="mt-4">
+              {/* <div className="mt-4">
                 <SubUsers />
-              </div>
+              </div> */}
             </div>
             <div className="admin-details__right">
               <Navigation active={active} links={links} />

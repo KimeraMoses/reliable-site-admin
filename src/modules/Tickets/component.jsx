@@ -6,10 +6,13 @@ import './style.scss';
 import { getTicketsByAdminID } from 'store';
 import { Spin } from 'antd';
 import { getDepartments } from 'store';
+import { useNavigate } from 'react-router-dom';
 
 export function Tickets() {
   const dispatch = useDispatch();
   const { t } = useTranslation('/Tickets/ns');
+
+  const navigate = useNavigate();
 
   const { user } = useSelector((state) => state?.auth);
   const { tickets, loading } = useSelector((state) => state?.tickets);
@@ -74,8 +77,11 @@ export function Tickets() {
                 return (
                   <div className="ticket-card__inner-left-text">
                     <h3
-                      className="ticket-card__inner-left-text-heading"
+                      className="ticket-card__inner-left-text-heading cursor-pointer"
                       style={{ color: idx % 2 === 0 ? '#0BB783' : '#3699FF' }}
+                      onClick={() => {
+                        navigate('/admin/dashboard/support/tickets');
+                      }}
                     >
                       {name}
                     </h3>

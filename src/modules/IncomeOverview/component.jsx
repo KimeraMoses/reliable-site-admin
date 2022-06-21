@@ -52,7 +52,9 @@ export function IncomeOverview() {
         <p className="income-overview__header-text">{t('desc')}</p>
       </div>
       {!income ? (
-        <div className="text-white p-[20px]">No Data Available!</div>
+        <div className="text-white p-[20px] text-center">
+          No Data Available Yet!
+        </div>
       ) : (
         <>
           <div className="income-overview__chart">

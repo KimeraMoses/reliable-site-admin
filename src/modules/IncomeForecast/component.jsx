@@ -62,7 +62,7 @@ export function IncomeForecast() {
             ))}
           </ul>
         ) : (
-          <div className="text-white">No Data Available!</div>
+          <div className="text-white text-center">No Data Available Yet!</div>
         )}
       </div>
     </div>
