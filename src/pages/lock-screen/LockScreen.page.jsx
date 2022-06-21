@@ -86,6 +86,7 @@ function LockScreen() {
       dispatch(initAuthenticationSuccess(res.data));
       dispatch(closeLockScreen());
       dispatch(getUserProfile(res.data.token));
+      localStorage.setItem('AuthToken', JSON.stringify(res.data));
       SaveTokenInLocalStorage(res.data);
     };
   };

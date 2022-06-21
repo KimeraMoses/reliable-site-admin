@@ -10,11 +10,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getArticleByID } from 'store';
 import { getArticleFeedbackByID } from 'store';
 import { useNavigate, useParams } from 'react-router-dom';
-import { createArticleFeedbackCommentReply } from 'store/Actions/articleFeedbackCommentReplies';
-import { getUsers } from 'store';
-import { createTicket } from 'store';
 import { toast } from 'react-toastify';
+
+import { createTicket, getUsers, getDepartments } from 'store';
 import { createArticleFeedbackComment } from 'store/Actions/articleFeedbackComments';
+import { createArticleFeedbackCommentReply } from 'store/Actions/articleFeedbackCommentReplies';
 
 const CommentCard = ({
   imgSrc,
@@ -144,29 +144,136 @@ export const FeedbackDetails = () => {
       await dispatch(getArticleByID({ id: articleId }));
       await dispatch(getArticleFeedbackByID({ id }));
       await dispatch(getUsers());
+      await dispatch(getDepartments());
     })();
   }, []);
 
   const { article, loading } = useSelector((state) => state?.articles);
+  const { departments } = useSelector((state) => state?.departments);
   const { articlesFeedback } = useSelector((state) => state?.articlesFeedback);
   const { users } = useSelector((state) => state?.users);
-  let usersData = [{ value: '', label: 'Select' }];
-  users.forEach((user) => {
+  let usersData = [{ value: '', label: 'Select User' }];
+  users?.forEach((user) => {
     usersData.push({
       value: user?.id,
       label: user?.fullName,
+    });
+  });
+  let departmentsData = [{ value: '', label: 'Select Department' }];
+  departments?.forEach((departments) => {
+    departmentsData.push({
+      value: departments?.id,
+      label: departments?.name,
     });
   });
   const feedbackLoading = useSelector(
     (state) => state?.articlesFeedback?.loading
   );
   const ticketLoading = useSelector((state) => state?.tickets?.loading);
+  const departmentsLoading = useSelector(
+    (state) => state?.departments?.loading
+  );
 
   const navigate = useNavigate();
   const [imgError, setImgError] = useState(false);
   return (
     <>
       <Spin spinning={loading || feedbackLoading || ticketLoading}>
+        <div className="bg-[#1E1E2D] m-[40px] p-[32px] rounded-[8px]">
+          <h6 className="text-white text-[20px]">
+            Generate Ticket For This Feedback
+          </h6>
+          <Formik
+            initialValues={{
+              assignTo: '',
+              status: 0,
+              priority: 0,
+              ticketTitle: '',
+              description: '',
+              departmentId: '',
+            }}
+            enableReinitialize
+            onSubmit={async (values) => {
+              if (values?.assignTo) {
+                const final = {
+                  assignedTo: values?.assignTo,
+                  ticketStatus: Number(values?.status),
+                  ticketPriority: Number(values?.priority),
+                  ticketTitle: values?.ticketTitle,
+                  description: values?.description,
+                  ticketRelatedTo: 0,
+                  ticketRelatedToId: id,
+                  departmentId: values?.departmentId,
+                };
+                await dispatch(createTicket({ data: final }));
+                navigate('/admin/dashboard/support/tickets');
+              } else {
+                toast.error('Please select appropriate values.');
+              }
+            }}
+          >
+            {() => {
+              return (
+                <Form>
+                  <div className="mt-[40px] grid grid-cols-3 gap-[16px]">
+                    <Input
+                      type="text"
+                      name="ticketTitle"
+                      placeholder="Enter Ticket Title..."
+                      label="Title"
+                    />
+                    <Input
+                      type="text"
+                      name="description"
+                      placeholder="Enter Short Description..."
+                      label="Description"
+                    />
+                    <Input
+                      options={usersData}
+                      type="select"
+                      name="assignTo"
+                      label="Assign To"
+                    />
+                    <Input
+                      options={[
+                        { label: 'Active', value: 0 },
+                        { label: 'Closed', value: 1 },
+                        { label: 'Disabled', value: 2 },
+                      ]}
+                      type="select"
+                      name="status"
+                      label="Status"
+                    />
+                    <Input
+                      options={[
+                        { label: 'Urgent', value: 0 },
+                        { label: 'Not Urgent', value: 1 },
+                      ]}
+                      type="select"
+                      name="priority"
+                      label="Priority"
+                    />
+                    <Input
+                      options={departmentsData}
+                      type="select"
+                      name="departmentId"
+                      label="departmentId"
+                    />
+                  </div>
+                  <div>
+                    <Button
+                      type="ghost"
+                      htmlType="submit"
+                      className="w-[fit_content] h-[55px] mt-[32px]"
+                    >
+                      Generate Ticket
+                    </Button>
+                  </div>
+                </Form>
+              );
+            }}
+          </Formik>
+        </div>
         <div className="m-[40px] p-[32px] bg-[#1E1E2D] rounded-[8px]">
           <div className="flex gap-[12px]">
             {article?.imagePath && !imgError ? (
@@ -193,89 +300,21 @@ export const FeedbackDetails = () => {
               </p>
             </div>
           </div>
-          <Formik
-            initialValues={{
-              assignTo: '',
-              status: 0,
-              priority: 0,
-            }}
-            enableReinitialize
-            onSubmit={async (values) => {
-              if (values?.assignTo) {
-                const final = {
-                  assignedTo: values?.assignTo,
-                  ticketStatus: Number(values?.status),
-                  ticketPriority: Number(values?.priority),
-                  ticketTitle: `Ticket for Article Feedback`,
-                  description: 'Demo Description for Ticket',
-                  ticketRelatedTo: 0,
-                  ticketRelatedToId: id,
-                  departmentId: '641de550-d0e3-458d-b842-0e7461a8301a',
-                };
-                await dispatch(createTicket({ data: final }));
-                navigate('/admin/dashboard/tickets/list/show');
-              } else {
-                toast.error('Please select appropriate values.');
-              }
-            }}
-          >
-            {() => {
-              return (
-                <Form>
-                  <div className="flex justify-between gap-[40px] mt-[40px]">
-                    {article?.bodyText ? (
-                      <p
-                        className="text-base text-[#FFFFFF]"
-                        dangerouslySetInnerHTML={{ __html: article?.bodyText }}
-                      />
-                    ) : (
-                      <p className="text-base text-[#FFFFFF]">
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Placeat voluptatem numquam labore illum quo pariatur
-                        tenetur perferendis quaerat dolore? Cum consequatur
-                        voluptatem, aliquid quis delectus provident eius facilis
-                        eos officiis?
-                      </p>
-                    )}
-                    <Button
-                      type="ghost"
-                      htmlType="submit"
-                      className="w-[fit_content] h-[55px]"
-                    >
-                      Generate Ticket
-                    </Button>
-                  </div>
-                  <div className="mt-[40px] grid grid-cols-3 gap-[16px]">
-                    <Input
-                      options={usersData}
-                      type="select"
-                      name="assignTo"
-                      label="Assign To"
-                    />
-                    <Input
-                      options={[
-                        { label: 'Active', value: 0 },
-                        { label: 'Closed', value: 1 },
-                        { label: 'Disabled', value: 2 },
-                      ]}
-                      type="select"
-                      name="status"
-                      label="Status"
-                    />
-                    <Input
-                      options={[
-                        { label: 'Urgent', value: 0 },
-                        { label: 'Not Urgent', value: 1 },
-                      ]}
-                      type="select"
-                      name="priority"
-                      label="Priority"
-                    />
-                  </div>
-                </Form>
-              );
-            }}
-          </Formik>
+          <div className="flex justify-between gap-[40px] mt-[40px]">
+            {article?.bodyText ? (
+              <p
+                className="text-base text-[#FFFFFF]"
+                dangerouslySetInnerHTML={{ __html: article?.bodyText }}
+              />
+            ) : (
+              <p className="text-base text-[#FFFFFF]">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat
+                voluptatem numquam labore illum quo pariatur tenetur perferendis
+                quaerat dolore? Cum consequatur voluptatem, aliquid quis
+                delectus provident eius facilis eos officiis?
+              </p>
+            )}
+          </div>
           <div>
             <Formik
               initialValues={{

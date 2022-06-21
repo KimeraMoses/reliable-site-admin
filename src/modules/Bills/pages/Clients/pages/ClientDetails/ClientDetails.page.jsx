@@ -73,7 +73,8 @@ export const ClientDetails = () => {
                 <>
                   <ProductsServices />
                   <AssignedTickets />
-                  <PastEmails />
+                  {/* TODO: Show it when mass email integration is done */}
+                  {/* <PastEmails /> */}
                 </>
               ) : (
                 <></>
