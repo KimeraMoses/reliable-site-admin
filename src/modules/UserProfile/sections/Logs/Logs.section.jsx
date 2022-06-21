@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkModule } from 'lib/checkModule';
-import { getLogs } from 'store';
+import { getLogsByUserID } from 'store';
 
 export const Logs = () => {
   const [selectedFilter, setSelectedFilter] = useState('status');
@@ -22,9 +22,10 @@ export const Logs = () => {
     modules: userModules,
   });
 
+  const { user } = useSelector((state) => state?.auth);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getLogs());
+    dispatch(getLogsByUserID(user?.id));
   }, []);
 
   const columns = [
@@ -98,7 +99,7 @@ export const Logs = () => {
           permissions={permissions}
           loading={loading}
           customFilterSort={
-            <>
+            <div className="custom-select-component">
               <Select
                 className="min-w-[235px] bg-[#171723]"
                 onChange={onSelectChange}
@@ -112,7 +113,7 @@ export const Logs = () => {
                   </Select.Option>
                 ))}
               </Select>
-            </>
+            </div>
           }
         />
       </div>
