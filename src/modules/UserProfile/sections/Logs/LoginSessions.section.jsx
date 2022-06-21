@@ -77,7 +77,9 @@ export const LoginSessions = () => {
   }, [selectedSort]);
 
   const { user } = useSelector((state) => state.auth);
-  const { loginSessions, loading } = useSelector((state) => state.logs);
+  const { loginSessions, loginSessionsLoading } = useSelector(
+    (state) => state.logs
+  );
   const dispatch = useDispatch();
   // get data from api
   useEffect(() => {
@@ -132,11 +134,11 @@ export const LoginSessions = () => {
             showSizeChanger: false,
           }}
           permissions={permissions}
-          loading={loading}
+          loading={loginSessionsLoading}
           hideActions
           t={t}
           customFilterSort={
-            <>
+            <div className="custom-select-component">
               <Select
                 className="min-w-[235px] bg-[#171723]"
                 onChange={onSelectChange}
@@ -146,7 +148,7 @@ export const LoginSessions = () => {
               >
                 <Select.Option value="1 Hr">1 Hours</Select.Option>
               </Select>
-            </>
+            </div>
           }
         />
       </div>

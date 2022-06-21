@@ -11,6 +11,7 @@ import {
   getLogsSlice,
   getUserLogsSlice,
   setLogsLoading,
+  setLoginSessionsLoading,
   getLoginSessionsSlice,
 } from 'store/Slices/logs';
 
@@ -42,8 +43,8 @@ export const getLogsByUserID = (id) => {
     dispatch(setLogsLoading(true));
     if (token) {
       try {
-        const { url } = getLogsByUserIDConfig(id);
-        const res = await axios.get(url);
+        const { url, defaultData, config } = getLogsByUserIDConfig(id);
+        const res = await axios.post(url, defaultData, config);
         await dispatch(getLogsSlice(res?.data?.data));
         dispatch(setLogsLoading(false));
       } catch (e) {
@@ -73,16 +74,16 @@ export const getUserLogs = (uid) => {
 
 export const getLoginSessions = (id) => {
   return async (dispatch) => {
-    dispatch(setLogsLoading(true));
+    dispatch(setLoginSessionsLoading(true));
     if (token) {
       try {
         const { url } = getUserLoginSessions(id);
         const res = await axios.get(url);
         await dispatch(getLoginSessionsSlice(res?.data?.data));
-        dispatch(setLogsLoading(false));
       } catch (e) {
         toast.error(getError(e));
-        dispatch(setLogsLoading(false));
+      } finally {
+        dispatch(setLoginSessionsLoading(false));
       }
     }
   };

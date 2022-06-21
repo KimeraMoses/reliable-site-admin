@@ -7,7 +7,6 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkModule } from 'lib/checkModule';
-import { getLogs } from 'store';
 import { getUserLogs } from 'store';
 
 export const Logs = () => {
@@ -26,12 +25,8 @@ export const Logs = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getLogs());
-  }, []);
-
-  useEffect(() => {
     if (user) {
-      getUserLogs(user.id);
+      dispatch(getUserLogs(user?.id));
     }
   }, [user]);
 

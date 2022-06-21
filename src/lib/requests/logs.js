@@ -2,7 +2,8 @@ import { getConfig } from './getConfig';
 
 // Logs and Login History End-Points
 export const getLogsConfig = () => ({
-  url: '/api/audit-logs',
+  url: '/api/v1/admin/auditlogs',
+  config: getConfig({ module: 'Users', action: 'View' }),
 });
 export const getLogsByUserIDConfig = (uid) => ({
   url: `/api/v1/admin/auditlogs/user/${uid}`,
