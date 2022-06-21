@@ -1,5 +1,3 @@
-import { Select } from 'antd';
-import { Down } from 'icons';
 import { Table } from 'components';
 import './Logs.styles.scss';
 import { useEffect, useState } from 'react';
@@ -7,10 +5,9 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkModule } from 'lib/checkModule';
 import { getLoginSessions } from 'store';
-import { getDifference } from 'lib';
+import { exportToExcel, getDifference } from 'lib';
 
 export const LoginSessions = () => {
-  const [selectedSort, setSelectedSort] = useState('1 Hr');
   const [data, setData] = useState([]);
 
   const { t } = useTranslation('Users/ns');
@@ -54,31 +51,9 @@ export const LoginSessions = () => {
     },
   ];
 
-  useEffect(() => {
-    const data = [];
-    for (let i = 1; i <= 4; i++) {
-      data.push({
-        key: i,
-        location: `Location ${i}`,
-        status: `OK`,
-        device: 'Chrome - Windows',
-        ipAddress: '236.125.56.78',
-        time: '2 Mins Ago',
-      });
-    }
-
-    data.sort((a, b) => {
-      if (a[selectedSort] && b[selectedSort]) {
-        return a?.[selectedSort]?.localeCompare(b?.[selectedSort]);
-      }
-      return a > b;
-    });
-    setData(data);
-  }, [selectedSort]);
-
-  const { user } = useSelector((state) => state.users);
+  const { user } = useSelector((state) => state?.users);
   const { loginSessions, loginSessionsLoading } = useSelector(
-    (state) => state?.logs
+    (state) => state.logs
   );
   const dispatch = useDispatch();
   // get data from api
@@ -112,9 +87,6 @@ export const LoginSessions = () => {
       console.log(dataHolder);
     }
   }, [loginSessions]);
-  const onSelectChange = (e) => {
-    setSelectedSort(e);
-  };
 
   return (
     <div className="mt-[20px] bg-[#1E1E2D] rounded-[8px]">
@@ -127,7 +99,12 @@ export const LoginSessions = () => {
           data={data}
           columns={columns}
           fieldToFilter={'location'}
-          btnData={{ text: t('viewAll'), onClick: () => {} }}
+          btnData={{
+            text: 'Download All',
+            onClick: () => {
+              exportToExcel(loginSessions);
+            },
+          }}
           pagination={{
             pageSize: 5,
             position: ['bottomLeft'],
@@ -137,19 +114,6 @@ export const LoginSessions = () => {
           loading={loginSessionsLoading}
           hideActions
           t={t}
-          customFilterSort={
-            <div className="custom-select-component">
-              <Select
-                className="min-w-[235px] bg-[#171723]"
-                onChange={onSelectChange}
-                dropdownClassName="custom-select-dropdown"
-                value={selectedSort}
-                suffixIcon={<Down />}
-              >
-                <Select.Option value="1 Hr">1 Hours</Select.Option>
-              </Select>
-            </div>
-          }
         />
       </div>
     </div>

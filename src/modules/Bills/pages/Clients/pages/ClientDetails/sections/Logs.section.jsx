@@ -1,35 +1,30 @@
-import { Select } from 'antd';
 import moment from 'moment';
-import { Down } from 'icons';
 import { Table } from 'components';
 import './Logs.styles.scss';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkModule } from 'lib/checkModule';
-import { getUserLogs } from 'store';
+import { getLogsByUserID } from 'store';
+import { exportToExcel } from 'lib';
 
 export const Logs = () => {
-  const [selectedFilter, setSelectedFilter] = useState('status');
   const [data, setData] = useState([]);
 
   const { t } = useTranslation('/Users/ns');
 
   const { logs, loading } = useSelector((state) => state?.logs);
-  const { user } = useSelector((state) => state?.users);
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
     module: 'Users',
     modules: userModules,
   });
 
+  const { user } = useSelector((state) => state?.users);
   const dispatch = useDispatch();
-
   useEffect(() => {
-    (async () => {
-      await dispatch(getUserLogs(user?.id));
-    })();
-  }, [user]);
+    dispatch(getLogsByUserID(user?.id));
+  }, []);
 
   const columns = [
     {
@@ -70,15 +65,6 @@ export const Logs = () => {
     setData(dataHolder);
   }, [logs]);
 
-  useEffect(() => {
-    // TODO: User your filter logic here
-    // setData(data);
-  }, [selectedFilter]);
-
-  const onSelectChange = (e) => {
-    setSelectedFilter(e);
-  };
-
   return (
     <div className="mt-[20px] bg-[#1E1E2D] rounded-[8px]">
       <h6 className="text-white text-[16px] px-[32px] pt-[32px]">
@@ -89,9 +75,14 @@ export const Logs = () => {
         <Table
           data={data}
           columns={columns}
-          fieldToFilter={'status'}
+          fieldToFilter={'url'}
           t={t}
-          btnData={{ text: t('downloadReport'), onClick: () => {} }}
+          btnData={{
+            text: 'Download Logs',
+            onClick: () => {
+              exportToExcel(logs);
+            },
+          }}
           pagination={{
             pageSize: 5,
             position: ['bottomLeft'],
@@ -101,23 +92,6 @@ export const Logs = () => {
           hideHeaders
           permissions={permissions}
           loading={loading}
-          customFilterSort={
-            <div className="custom-select-component">
-              <Select
-                className="min-w-[235px] bg-[#171723]"
-                onChange={onSelectChange}
-                dropdownClassName="custom-select-dropdown"
-                value={selectedFilter}
-                suffixIcon={<Down />}
-              >
-                {columns?.map((el) => (
-                  <Select.Option value={el?.key} key={el?.key}>
-                    {t('filterBy')} {el?.title}
-                  </Select.Option>
-                ))}
-              </Select>
-            </div>
-          }
         />
       </div>
     </div>

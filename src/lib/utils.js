@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { EditorState, ContentState, convertFromHTML } from 'draft-js';
 import { browserName, browserVersion } from 'react-device-detect';
+import moment from 'moment';
+import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
 
 export const getGroupModules = ({ appModules = [], groupModules = [] }) => {
   const groupNames = groupModules?.map((el) => el?.name);
@@ -326,4 +329,24 @@ export const genrateFirstLetterName = (value) => {
     }
     return name;
   }
+};
+
+export const exportToExcel = (object) => {
+  const fileType = 'text/csv;charset=utf-8';
+  const fileExtension = '.csv';
+
+  // const json = JSON.stringify(object);
+  const ws = XLSX.utils.json_to_sheet(object);
+
+  const wb = {
+    Sheets: { data: ws },
+    SheetNames: [`data`],
+  };
+
+  const excelBuffer = XLSX.write(wb, { bookType: 'csv', type: 'array' });
+  const data = new Blob([excelBuffer], { type: fileType });
+  FileSaver.saveAs(
+    data,
+    `Report-${moment().format('MM-DD-YYYY [at] HH:mm A')}` + fileExtension
+  );
 };
