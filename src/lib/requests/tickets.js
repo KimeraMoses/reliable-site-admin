@@ -56,3 +56,21 @@ export const getAssignedTicketsByIDConfig = ({ id }) => ({
   },
   config: ticketsConfig('View'),
 });
+
+export const getTicketsByDepartmentIdConfig = ({ id }) => ({
+  url: `${prefix}/search`,
+  defaultData: {
+    advancedSearch: {
+      fields: ['departmentId'],
+      keyword: id,
+    },
+    keyword: '',
+    pageNumber: 0,
+    pageSize: 100,
+    orderBy: [''],
+    ticketStatus: 0,
+    // ticketPriority: '0 = Urgent',
+    // ticketRelatedTo: '0 = KnowledgeBase',
+  },
+  config: ticketsConfig('View'),
+});

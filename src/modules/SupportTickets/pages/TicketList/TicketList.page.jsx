@@ -82,7 +82,7 @@ export const TicketList = () => {
             className="flex cursor-pointer"
             onClick={() => {
               navigate(
-                `/admin/dashboard/support/tickets/details/${record?.id}`
+                `/admin/dashboard/support/tickets/list/details/${record?.id}`
               );
             }}
           >

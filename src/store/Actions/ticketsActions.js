@@ -7,6 +7,7 @@ import {
   createTicketConfig,
   getTicketsByClintIDConfig,
   getAssignedTicketsByIDConfig,
+  getTicketsByDepartmentIdConfig,
 } from 'lib';
 import { toast } from 'react-toastify';
 import {
@@ -71,6 +72,25 @@ export const getTicketsByAdminID = ({ id }) => {
     dispatch(setTicketLoading(true));
     try {
       const { url, defaultData, config } = getAssignedTicketsByIDConfig({ id });
+      const res = await axios.post(url, defaultData, config);
+      dispatch(getTicketsDispatch(res?.data?.data));
+    } catch (e) {
+      toast.error(getError(e));
+      dispatch(getTicketsDispatch([]));
+    } finally {
+      dispatch(setTicketLoading(false));
+    }
+  };
+};
+// getTicketsByDepartmentId
+export const getTicketsByDepartmentId = ({ id }) => {
+  // getAssignedTicketsByIDConfig
+  return async (dispatch) => {
+    dispatch(setTicketLoading(true));
+    try {
+      const { url, defaultData, config } = getTicketsByDepartmentIdConfig({
+        id,
+      });
       const res = await axios.post(url, defaultData, config);
       dispatch(getTicketsDispatch(res?.data?.data));
     } catch (e) {

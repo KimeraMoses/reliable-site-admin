@@ -127,21 +127,21 @@ export const sidebarData = [
     subLinks: [
       {
         name: 'My Tickets',
-        path: '/admin/dashboard/support/tickets',
+        path: '/admin/dashboard/support/tickets/list',
         subLinks: [
           {
             name: 'Tickets Details',
-            path: '/admin/dashboard/support/tickets/details/:id',
+            path: '/admin/dashboard/support/tickets/list/details/:id',
           },
         ],
       },
       {
         name: 'Tickets By Department',
-        path: '/admin/dashboard/support/tickets-by-departments',
+        path: '/admin/dashboard/support/tickets/by-departments',
         subLinks: [
           {
             name: 'Tickets Details',
-            path: '/admin/dashboard/support/tickets/details/:id',
+            path: '/admin/dashboard/support/tickets/by-departments/details/:id',
           },
         ],
       },
