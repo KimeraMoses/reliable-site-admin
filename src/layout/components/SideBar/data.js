@@ -126,8 +126,18 @@ export const sidebarData = [
     icon: (fill) => <Support fill={fill} />,
     subLinks: [
       {
-        name: 'Tickets List',
+        name: 'My Tickets',
         path: '/admin/dashboard/support/tickets',
+        subLinks: [
+          {
+            name: 'Tickets Details',
+            path: '/admin/dashboard/support/tickets/details/:id',
+          },
+        ],
+      },
+      {
+        name: 'Tickets By Department',
+        path: '/admin/dashboard/support/tickets-by-departments',
         subLinks: [
           {
             name: 'Tickets Details',

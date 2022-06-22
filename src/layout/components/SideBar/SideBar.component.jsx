@@ -1,13 +1,11 @@
 import React, { Fragment } from 'react';
 import SideLinks from './SideLinks.component';
-import QRCode from 'react-qr-code';
 import './SideBar.styles.scss';
 import { useSelector } from 'react-redux';
 import { sidebarData } from './data';
 import { checkModule } from 'lib/checkModule';
 
 export function SideBar({ hideSide }) {
-  const authenticatorUri = useSelector((state) => state.auth.authUri);
   const userLevelModules = useSelector((state) => state?.modules?.userModules);
 
   return (

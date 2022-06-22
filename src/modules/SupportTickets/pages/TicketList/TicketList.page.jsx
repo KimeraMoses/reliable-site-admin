@@ -142,7 +142,13 @@ export const TicketList = () => {
           fieldToFilter="ticketRelatedTo"
           permissions={permissions}
           hideActions={true}
-          headingTitle={t('publicTickets')}
+          headingTitle={
+            active === t('active')
+              ? 'Active Tickets'
+              : active === t('waiting')
+              ? 'Waiting Tickets'
+              : 'Closed Tickets'
+          }
           t={t}
         />
       </div>

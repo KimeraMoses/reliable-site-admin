@@ -43,7 +43,7 @@ export function Tickets() {
   const listToDisplay = Object?.keys(counts)?.map((name) => {
     return {
       name,
-      percentage: `${(counts[name] / totalTickets) * 100}%`,
+      percentage: `${((counts[name] / totalTickets) * 100).toFixed(2)}%`,
       percent: (counts[name] / totalTickets) * 100,
     };
   });
