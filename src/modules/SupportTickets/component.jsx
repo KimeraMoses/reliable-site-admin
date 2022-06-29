@@ -4,6 +4,7 @@ import {
   TicketList,
   TicketDetails,
   TicketsByDeptId,
+  AllTickets,
   // TicketsByDepartment,
   // TicketsByDepartmentsDetails,
 } from './pages';
@@ -23,6 +24,7 @@ export const SupportTickets = () => {
           path="tickets/by-departments/:id"
           element={<TicketsByDeptId />}
         />
+        <Route path="tickets/show-all/list" element={<AllTickets />} />
         {/* <Route
           path="tickets/by-departments/details/:id"
           element={<TicketsByDepartmentsDetails />}

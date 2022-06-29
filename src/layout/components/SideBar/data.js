@@ -25,12 +25,8 @@ export const useSidebarData = () => {
     (ticket) => ticket?.departmentName !== undefined
   );
 
-  // const counts = {};
-  // finalTickets.forEach(function (x) {
-  //   counts[x?.departmentName] = (counts[x?.departmentName] || 0) + 1;
-  // });
   function getUniqueListBy(arr, key) {
-    return [...new Map(arr.map((item) => [item[key], item])).values()];
+    return [...new Map(arr?.map((item) => [item?.[key], item]))?.values()];
   }
   const uniqueDeptTickets = getUniqueListBy(finalTickets, 'departmentId');
   const links = uniqueDeptTickets?.map((el) => ({
@@ -162,6 +158,10 @@ export const useSidebarData = () => {
         },
         // Dynamically Spreading Available Departments In Which Tickets Present
         ...links,
+        {
+          name: 'Tickets List',
+          path: '/admin/dashboard/support/tickets/show-all/list',
+        },
       ],
     },
     {

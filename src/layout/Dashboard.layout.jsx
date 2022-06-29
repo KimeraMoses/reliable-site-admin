@@ -3,9 +3,10 @@ import { Link, useLocation } from 'react-router-dom';
 import { element, bool } from 'prop-types';
 import { useMediaQuery } from 'react-responsive';
 import { SideBar, TopBar, Notifications } from './components';
-import { sidebarData } from './components/SideBar/data';
+// import { sidebarData } from './components/SideBar/data';
 import { GetMFAUri } from 'store/Actions/AuthActions';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSidebarData } from './components/SideBar/data';
 
 export function DashboardLayout({ children, hide }) {
   const [active, setActive] = useState('');
@@ -19,6 +20,8 @@ export function DashboardLayout({ children, hide }) {
   const lessThanDesktop = useMediaQuery({
     query: '(max-width: 900px)',
   });
+
+  const sidebarData = useSidebarData();
 
   const [hideSide, setHideSide] = useState(!!lessThanDesktop);
   const [hideNoti, setHideNoti] = useState(false);
