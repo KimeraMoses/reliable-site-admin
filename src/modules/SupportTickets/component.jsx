@@ -3,8 +3,9 @@ import { Navigate, Route, Routes } from 'react-router-dom';
 import {
   TicketList,
   TicketDetails,
-  TicketsByDepartment,
-  TicketsByDepartmentsDetails,
+  TicketsByDeptId,
+  // TicketsByDepartment,
+  // TicketsByDepartmentsDetails,
 } from './pages';
 import './style.scss';
 
@@ -19,13 +20,13 @@ export const SupportTickets = () => {
         <Route path="tickets/list" element={<TicketList />} />
         <Route path="tickets/list/details/:id" element={<TicketDetails />} />
         <Route
-          path="tickets/by-departments"
-          element={<TicketsByDepartment />}
+          path="tickets/by-departments/:id"
+          element={<TicketsByDeptId />}
         />
-        <Route
+        {/* <Route
           path="tickets/by-departments/details/:id"
           element={<TicketsByDepartmentsDetails />}
-        />
+        /> */}
       </Routes>
     </DashboardLayout>
   );

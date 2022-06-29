@@ -14,6 +14,7 @@ import {
   getTicketsDispatch,
   setTicketLoading,
   getTicket,
+  getDepartmentTickets,
   setTicketCommentLoading,
 } from 'store/Slices';
 
@@ -92,10 +93,10 @@ export const getTicketsByDepartmentId = ({ id }) => {
         id,
       });
       const res = await axios.post(url, defaultData, config);
-      dispatch(getTicketsDispatch(res?.data?.data));
+      dispatch(getDepartmentTickets(res?.data?.data));
     } catch (e) {
       toast.error(getError(e));
-      dispatch(getTicketsDispatch([]));
+      dispatch(getDepartmentTickets([]));
     } finally {
       dispatch(setTicketLoading(false));
     }

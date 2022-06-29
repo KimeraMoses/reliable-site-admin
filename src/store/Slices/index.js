@@ -40,6 +40,7 @@ export {
 export {
   getTickets as getTicketsDispatch,
   setTicketLoading,
+  getDepartmentTickets,
   getTicket,
 } from './ticketsSlice';
 
