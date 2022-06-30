@@ -11,6 +11,9 @@ import {
   getTickets,
   getTicketsByDepartmentId,
 } from 'store';
+import { getUsers } from 'store';
+import { getClients } from 'store';
+import { Spin } from 'antd';
 
 export const RelatedList = () => {
   const location = useLocation();
@@ -18,12 +21,26 @@ export const RelatedList = () => {
     (state) => state?.tickets
   );
   const userTickets = useSelector((state) => state?.tickets?.tickets);
+  const { clients, users } = useSelector((state) => state?.users);
+  const { departments } = useSelector((state) => state?.departments);
+  const usersLoading = useSelector((state) => state?.users?.loading);
+  const departmentsLoading = useSelector(
+    (state) => state?.departments?.loading
+  );
 
   const tickets = location?.pathname?.includes('show-all')
     ? allTickets
     : location?.pathname.includes('by-department')
     ? departmentTickets
     : userTickets;
+
+  const currentRoute = ({ deptId = '', id = '' }) =>
+    location?.pathname?.includes('show-all')
+      ? `/admin/dashboard/support/tickets/show-all/list/details/${id}`
+      : location?.pathname.includes('by-department')
+      ? `/admin/dashboard/support/tickets/by-departments/${deptId}/details/${id}`
+      : `/admin/dashboard/support/tickets/list/details/${id}`;
+
   const { userModules } = useSelector((state) => state?.modules);
 
   const { permissions } = checkModule({
@@ -54,42 +71,70 @@ export const RelatedList = () => {
 
   const columns = [
     {
-      title: '',
-      dataIndex: 'description',
-      key: 'description',
-      render: (description, record) => {
-        return (
-          <div
-            className="flex cursor-pointer"
-            onClick={() => {
-              navigate(
-                `/admin/dashboard/support/tickets/details/${record?.id}`
-              );
-            }}
-          >
-            <TicketIcon />
-            <div className="ml-[8px]">
-              <h3 className={`text-[#FFFFFF]`}>
-                {record?.ticketTitle}{' '}
-                {`${
-                  record?.tagTitle ? (
-                    <span
-                      className={`uppercase ml-[12px] text-[10px] bg-[#323248] pt-[4px] pb-[4px] pl-[8px] pr-[8px]`}
-                    >
-                      ${record?.tagTitle}
-                    </span>
-                  ) : (
-                    ''
-                  )
-                }`}
-              </h3>
-              <p className={'text-[#474761] text-[14px] mt-[12px]'}>
-                {description}
-              </p>
-            </div>
-          </div>
-        );
+      title: 'Status',
+      dataIndex: 'ticketStatus',
+      key: 'ticketStatus',
+      render: (key) => {
+        if (key === 0) {
+          return 'Active';
+        } else if (key === 1) {
+          return 'Closed';
+        } else if (key === '2') {
+          return 'Disabled';
+        }
       },
+    },
+    {
+      title: 'Subject',
+      dataIndex: 'ticketTitle',
+      key: 'ticketTitle',
+    },
+    {
+      title: 'Created By',
+      dataIndex: 'createdBy',
+      key: 'createdBy',
+      render: (text) => {
+        const client = clients?.find((client) => client?.id === text);
+        const admin = users?.find((user) => user?.id === text);
+        return client?.fullName
+          ? client.fullName
+          : admin?.fullName
+          ? admin.fullName
+          : 'N/A';
+      },
+    },
+    {
+      title: 'Department',
+      dataIndex: 'departmentId',
+      key: 'departmentId',
+      render: (text) => {
+        const department = departments?.find((dept) => dept?.id === text);
+        return department?.name ? department?.name : 'N/A';
+      },
+    },
+    {
+      title: 'Assigned To',
+      dataIndex: 'assignedTo',
+      key: 'assignedTo',
+      render: (text) => {
+        const admin = users?.find((user) => user?.id === text);
+        return admin?.fullName ? admin.fullName : 'N/A';
+      },
+    },
+    {
+      title: 'Follow-Up',
+      dataIndex: '',
+      key: '',
+    },
+    {
+      title: 'No. of Messages',
+      dataIndex: '',
+      key: '',
+    },
+    {
+      title: 'Idle Time',
+      dataIndex: '',
+      key: '',
     },
   ];
 
@@ -105,21 +150,42 @@ export const RelatedList = () => {
       } else {
         await dispatch(getTicketsByAdminID({ id: user?.id }));
       }
+      await dispatch(getUsers());
+      await dispatch(getClients());
     })();
   }, [dispatch]);
   return (
-    <div className={`p-[40px] bg-[#1E1E2D] rounded-[8px] custom-tickets-table`}>
-      <Table
-        columns={columns}
-        data={data}
-        loading={loading}
-        fieldToFilter="ticketRelatedTo"
-        permissions={permissions}
-        hideActions={true}
-        customFilterSort={<></>}
-        // headingTitle={}
-        // t={t}
-      />
+    <div className={`p-[40px] bg-[#1E1E2D] rounded-[8px]`}>
+      {loading || departmentsLoading || usersLoading ? (
+        <div className="w-full flex items-center justify-center min-h-[400px]">
+          <Spin spinning />
+        </div>
+      ) : (
+        <Table
+          columns={columns}
+          data={data}
+          // fieldToFilter="ticketRelatedTo"
+          fieldToFilter="id"
+          permissions={permissions}
+          hideActions={true}
+          customFilterSort={<></>}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {
+                navigate(
+                  currentRoute({ deptId: record?.departmentId, id: record?.id })
+                );
+              }, // click row
+              onDoubleClick: (event) => {}, // double click row
+              onContextMenu: (event) => {}, // right button click row
+              onMouseEnter: (event) => {}, // mouse enter row
+              onMouseLeave: (event) => {}, // mouse leave row
+            };
+          }}
+          // headingTitle={}
+          // t={t}
+        />
+      )}
     </div>
   );
 };
