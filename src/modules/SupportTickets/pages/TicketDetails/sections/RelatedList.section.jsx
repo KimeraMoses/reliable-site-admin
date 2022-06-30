@@ -165,46 +165,54 @@ export const RelatedList = () => {
           <Spin spinning />
         </div>
       ) : (
-        <Table
-          columns={columns}
-          data={data}
-          // fieldToFilter="ticketRelatedTo"
-          fieldToFilter="id"
-          permissions={permissions}
-          hideActions={true}
-          customFilterSort={<></>}
-          onRow={(record, rowIndex) => {
-            return {
-              onClick: (event) => {
-                navigate(
-                  currentRoute({ deptId: record?.departmentId, id: record?.id })
-                );
-              }, // click row
-              onDoubleClick: (event) => {}, // double click row
-              onContextMenu: (event) => {
-                event.preventDefault();
-                if (!visible) {
-                  document.addEventListener(`click`, function onClickOutside() {
-                    setVisible(false);
-                    document.removeEventListener(`click`, onClickOutside);
+        <div>
+          <Table
+            columns={columns}
+            data={data}
+            // fieldToFilter="ticketRelatedTo"
+            fieldToFilter="id"
+            permissions={permissions}
+            hideActions={true}
+            customFilterSort={<></>}
+            onRow={(record, rowIndex) => {
+              return {
+                onClick: (event) => {
+                  navigate(
+                    currentRoute({
+                      deptId: record?.departmentId,
+                      id: record?.id,
+                    })
+                  );
+                }, // click row
+                onDoubleClick: (event) => {}, // double click row
+                onContextMenu: (event) => {
+                  event.preventDefault();
+                  if (!visible) {
+                    document.addEventListener(
+                      `click`,
+                      function onClickOutside() {
+                        setVisible(false);
+                        document.removeEventListener(`click`, onClickOutside);
+                      }
+                    );
+                  }
+                  setVisible(true);
+                  setPopup({
+                    record,
+                    x: event.clientX,
+                    y: event.clientY,
                   });
-                }
-                setVisible(true);
-                setPopup({
-                  record,
-                  x: event.clientX,
-                  y: event.clientY,
-                });
-              }, // right button click row
-              onMouseEnter: (event) => {}, // mouse enter row
-              onMouseLeave: (event) => {}, // mouse leave row
-            };
-          }}
-          // headingTitle={}
-          // t={t}
-        />
+                }, // right button click row
+                onMouseEnter: (event) => {}, // mouse enter row
+                onMouseLeave: (event) => {}, // mouse leave row
+              };
+            }}
+            // headingTitle={}
+            // t={t}
+          />
+          {visible ? <Popup {...popup} /> : null}
+        </div>
       )}
-      {visible ? <Popup {...popup} /> : null}
     </div>
   );
 };
