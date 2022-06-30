@@ -1,5 +1,10 @@
 import { useDispatch, useSelector } from 'react-redux';
-
+import {
+  CheckCircleOutlined,
+  FieldTimeOutlined,
+  PushpinOutlined,
+  RiseOutlined,
+} from '@ant-design/icons';
 import { Table } from 'components';
 // import { Ticket as TicketIcon } from 'icons';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -72,17 +77,35 @@ export const RelatedList = () => {
 
   const columns = [
     {
-      title: 'Status',
-      dataIndex: 'ticketStatus',
-      key: 'ticketStatus',
-      render: (key) => {
-        if (key === 0) {
-          return 'Active';
-        } else if (key === 1) {
-          return 'Closed';
-        } else if (key === '2') {
-          return 'Disabled';
-        }
+      title: 'Status | Follow Up | High Priority | Pinned',
+      dataIndex: 'actions',
+      key: 'actions',
+      // render: (key) => {
+      //   if (key === 0) {
+      //     return 'Active';
+      //   } else if (key === 1) {
+      //     return 'Closed';
+      //   } else if (key === '2') {
+      //     return 'Disabled';
+      //   }
+      // },
+      render: (text, record) => {
+        return (
+          <div className="flex items-center gap-[12px]">
+            <div className="action-icon">
+              <CheckCircleOutlined />
+            </div>
+            <div className="action-icon action-icon-active">
+              <FieldTimeOutlined />
+            </div>
+            <div className="action-icon">
+              <RiseOutlined />
+            </div>
+            <div className="action-icon">
+              <PushpinOutlined />
+            </div>
+          </div>
+        );
       },
     },
     {
