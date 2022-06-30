@@ -12,6 +12,7 @@ export const MultiSelect = ({
   className,
   dropdownClassName,
 }) => {
+  console.log(options);
   return (
     <Field name={name}>
       {({ meta, form: { setFieldValue, setFieldTouched } }) => {
@@ -32,6 +33,9 @@ export const MultiSelect = ({
               className={`custom-select ${className}`}
               dropdownClassName={`custom-select__dropdown ${dropdownClassName}`}
               options={options}
+              dropdownStyle={{
+                zIndex: 999999,
+              }}
               value={meta?.value}
               onChange={(value, option) => {
                 setFieldValue(name, value);
