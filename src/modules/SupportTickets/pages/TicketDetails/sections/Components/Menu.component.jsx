@@ -1,23 +1,22 @@
 import React from 'react';
-import { Icon } from 'antd';
+// import { Icon } from 'antd';
 import './index.scss';
 
-const Popup = ({ record, visible, x, y }) =>
-  visible && (
+const Popup = ({ record, x, y }) => {
+  const onMergeClick = ({ ticket }) => {
+    console.log(ticket);
+  };
+
+  return (
     <ul className="popup" style={{ left: `${x}px`, top: `${y}px` }}>
-      <li>
-        <Icon type="user" />
-        {record.name}
-      </li>
-      <li>
-        <Icon type="heart-o" />
-        Like it
-      </li>
-      <li>
-        <Icon type="star-o" />
-        Bookmark
-      </li>
+      <li onClick={() => onMergeClick({ ticket: record })}>Merge</li>
+      <li>Transfer</li>
+      <li>Status</li>
+      <li>Follow-Up</li>
+      <li>Priority</li>
+      <li>Pin</li>
     </ul>
   );
+};
 
 export default Popup;

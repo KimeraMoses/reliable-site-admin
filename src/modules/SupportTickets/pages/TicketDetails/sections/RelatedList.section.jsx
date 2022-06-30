@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Table } from 'components';
-import { Ticket as TicketIcon } from 'icons';
+// import { Ticket as TicketIcon } from 'icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { checkModule } from 'lib/checkModule';
@@ -14,6 +14,7 @@ import {
 import { getUsers } from 'store';
 import { getClients } from 'store';
 import { Spin } from 'antd';
+import Popup from './Components/Menu.component';
 
 export const RelatedList = () => {
   const location = useLocation();
@@ -141,6 +142,9 @@ export const RelatedList = () => {
   const { user } = useSelector((state) => state?.auth);
   const dispatch = useDispatch();
 
+  const [visible, setVisible] = useState(false);
+  const [popup, setPopup] = useState(null);
+
   useEffect(() => {
     (async () => {
       if (location?.pathname.includes('show-all')) {
@@ -177,7 +181,21 @@ export const RelatedList = () => {
                 );
               }, // click row
               onDoubleClick: (event) => {}, // double click row
-              onContextMenu: (event) => {}, // right button click row
+              onContextMenu: (event) => {
+                event.preventDefault();
+                if (!visible) {
+                  document.addEventListener(`click`, function onClickOutside() {
+                    setVisible(false);
+                    document.removeEventListener(`click`, onClickOutside);
+                  });
+                }
+                setVisible(true);
+                setPopup({
+                  record,
+                  x: event.clientX,
+                  y: event.clientY,
+                });
+              }, // right button click row
               onMouseEnter: (event) => {}, // mouse enter row
               onMouseLeave: (event) => {}, // mouse leave row
             };
@@ -186,6 +204,7 @@ export const RelatedList = () => {
           // t={t}
         />
       )}
+      {visible ? <Popup {...popup} /> : null}
     </div>
   );
 };
