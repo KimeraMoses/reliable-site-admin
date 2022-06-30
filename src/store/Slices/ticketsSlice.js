@@ -5,6 +5,7 @@ const initialState = {
   departmentTickets: [],
   loading: false,
   ticket: null,
+  allTickets: [],
 };
 
 const ticketsSlice = createSlice({
@@ -13,6 +14,9 @@ const ticketsSlice = createSlice({
   reducers: {
     getTickets: (state, { payload }) => {
       state.tickets = payload;
+    },
+    getAllTickets: (state, { payload }) => {
+      state.allTickets = payload;
     },
     getDepartmentTickets: (state, { payload }) => {
       state.departmentTickets = payload;
@@ -27,7 +31,12 @@ const ticketsSlice = createSlice({
 });
 
 const { reducer, actions } = ticketsSlice;
-export const { getTickets, getTicket, setTicketLoading, getDepartmentTickets } =
-  actions;
+export const {
+  getTickets,
+  getAllTickets,
+  getTicket,
+  setTicketLoading,
+  getDepartmentTickets,
+} = actions;
 
 export default reducer;

@@ -13,7 +13,8 @@ export const AllTickets = () => {
   const { t } = useTranslation('/Tickets/ns');
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { tickets, loading } = useSelector((state) => state?.tickets);
+  const { loading } = useSelector((state) => state?.tickets);
+  const tickets = useSelector((state) => state?.tickets?.allTickets);
   const { userModules } = useSelector((state) => state?.modules);
 
   let activeTicket = tickets ? groupBy(tickets, 'ticketStatus') : {};

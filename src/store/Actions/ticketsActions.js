@@ -16,6 +16,7 @@ import {
   getTicket,
   getDepartmentTickets,
   setTicketCommentLoading,
+  getAllTickets,
 } from 'store/Slices';
 
 // Get All Admin Ticket
@@ -25,7 +26,7 @@ export const getTickets = (params = []) => {
     try {
       const { url, defaultData, config } = getTicketsConfig();
       const res = await axios.post(url, defaultData, config);
-      dispatch(getTicketsDispatch(res?.data?.data));
+      dispatch(getAllTickets(res?.data?.data));
       dispatch(setTicketLoading(false));
     } catch (e) {
       toast.error(getError(e));

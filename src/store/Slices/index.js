@@ -42,6 +42,7 @@ export {
   setTicketLoading,
   getDepartmentTickets,
   getTicket,
+  getAllTickets,
 } from './ticketsSlice';
 
 export {
