@@ -79,7 +79,7 @@ export const Details = () => {
   const { commentLoading } = useSelector((state) => state?.ticketComments);
   const { repliesLoading } = useSelector((state) => state?.ticketReplies);
   const { userModules } = useSelector((state) => state?.modules);
-  const { users } = useSelector((state) => state?.users);
+  const { users, clients } = useSelector((state) => state?.users);
   const isSelected = (id) => selected.indexOf(id) !== -1;
   let search = window.location.search;
   let params = new URLSearchParams(search);
@@ -143,6 +143,31 @@ export const Details = () => {
       goToViolation(repliesId);
     })();
   }, [id]);
+
+  // Ticket Data
+  const ticketData = [
+    { title: 'Ticket #', value: ticket?.ticketNumber },
+    {
+      title: 'Client Email',
+      value: clients?.find((client) => client?.id === ticket?.createdBy)?.email,
+    },
+    {
+      title: 'Client Full Name',
+      value: clients?.find((client) => client?.id === ticket?.createdBy)
+        ?.fullName,
+    },
+    { title: 'Product / Service', value: ticket?.product },
+    { title: 'Brand', value: ticket?.brand },
+    { title: 'Department', value: ticket?.Department },
+    { title: 'Idle', value: ticket?.idle },
+    { title: 'Duration', value: ticket?.duration },
+    {
+      title: 'Assigned To',
+      value: users?.find((user) => user?.id === ticket?.assignedTo)?.email,
+    },
+    { title: 'Number of Messages', value: ticket?.numberOfMessages },
+  ];
+  // Ticket Data
 
   const handleReplyInput = (id) => {
     const selectedIndex = selected.indexOf(id);
@@ -232,8 +257,25 @@ export const Details = () => {
               </p>
             </div>
           </div>
-          <div className={'text-[16px] mt-[40px] mb-[40px]'}>
-            {ticket?.description}{' '}
+          <div className="mt-[40px] grid grid-cols-3 gap-[32px]">
+            {ticketData?.map((data) => {
+              return (
+                <div className="flex items-center gap-[12px]">
+                  <div className="text-[16px] text-[#474761]">
+                    {data?.title}:
+                  </div>
+                  <div className={'text-[14px]'}>
+                    {data?.value ? data?.value : 'N/A'}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+          <div className={'text-[14px] mt-[40px] mb-[40px]'}>
+            <div className="flex items-center gap-[12px]">
+              <div className="text-[16px] text-[#474761]">Description:</div>
+              <div className={'text-[14px]'}>{ticket?.description}</div>
+            </div>
           </div>
           <div className={`form ticket-form `}>
             <div className="grid grid-cols-3 gap-[20px] mb-[32px] items-end">
