@@ -2,14 +2,28 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { Table } from 'components';
 import { Ticket as TicketIcon } from 'icons';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { checkModule } from 'lib/checkModule';
 import './styles.scss';
-import { getTicketsByAdminID } from 'store';
+import {
+  getTicketsByAdminID,
+  getTickets,
+  getTicketsByDepartmentId,
+} from 'store';
 
 export const RelatedList = () => {
-  const { tickets, loading } = useSelector((state) => state?.tickets);
+  const location = useLocation();
+  const { allTickets, departmentTickets, loading } = useSelector(
+    (state) => state?.tickets
+  );
+  const userTickets = useSelector((state) => state?.tickets?.tickets);
+
+  const tickets = location?.pathname?.includes('show-all')
+    ? allTickets
+    : location?.pathname.includes('by-department')
+    ? departmentTickets
+    : userTickets;
   const { userModules } = useSelector((state) => state?.modules);
 
   const { permissions } = checkModule({
@@ -84,7 +98,13 @@ export const RelatedList = () => {
 
   useEffect(() => {
     (async () => {
-      await dispatch(getTicketsByAdminID({ id: user?.id }));
+      if (location?.pathname.includes('show-all')) {
+        await dispatch(getTickets());
+      } else if (location?.pathname?.includes('by-department')) {
+        getTicketsByDepartmentId({ id: location?.state?.departmentId });
+      } else {
+        await dispatch(getTicketsByAdminID({ id: user?.id }));
+      }
     })();
   }, [dispatch]);
   return (

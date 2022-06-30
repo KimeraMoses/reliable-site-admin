@@ -82,7 +82,7 @@ export const AllTickets = () => {
             className="flex cursor-pointer"
             onClick={() => {
               navigate(
-                `/admin/dashboard/support/tickets/list/details/${record?.id}`
+                `/admin/dashboard/support/tickets/show-all/list/details/${record?.id}`
               );
             }}
           >

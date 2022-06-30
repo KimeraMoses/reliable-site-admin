@@ -9,7 +9,8 @@ import { getTicketsByDepartmentId } from 'store';
 import './styles.scss';
 
 export const RelatedList = () => {
-  const { tickets, loading } = useSelector((state) => state?.tickets);
+  const { loading } = useSelector((state) => state?.tickets);
+  const tickets = useSelector((state) => state?.tickets?.departmentTickets);
   const { userModules } = useSelector((state) => state?.modules);
 
   const location = useLocation();
@@ -98,9 +99,6 @@ export const RelatedList = () => {
   }, [dispatch]);
   return (
     <div className={`p-[40px] bg-[#1E1E2D] rounded-[8px] custom-tickets-table`}>
-      <h4 className="text-white text-[18px] font-medium mb-[32px]">
-        {location?.state?.departmentName}
-      </h4>
       <Table
         columns={columns}
         data={data}
@@ -109,8 +107,6 @@ export const RelatedList = () => {
         permissions={permissions}
         hideActions={true}
         customFilterSort={<></>}
-        // headingTitle={}
-        // t={t}
       />
     </div>
   );

@@ -83,7 +83,13 @@ export const TicketsByDeptId = () => {
             className="flex cursor-pointer"
             onClick={() => {
               navigate(
-                `/admin/dashboard/support/tickets/list/details/${record?.id}`
+                `/admin/dashboard/support/tickets/by-departments/${record?.departmentId}/details/${record?.id}`,
+                {
+                  state: {
+                    departmentName: record?.departmentName,
+                    departmentId: record?.departmentId,
+                  },
+                }
               );
             }}
           >

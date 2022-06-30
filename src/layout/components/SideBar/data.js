@@ -32,6 +32,12 @@ export const useSidebarData = () => {
   const links = uniqueDeptTickets?.map((el) => ({
     name: el?.departmentName,
     path: `/admin/dashboard/support/tickets/by-departments/${el?.departmentId}`,
+    subLinks: [
+      {
+        name: 'Ticket Details',
+        path: `/admin/dashboard/support/tickets/by-departments/${el?.departmentId}/details/${el?.id}`,
+      },
+    ],
   }));
 
   // Side Bar Data
@@ -161,6 +167,12 @@ export const useSidebarData = () => {
         {
           name: 'Tickets List',
           path: '/admin/dashboard/support/tickets/show-all/list',
+          subLinks: [
+            {
+              name: 'Ticket Details',
+              path: '/admin/dashboard/support/tickets/show-all/list/details/:id',
+            },
+          ],
         },
       ],
     },
