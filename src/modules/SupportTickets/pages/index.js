@@ -4,3 +4,4 @@ export { TicketsByDepartment } from './TicketsByDepartments/TicketsByDepartments
 export { TicketsByDepartmentsDetails } from './TicketsByDepartmentsDetails/TicketsByDepartmentsDetails.page';
 export { TicketsByDeptId } from './TicketsByDeptId/TicketList.page';
 export { AllTickets } from './AllTickets/TicketList.page';
+export { MyTickets } from './MyTickets/TicketDetails.page';

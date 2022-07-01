@@ -1,36 +1,36 @@
 import { Ticket as TicketIcon } from 'icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { Spin } from 'antd';
-import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { getTicketById, getUsers } from 'store';
 import moment from 'moment';
 import { getDifference } from 'lib';
 import { Navigation } from '.';
 import { Comments } from './Comments.section';
 import { TicketHistory } from './TicketHistory.section';
+import { useLocation } from 'react-router-dom';
+
+function useQuery() {
+  const { search } = useLocation();
+  return useMemo(() => new URLSearchParams(search), [search]);
+}
 
 export const Details = () => {
-  const { id } = useParams();
   const dispatch = useDispatch();
   const { detailsLoading, ticket } = useSelector((state) => state?.tickets);
-  // const deptLoading = useSelector((state) => state?.departments?.loading);
-  // const userLoading = useSelector((state) => state?.users?.loading);
-  const loading = detailsLoading;
   let search = window.location.search;
   let params = new URLSearchParams(search);
   let repliesId = params.get('id');
-
-  // const { permissions } = checkModule({
-  //   module: 'Users',
-  //   modules: userModules,
-  // });
+  const query = useQuery();
+  const id = query.get('tid');
 
   useEffect(() => {
     (async () => {
-      await dispatch(getTicketById(id));
-      // await dispatch(getUsers());
-      goToViolation(repliesId);
+      if (id) {
+        await dispatch(getTicketById(id));
+        // await dispatch(getUsers());
+        goToViolation(repliesId);
+      }
     })();
   }, [id]);
 
@@ -53,7 +53,9 @@ export const Details = () => {
   });
   return (
     <div className="ticket-wrap bg-[#1E1E2D] text-[#ffffff] p-[40px] rounded-[8px]">
-      {loading || ticket === null ? (
+      {ticket === null ? (
+        <></>
+      ) : detailsLoading ? (
         <div className="text-center">
           <Spin
             size="large"

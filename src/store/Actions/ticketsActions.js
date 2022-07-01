@@ -17,6 +17,7 @@ import {
   getDepartmentTickets,
   setTicketCommentLoading,
   getAllTickets,
+  setDetailsLoading,
 } from 'store/Slices';
 
 // Get All Admin Ticket
@@ -38,16 +39,16 @@ export const getTickets = (params = []) => {
 // Get Ticket By ID
 export const getTicketById = (id) => {
   return async (dispatch) => {
-    dispatch(setTicketLoading(true));
+    dispatch(setDetailsLoading(true));
     try {
       const { url, config } = getTicketConfig(id);
       const res = await axios.get(url, config);
       dispatch(getTicket(res?.data?.data));
-      dispatch(setTicketLoading(false));
+      dispatch(setDetailsLoading(false));
     } catch (e) {
       toast.error(getError(e));
       dispatch(getTicket(null));
-      dispatch(setTicketLoading(false));
+      dispatch(setDetailsLoading(false));
     }
   };
 };
