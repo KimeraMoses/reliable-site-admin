@@ -60,6 +60,7 @@ export function GeneralSettings() {
                 {field?.type === 'multiselect' ? (
                   <MultiSelect
                     name={field.name}
+                    label={field?.label}
                     placeholder={field.placeholder}
                     mode="multiple"
                     options={field?.options}
