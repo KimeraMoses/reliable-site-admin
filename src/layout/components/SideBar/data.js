@@ -272,6 +272,10 @@ export const useSidebarData = () => {
           path: '/admin/dashboard/settings/general',
         },
         {
+          name: 'Tickets',
+          path: '/admin/dashboard/settings/tickets',
+        },
+        {
           name: 'Billing',
           path: '/admin/dashboard/settings/billing',
         },
