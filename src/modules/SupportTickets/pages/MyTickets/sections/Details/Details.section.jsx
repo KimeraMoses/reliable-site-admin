@@ -5,7 +5,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { getTicketById } from 'store';
 import moment from 'moment';
 import { getDifference } from 'lib';
-import { Communication, TicketHistory, Navigation } from './sections';
+import { Communication, TicketHistory, Navigation, Comments } from './sections';
 import { useLocation } from 'react-router-dom';
 
 function useQuery() {
@@ -112,7 +112,7 @@ export const Details = () => {
           {/* navigation */}
           <Navigation active={active} links={links} />
           {active === 'Communication' ? <Communication /> : <></>}
-          {active === 'Comments' ? <Communication /> : <></>}
+          {active === 'Comments' ? <Comments /> : <></>}
           {active === 'History' ? <TicketHistory /> : <></>}
         </div>
       )}
