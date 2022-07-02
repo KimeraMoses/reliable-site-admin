@@ -1,13 +1,14 @@
 import { Navigation } from './sections';
 import { Ticket as TicketIcon } from 'icons';
 import { useEffect, useState } from 'react';
-import { Table } from 'components';
+import { Table, TicketMenu } from 'components';
 import { checkModule } from 'lib/checkModule';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { groupBy } from 'lib';
 import { useNavigate } from 'react-router-dom';
 import { getTickets } from 'store';
+import { AssignTicket } from 'components/TicketModals';
 
 export const AllTickets = () => {
   const { t } = useTranslation('/Tickets/ns');
@@ -86,7 +87,9 @@ export const AllTickets = () => {
               );
             }}
           >
-            <TicketIcon />
+            <div className="w-[20px]">
+              <TicketIcon />
+            </div>
             <div className="ml-[8px]">
               <h3 className={`text-[#FFFFFF]`}>
                 {record?.ticketTitle}{' '}
@@ -131,9 +134,27 @@ export const AllTickets = () => {
     }
   }, [tickets]);
 
+  const [visible, setVisible] = useState(false);
+  const [popup, setPopup] = useState(null);
+
+  // Assign Ticket Modal
+  const [show, setShow] = useState(false);
+  const [id, setId] = useState('');
+
+  const menuItems = [
+    {
+      label: 'Assign Ticket',
+      onClick: (record) => {
+        setShow(true);
+        setId(record?.id);
+      },
+    },
+  ];
+
   return (
     <div className="p-[40px] dashboard-ticket">
       <Navigation active={active} links={links} />
+      <AssignTicket show={show} setShow={setShow} id={id} />
       <div className={`p-[40px] mt-[20px] bg-[#1E1E2D]`}>
         <Table
           columns={columns}
@@ -150,7 +171,31 @@ export const AllTickets = () => {
               : 'Closed Tickets'
           }
           t={t}
+          onRow={(record, rowIndex) => {
+            return {
+              onClick: (event) => {}, // click row
+              onDoubleClick: (event) => {}, // double click row
+              onContextMenu: (event) => {
+                event.preventDefault();
+                if (!visible) {
+                  document.addEventListener(`click`, function onClickOutside() {
+                    setVisible(false);
+                    document.removeEventListener(`click`, onClickOutside);
+                  });
+                }
+                setVisible(true);
+                setPopup({
+                  record,
+                  x: event.clientX,
+                  y: event.clientY,
+                });
+              }, // right button click row
+              onMouseEnter: (event) => {}, // mouse enter row
+              onMouseLeave: (event) => {}, // mouse leave row
+            };
+          }}
         />
+        {visible ? <TicketMenu options={menuItems} {...popup} /> : null}
       </div>
     </div>
   );

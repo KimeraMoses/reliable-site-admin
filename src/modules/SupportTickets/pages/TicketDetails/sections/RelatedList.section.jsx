@@ -192,7 +192,6 @@ export const RelatedList = () => {
           <Table
             columns={columns}
             data={data}
-            // fieldToFilter="ticketRelatedTo"
             fieldToFilter="id"
             permissions={permissions}
             hideActions={true}

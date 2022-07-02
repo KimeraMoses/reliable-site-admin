@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Spin } from 'antd';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getTicketById, getUsers } from 'store';
+import { getTicketById } from 'store';
 import moment from 'moment';
 import { getDifference } from 'lib';
 import { Navigation } from '.';

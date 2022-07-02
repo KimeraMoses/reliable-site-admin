@@ -15,9 +15,8 @@ import {
   addTicketComments,
   editTicket,
 } from 'store';
-import { Button, Input } from 'components';
+import { Button, Input, FollowUp } from 'components';
 import { genrateFirstLetterName } from 'lib';
-import { FollowUp } from './FollowUp.section';
 // import { checkModule } from 'lib/checkModule';
 
 const CustomSelectUpdate = ({
@@ -76,7 +75,7 @@ export const Comments = () => {
 
   const { commentLoading } = useSelector((state) => state?.ticketComments);
   const { repliesLoading } = useSelector((state) => state?.ticketReplies);
-  const { userModules } = useSelector((state) => state?.modules);
+  // const { userModules } = useSelector((state) => state?.modules);
   const { users, clients } = useSelector((state) => state?.users);
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
