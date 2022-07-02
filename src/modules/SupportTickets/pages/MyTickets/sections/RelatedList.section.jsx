@@ -5,7 +5,7 @@ import {
   PushpinOutlined,
   RiseOutlined,
 } from '@ant-design/icons';
-import { Table } from 'components';
+import { Table, TicketMenu } from 'components';
 // import { Ticket as TicketIcon } from 'icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -19,7 +19,6 @@ import {
 import { getUsers } from 'store';
 import { getClients } from 'store';
 import { Button, Spin } from 'antd';
-import Popup from './Components/Menu.component';
 
 export const RelatedList = () => {
   const location = useLocation();
@@ -237,7 +236,7 @@ export const RelatedList = () => {
             // headingTitle={}
             // t={t}
           />
-          {visible ? <Popup {...popup} /> : null}
+          {visible ? <TicketMenu {...popup} /> : null}
         </div>
       )}
     </div>

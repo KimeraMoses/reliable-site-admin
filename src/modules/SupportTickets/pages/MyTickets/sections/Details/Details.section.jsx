@@ -2,12 +2,10 @@ import { Ticket as TicketIcon } from 'icons';
 import { useDispatch, useSelector } from 'react-redux';
 import { Spin } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
-import { getTicketById, getUsers } from 'store';
+import { getTicketById } from 'store';
 import moment from 'moment';
 import { getDifference } from 'lib';
-import { Navigation } from '.';
-import { Comments } from './Comments.section';
-import { TicketHistory } from './TicketHistory.section';
+import { Communication, TicketHistory, Navigation } from './sections';
 import { useLocation } from 'react-router-dom';
 
 function useQuery() {
@@ -18,17 +16,22 @@ function useQuery() {
 export const Details = () => {
   const dispatch = useDispatch();
   const { detailsLoading, ticket } = useSelector((state) => state?.tickets);
+  const { users, clients } = useSelector((state) => state?.users);
   let search = window.location.search;
   let params = new URLSearchParams(search);
   let repliesId = params.get('id');
   const query = useQuery();
   const id = query.get('tid');
 
+  const createdByAdmin = users?.find((user) => user?.id === ticket?.createdBy);
+  const createdByClient = clients?.find(
+    (user) => user?.id === ticket?.createdBy
+  );
+
   useEffect(() => {
     (async () => {
       if (id) {
         await dispatch(getTicketById(id));
-        // await dispatch(getUsers());
         goToViolation(repliesId);
       }
     })();
@@ -41,7 +44,7 @@ export const Details = () => {
     }
   };
 
-  const linksArr = ['Comments', 'History'];
+  const linksArr = ['Communication', 'Comments', 'History'];
   // Handle Navigation
   const [active, setActive] = useState(linksArr[0]);
   const links = linksArr?.map((link) => {
@@ -72,19 +75,44 @@ export const Details = () => {
               <h3 className={'text-[24px] text-[#fff]'}>
                 {ticket?.ticketTitle}
               </h3>
-              <p className={'mt-[8px] text-[#474761]'}>
-                <span className="mr-[20px]">By {ticket?.createdByName}</span>{' '}
-                <span>{`Created ${getDifference(
-                  new Date(ticket.createdOn)
-                )} - ${moment(ticket?.createdOn).format(
-                  'MMMM Do, YYYY h:m A'
-                )}`}</span>
-              </p>
+              <div
+                className={
+                  'mt-[8px] text-[#474761] flex items-center gap-[12px]'
+                }
+              >
+                <p className="text-[14px]">
+                  By{' '}
+                  {createdByAdmin?.fullName
+                    ? createdByAdmin?.fullName
+                    : createdByClient?.fullName
+                    ? createdByClient?.fullName
+                    : 'N/A'}
+                </p>{' '}
+                <p
+                  className={`${
+                    createdByAdmin?.fullName
+                      ? 'bg-[#1C3238] text-[#0BB783]'
+                      : 'bg-[#2F264F] text-[#8950FC]'
+                  } rounded-[4px] text-[14px] px-[8px] py-[4px]`}
+                >
+                  {createdByAdmin?.fullName
+                    ? 'Admin'
+                    : createdByClient?.fullName
+                    ? 'Client'
+                    : 'N/A'}
+                </p>
+              </div>
+              <p className="text-[14px] mt-[12px] text-[#474761]">{`Created ${getDifference(
+                new Date(ticket.createdOn)
+              )} - ${moment(ticket?.createdOn).format(
+                'MMMM Do, YYYY h:m A'
+              )}`}</p>
             </div>
           </div>
           {/* navigation */}
           <Navigation active={active} links={links} />
-          {active === 'Comments' ? <Comments /> : <></>}
+          {active === 'Communication' ? <Communication /> : <></>}
+          {active === 'Comments' ? <Communication /> : <></>}
           {active === 'History' ? <TicketHistory /> : <></>}
         </div>
       )}

@@ -15,9 +15,8 @@ import {
   addTicketComments,
   editTicket,
 } from 'store';
-import { Button, Input } from 'components';
+import { Button, Input, FollowUp } from 'components';
 import { genrateFirstLetterName } from 'lib';
-import { FollowUp } from './FollowUp.section';
 // import { checkModule } from 'lib/checkModule';
 
 const CustomSelectUpdate = ({
@@ -69,14 +68,13 @@ const validationSchemaReplies = Yup.object().shape({
   commentText: Yup.string().required('Comment text is required'),
 });
 
-export const Comments = () => {
+export const Communication = () => {
   const { t } = useTranslation('/Tickets/ns');
   const [selected, setSelected] = useState([]);
   const navigate = useNavigate();
 
   const { commentLoading } = useSelector((state) => state?.ticketComments);
   const { repliesLoading } = useSelector((state) => state?.ticketReplies);
-  const { userModules } = useSelector((state) => state?.modules);
   const { users, clients } = useSelector((state) => state?.users);
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
@@ -352,15 +350,29 @@ export const Comments = () => {
                     </div>
                   </div>
                   {ticket?.ticketStatus === 0 && (
-                    <NavLink
-                      to="#"
-                      onClick={() => handleReplyInput(item.id)}
-                      className={
-                        'text-[#474761] text-[16px] absolute right-5 top-1'
-                      }
-                    >
-                      Reply
-                    </NavLink>
+                    <div className="flex items-center gap-[12px] text-[16px] absolute right-5 top-1">
+                      <NavLink
+                        to="#"
+                        onClick={() => handleReplyInput(item.id)}
+                        className={'text-[#474761]'}
+                      >
+                        Reply
+                      </NavLink>
+                      <NavLink
+                        to="#"
+                        onClick={() => handleReplyInput(item.id)}
+                        className={'text-[#474761]'}
+                      >
+                        Delete
+                      </NavLink>
+                      <NavLink
+                        to="#"
+                        onClick={() => handleReplyInput(item.id)}
+                        className={'text-[#474761]'}
+                      >
+                        Pin
+                      </NavLink>
+                    </div>
                   )}
                 </div>
                 <div className="text-[16px] text-[#92928F] mt-[20px] leading-7">
