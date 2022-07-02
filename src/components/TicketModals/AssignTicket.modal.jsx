@@ -20,6 +20,12 @@ export const AssignTicket = ({ show, setShow, id }) => {
       })),
       title: 'Admin',
     },
+    {
+      type: 'textarea',
+      name: 'comment',
+      title: 'Comment',
+      placeholder: 'Enter Comment Here...',
+    },
   ];
   return (
     <Modal

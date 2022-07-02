@@ -1,5 +1,4 @@
 import { Modal } from 'components';
-import { useSelector } from 'react-redux';
 import * as Yup from 'yup';
 
 const initialValues = {};
@@ -7,18 +6,24 @@ const initialValues = {};
 const validationSchema = Yup.object().shape({});
 
 export const Status = ({ show, setShow, id }) => {
-  const { users } = useSelector((state) => state?.users);
-
   const fields = [
     {
       type: 'select',
-      name: 'adminId',
-      placeholder: 'Select Admin',
-      options: users?.map((user) => ({
-        label: user?.fullName ? user?.fullName : user?.email,
-        value: user?.id,
-      })),
-      title: 'Admin',
+      name: 'status',
+      placeholder: 'Select Status',
+      options: ['Active', 'Waiting', 'Closed', 'Closed and Locked']?.map(
+        (el) => ({
+          label: el,
+          value: el,
+        })
+      ),
+      title: 'Status',
+    },
+    {
+      type: 'textarea',
+      name: 'comment',
+      title: 'Comment',
+      placeholder: 'Enter Comment Here...',
     },
   ];
   return (

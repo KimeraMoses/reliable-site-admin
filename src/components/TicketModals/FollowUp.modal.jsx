@@ -63,6 +63,12 @@ export const FollowUp = ({ show, setShow }) => {
       name: 'pinned',
       title: 'Pin Ticket',
     },
+    {
+      type: 'textarea',
+      name: 'comment',
+      title: 'Comment',
+      placeholder: 'Enter Comment Here...',
+    },
   ];
   return (
     <Modal

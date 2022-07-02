@@ -6,7 +6,7 @@ import './Modal.styles.scss';
 import { DatePicker } from 'components';
 import { Switch, Button, Checkbox } from 'antd';
 import { Fragment } from 'react';
-import { MultiSelect } from 'components/formFields';
+import { Input, MultiSelect } from 'components/formFields';
 
 const demoFields = [];
 
@@ -374,6 +374,12 @@ export function Modal({
                                     placeholder={placeholder}
                                     mode={mode}
                                   />
+                                ) : type === 'textarea' ? (
+                                  <Input
+                                    name={name}
+                                    type="textarea"
+                                    placeholder={placeholder}
+                                  />
                                 ) : (
                                   <>
                                     <Field
@@ -381,7 +387,7 @@ export function Modal({
                                       key={name}
                                       type={type}
                                       name={name}
-                                      placeholder={placeholder}
+                                      plqaceholder={placeholder}
                                       disabled={disabled}
                                     />
                                     {touched[name] && errors[name] && (
