@@ -233,7 +233,7 @@ export const Comments = () => {
   return (
     <>
       <FollowUp show={showFollowUp} setShow={setShowFollowUp} />
-      <div className="mt-[40px] grid grid-cols-3 gap-[32px]">
+      {/* <div className="mt-[40px] grid grid-cols-3 gap-[32px]">
         {ticketData?.map((data) => {
           return (
             <div className="flex items-center gap-[12px]">
@@ -244,15 +244,15 @@ export const Comments = () => {
             </div>
           );
         })}
-      </div>
-      <div className={'text-[14px] mt-[40px] mb-[40px]'}>
+      </div> */}
+      {/* <div className={'text-[14px] mt-[40px] mb-[40px]'}>
         <div className="flex items-center gap-[12px]">
           <div className="text-[16px] text-[#474761]">Description:</div>
           <div className={'text-[14px]'}>{ticket?.description}</div>
         </div>
-      </div>
-      <div className={`form ticket-form `}>
-        <div className="grid grid-cols-3 gap-[20px] mb-[32px] items-end">
+      </div> */}
+      <div className={`form ticket-form mt-[20px]`}>
+        {/* <div className="grid grid-cols-3 gap-[20px] mb-[32px] items-end">
           {fields.map((field) => (
             <div className="flex items-end" key={field?.name}>
               <CustomSelectUpdate
@@ -268,7 +268,7 @@ export const Comments = () => {
               />
             </div>
           ))}
-        </div>
+        </div> */}
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
