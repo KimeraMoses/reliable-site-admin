@@ -236,7 +236,7 @@ export const RelatedList = () => {
             // headingTitle={}
             // t={t}
           />
-          {visible ? <TicketMenu {...popup} /> : null}
+          {<TicketMenu {...popup} visible={visible} />}
         </div>
       )}
     </div>
