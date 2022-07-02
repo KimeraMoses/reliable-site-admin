@@ -195,7 +195,7 @@ export const AllTickets = () => {
             };
           }}
         />
-        {visible ? <TicketMenu options={menuItems} {...popup} /> : null}
+        {<TicketMenu options={menuItems} visible={visible} {...popup} />}
       </div>
     </div>
   );
