@@ -3,7 +3,7 @@ import { NavLink, useParams } from 'react-router-dom';
 import { Reply as ReplyIcon } from 'icons';
 import { Formik, Form, Field } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { List } from 'antd';
+import { Dropdown, List, Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -15,7 +15,7 @@ import {
   addTicketComments,
   editTicket,
 } from 'store';
-import { Button, Input, FollowUp } from 'components';
+import { Button as CustomButton, Input, FollowUp } from 'components';
 import { genrateFirstLetterName } from 'lib';
 // import { checkModule } from 'lib/checkModule';
 
@@ -207,6 +207,32 @@ export const Communication = () => {
     }
   };
 
+  // Dropdown Menu
+  const menu = (
+    <>
+      {[
+        'Send and Mark Active',
+        'Send and Mark Waiting',
+        'Send and Mark Closed',
+        'Send and Mark Closed & Locked',
+        'Send and Schedule Follow-Up',
+      ].map((el) => {
+        return (
+          <Button
+            onClick={() => {
+              if (el === 'Send and Schedule Follow-Up') {
+                setShowFollowUp(true);
+              }
+            }}
+            loading={commentLoading}
+          >
+            {el}
+          </Button>
+        );
+      })}
+    </>
+  );
+
   // Follow-Up Modal
   const [showFollowUp, setShowFollowUp] = useState(false);
 
@@ -278,29 +304,22 @@ export const Communication = () => {
                 type={'textarea'}
                 rows={'7'}
               />
-              <div className="absolute bottom-5 right-5 flex items-center gap-[12px] flex-wrap">
-                {[
-                  'Send and Mark Active',
-                  'Send and Mark Waiting',
-                  'Send and Mark Closed',
-                  'Send and Mark Closed & Locked',
-                  'Send and Schedule Follow-Up',
-                ].map((el) => {
-                  return (
-                    <Button
-                      // htmlType="submit"
-                      onClick={() => {
-                        if (el === 'Send and Schedule Follow-Up') {
-                          setShowFollowUp(true);
-                        }
-                      }}
-                      loading={commentLoading}
-                      className="px-[16px] py-[5px] text-[14px] bg-[#3699FF] text-[#fff] h-[36px]"
-                    >
-                      {el}
-                    </Button>
-                  );
-                })}
+              <div className="absolute bottom-5 right-5 gap-[12px]">
+                <Dropdown
+                  overlay={menu}
+                  overlayClassName="custom-table__table-dropdown-overlay"
+                  className="custom-table__table-dropdown"
+                  destroyPopupOnHide
+                  placement="bottomRight"
+                  trigger={['click', 'contextMenu']}
+                >
+                  <CustomButton
+                    loading={commentLoading}
+                    className="px-[16px] py-[5px] text-[14px] h-[36px]"
+                  >
+                    Send
+                  </CustomButton>
+                </Dropdown>
               </div>
             </div>
           </Form>
