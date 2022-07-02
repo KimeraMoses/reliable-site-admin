@@ -1,12 +1,6 @@
 import { DashboardLayout } from 'layout';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import {
-  TicketList,
-  TicketsByDeptId,
-  AllTickets,
-  TicketDetails,
-  MyTickets,
-} from './pages';
+import { TicketsByDeptId, AllTickets, TicketDetails, MyTickets } from './pages';
 import './style.scss';
 
 export const SupportTickets = () => {
@@ -19,7 +13,6 @@ export const SupportTickets = () => {
           element={<Navigate to="/admin/dashboard/support/tickets/list" />}
         />
         <Route path="tickets/list" element={<MyTickets />} />
-        {/* <Route path="tickets/list/details/:id" element={<TicketDetails />} /> */}
         {/* Admin's Ticket List */}
         {/* Department's Tickets' */}
         <Route

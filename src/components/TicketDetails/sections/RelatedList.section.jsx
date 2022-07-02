@@ -39,12 +39,12 @@ export const RelatedList = () => {
     ? departmentTickets
     : userTickets;
 
-  // const currentRoute = ({ deptId = '', id = '' }) =>
-  //   location?.pathname?.includes('show-all')
-  //     ? `/admin/dashboard/support/tickets/show-all/list/details/${id}`
-  //     : location?.pathname.includes('by-department')
-  //     ? `/admin/dashboard/support/tickets/by-departments/${deptId}/details/${id}`
-  //     : `/admin/dashboard/support/tickets/list/details/${id}`;
+  const currentRoute = ({ deptId = '', id = '' }) =>
+    location?.pathname?.includes('show-all')
+      ? `/admin/dashboard/support/tickets/show-all/list/details/${id}?tid=${id}`
+      : location?.pathname.includes('by-department')
+      ? `/admin/dashboard/support/tickets/by-departments/${deptId}/details/${id}?tid=${id}`
+      : `/admin/dashboard/support/tickets/list?tid=${id}`;
 
   const { userModules } = useSelector((state) => state?.modules);
 
@@ -208,7 +208,12 @@ export const RelatedList = () => {
             onRow={(record, rowIndex) => {
               return {
                 onClick: (event) => {
-                  navigate(`${location.pathname}?tid=${record?.id}`);
+                  navigate(
+                    `${currentRoute({
+                      deptId: record?.departmentId,
+                      id: record?.id,
+                    })}`
+                  );
                 }, // click row
                 onDoubleClick: (event) => {}, // double click row
                 onContextMenu: (event) => {
