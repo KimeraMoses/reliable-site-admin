@@ -53,7 +53,7 @@ export const Details = () => {
   });
   return (
     <div className="ticket-wrap bg-[#1E1E2D] text-[#ffffff] p-[40px] rounded-[8px]">
-      {ticket === null ? (
+      {ticket === null && !detailsLoading ? (
         <></>
       ) : detailsLoading ? (
         <div className="text-center">

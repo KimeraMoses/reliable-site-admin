@@ -18,7 +18,7 @@ import {
 } from 'store';
 import { getUsers } from 'store';
 import { getClients } from 'store';
-import { Spin } from 'antd';
+import { Button, Spin } from 'antd';
 import Popup from './Components/Menu.component';
 
 export const RelatedList = () => {
@@ -195,7 +195,16 @@ export const RelatedList = () => {
             // fieldToFilter="ticketRelatedTo"
             fieldToFilter="id"
             permissions={permissions}
-            hideActions={true}
+            editAction={(record) => {
+              return (
+                <>
+                  <Button>Reply</Button>
+                  <Button>Transfer</Button>
+                  <Button>Follow-Up</Button>
+                  <Button>Pin</Button>
+                </>
+              );
+            }}
             customFilterSort={<></>}
             onRow={(record, rowIndex) => {
               return {
