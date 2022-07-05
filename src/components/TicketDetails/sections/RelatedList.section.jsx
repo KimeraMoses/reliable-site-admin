@@ -6,7 +6,6 @@ import {
   RiseOutlined,
 } from '@ant-design/icons';
 import { Table, TicketMenu } from 'components';
-// import { Ticket as TicketIcon } from 'icons';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { checkModule } from 'lib/checkModule';
@@ -79,15 +78,6 @@ export const RelatedList = () => {
       title: 'Status | Follow Up | High Priority | Pinned',
       dataIndex: 'actions',
       key: 'actions',
-      // render: (key) => {
-      //   if (key === 0) {
-      //     return 'Active';
-      //   } else if (key === 1) {
-      //     return 'Closed';
-      //   } else if (key === '2') {
-      //     return 'Disabled';
-      //   }
-      // },
       render: (text, record) => {
         return (
           <div className="flex items-center gap-[12px]">
@@ -180,6 +170,22 @@ export const RelatedList = () => {
       await dispatch(getClients());
     })();
   }, [dispatch]);
+
+  // Selected Rows
+  const [selectedRows, setSelectedRows] = useState(false);
+
+  // Methods to Select Rows
+  const rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+      setSelectedRows(selectedRows);
+    },
+    // getCheckboxProps: (record) => ({
+    //   disabled: logic to disable using record
+    //   name: logic to set name of checkbox,
+    // }),
+  };
+
   return (
     <div className={`p-[40px] bg-[#1E1E2D] rounded-[8px]`}>
       {loading || departmentsLoading || usersLoading ? (
@@ -194,6 +200,16 @@ export const RelatedList = () => {
             // fieldToFilter="ticketRelatedTo"
             fieldToFilter="id"
             permissions={permissions}
+            additionalBtns={
+              selectedRows?.length
+                ? [
+                    { text: 'Pin', onClick: () => {} },
+                    { text: 'Assign', onClick: () => {} },
+                    { text: 'Delete', onClick: () => {} },
+                  ]
+                : []
+            }
+            rowSelection={rowSelection}
             editAction={(record) => {
               return (
                 <>
