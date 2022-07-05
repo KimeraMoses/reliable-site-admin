@@ -304,7 +304,7 @@ export const Communication = () => {
                 type={'textarea'}
                 rows={'7'}
               />
-              <div className="absolute bottom-5 right-5 gap-[12px]">
+              <div className="absolute bottom-5 right-5 flex items-center gap-[12px]">
                 <Dropdown
                   overlay={menu}
                   overlayClassName="custom-table__table-dropdown-overlay"
@@ -320,6 +320,12 @@ export const Communication = () => {
                     Send
                   </CustomButton>
                 </Dropdown>
+                <CustomButton
+                  loading={commentLoading}
+                  className="px-[16px] py-[5px] text-[14px] h-[36px]"
+                >
+                  Save as Draft
+                </CustomButton>
               </div>
             </div>
           </Form>

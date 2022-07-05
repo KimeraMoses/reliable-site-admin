@@ -5,7 +5,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { getTicketById } from 'store';
 import moment from 'moment';
 import { getDifference } from 'lib';
-import { Communication, TicketHistory, Navigation, Comments } from './sections';
+import {
+  Communication,
+  TicketHistory,
+  Navigation,
+  Comments,
+  Drafts,
+} from './sections';
 import { useLocation } from 'react-router-dom';
 
 function useQuery() {
@@ -44,7 +50,7 @@ export const Details = () => {
     }
   };
 
-  const linksArr = ['Communication', 'Comments', 'History'];
+  const linksArr = ['Communication', 'Drafts', 'Comments', 'History'];
   // Handle Navigation
   const [active, setActive] = useState(linksArr[0]);
   const links = linksArr?.map((link) => {
@@ -112,6 +118,7 @@ export const Details = () => {
           {/* navigation */}
           <Navigation active={active} links={links} />
           {active === 'Communication' ? <Communication /> : <></>}
+          {active === 'Drafts' ? <Drafts setActive={setActive} /> : <></>}
           {active === 'Comments' ? <Comments /> : <></>}
           {active === 'History' ? <TicketHistory /> : <></>}
         </div>
