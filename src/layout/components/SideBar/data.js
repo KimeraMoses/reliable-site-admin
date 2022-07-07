@@ -146,6 +146,10 @@ export const useSidebarData = () => {
           name: 'WHMCS Import Tool',
           path: '/admin/dashboard/billing/WHMCS-import',
         },
+        {
+          name: 'Logs',
+          path: '/admin/dashboard/billing/logs',
+        },
       ],
     },
     {

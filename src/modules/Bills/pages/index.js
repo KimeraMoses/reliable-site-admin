@@ -3,6 +3,7 @@ import Clients from './Clients/Clients.page';
 import ProductsServices from './ProductsServices/ProductsServices.page';
 import Invoices from './Invoices/Invoices.page';
 import WHMCS from './WHMCS/WHMCS.page';
+import Logs from './Logs/Logs.page';
 
 export const pages = [
   { path: '/orders/*', Component: Orders },
@@ -10,4 +11,5 @@ export const pages = [
   { path: '/products-services/*', Component: ProductsServices },
   { path: '/invoices/*', Component: Invoices },
   { path: '/WHMCS-import', Component: WHMCS },
+  { path: '/logs', Component: Logs },
 ];
