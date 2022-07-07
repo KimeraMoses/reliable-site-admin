@@ -8,6 +8,7 @@ const editValidationSchema = Yup.object().shape({
   groupName: Yup.string().required('This field is required!'),
   status: Yup.boolean().required('This field is required!'),
   isDefault: Yup.boolean().required('This field is required!'),
+  isSuperAdmin: Yup.boolean().required('This field is required!'),
 });
 
 export const EditGroup = ({ editModal, setEditModal, t, loading }) => {
@@ -15,11 +16,12 @@ export const EditGroup = ({ editModal, setEditModal, t, loading }) => {
 
   useEffect(() => {
     const {
-      values: { name, isDefault, status, id },
+      values: { name, isDefault, isSuperAdmin, status, id },
     } = editModal;
     const init = {
       groupName: name,
       isDefault,
+      isSuperAdmin,
       status,
       id: id,
     };
@@ -42,6 +44,11 @@ export const EditGroup = ({ editModal, setEditModal, t, loading }) => {
       type: 'switch',
       name: 'isDefault',
       title: t('makeDefault'),
+    },
+    {
+      type: 'switch',
+      name: 'isSuperAdmin',
+      title: 'Make Super Admin',
     },
   ];
   const dispatch = useDispatch();

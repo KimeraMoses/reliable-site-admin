@@ -54,6 +54,7 @@ export const UsersGroups = () => {
           id: group?.id,
           name: group?.groupName,
           isDefault: group?.isDefault,
+          isSuperAdmin: group?.isSuperAdmin,
           status: group?.status,
           numberOfUsers: group?.numberOfUsers
             ? Number(group?.numberOfUsers)
@@ -72,28 +73,40 @@ export const UsersGroups = () => {
       title: t('name'),
       dataIndex: 'name',
       key: 'name',
-      width: '20%',
     },
     {
       title: t('numberOfUsers'),
       dataIndex: 'numberOfUsers',
       key: 'numberOfUsers',
-      width: '20%',
     },
     {
       title: t('status'),
       dataIndex: 'status',
       key: 'status',
-      width: '20%',
       render: (text, record) => {
         return <Switch checked={record?.status} disabled />;
+      },
+    },
+    {
+      title: 'is Default',
+      dataIndex: 'isDefault',
+      key: 'isDefault',
+      render: (text, record) => {
+        return <Switch checked={record?.isDefault} disabled />;
+      },
+    },
+    {
+      title: 'is Super Admin',
+      dataIndex: 'isSuperAdmin',
+      key: 'isSuperAdmin',
+      render: (text, record) => {
+        return <Switch checked={record?.isSuperAdmin} disabled />;
       },
     },
     {
       title: t('createDate'),
       key: 'createdAt',
       dataIndex: 'createdAt',
-      width: '20%',
     },
   ];
 
