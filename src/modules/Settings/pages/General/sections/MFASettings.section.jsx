@@ -17,7 +17,8 @@ export function MFASettings() {
   const dispatch = useDispatch();
 
   const initialValues = {
-    foceMFA: settings?.forceMFA,
+    forceAdminMFA: settings?.forceAdminMFA,
+    forceClientMFA: settings?.forceClientMFA,
     googleAuthenticator: settings?.googleAuthenticator,
     microsoftAuthenticator: settings?.microsoftAuthenticator,
   };
@@ -25,8 +26,13 @@ export function MFASettings() {
   // Fields
   const fields = [
     {
-      name: 'foceMFA',
-      label: '2 Factor Authentication',
+      name: 'forceAdminMFA',
+      label: 'Force Admin MFA',
+      type: 'switch',
+    },
+    {
+      name: 'forceClientMFA',
+      label: 'Force Client MFA',
       type: 'switch',
     },
     {
@@ -42,7 +48,7 @@ export function MFASettings() {
   ];
 
   return (
-    <Card heading="2FA & MFA" className="mt-[40px]">
+    <Card heading="MFA Settings" className="mt-[40px]">
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
