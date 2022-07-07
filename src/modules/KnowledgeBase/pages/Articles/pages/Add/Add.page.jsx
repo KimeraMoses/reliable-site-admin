@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { ConfigurationEditor, EmailBodyInput, Button } from 'components';
 import { createArticle } from 'store';
 import './Add.styles.scss';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { getAllArticleCategories } from 'store';
 import { createServerImage } from 'lib';
 
@@ -117,6 +117,16 @@ export const Add = () => {
     (state) => state?.articleCategories
   );
   const articleLoading = useSelector((state) => state?.articles?.loading);
+  const [subCategories, setSubCategories] = useState([]);
+
+  useEffect(() => {
+    if (articleCategories.length) {
+      const newCat = articleCategories?.filter(
+        (c) => c.parentCategoryId !== '00000000-0000-0000-0000-000000000000'
+      );
+      setSubCategories(newCat);
+    }
+  }, [articleCategories]);
 
   const fields = [
     {
@@ -129,7 +139,7 @@ export const Add = () => {
       name: 'categories',
       type: 'multiselect',
       placeholder: 'Select Categories',
-      options: articleCategories?.map((category) => ({
+      options: subCategories?.map((category) => ({
         label: category.name,
         value: category.id,
       })),

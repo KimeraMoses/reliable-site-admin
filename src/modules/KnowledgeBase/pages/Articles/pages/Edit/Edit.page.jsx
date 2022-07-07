@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { EditorState, convertToRaw } from 'draft-js';
 import { convertToHTML } from 'draft-convert';
 import { Formik, Form } from 'formik';
@@ -18,7 +18,7 @@ export const Edit = () => {
   const { id } = useParams();
   useEffect(() => {
     dispatch(getAllArticleCategories());
-    dispatch(getArticleByID(id));
+    dispatch(getArticleByID({ id }));
   }, []);
 
   const { loading, articleCategories } = useSelector(
@@ -26,6 +26,17 @@ export const Edit = () => {
   );
   const articleLoading = useSelector((state) => state?.articles?.loading);
   const { article } = useSelector((state) => state?.articles);
+
+  const [subCategories, setSubCategories] = useState([]);
+
+  useEffect(() => {
+    if (articleCategories.length) {
+      const newCat = articleCategories?.filter(
+        (c) => c.parentCategoryId !== '00000000-0000-0000-0000-000000000000'
+      );
+      setSubCategories(newCat);
+    }
+  }, [articleCategories]);
 
   const initialValues = {
     title: article?.title,
@@ -47,7 +58,7 @@ export const Edit = () => {
       name: 'categories',
       type: 'multiselect',
       placeholder: 'Select Categories',
-      options: articleCategories?.map((category) => ({
+      options: subCategories?.map((category) => ({
         label: category.name,
         value: category.id,
       })),

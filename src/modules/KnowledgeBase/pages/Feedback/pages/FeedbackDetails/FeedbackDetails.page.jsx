@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import { createTicket, getUsers, getDepartments } from 'store';
 import { createArticleFeedbackComment } from 'store/Actions/articleFeedbackComments';
 import { createArticleFeedbackCommentReply } from 'store/Actions/articleFeedbackCommentReplies';
+import { updateArticleFeedback } from 'store';
 
 const CommentCard = ({
   imgSrc,
@@ -173,12 +174,16 @@ export const FeedbackDetails = () => {
   const departmentsLoading = useSelector(
     (state) => state?.departments?.loading
   );
-
+  const params = useParams();
   const navigate = useNavigate();
   const [imgError, setImgError] = useState(false);
   return (
     <>
-      <Spin spinning={loading || feedbackLoading || ticketLoading}>
+      <Spin
+        spinning={
+          loading || feedbackLoading || ticketLoading || departmentsLoading
+        }
+      >
         <div className="bg-[#1E1E2D] m-[40px] p-[32px] rounded-[8px]">
           <h6 className="text-white text-[20px]">
             Generate Ticket For This Feedback
@@ -260,13 +265,36 @@ export const FeedbackDetails = () => {
                       label="departmentId"
                     />
                   </div>
-                  <div>
+                  <div className="flex items-center gap-[12px]">
                     <Button
-                      type="ghost"
+                      type="primary"
                       htmlType="submit"
                       className="w-[fit_content] h-[55px] mt-[32px]"
                     >
                       Generate Ticket
+                    </Button>
+                    <Button
+                      type="ghost"
+                      htmlType="button"
+                      className="w-[fit_content] h-[55px] mt-[32px]"
+                      onClick={async () => {
+                        const isReviewed = articlesFeedback?.isReviewed
+                          ? false
+                          : true;
+                        await dispatch(
+                          updateArticleFeedback({
+                            id: params?.id,
+                            data: {
+                              ...articlesFeedback,
+                              isReviewed,
+                            },
+                          })
+                        );
+                      }}
+                    >
+                      {articlesFeedback?.isReviewed
+                        ? 'Mark as Not Reviewed'
+                        : 'Mark as Reviewed'}
                     </Button>
                   </div>
                 </Form>

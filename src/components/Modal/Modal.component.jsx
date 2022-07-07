@@ -387,7 +387,7 @@ export function Modal({
                                       key={name}
                                       type={type}
                                       name={name}
-                                      plqaceholder={placeholder}
+                                      placeholder={placeholder}
                                       disabled={disabled}
                                     />
                                     {touched[name] && errors[name] && (

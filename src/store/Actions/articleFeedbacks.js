@@ -81,9 +81,9 @@ export const updateArticleFeedback = ({ id, data }) => {
       const { url, config } = updateArticleFeedbackConfig(id);
       const res = await axios.put(url, data, config);
       if (res.status === 200) {
-        const { url, config } = getArticleFeedbackConfig();
+        const { url, config } = getArticleFeedbackByIDConfig(id);
         const res = await axios.get(url, config);
-        dispatch(updateArticleFeedbackConfig(res?.data?.data));
+        dispatch(getArticleFeedback(res?.data?.data));
         toast.success('Article Feedback updated successfully');
       }
     } catch (e) {
@@ -102,9 +102,9 @@ export const deleteArticleFeedback = ({ id }) => {
       const { url, config } = deleteArticleFeedbackConfig(id);
       const res = await axios.delete(url, config);
       if (res.status === 200) {
-        const { url, config } = getArticleFeedbackConfig();
-        const res = await axios.get(url, config);
-        dispatch(updateArticleFeedbackConfig(res?.data?.data));
+        const { url, defaultData, config } = getArticleFeedbackConfig();
+        const res = await axios.post(url, defaultData, config);
+        dispatch(getArticleFeedbacks(res?.data?.data));
         toast.success('Article Feedback deleted successfully');
       }
     } catch (e) {

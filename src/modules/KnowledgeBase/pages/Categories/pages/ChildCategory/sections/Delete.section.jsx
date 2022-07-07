@@ -8,8 +8,8 @@ const validationSchema = Yup.object().shape({
 });
 
 export const Delete = ({ show, setShow }) => {
-  const { id } = useSelector(
-    (state) => state?.articleCategories?.articleCategory
+  const id = useSelector(
+    (state) => state?.articleCategories?.articleCategory?.id
   );
   const initialValues = {
     id,

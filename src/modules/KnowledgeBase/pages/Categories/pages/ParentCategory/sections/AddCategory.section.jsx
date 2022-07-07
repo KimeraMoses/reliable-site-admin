@@ -1,4 +1,5 @@
 import { Modal } from 'components';
+import { createServerImage } from 'lib';
 import { useDispatch, useSelector } from 'react-redux';
 import { createArticleCategory } from 'store';
 import * as Yup from 'yup';
@@ -9,6 +10,12 @@ const fields = [
     name: 'name',
     placeholder: 'Enter Category Name',
     title: 'Category Name',
+  },
+  {
+    type: 'file',
+    name: 'childCategoryIcon',
+    title: 'Icon',
+    subText: 'Browse',
   },
 ];
 
@@ -34,7 +41,9 @@ export const AddCategory = ({ show, setShow }) => {
       initialValues={initialValues}
       validationSchema={validationSchema}
       handleSubmit={async (values) => {
+        const img = await createServerImage(values?.childCategoryIcon);
         const newValues = {
+          childCategoryIcon: img,
           ...values,
           categoryType: 1,
         };
