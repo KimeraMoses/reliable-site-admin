@@ -6,6 +6,7 @@ import {
   getProductsCall,
   updateProductsByIDCall,
   getProductsByClientIDCall,
+  getCancelledProductsCall,
 } from 'lib';
 import { toast } from 'react-toastify';
 import {
@@ -20,6 +21,21 @@ export const getProducts = () => {
     dispatch(setProductsLoading(true));
     try {
       const products = await getProductsCall();
+      dispatch(getProductsDispatch(products?.data?.data));
+    } catch (error) {
+      toast.error(getError(error));
+    } finally {
+      dispatch(setProductsLoading(false));
+    }
+  };
+};
+
+// Get Cancelled Products
+export const getCancelledProducts = () => {
+  return async (dispatch) => {
+    dispatch(setProductsLoading(true));
+    try {
+      const products = await getCancelledProductsCall();
       dispatch(getProductsDispatch(products?.data?.data));
     } catch (error) {
       toast.error(getError(error));
