@@ -149,6 +149,11 @@ export const useSidebarData = () => {
         {
           name: 'Logs',
           path: '/admin/dashboard/billing/logs',
+          showDropdown: true,
+          subLinks: [
+            { name: 'Logs', path: '/admin/dashboard/billing/logs' },
+            { name: 'Gateway Logs', path: '#' },
+          ],
         },
       ],
     },
