@@ -11,7 +11,7 @@ export const Article = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getArticleByID({ id }));
-  }, []);
+  }, [id]);
 
   const { article, loading } = useSelector((state) => state?.articles);
   const [imgError, setImgError] = useState(false);
