@@ -1,7 +1,20 @@
-import { Article, RecentArticle } from './sections';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { getDepartments } from 'store';
+import { getClients } from 'store';
+import { getUsers } from 'store';
+import { Article, GenerateTicket, RecentArticle } from './sections';
 import './View.styles.scss';
 
 export const View = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    (async () => {
+      await dispatch(getUsers());
+      await dispatch(getClients());
+      await dispatch(getDepartments());
+    })();
+  });
   return (
     <>
       <div className="p-[40px] ">
@@ -17,6 +30,7 @@ export const View = () => {
             </div>
           </div>
         </div>
+        <GenerateTicket />
       </div>
     </>
   );
