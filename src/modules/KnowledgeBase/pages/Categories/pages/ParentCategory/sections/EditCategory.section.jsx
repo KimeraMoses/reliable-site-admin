@@ -1,4 +1,5 @@
 import { Modal } from 'components';
+import { createServerImage } from 'lib';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateArticleCategory } from 'store';
 import * as Yup from 'yup';
@@ -9,6 +10,12 @@ const fields = [
     name: 'name',
     placeholder: 'Enter Category Name',
     title: 'Category Name',
+  },
+  {
+    type: 'file',
+    name: 'categoryIcon',
+    title: 'Icon',
+    subText: 'Browse',
   },
 ];
 
@@ -24,6 +31,7 @@ export const EditCategory = ({ show, setShow, id }) => {
 
   const initialValues = {
     name: articleCategory?.name,
+    categoryIcon: articleCategory?.categoryIcon,
   };
 
   return (
@@ -37,10 +45,21 @@ export const EditCategory = ({ show, setShow, id }) => {
       initialValues={initialValues}
       validationSchema={validationSchema}
       handleSubmit={async (values) => {
-        const newValues = {
-          ...values,
-          categoryType: 1,
-        };
+        let newValues = null;
+        if (values?.image) {
+          const img = await createServerImage(values?.image);
+          newValues = {
+            categoryIcon: img,
+            name: values.name,
+            categoryType: 1,
+          };
+        } else {
+          newValues = {
+            categoryIcon: values?.categoryIcon,
+            name: values.name,
+            categoryType: 1,
+          };
+        }
         await dispatch(updateArticleCategory({ id, data: newValues }));
         setShow(false);
       }}

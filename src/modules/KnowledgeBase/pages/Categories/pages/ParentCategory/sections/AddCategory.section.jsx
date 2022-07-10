@@ -13,7 +13,7 @@ const fields = [
   },
   {
     type: 'file',
-    name: 'childCategoryIcon',
+    name: 'categoryIcon',
     title: 'Icon',
     subText: 'Browse',
   },
@@ -41,10 +41,10 @@ export const AddCategory = ({ show, setShow }) => {
       initialValues={initialValues}
       validationSchema={validationSchema}
       handleSubmit={async (values) => {
-        const img = await createServerImage(values?.childCategoryIcon);
+        const img = await createServerImage(values?.image);
         const newValues = {
-          childCategoryIcon: img,
-          ...values,
+          categoryIcon: img,
+          name: values.name,
           categoryType: 1,
         };
         await dispatch(createArticleCategory(newValues));

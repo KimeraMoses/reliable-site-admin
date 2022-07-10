@@ -14,10 +14,10 @@ export const Status = () => {
         Set The Product Status
       </p>
       <Input
-        name="status"
-        placeholder="Status"
+        name="assignedToClientId"
+        placeholder="Client"
         type="select"
-        label="Status"
+        label="Assign To"
         className="mb-[20px]"
         options={clients?.map((client) => ({
           label: client?.fullName ? client?.fullName : client?.email,
