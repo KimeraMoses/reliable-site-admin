@@ -68,12 +68,22 @@ export const PSList = () => {
       render: (lineItems) => {
         return (
           <div className="flex flex-col gap-[16px]">
-            {lineItems?.map((item) => (
-              <div className="flex flex-col gap-[4px]">
-                <div className="text-white text-[14px]">{item?.name}</div>
-                <div className="text-[#474761] text-[12px]">${item?.price}</div>
-              </div>
-            ))}
+            {lineItems?.map((item, idx) => {
+              if (idx >= 3) {
+                return null;
+              } else {
+                return (
+                  <div className="flex flex-col gap-[4px]">
+                    <div className="text-white text-[14px]">
+                      {item?.lineItem}
+                    </div>
+                    <div className="text-[#474761] text-[12px]">
+                      ${item?.price}
+                    </div>
+                  </div>
+                );
+              }
+            })}
           </div>
         );
       },

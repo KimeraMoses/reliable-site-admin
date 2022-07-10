@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux';
 
 export const ProductDetails = () => {
   const { categories } = useSelector((state) => state?.categories);
+  const { departments } = useSelector((state) => state.departments);
 
   return (
     <div className="p-[32px] bg-[#1E1E2D] rounded-[8px] mt-[20px]">
@@ -22,6 +23,15 @@ export const ProductDetails = () => {
       <Button type="ghost" className="mt-[16px] mb-[32px] w-full h-[52px]">
         Add New Category
       </Button>
+      <MultiSelect
+        name="productDepartments"
+        placeholder="Select Departments"
+        label="Departments"
+        options={departments?.map((department) => ({
+          label: department?.name,
+          value: department?.id,
+        }))}
+      />
       <MultiSelect
         name="tags"
         placeholder="Enter New Tag"

@@ -1,6 +1,9 @@
 import { Input } from 'components';
+import { useSelector } from 'react-redux';
 
 export const Status = () => {
+  const { clients } = useSelector((state) => state?.users);
+
   return (
     <div className="p-[32px] bg-[#1E1E2D] rounded-[8px] mt-[20px]">
       <div className="flex justify-between items-center">
@@ -16,10 +19,24 @@ export const Status = () => {
         type="select"
         label="Status"
         className="mb-[20px]"
+        options={clients?.map((client) => ({
+          label: client?.fullName ? client?.fullName : client?.email,
+          value: client?.id,
+        }))}
+      />
+      <Input
+        name="status"
+        placeholder="Status"
+        type="select"
+        label="Status"
+        className="mb-[20px]"
         options={[
           { label: 'Pending', value: 0 },
           { label: 'Confirmed', value: 1 },
           { label: 'Cancelled', value: 2 },
+          { label: 'Renewed', value: 3 },
+          { label: 'Suspended', value: 4 },
+          { label: 'Terminated', value: 5 },
         ]}
       />
       <Input
@@ -27,9 +44,25 @@ export const Status = () => {
         placeholder="Payment Type"
         type="select"
         label="Payment Type"
+        className="mb-[20px]"
         options={[
           { label: 'One Time', value: 0 },
           { label: 'Monthly', value: 1 },
+        ]}
+      />
+      <Input
+        name="billingCycle"
+        placeholder="Billing Cycle"
+        type="select"
+        label="Billing Cycle"
+        options={[
+          { label: 'Hourly', value: 0 },
+          { label: 'Monthly', value: 1 },
+          { label: 'Quarterly', value: 2 },
+          { label: 'SemiAnnually', value: 3 },
+          { label: 'Annually', value: 4 },
+          { label: 'Biennially', value: 5 },
+          { label: 'Triennially', value: 6 },
         ]}
       />
     </div>

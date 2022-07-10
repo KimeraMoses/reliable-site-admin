@@ -4,6 +4,8 @@ import { AddLineItem, DeleteItem, EditLineItem } from './sections';
 import { nanoid } from 'nanoid';
 import { useFormikContext } from 'formik';
 import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
+import moment from 'moment';
 
 const LineItem = ({ item, setDel, setId, setEdit, setEditData }) => {
   return (
@@ -11,7 +13,9 @@ const LineItem = ({ item, setDel, setId, setEdit, setEditData }) => {
       <div className="flex gap-[16px]">
         <div className="h-[52px] w-[3px] bg-[#8950FC] rounded-[8px]" />
         <div>
-          <div className="text-white text-[16px] font-normal">{item?.name}</div>
+          <div className="text-white text-[16px] font-normal">
+            {item?.lineItem}
+          </div>
           <div className="text-[#474761] text-[14px] font-normal">
             ${item?.price}
           </div>
@@ -50,8 +54,7 @@ export const LineItems = () => {
   const [total, setTotal] = useState(0);
 
   const { values, setFieldValue } = useFormikContext();
-
-  console.log(values);
+  const { user } = useSelector((state) => state?.auth);
 
   const addLineItem = (item) => {
     const currentLineItems = values?.productLineItems;
@@ -73,21 +76,23 @@ export const LineItems = () => {
 
   const deleteLineItem = (id) => {
     const newItems = values?.productLineItems?.filter(
-      (item) => item.id !== id && item?.isDeleted === false
+      (item) => item.id !== id && item?.deletedOn === null
     );
     const lineItemDeleted = values?.productLineItems?.filter(
-      (item) => item?.id === id || item?.isDeleted === true
+      (item) => item?.id === id || item?.deletedOn
     );
     const newItemsFinal = newItems?.map((item) => {
       return {
         ...item,
-        isDeleted: false,
+        deletedOn: null,
+        deletedBy: null,
       };
     });
     const deletedItemsFinal = lineItemDeleted?.map((item) => {
       return {
         ...item,
-        isDeleted: true,
+        deletedOn: moment().toISOString(),
+        deletedBy: user?.id,
       };
     });
     if (newItems?.length < 1) {
@@ -110,6 +115,8 @@ export const LineItems = () => {
     setTotal(sum);
   }, [values?.productLineItems]);
 
+  console.log(values?.productLineItems);
+
   return (
     <>
       <div className="bg-[#1E1E2D] p-[32px] rounded-[8px] mt-[20px]">
@@ -118,7 +125,7 @@ export const LineItems = () => {
           <Button onClick={() => setAdd(true)}>Add New Item</Button>
         </div>
         {values?.productLineItems?.map((item, idx) => {
-          if (!item?.isDeleted) {
+          if (item?.deletedOn === null) {
             return (
               <LineItem
                 key={`item-${idx}`}

@@ -13,9 +13,11 @@ import {
   AdvancedSettings,
 } from './sections';
 import './PSDetails.styles.scss';
-import { convertHTMLToDraftState, createServerImage } from 'lib';
+import { createServerImage } from 'lib';
 import { getCategories } from 'store';
 import { updateProductByID } from 'store';
+import { getClients } from 'store';
+import { getDepartments } from 'store';
 
 export const PSDetails = () => {
   const [active, setActive] = useState('GENERAL SETTINGS');
@@ -30,6 +32,11 @@ export const PSDetails = () => {
 
   const dispatch = useDispatch();
   const { loading, product } = useSelector((state) => state?.products);
+  const categoriesLoading = useSelector((state) => state?.categories?.loading);
+  const usersLoading = useSelector((state) => state?.users?.loading);
+  const departmentsLoading = useSelector(
+    (state) => state?.departments?.loading
+  );
 
   const { id } = useParams();
 
@@ -37,6 +44,8 @@ export const PSDetails = () => {
     (async () => {
       await dispatch(getCategories());
       await dispatch(getProductByID(id));
+      await dispatch(getClients());
+      await dispatch(getDepartments());
     })();
   }, []);
 
@@ -44,7 +53,6 @@ export const PSDetails = () => {
     preview: product?.base64Image,
     thumbnail: product?.thumbnail,
     status: product?.status,
-    // TODO: Add departments once merged with task-116
     productDepartments: product?.productDepartments?.map(
       (department) => department?.departmentId
     ),
@@ -66,6 +74,8 @@ export const PSDetails = () => {
     terminationDate: moment(product?.terminationDate),
     overrideSuspensionDate: moment(product?.overrideSuspensionDate),
     overrideTerminationDate: moment(product?.overrideTerminationDate),
+    assignedToClientId: product?.assignedToClientId,
+    billingCycle: product?.billingCycle,
   };
 
   return (
@@ -76,18 +86,23 @@ export const PSDetails = () => {
         const img = await createServerImage(values.thumbnail);
         const newValues = {
           thumbnail: img,
-          status: values?.status,
+          status: Number(values?.status),
           productCategories: values?.productCategories?.map((item) => ({
             categoryId: item,
           })),
-          paymentType: values?.paymentType,
+          productDepartments: values?.productDepartments?.map((item) => ({
+            departmentId: item,
+          })),
+          paymentType: Number(values?.paymentType),
+          billingCycle: Number(values?.billingCycle),
           tags: `${values?.tags}`,
           name: values?.name,
           description: values?.description,
           productLineItems: values?.productLineItems?.map((item) => ({
-            name: item?.name,
+            lineItem: item?.lineItem,
             price: item?.price,
-            isDeleted: item?.isDeleted,
+            deletedOn: item?.deletedOn,
+            deletedBy: item?.deletedBy,
           })),
           notes: values?.notes,
           registrationDate: values?.registrationDate?.toISOString(),
@@ -96,7 +111,6 @@ export const PSDetails = () => {
           overrideSuspensionDate: values?.overrideSuspensionDate?.toISOString(),
           overrideTerminationDate:
             values?.overrideTerminationDate?.toISOString(),
-          productDepartments: values?.productDepartments,
         };
         await dispatch(updateProductByID(id, newValues));
         // console.log(newValues);
@@ -108,7 +122,11 @@ export const PSDetails = () => {
           <Form>
             <div className="users">
               <div className="admin-details min-w-[60vh]">
-                {loading || product === null ? (
+                {loading ||
+                categoriesLoading ||
+                usersLoading ||
+                departmentsLoading ||
+                product === null ? (
                   <Spin
                     size="large"
                     style={{ gridColumn: '1/3', alignSelf: 'center' }}
