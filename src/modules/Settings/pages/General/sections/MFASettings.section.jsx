@@ -24,17 +24,32 @@ export function MFASettings() {
   };
 
   // Fields
-  const fields = [
+  // Admin MFA Fields
+  const adminMFAFields = [
+    {
+      name: 'enableAdminMFA',
+      label: 'Enable Admin MFA/OTP',
+      type: 'switch',
+    },
     {
       name: 'forceAdminMFA',
-      label: 'Force Admin MFA',
+      label: 'Force Admin MFA/OTP',
+      type: 'switch',
+    },
+  ];
+  const clientMFAFields = [
+    {
+      name: 'enableClientMFA',
+      label: 'Enable Client MFA/OTP',
       type: 'switch',
     },
     {
       name: 'forceClientMFA',
-      label: 'Force Client MFA',
+      label: 'Force Client MFA/OTP',
       type: 'switch',
     },
+  ];
+  const fields = [
     {
       name: 'googleAuthenticator',
       label: 'Google Authentication',
@@ -63,23 +78,75 @@ export function MFASettings() {
           }
         }}
       >
-        <Form>
-          <div className="grid grid-cols-4 gap-[20px] mb-[32px]">
-            {fields.map((field) => (
-              <Input
-                key={field.name}
-                name={field.name}
-                label={field?.label}
-                placeholder={field.placeholder}
-                type={field.type}
-                options={field.options}
-              />
-            ))}
-          </div>
-          <Button htmlType="submit" type="ghost" className="px-[32px] h-[52px]">
-            Save Changes
-          </Button>
-        </Form>
+        {({ values }) => {
+          return (
+            <Form>
+              <div className="grid grid-cols-4 gap-[20px] mb-[32px]">
+                <div className="flex flex-col gap-[20px]">
+                  {adminMFAFields?.map((field) => {
+                    if (
+                      field?.name === 'forceAdminMFA' &&
+                      !values?.enableAdminMFA
+                    ) {
+                      return <></>;
+                    } else {
+                      return (
+                        <Input
+                          key={field.name}
+                          name={field.name}
+                          label={field?.label}
+                          placeholder={field.placeholder}
+                          type={field.type}
+                          options={field.options}
+                        />
+                      );
+                    }
+                  })}
+                </div>
+                <div className="flex flex-col gap-[20px]">
+                  {clientMFAFields?.map((field) => {
+                    if (
+                      field?.name === 'forceClientMFA' &&
+                      !values?.enableClientMFA
+                    ) {
+                      return <></>;
+                    } else {
+                      return (
+                        <Input
+                          key={field.name}
+                          name={field.name}
+                          label={field?.label}
+                          placeholder={field.placeholder}
+                          type={field.type}
+                          options={field.options}
+                        />
+                      );
+                    }
+                  })}
+                </div>
+                {fields?.map((field) => {
+                  return (
+                    <Input
+                      key={field.name}
+                      name={field.name}
+                      label={field?.label}
+                      placeholder={field.placeholder}
+                      type={field.type}
+                      options={field.options}
+                    />
+                  );
+                })}
+              </div>
+              <Button
+                htmlType="submit"
+                type="ghost"
+                className="px-[32px] h-[52px]"
+              >
+                Save Changes
+              </Button>
+            </Form>
+          );
+        }}
       </Formik>
     </Card>
   );
