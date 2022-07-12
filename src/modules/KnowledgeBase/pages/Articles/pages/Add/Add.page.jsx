@@ -12,6 +12,7 @@ import './Add.styles.scss';
 import { useEffect, useState } from 'react';
 import { getAllArticleCategories } from 'store';
 import { createServerImage } from 'lib';
+import { getBrands } from 'store';
 
 // const ConfigurationEditor = ({ editorState, onEditorStateChange, onBlur }) => {
 //   return (
@@ -103,6 +104,7 @@ export const Add = () => {
     categories: [],
     visibility: true,
     articleStatus: 'draft',
+    brandIds: [],
     bodyText: '',
     bodyHolder: EditorState.createEmpty(),
   };
@@ -111,11 +113,14 @@ export const Add = () => {
 
   useEffect(() => {
     dispatch(getAllArticleCategories());
+    dispatch(getBrands());
   }, []);
 
   const { loading, articleCategories } = useSelector(
     (state) => state?.articleCategories
   );
+  const { brands } = useSelector((state) => state?.brands);
+  const brandsLoading = useSelector((state) => state?.brands?.loading);
   const articleLoading = useSelector((state) => state?.articles?.loading);
   const [subCategories, setSubCategories] = useState([]);
 
@@ -134,6 +139,16 @@ export const Add = () => {
       type: 'text',
       label: 'Article Ttitle',
       placeholder: 'Enter Article Title Here',
+    },
+    {
+      name: 'brandIds',
+      type: 'multiselect',
+      label: 'Brands',
+      placeholder: 'All Brands',
+      options: brands?.map((brand) => ({
+        label: brand?.name,
+        value: brand?.id,
+      })),
     },
     {
       name: 'categories',
@@ -174,7 +189,6 @@ export const Add = () => {
   return (
     <Formik
       initialValues={initialValues}
-      // validationSchema={validationSchema}
       enableReinitialize
       onSubmit={async (values) => {
         const serverImage = await createServerImage(values?.image);
@@ -194,7 +208,7 @@ export const Add = () => {
       {({ values, errors, touched, setFieldValue, setFieldTouched }) => {
         return (
           <Form>
-            <Spin spinning={loading || articleLoading}>
+            <Spin spinning={loading || articleLoading || brandsLoading}>
               <div className="grid grid-cols-[1fr] gap-[20px] px-[32px] py-[40px]">
                 <div className="flex flex-col gap-[20px]">
                   <div className="bg-[#1E1E2D] rounded-[8px]">

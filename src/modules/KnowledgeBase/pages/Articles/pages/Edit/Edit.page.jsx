@@ -11,6 +11,7 @@ import { ConfigurationEditor, EmailBodyInput, Button } from 'components';
 import './Edit.styles.scss';
 import { createServerImage } from 'lib';
 import { getArticleByID, updateArticle, getAllArticleCategories } from 'store';
+import { getBrands } from 'store';
 
 export const Edit = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ export const Edit = () => {
   const { id } = useParams();
   useEffect(() => {
     dispatch(getAllArticleCategories());
+    dispatch(getBrands());
     dispatch(getArticleByID({ id }));
   }, []);
 
@@ -26,6 +28,7 @@ export const Edit = () => {
   );
   const articleLoading = useSelector((state) => state?.articles?.loading);
   const { article } = useSelector((state) => state?.articles);
+  const brands = useSelector((state) => state?.brands);
 
   const [subCategories, setSubCategories] = useState([]);
 
@@ -41,6 +44,7 @@ export const Edit = () => {
   const initialValues = {
     title: article?.title,
     categories: article?.categories,
+    brandIds: article?.brands,
     visibility: article?.visibility,
     articleStatus: article?.articleStatus,
     bodyText: article?.bodyText,
@@ -63,6 +67,16 @@ export const Edit = () => {
         value: category.id,
       })),
       label: 'Categories',
+    },
+    {
+      name: 'brandIds',
+      type: 'multiselect',
+      label: 'Brands',
+      placeholder: 'All Brands',
+      options: brands?.map((brand) => ({
+        label: brand?.name,
+        value: brand?.id,
+      })),
     },
     {
       name: 'visibility',
