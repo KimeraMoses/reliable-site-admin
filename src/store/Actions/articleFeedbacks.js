@@ -25,7 +25,6 @@ export const getAllArticleFeedbacks = (params) => {
         defaultData.advancedSearch.keyword = params?.status;
       }
       if (params?.startDate && params?.endDate) {
-        console.log('test');
         defaultData['startDate'] = params?.startDate;
         defaultData['endDate'] = params?.endDate;
       }
@@ -84,6 +83,12 @@ export const updateArticleFeedback = ({ id, data }) => {
         const { url, config } = getArticleFeedbackByIDConfig(id);
         const res = await axios.get(url, config);
         dispatch(getArticleFeedback(res?.data?.data));
+        const fullRes = await axios.post(
+          getArticleFeedbackConfig()?.url,
+          getArticleFeedbackConfig()?.defaultData,
+          getArticleFeedbackConfig()?.config
+        );
+        dispatch(getArticleFeedbacks(fullRes?.data?.data));
         toast.success('Article Feedback updated successfully');
       }
     } catch (e) {

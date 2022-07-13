@@ -7,7 +7,6 @@ import { Input, Button } from 'components';
 import './FeedbackDetails.styles.scss';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getArticleByID } from 'store';
 import { getArticleFeedbackByID } from 'store';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -15,7 +14,7 @@ import { toast } from 'react-toastify';
 import { createTicket, getUsers, getDepartments } from 'store';
 import { createArticleFeedbackComment } from 'store/Actions/articleFeedbackComments';
 import { createArticleFeedbackCommentReply } from 'store/Actions/articleFeedbackCommentReplies';
-import { updateArticleFeedback } from 'store';
+import { MarkAsReviewed } from '../common-sections/MarkAsReviewed.section';
 
 const CommentCard = ({
   imgSrc,
@@ -58,11 +57,6 @@ const CommentCard = ({
                 <h5 className="text-sm text-[#FFFFFF]">
                   {userFullName || 'Anonymous'}
                 </h5>
-                {/* {author && (
-                  <p className="bg-[#3A2434] py-[4px] px-[8px] text-[#F64E60] rounded-[8px] text-xs">
-                    Author
-                  </p>
-                )} */}
               </div>
               <p className="text-xs text-[#474761]">
                 {createdOn
@@ -94,14 +88,10 @@ const CommentCard = ({
               onSubmit={async (values) => {
                 dispatch(
                   createArticleFeedbackCommentReply({
-                    // articleFeedbackId: params?.id,
                     commentText: values?.commentText,
-                    // articleFeedbackCommentParentReplyId:
-                    //   '3fa85f64-5717-4562-b3fc-2c963f66afa6',
                     articleFeedbackCommentId: id,
                   })
                 );
-                await dispatch(getArticleByID({ id: params?.articleId }));
                 await dispatch(getArticleFeedbackByID({ id: params?.id }));
                 setActive(false);
               }}
@@ -139,17 +129,16 @@ const CommentCard = ({
 
 export const FeedbackDetails = () => {
   const dispatch = useDispatch();
-  const { articleId, id } = useParams();
+  const { id } = useParams();
   useEffect(() => {
     (async () => {
-      await dispatch(getArticleByID({ id: articleId }));
       await dispatch(getArticleFeedbackByID({ id }));
       await dispatch(getUsers());
       await dispatch(getDepartments());
     })();
   }, []);
 
-  const { article, loading } = useSelector((state) => state?.articles);
+  // const { article, loading } = useSelector((state) => state?.articles);
   const { departments } = useSelector((state) => state?.departments);
   const { articlesFeedback } = useSelector((state) => state?.articlesFeedback);
   const { users } = useSelector((state) => state?.users);
@@ -174,16 +163,14 @@ export const FeedbackDetails = () => {
   const departmentsLoading = useSelector(
     (state) => state?.departments?.loading
   );
-  const params = useParams();
   const navigate = useNavigate();
   const [imgError, setImgError] = useState(false);
+
+  const [show, setShow] = useState(false);
   return (
     <>
-      <Spin
-        spinning={
-          loading || feedbackLoading || ticketLoading || departmentsLoading
-        }
-      >
+      <Spin spinning={feedbackLoading || ticketLoading || departmentsLoading}>
+        <MarkAsReviewed show={show} setShow={setShow} />
         <div className="bg-[#1E1E2D] m-[40px] p-[32px] rounded-[8px]">
           <h6 className="text-white text-[20px]">
             Generate Ticket For This Feedback
@@ -262,7 +249,7 @@ export const FeedbackDetails = () => {
                       options={departmentsData}
                       type="select"
                       name="departmentId"
-                      label="departmentId"
+                      label="Department"
                     />
                   </div>
                   <div className="flex items-center gap-[12px]">
@@ -277,20 +264,7 @@ export const FeedbackDetails = () => {
                       type="ghost"
                       htmlType="button"
                       className="w-[fit_content] h-[55px] mt-[32px]"
-                      onClick={async () => {
-                        const isReviewed = articlesFeedback?.isReviewed
-                          ? false
-                          : true;
-                        await dispatch(
-                          updateArticleFeedback({
-                            id: params?.id,
-                            data: {
-                              ...articlesFeedback,
-                              isReviewed,
-                            },
-                          })
-                        );
-                      }}
+                      onClick={() => setShow(true)}
                     >
                       {articlesFeedback?.isReviewed
                         ? 'Mark as Not Reviewed'
@@ -304,12 +278,12 @@ export const FeedbackDetails = () => {
         </div>
         <div className="m-[40px] p-[32px] bg-[#1E1E2D] rounded-[8px]">
           <div className="flex gap-[12px]">
-            {article?.imagePath && !imgError ? (
+            {articlesFeedback?.articleImage && !imgError ? (
               <img
                 className="w-[90px] rounded-[8px] object-cover"
                 onError={() => setImgError(true)}
-                src={article?.imagePath}
-                alt={article?.title}
+                src={articlesFeedback?.articleImage}
+                alt={articlesFeedback?.articleTitle}
               />
             ) : (
               <div className="w-[90px] rounded-[8px] object-cover border-1 border-blue-600 flex items-center justify-center text-white text-[16px] font-medium">
@@ -318,7 +292,7 @@ export const FeedbackDetails = () => {
             )}
             <div className="flex flex-col gap-[8px] ">
               <p className="text-[24px] text-[#FFFFFF] ">
-                {article?.title || 'No Title'}
+                {articlesFeedback?.articleTitle || 'No Title'}
               </p>
               <p className="text-[#474761] text-[14px]">
                 Created On{' '}
@@ -329,10 +303,12 @@ export const FeedbackDetails = () => {
             </div>
           </div>
           <div className="flex justify-between gap-[40px] mt-[40px]">
-            {article?.bodyText ? (
+            {articlesFeedback?.articleDescription ? (
               <p
                 className="text-base text-[#FFFFFF]"
-                dangerouslySetInnerHTML={{ __html: article?.bodyText }}
+                dangerouslySetInnerHTML={{
+                  __html: articlesFeedback?.articleDescription,
+                }}
               />
             ) : (
               <p className="text-base text-[#FFFFFF]">
@@ -357,7 +333,6 @@ export const FeedbackDetails = () => {
                     commentText: values?.commentText,
                   };
                   dispatch(createArticleFeedbackComment(final));
-                  await dispatch(getArticleByID({ id: articleId }));
                   await dispatch(getArticleFeedbackByID({ id }));
                 }
               }}
@@ -426,11 +401,6 @@ export const FeedbackDetails = () => {
                 </>
               );
             })}
-            {/* <CommentCard imgTxt="P" />
-            <CommentCard imgSrc="/article.jpg" author />
-
-            <CommentCard imgTxt="P" reply />
-            <CommentCard imgTxt="P" /> */}
           </div>
         </div>
       </Spin>

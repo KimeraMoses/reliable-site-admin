@@ -5,7 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkModule } from 'lib/checkModule';
 import { Table } from 'components';
-import { getAllArticlesWithFeedbacks } from 'store';
+import { Navigation } from './Navigation.section';
+import { getAllArticleFeedbacks } from 'store';
+import moment from 'moment';
+import { MarkAsReviewed } from '../../common-sections/MarkAsReviewed.section';
+import { getArticleFeedbackByID } from 'store';
 
 export const FeedbackList = () => {
   const navigate = useNavigate();
@@ -15,12 +19,16 @@ export const FeedbackList = () => {
 
   useEffect(() => {
     (async () => {
-      await dispatch(getAllArticlesWithFeedbacks());
+      await dispatch(getAllArticleFeedbacks());
     })();
   }, [dispatch]);
 
-  const { articles, loading } = useSelector((state) => state?.articles);
+  const { articlesFeedbacks, loading } = useSelector(
+    (state) => state?.articlesFeedback
+  );
   const { userModules } = useSelector((state) => state?.modules);
+
+  console.log(articlesFeedbacks);
 
   const { permissions } = checkModule({
     module: 'Users',
@@ -30,102 +38,100 @@ export const FeedbackList = () => {
   const columns = [
     {
       title: 'Article Title',
-      dataIndex: 'title',
-      key: 'title',
-      render: (text, record) => {
-        return (
-          <div className="flex items-center gap-[12px] rounded-[8px]">
-            <img className="w-[40px]" src="/article.jpg" alt="article title" />
-            <p className="text-sm">{text}</p>
-          </div>
-        );
-      },
+      dataIndex: 'articleTitle',
+      key: 'articleTitle',
     },
-
     {
       title: 'Article Description',
-      dataIndex: 'bodyText',
-      key: 'bodyText',
-      render: (text) => {
-        return (
-          <div className="text-sm" dangerouslySetInnerHTML={{ __html: text }} />
-        );
-      },
+      dataIndex: 'articleDescription',
+      key: 'articleDescription',
     },
     {
-      title: 'Number of Feedbacks',
-      dataIndex: 'feedbacknumbers',
-      key: 'feedbacknumbers',
-      render: (text, record) => {
-        return (
-          <div className="text-sm">
-            {record?.articleFeedbacks?.length} User Feedbacks
-          </div>
-        );
-      },
+      title: 'Created By',
+      dataIndex: 'createdByName',
+      key: 'createdByName',
     },
     {
-      title: 'Category',
-      dataIndex: 'categoryName',
-      key: 'categoryName',
-      render: (text, record) => {
-        const category = record?.articleCategories?.[0]?.category?.name;
-        return (
-          <div className="bg-[#2F264F] px-[8px] py-[4px] uppercase text-[#8950FC] w-[fit-content] rounded-[4px]">
-            {category ? category : 'Uncategorized'}
-          </div>
-        );
-      },
+      title: 'Created At',
+      dataIndex: 'createdAt',
+      key: 'createdAt',
+      render: (text) => (
+        <>{moment(text).format('MM/DD/YYYY [at] hh:mm:ss a')}</>
+      ),
     },
+    {
+      title: 'Assigned To',
+      dataIndex: 'assignedToFullName',
+      key: 'assignedToFullName',
+    },
+  ];
+
+  const [current, setCurrent] = useState('notReviewed');
+
+  const navData = [
+    { label: 'NOT REVIEWED', path: 'notReviewed' },
+    { label: 'REVIEWED', path: 'reviewed' },
   ];
 
   // Setting data properly
   const [data, setData] = useState([]);
+
   useEffect(() => {
-    setData([]);
-    if (articles?.length) {
-      const dataToSet = articles.map((b) => {
-        return {
-          ...b,
-          key: b?.id,
-        };
-      });
-      setData(dataToSet);
+    if (articlesFeedbacks?.length && current === 'notReviewed') {
+      const finalData = articlesFeedbacks?.filter(
+        (articleFeedback) => articleFeedback?.isReviewed === false
+      );
+      setData(finalData);
+    } else if (articlesFeedbacks?.length && current === 'reviewed') {
+      const finalData = articlesFeedbacks?.filter(
+        (articleFeedback) => articleFeedback?.isReviewed === true
+      );
+      setData(finalData);
+    } else {
+      setData([]);
     }
-  }, [articles]);
+  }, [articlesFeedbacks, current]);
+
+  const [show, setShow] = useState(false);
 
   return (
     <div className="p-[40px]">
+      <Navigation current={current} setCurrent={setCurrent} navData={navData} />
+      <MarkAsReviewed show={show} setShow={setShow} />
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
         <Table
           columns={columns}
           data={data}
           loading={loading}
-          // statusFilter={[
-          //   { name: 'Active' },
-          //   { name: 'Closed' },
-          //   { name: 'Disabled' },
-          // ]}
-          // fieldToFilter="articleTitle"
+          field="name"
           editAction={(record) => (
             <>
-              {record?.articleFeedbacks?.map((feedback, idx) => {
-                return (
-                  <Button
-                    onClick={() => {
-                      navigate(
-                        `/admin/dashboard/knowledge-base/feedback/view/${record?.id}/${feedback?.id}`
-                      );
-                    }}
-                  >
-                    View Feedback {idx + 1}
-                  </Button>
-                );
-              })}
+              <Button
+                onClick={() => {
+                  navigate(
+                    `/admin/dashboard/knowledge-base/feedback/view/${record?.id}`
+                  );
+                }}
+              >
+                View
+              </Button>
+              {
+                <Button
+                  onClick={async () => {
+                    await dispatch(getArticleFeedbackByID({ id: record?.id }));
+                    setShow(true);
+                  }}
+                >
+                  {!record?.isReviewed
+                    ? 'Mark as Reviewed'
+                    : 'Mark as Not Reviewed'}
+                </Button>
+              }
             </>
           )}
           permissions={permissions}
           t={t}
+          rowKey={(record) => record?.id}
         />
       </div>
     </div>
