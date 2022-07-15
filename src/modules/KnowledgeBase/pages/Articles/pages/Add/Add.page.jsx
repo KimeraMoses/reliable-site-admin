@@ -200,6 +200,7 @@ export const Add = () => {
           bodyText: values?.bodyText,
           title: values?.title,
           articleStatus: values?.articleStatus,
+          brandIds: values?.brandIds,
         };
         await dispatch(createArticle(finalValues));
         navigate('/admin/dashboard/knowledge-base/articles');

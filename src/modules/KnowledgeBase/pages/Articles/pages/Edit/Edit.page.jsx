@@ -44,7 +44,7 @@ export const Edit = () => {
   const initialValues = {
     title: article?.title,
     categories: article?.categories,
-    brandIds: article?.brands,
+    brandIds: article?.brandIds,
     visibility: article?.visibility,
     articleStatus: article?.articleStatus,
     bodyText: article?.bodyText,
@@ -119,6 +119,7 @@ export const Edit = () => {
           bodyText: values?.bodyText,
           title: values?.title,
           articleStatus: values?.articleStatus,
+          brandIds: values?.brandIds,
         };
         await dispatch(updateArticle({ id: article?.id, data: finalValues }));
         navigate('/admin/dashboard/knowledge-base/articles');

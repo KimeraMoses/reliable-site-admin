@@ -15,6 +15,7 @@ import { createTicket, getUsers, getDepartments } from 'store';
 import { createArticleFeedbackComment } from 'store/Actions/articleFeedbackComments';
 import { createArticleFeedbackCommentReply } from 'store/Actions/articleFeedbackCommentReplies';
 import { MarkAsReviewed } from '../common-sections/MarkAsReviewed.section';
+import { getClients } from 'store';
 
 const CommentCard = ({
   imgSrc,
@@ -65,7 +66,7 @@ const CommentCard = ({
               </p>
             </div>
           </div>
-          {!reply && (
+          {/* {!reply && (
             <div
               className={`cursor-pointer text-base hover:text-[#3699FF]
               ${active ? 'text-[#3699FF]' : 'text-[#474761]'}
@@ -74,7 +75,7 @@ const CommentCard = ({
             >
               Reply
             </div>
-          )}
+          )} */}
         </div>
         <div className="mt-[20px]">
           <p className=" text-base text-[#92928F]">{commentText}</p>
@@ -134,6 +135,7 @@ export const FeedbackDetails = () => {
     (async () => {
       await dispatch(getArticleFeedbackByID({ id }));
       await dispatch(getUsers());
+      await dispatch(getClients());
       await dispatch(getDepartments());
     })();
   }, []);
@@ -141,7 +143,7 @@ export const FeedbackDetails = () => {
   // const { article, loading } = useSelector((state) => state?.articles);
   const { departments } = useSelector((state) => state?.departments);
   const { articlesFeedback } = useSelector((state) => state?.articlesFeedback);
-  const { users } = useSelector((state) => state?.users);
+  const { users, clients } = useSelector((state) => state?.users);
   let usersData = [{ value: '', label: 'Select User' }];
   users?.forEach((user) => {
     usersData.push({
@@ -298,7 +300,17 @@ export const FeedbackDetails = () => {
                 Created On{' '}
                 {articlesFeedback?.createdOn
                   ? moment(articlesFeedback?.createdOn).format('MM/DD/YYYY')
-                  : 'N/A'}
+                  : 'N/A'}{' '}
+                by{' '}
+                {clients?.find(
+                  (client) => client?.id === articlesFeedback?.createdBy
+                )?.fullName || 'Super Admin'}
+                &nbsp;
+                {articlesFeedback?.lastModifiedOn
+                  ? `and Updated on ${moment(
+                      articlesFeedback?.lastModifiedOn
+                    ).format('MM/DD/YYYY')}`
+                  : ''}
               </p>
             </div>
           </div>
@@ -378,7 +390,7 @@ export const FeedbackDetails = () => {
                     imgSrc={image}
                     {...comment}
                   />
-                  {comment?.articleFeedbackCommentReplies ? (
+                  {/* {comment?.articleFeedbackCommentReplies ? (
                     comment?.articleFeedbackCommentReplies?.map((reply) => {
                       return (
                         <CommentCard
@@ -397,7 +409,7 @@ export const FeedbackDetails = () => {
                     })
                   ) : (
                     <></>
-                  )}
+                  )} */}
                 </>
               );
             })}
