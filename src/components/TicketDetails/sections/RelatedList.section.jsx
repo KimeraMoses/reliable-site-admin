@@ -18,6 +18,7 @@ import {
 import { getUsers } from 'store';
 import { getClients } from 'store';
 import { Button, Spin } from 'antd';
+import moment from 'moment';
 
 export const RelatedList = () => {
   const location = useLocation();
@@ -136,8 +137,9 @@ export const RelatedList = () => {
     },
     {
       title: 'Follow-Up',
-      dataIndex: '',
-      key: '',
+      dataIndex: 'followUpOn',
+      key: 'followUpOn',
+      render: (text) => <>{text ? moment(text).format('MM/DD/YYYY') : 'N/A'}</>,
     },
     {
       title: 'No. of Messages',
@@ -146,8 +148,9 @@ export const RelatedList = () => {
     },
     {
       title: 'Idle Time',
-      dataIndex: '',
-      key: '',
+      dataIndex: 'idleTime',
+      key: 'idleTime',
+      render: (text) => <>{text ? text : 'N/A'}</>,
     },
   ];
 

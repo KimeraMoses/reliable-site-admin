@@ -134,23 +134,25 @@ export const Communication = () => {
     { title: 'Ticket #', value: ticket?.ticketNumber },
     {
       title: 'Client Email',
-      value: clients?.find((client) => client?.id === ticket?.createdBy)?.email,
+      value: ticket?.clientEmail,
     },
     {
       title: 'Client Full Name',
-      value: clients?.find((client) => client?.id === ticket?.createdBy)
-        ?.fullName,
+      value: ticket?.clientFullName,
     },
     { title: 'Product / Service', value: ticket?.product },
-    { title: 'Brand', value: ticket?.brand },
+    { title: 'Brand', value: ticket?.brandId },
     { title: 'Department', value: ticket?.Department },
-    { title: 'Idle', value: ticket?.idle },
+    { title: 'Idle', value: ticket?.idleTime },
     { title: 'Duration', value: ticket?.duration },
     {
       title: 'Assigned To',
-      value: users?.find((user) => user?.id === ticket?.assignedTo)?.email,
+      value: ticket?.assignedToFullName,
     },
-    { title: 'Number of Messages', value: ticket?.numberOfMessages },
+    {
+      title: 'Number of Messages',
+      value: ticket?.ticketComments?.length || '0',
+    },
   ];
   // Ticket Data
 
