@@ -57,6 +57,10 @@ export const getAssignedTicketsByIDConfig = ({ id }) => ({
   config: ticketsConfig('View'),
 });
 
+export const getTicketHistoryByID = ({ id }) => ({
+  url: `${prefix}/gettickethistory/${id}`,
+});
+
 export const getTicketsByDepartmentIdConfig = ({ id }) => ({
   url: `${prefix}/search`,
   defaultData: {

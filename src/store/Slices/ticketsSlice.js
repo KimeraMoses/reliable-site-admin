@@ -7,6 +7,7 @@ const initialState = {
   detailsLoading: false,
   ticket: null,
   allTickets: [],
+  ticketHistory: [],
 };
 
 const ticketsSlice = createSlice({

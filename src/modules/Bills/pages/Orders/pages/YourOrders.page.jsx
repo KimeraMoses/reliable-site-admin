@@ -24,11 +24,11 @@ export const YourOrders = () => {
   const { user } = useSelector((state) => state?.auth);
 
   useEffect(() => {
-    let details = {
-      userId: user?.id,
-    };
+    // let details = {
+    //   userId: user?.id,
+    // };
     (async () => {
-      await dispatch(getOrders(details));
+      await dispatch(getOrders());
       await dispatch(getClients());
       await dispatch(getProducts());
     })();

@@ -1,48 +1,43 @@
 import { Modal } from 'components';
-import { useSelector } from 'react-redux';
-// import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { createOrder } from 'store';
 import * as Yup from 'yup';
 
-// const initialValues = {
-//   name: '',
-//   apiKey: '',
-//   status: true,
-// };
+const initialValues = {
+  productIds: [],
+  orderForClientId: '',
+  customerIP: '',
+  orderStatus: 0,
+  notes: '',
+};
 
 const validationSchema = Yup.object().shape({
-  // name: Yup.string().required('This field is required!'),
-  // apiKey: Yup.string().required('This field is required!'),
-  // status: Yup.boolean().required('This field is required!'),
+  productIds: Yup.array().of(Yup.string()).required('This field is required!'),
+  orderForClientId: Yup.string().required('This field is required!'),
+  customerIP: Yup.string().required('This field is required!'),
+  orderStatus: Yup.number().required('This field is required!'),
+  notes: Yup.string().required('This field is required!'),
 });
 
 export const AddOrder = ({ show, setShow }) => {
-  // const dispatch = useDispatch();
-  // const { loading } = useSelector((state) => state?.orders);
+  const dispatch = useDispatch();
   const { clients } = useSelector((state) => state?.users);
   const { products } = useSelector((state) => state?.products);
 
-  // Status
-  // ●  Draft - The order is only visible on the admin interface.
-  // ● Pending - The order is visible on the end user interface.
-  // ● Paid - The invoice has been paid (if applicable).
-  // ● Processing - The order is being processed.
-  // ● Completed - The order has been setup.
-  // ● Accepted - The order has been reviewed and accepted.
-  // ● Canceled - The order has been canceled.
   const status = [
     'Draft',
     'Pending',
     'Paid',
     'Processing',
-    'Completed',
     'Accepted',
+    'Completed',
     'Canceled',
   ];
 
   const fields = [
     {
       type: 'select',
-      name: 'clientId',
+      name: 'orderForClientId',
       placeholder: 'Select Client',
       title: 'Client',
       options: clients?.map((client) => ({
@@ -52,20 +47,20 @@ export const AddOrder = ({ show, setShow }) => {
     },
     {
       type: 'select',
-      name: 'status',
+      name: 'orderStatus',
       placeholder: 'Select Status',
       title: 'Status',
-      options: status?.map((el) => ({
+      options: status?.map((el, idx) => ({
         label: el,
-        value: el,
+        value: idx,
       })),
     },
     {
       type: 'multiselect',
       mode: 'multiple',
-      name: 'product',
-      placeholder: 'Select Product',
-      title: 'Product/Service',
+      name: 'productIds',
+      placeholder: 'Select Products',
+      title: 'Products/Services',
       options: products?.map((el) => ({
         label: el?.name,
         value: el?.id,
@@ -73,28 +68,40 @@ export const AddOrder = ({ show, setShow }) => {
     },
     {
       type: 'text',
-      name: 'orderNote',
+      name: 'customerIP',
+      placeholder: 'Enter Customer IP...',
+      title: 'Customer IP',
+    },
+    {
+      type: 'text',
+      name: 'notes',
       placeholder: 'Enter Order Notes...',
       title: 'Order Notes',
-      options: products?.map((el) => ({
-        label: el?.name,
-        value: el?.id,
-      })),
     },
   ];
+
+  const { loading } = useSelector((state) => state?.orders);
 
   return (
     <Modal
       heading="Add Order"
       submitText="Add Order"
       show={show}
-      // loading={loading}
+      loading={loading}
       setShow={setShow}
       fields={fields}
-      // initialValues={initialValues}
+      initialValues={initialValues}
       validationSchema={validationSchema}
       handleSubmit={async (values) => {
-        console.log(values);
+        await dispatch(
+          createOrder({
+            data: {
+              ...values,
+              orderStatus: Number(values?.orderStatus),
+              tenant: 'Admin',
+            },
+          })
+        );
         setShow(false);
       }}
     />
