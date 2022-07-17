@@ -108,6 +108,7 @@ export const getTicketsByDepartmentId = ({ id }) => {
 export const editTicket = ({ data }) => {
   return async (dispatch) => {
     dispatch(setTicketCommentLoading(true));
+    dispatch(setTicketLoading(true));
     try {
       const { url, config } = editTicketConfig({ id: data?.id });
       const response = await axios.put(url, data, config);
@@ -118,6 +119,7 @@ export const editTicket = ({ data }) => {
       toast.error(getError(error));
     } finally {
       dispatch(setTicketCommentLoading(false));
+      dispatch(setTicketLoading(false));
     }
   };
 };

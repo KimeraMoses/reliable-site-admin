@@ -58,16 +58,12 @@ export const RelatedList = () => {
   useEffect(() => {
     setData([]);
     if (tickets.length) {
-      const dataToSet = tickets
-        ?.filter(function (el) {
-          return el.ticketStatus === 0;
-        })
-        .map((b) => {
-          return {
-            ...b,
-            key: b?.id,
-          };
-        });
+      const dataToSet = tickets?.map((b) => {
+        return {
+          ...b,
+          key: b?.id,
+        };
+      });
       setData(dataToSet);
     }
   }, [tickets]);
@@ -91,7 +87,13 @@ export const RelatedList = () => {
             <div className="action-icon">
               <RiseOutlined />
             </div>
-            <div className="action-icon">
+            <div
+              className={
+                record?.pinTicket
+                  ? 'action-icon action-icon-active'
+                  : 'action-icon'
+              }
+            >
               <PushpinOutlined />
             </div>
           </div>
@@ -143,8 +145,9 @@ export const RelatedList = () => {
     },
     {
       title: 'No. of Messages',
-      dataIndex: '',
-      key: '',
+      dataIndex: 'ticketComments',
+      key: 'ticketComments',
+      render: (text) => text?.length || '0',
     },
     {
       title: 'Idle Time',

@@ -2,6 +2,12 @@ import { message } from 'antd';
 import { Priority } from 'components';
 import { AssignTicket, FollowUp, Status } from 'components/TicketModals';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom';
+import { getTicketsByDepartmentId } from 'store';
+import { getTicketsByAdminID } from 'store';
+import { getTickets } from 'store';
+import { editTicket } from 'store';
 // import { Icon } from 'antd';
 import './index.scss';
 
@@ -11,13 +17,12 @@ export const TicketMenu = ({ visible, options, record, x, y }) => {
   const [followup, setFollowUp] = useState(false);
   const [status, setStatus] = useState(false);
 
+  const dispatch = useDispatch();
+  const location = useLocation();
+
+  const { user } = useState((state) => state?.auth);
+
   const defaultOptions = [
-    // {
-    //   label: 'Merge',
-    //   onClick: (record) => {
-    //     console.log(record);
-    //   },
-    // },
     {
       label: 'Transfer',
       onClick: (record) => {
@@ -44,7 +49,15 @@ export const TicketMenu = ({ visible, options, record, x, y }) => {
     },
     {
       label: 'Pin',
-      onClick: (record) => {
+      onClick: async (record) => {
+        await dispatch(editTicket({ data: { ...record, pinTicket: true } }));
+        if (location?.pathname.includes('show-all')) {
+          await dispatch(getTickets());
+        } else if (location?.pathname?.includes('by-department')) {
+          getTicketsByDepartmentId({ id: location?.state?.departmentId });
+        } else {
+          await dispatch(getTicketsByAdminID({ id: user?.id }));
+        }
         message.success('Ticket Pinned');
       },
     },
