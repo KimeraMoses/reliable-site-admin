@@ -28,8 +28,6 @@ export const FeedbackList = () => {
   );
   const { userModules } = useSelector((state) => state?.modules);
 
-  console.log(articlesFeedbacks);
-
   const { permissions } = checkModule({
     module: 'Users',
     modules: userModules,
@@ -40,16 +38,28 @@ export const FeedbackList = () => {
       title: 'Article Title',
       dataIndex: 'articleTitle',
       key: 'articleTitle',
+      render: (text, record) => <>{record?.article?.title}</>,
     },
     {
       title: 'Article Description',
       dataIndex: 'articleDescription',
       key: 'articleDescription',
+      // bodyText
+      render: (text, record) => (
+        <p
+          dangerouslySetInnerHTML={{
+            __html: record?.article?.bodyText
+              ? record?.article?.bodyText?.substring(0, 25)
+              : 'No Description',
+          }}
+        />
+      ),
     },
     {
       title: 'Created By',
       dataIndex: 'createdByName',
       key: 'createdByName',
+      render: (text) => <>{text ? text : 'N/A'}</>,
     },
     {
       title: 'Created At',
@@ -58,11 +68,6 @@ export const FeedbackList = () => {
       render: (text) => (
         <>{moment(text).format('MM/DD/YYYY [at] hh:mm:ss a')}</>
       ),
-    },
-    {
-      title: 'Assigned To',
-      dataIndex: 'assignedToFullName',
-      key: 'assignedToFullName',
     },
   ];
 

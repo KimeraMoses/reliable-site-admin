@@ -12,7 +12,6 @@ export const MultiSelect = ({
   className,
   dropdownClassName,
 }) => {
-  console.log(options);
   return (
     <Field name={name}>
       {({ meta, form: { setFieldValue, setFieldTouched } }) => {

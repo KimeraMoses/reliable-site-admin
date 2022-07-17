@@ -43,8 +43,8 @@ export const Edit = () => {
 
   const initialValues = {
     title: article?.title,
-    categories: article?.categories,
-    brandIds: article?.brandIds,
+    categories: article?.articleCategories?.map((cat) => cat?.categoryId),
+    brandIds: article?.brandArticles?.map((brand) => brand?.brandId),
     visibility: article?.visibility,
     articleStatus: article?.articleStatus,
     bodyText: article?.bodyText,
@@ -68,16 +68,16 @@ export const Edit = () => {
       })),
       label: 'Categories',
     },
-    {
-      name: 'brandIds',
-      type: 'multiselect',
-      label: 'Brands',
-      placeholder: 'All Brands',
-      options: brands?.map((brand) => ({
-        label: brand?.name,
-        value: brand?.id,
-      })),
-    },
+    // {
+    //   name: 'brandIds',
+    //   type: 'multiselect',
+    //   label: 'Brands',
+    //   placeholder: 'All Brands',
+    //   options: brands?.map((brand) => ({
+    //     label: brand?.name,
+    //     value: brand?.id,
+    //   })),
+    // },
     {
       name: 'visibility',
       type: 'select',

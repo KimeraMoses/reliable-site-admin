@@ -7,7 +7,6 @@ import { toast } from 'react-toastify';
 import { updateAppSettings } from 'store';
 
 const validationSchema = Yup.object().shape({
-  foceMFA: Yup.boolean().required('This is a required field'),
   googleAuthenticator: Yup.boolean().required('This is a required field'),
   microsoftAuthenticator: Yup.boolean().required('This is a required field'),
 });
@@ -73,7 +72,10 @@ export function MFASettings() {
             toast.info('No changes were made');
           } else {
             await dispatch(
-              updateAppSettings({ id: settings?.id, data: values })
+              updateAppSettings({
+                id: settings?.id,
+                data: { ...settings, ...values },
+              })
             );
           }
         }}

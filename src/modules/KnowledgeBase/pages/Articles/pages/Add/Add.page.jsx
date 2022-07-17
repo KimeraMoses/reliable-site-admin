@@ -238,9 +238,15 @@ export const Add = () => {
                       onBlur={() => setFieldTouched('bodyText', true)}
                       onEditorStateChange={(state) => {
                         setFieldValue('bodyHolder', state);
-                        const currentContentAsHTML = convertToHTML(
-                          state.getCurrentContent()
-                        );
+                        const currentContentAsHTML = convertToHTML({
+                          entityToHTML: (entity, originalText) => {
+                            if (entity.type === 'IMAGE') {
+                              return `<img src="${entity.data.src}" />`;
+                            }
+                            return originalText;
+                          },
+                        })(state.getCurrentContent());
+                        console.log(currentContentAsHTML);
                         if (
                           convertToRaw(state.getCurrentContent()).blocks
                             .length === 1 &&

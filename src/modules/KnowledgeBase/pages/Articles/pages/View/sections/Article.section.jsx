@@ -39,10 +39,10 @@ export const Article = () => {
           </p>
         </div>
         <div className="relative w-full mt-[32px]">
-          {article?.imagePath && !imgError ? (
+          {article?.base64Image && !imgError ? (
             <img
               className="h-[492px] w-full rounded-[8px] object-cover"
-              src={article?.imagePath}
+              src={article?.base64Image}
               onError={() => setImgError(true)}
               alt="article"
             />
