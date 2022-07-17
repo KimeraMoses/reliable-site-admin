@@ -99,10 +99,11 @@ export const PSDetails = () => {
           name: values?.name,
           description: values?.description,
           productLineItems: values?.productLineItems?.map((item) => ({
+            id: item?.id,
             lineItem: item?.lineItem,
             price: item?.price,
-            deletedOn: item?.deletedOn,
-            deletedBy: item?.deletedBy,
+            isDeleted: item?.isDeleted,
+            priceType: item?.priceType,
           })),
           notes: values?.notes,
           registrationDate: values?.registrationDate?.toISOString(),

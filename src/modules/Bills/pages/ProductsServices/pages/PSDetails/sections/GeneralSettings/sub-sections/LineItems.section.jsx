@@ -1,11 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Button } from 'components';
 import { AddLineItem, DeleteItem, EditLineItem } from './sections';
-import { nanoid } from 'nanoid';
 import { useFormikContext } from 'formik';
 import { toast } from 'react-toastify';
-import { useSelector } from 'react-redux';
-import moment from 'moment';
 
 const LineItem = ({ item, setDel, setId, setEdit, setEditData }) => {
   return (
@@ -54,14 +51,10 @@ export const LineItems = () => {
   const [total, setTotal] = useState(0);
 
   const { values, setFieldValue } = useFormikContext();
-  const { user } = useSelector((state) => state?.auth);
 
   const addLineItem = (item) => {
     const currentLineItems = values?.productLineItems;
-    const newLineItems = [
-      ...currentLineItems,
-      { ...item, id: item?.id || nanoid(), isDeleted: false },
-    ];
+    const newLineItems = [...currentLineItems, { ...item, isDeleted: false }];
     setFieldValue('productLineItems', newLineItems);
   };
   const editLineItem = (id, editItem) => {
@@ -76,23 +69,21 @@ export const LineItems = () => {
 
   const deleteLineItem = (id) => {
     const newItems = values?.productLineItems?.filter(
-      (item) => item.id !== id && item?.deletedOn === null
+      (item) => item.id !== id && item?.isDeleted === false
     );
     const lineItemDeleted = values?.productLineItems?.filter(
-      (item) => item?.id === id || item?.deletedOn
+      (item) => item?.id === id || item?.isDeleted === true
     );
     const newItemsFinal = newItems?.map((item) => {
       return {
         ...item,
-        deletedOn: null,
-        deletedBy: null,
+        isDeleted: false,
       };
     });
     const deletedItemsFinal = lineItemDeleted?.map((item) => {
       return {
         ...item,
-        deletedOn: moment().toISOString(),
-        deletedBy: user?.id,
+        isDeleted: true,
       };
     });
     if (newItems?.length < 1) {
@@ -125,7 +116,7 @@ export const LineItems = () => {
           <Button onClick={() => setAdd(true)}>Add New Item</Button>
         </div>
         {values?.productLineItems?.map((item, idx) => {
-          if (item?.deletedOn === null) {
+          if (!item?.isDeleted) {
             return (
               <LineItem
                 key={`item-${idx}`}
