@@ -11,6 +11,8 @@ import './styles.scss';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { convertHTMLToDraftState, deepEqual } from 'lib';
 import { toast } from 'react-toastify';
+import { useEffect } from 'react';
+import { getBrands } from 'store';
 
 const validationSchema = Yup.object().shape({
   host: Yup.string().required('Host is required'),
@@ -63,6 +65,14 @@ export function EditConfiguration() {
   // Setting Initial Values
   const smtp = location?.state?.smtp;
 
+  const { brands } = useSelector((state) => state?.brands);
+
+  useEffect(() => {
+    (async () => {
+      await getBrands();
+    })();
+  }, []);
+
   const initialValues = {
     id: smtp?.id,
     host: smtp?.host,
@@ -78,6 +88,7 @@ export function EditConfiguration() {
     headerContentHolder: convertHTMLToDraftState(smtp?.headerContent),
     signatureHolder: convertHTMLToDraftState(smtp?.signature),
     footerContentHolder: convertHTMLToDraftState(smtp?.footerContent),
+    brand: smtp?.brandSmtpConfigurations[0]?.brandId,
   };
   // Setting Initial Values End
 
@@ -87,6 +98,7 @@ export function EditConfiguration() {
       validationSchema={validationSchema}
       enableReinitialize
       onSubmit={async (values) => {
+        const brand = brands?.find((brand) => brand?.id === values?.brand);
         if (deepEqual(initialValues, values)) {
           toast.info('Nothing Changed in SMTP Settings');
           return navigate('/admin/dashboard/settings/smtp');
@@ -103,8 +115,14 @@ export function EditConfiguration() {
             headerContent: values?.headerContent,
             signature: values?.signature,
             footerContent: values?.footerContent,
-            // TODO: Change brandIds once we have multiple brands
-            brandIds: ['1ac3fe50-d86a-420a-bb04-728a2b0c394a'],
+            brandSmtpConfigurations: [
+              {
+                id: smtp?.brandSmtpConfigurations[0]?.id,
+                brandId: brand?.id,
+                departmentId: brand?.departmentId,
+                smtpConfigurationId: smtp?.id,
+              },
+            ],
           };
           await dispatch(editSMTP({ data: finalValues }));
           navigate('/admin/dashboard/settings/smtp');
@@ -147,6 +165,16 @@ export function EditConfiguration() {
                       label="BCC"
                       placeholder="Enter Email Addresses"
                       mode="tags"
+                    />
+                    <Input
+                      type="select"
+                      name="brand"
+                      label="Brand"
+                      placeholder="Select Brand"
+                      options={brands?.map((brand) => ({
+                        label: brand?.name,
+                        value: brand?.id,
+                      }))}
                     />
                   </div>
                   <Button className="mt-[32px]" htmlType="submit">
