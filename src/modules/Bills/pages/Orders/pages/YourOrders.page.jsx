@@ -11,12 +11,11 @@ import { useNavigate } from 'react-router-dom';
 import { AddOrder } from './sections/AddOrder.section';
 import { getClients } from 'store';
 import { getProducts } from 'store';
-import { OrderTemplate } from './sections/OrderTemplate.section';
+import { getOrderTemplates } from 'store';
 
 export const YourOrders = () => {
   const navigate = useNavigate();
   const [showAdd, setShowAdd] = useState(false);
-  const [showOrderTemplate, setShowOrderTemplate] = useState(false);
   const { t } = useTranslation('/Bills/ns');
   const dispatch = useDispatch();
   const { orders, loading } = useSelector((state) => state?.orders);
@@ -29,6 +28,7 @@ export const YourOrders = () => {
     // };
     (async () => {
       await dispatch(getOrders());
+      await dispatch(getOrderTemplates());
       await dispatch(getClients());
       await dispatch(getProducts());
     })();
@@ -59,14 +59,14 @@ export const YourOrders = () => {
   }, [orders]);
 
   const columns = [
-    {
-      title: '',
-      dataIndex: 'id',
-      key: 'id',
-      render: (id) => {
-        return <Checkbox></Checkbox>;
-      },
-    },
+    // {
+    //   title: '',
+    //   dataIndex: 'id',
+    //   key: 'id',
+    //   render: (id) => {
+    //     return <Checkbox></Checkbox>;
+    //   },
+    // },
     {
       title: t('orderId'),
       dataIndex: 'orderNo',
@@ -146,10 +146,6 @@ export const YourOrders = () => {
     <div className="p-[40px]">
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
         <AddOrder show={showAdd} setShow={setShowAdd} />
-        <OrderTemplate
-          show={showOrderTemplate}
-          setShow={setShowOrderTemplate}
-        />
         <div className="flex items-center gap-[12px]">
           <Button
             className="mb-[32px]"
@@ -157,13 +153,7 @@ export const YourOrders = () => {
               navigate(`/admin/dashboard/billing/orders/all-orders/list`);
             }}
           >
-            View All Orders
-          </Button>
-          <Button
-            className="mb-[32px]"
-            onClick={() => setShowOrderTemplate(true)}
-          >
-            Create Order Template
+            Order Templates
           </Button>
         </div>
         <Table
@@ -172,6 +162,7 @@ export const YourOrders = () => {
           loading={loading}
           dateRageFilter={true}
           statusFilter={statusList()}
+          hideActions
           fieldToFilter="orderNo"
           btnData={{
             text: 'Add Order',

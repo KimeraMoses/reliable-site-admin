@@ -30,7 +30,11 @@ export {
   getInvoice,
 } from './invoicesSlice';
 
-export { getOrders as getOrdersDispatch, setOrderLoading } from './ordersSlice';
+export {
+  getOrders as getOrdersDispatch,
+  getOrderTemplates as getOrderTemplatesDispatch,
+  setOrderLoading,
+} from './ordersSlice';
 
 export {
   getNotifications as getNotificationsDispatch,

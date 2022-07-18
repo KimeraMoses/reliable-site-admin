@@ -1,8 +1,8 @@
 import { Modal } from 'components';
 import { useDispatch, useSelector } from 'react-redux';
-import { createOrderTemplate } from 'store';
+import { editOrderTemplate } from 'store';
 
-export const OrderTemplate = ({ show, setShow }) => {
+export const EditOrderTemplate = ({ show, setShow, orderTemplate }) => {
   const { products } = useSelector((state) => state?.products);
   const { loading } = useSelector((state) => state?.orders);
 
@@ -33,24 +33,28 @@ export const OrderTemplate = ({ show, setShow }) => {
   ];
 
   const initialValues = {
-    templateName: '',
-    productIds: [],
-    notes: '',
+    templateName: orderTemplate?.templateName,
+    productIds: orderTemplate?.productIds,
+    notes: orderTemplate?.notes,
     tenant: 'Admin',
   };
 
   const dispatch = useDispatch();
   return (
     <Modal
-      heading="Add Order Template"
-      submitText="Add Order Template"
+      heading="Edit Order Template"
+      submitText="Edit Order Template"
       show={show}
       loading={loading}
       setShow={setShow}
       fields={fields}
       initialValues={initialValues}
       handleSubmit={async (values) => {
-        await dispatch(createOrderTemplate({ data: values }));
+        const finalValues = {
+          ...orderTemplate,
+          ...values,
+        };
+        await dispatch(editOrderTemplate({ data: finalValues }));
         setShow(false);
       }}
     />

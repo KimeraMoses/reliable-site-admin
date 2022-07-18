@@ -60,7 +60,7 @@ export const useSidebarData = () => {
               path: '/admin/dashboard/billing/orders/your-orders/list',
             },
             {
-              name: 'All Orders',
+              name: 'Order Templates',
               path: '/admin/dashboard/billing/orders/all-orders/list',
             },
           ],
@@ -386,7 +386,7 @@ export const sidebarData = [
             path: '/admin/dashboard/billing/orders/your-orders/list',
           },
           {
-            name: 'All Orders',
+            name: 'Order Templates',
             path: '/admin/dashboard/billing/orders/all-orders/list',
           },
         ],

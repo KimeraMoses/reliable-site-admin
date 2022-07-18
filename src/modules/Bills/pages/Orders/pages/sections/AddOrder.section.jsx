@@ -3,14 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createOrder } from 'store';
 import * as Yup from 'yup';
 
-const initialValues = {
-  productIds: [],
-  orderForClientId: '',
-  customerIP: '',
-  orderStatus: 0,
-  notes: '',
-};
-
 const validationSchema = Yup.object().shape({
   productIds: Yup.array().of(Yup.string()).required('This field is required!'),
   orderForClientId: Yup.string().required('This field is required!'),
@@ -23,6 +15,7 @@ export const AddOrder = ({ show, setShow }) => {
   const dispatch = useDispatch();
   const { clients } = useSelector((state) => state?.users);
   const { products } = useSelector((state) => state?.products);
+  const { orderTemplates, loading } = useSelector((state) => state?.orders);
 
   const status = [
     'Draft',
@@ -35,6 +28,16 @@ export const AddOrder = ({ show, setShow }) => {
   ];
 
   const fields = [
+    {
+      type: 'select',
+      name: 'orderTemplateId',
+      placeholder: 'Choose Template',
+      title: 'Template',
+      options: orderTemplates?.map((template) => ({
+        label: template?.templateName,
+        value: template?.id,
+      })),
+    },
     {
       type: 'select',
       name: 'orderForClientId',
@@ -80,7 +83,14 @@ export const AddOrder = ({ show, setShow }) => {
     },
   ];
 
-  const { loading } = useSelector((state) => state?.orders);
+  const initialValues = {
+    productIds: [],
+    orderForClientId: '',
+    customerIP: '',
+    orderStatus: 0,
+    notes: '',
+    orderTemplateId: orderTemplates[0]?.id,
+  };
 
   return (
     <Modal
