@@ -3,8 +3,12 @@ import { convertToHTML } from 'draft-convert';
 import { convertToRaw } from 'draft-js';
 
 import { EmailBodyInput, ConfigurationEditor, Button } from 'components';
+import { axios, getError } from 'lib';
+import { toast } from 'react-toastify';
+import { useState } from 'react';
 
 export function Right() {
+  const [loading, setLoading] = useState(false);
   const { values, setFieldValue, setFieldTouched, touched, errors } =
     useFormikContext();
   return (
@@ -46,7 +50,7 @@ export function Right() {
           </h6>
           <ConfigurationEditor
             editorState={values.footerContentHolder}
-            onBlur={() => setFieldTouched('footerContent', true)}
+            onBlur={() => setFieldTouched('footerConent', true)}
             onEditorStateChange={(state) => {
               setFieldValue('footerContentHolder', state);
               const currentContentAsHTML = convertToHTML(
@@ -56,15 +60,15 @@ export function Right() {
                 convertToRaw(state.getCurrentContent()).blocks.length === 1 &&
                 convertToRaw(state.getCurrentContent()).blocks[0].text === ''
               ) {
-                setFieldValue('footerContent', '');
+                setFieldValue('footerConent', '');
               } else {
-                setFieldValue('footerContent', currentContentAsHTML);
+                setFieldValue('footerConent', currentContentAsHTML);
               }
             }}
           />
-          {touched['footerContent'] && errors['footerContent'] && (
+          {touched['footerConent'] && errors['footerConent'] && (
             <div className="error whitespace-nowrap ml-[32px] mb-[16px] w-[20%]">
-              {errors['footerContent']}
+              {errors['footerConent']}
             </div>
           )}
         </div>
@@ -75,7 +79,7 @@ export function Right() {
           </h6>
           <ConfigurationEditor
             editorState={values.signatureHolder}
-            onBlur={() => setFieldTouched('signature', true)}
+            onBlur={() => setFieldTouched('signatureContent', true)}
             onEditorStateChange={(state) => {
               setFieldValue('signatureHolder', state);
               const currentContentAsHTML = convertToHTML(
@@ -85,15 +89,15 @@ export function Right() {
                 convertToRaw(state.getCurrentContent()).blocks.length === 1 &&
                 convertToRaw(state.getCurrentContent()).blocks[0].text === ''
               ) {
-                setFieldValue('signature', '');
+                setFieldValue('signatureContent', '');
               } else {
-                setFieldValue('signature', currentContentAsHTML);
+                setFieldValue('signatureContent', currentContentAsHTML);
               }
             }}
           />
-          {touched['signature'] && errors['signature'] && (
+          {touched['signatureContent'] && errors['signatureContent'] && (
             <div className="error whitespace-nowrap ml-[32px] mb-[16px] w-[20%]">
-              {errors['signature']}
+              {errors['signatureContent']}
             </div>
           )}
         </div>
@@ -127,7 +131,7 @@ export function Right() {
                 errors={errors}
                 type="readOnly"
               />
-              <EmailBodyInput
+              {/* <EmailBodyInput
                 name="emailTo"
                 label="Email To"
                 options={[
@@ -139,11 +143,11 @@ export function Right() {
                 errors={errors}
                 type="multiselect"
                 darkBg
-              />
+              /> */}
             </div>
             <ConfigurationEditor
               editorState={values?.bodyHolder}
-              onBlur={() => setFieldTouched('body', true)}
+              onBlur={() => setFieldTouched('emailBody', true)}
               onEditorStateChange={(state) => {
                 setFieldValue('bodyHolder', state);
                 const currentContentAsHTML = convertToHTML(
@@ -153,20 +157,20 @@ export function Right() {
                   convertToRaw(state.getCurrentContent()).blocks.length === 1 &&
                   convertToRaw(state.getCurrentContent()).blocks[0].text === ''
                 ) {
-                  setFieldValue('body', '');
+                  setFieldValue('emailBody', '');
                 } else {
-                  setFieldValue('body', currentContentAsHTML);
+                  setFieldValue('emailBody', currentContentAsHTML);
                 }
               }}
             />
-            {touched['body'] && errors['body'] && (
+            {touched['emailBody'] && errors['emailBody'] && (
               <div className="error whitespace-nowrap ml-[32px] mb-[16px] w-[20%]">
-                {errors['body']}
+                {errors['emailBody']}
               </div>
             )}
             <div className="flex flex-col gap-[2px]">
               <EmailBodyInput
-                name="numberOfEmail"
+                name="numberOfEmails"
                 label="Number of Email"
                 placeholder="[numbers]"
                 touched={touched}
@@ -175,7 +179,7 @@ export function Right() {
                 darkBg
               />
               <EmailBodyInput
-                name="interval"
+                name="intervalInSeconds"
                 label="Interval In Seconds"
                 placeholder="[seconds]"
                 touched={touched}
@@ -185,7 +189,42 @@ export function Right() {
               />
             </div>
             <div className="p-[32px]">
-              <Button>Send Email</Button>
+              <Button
+                onClick={async () => {
+                  setLoading(true);
+                  try {
+                    await axios.post(
+                      '/api/v1/admin/massemails',
+                      {
+                        productIds: values?.productIds,
+                        clientIds: values?.clientIds,
+                        headerContent: values?.headerContent,
+                        footerConent: values?.footerContent,
+                        signatureContent: values?.signatureContent,
+                        emailBody: values?.emailBody,
+                        numberOfEmails: values?.numberOfEmails,
+                        intervalInSeconds: values?.intervalInSeconds,
+                        smtpConfigId: values?.smtpConfigId,
+                        name: values?.name,
+                        emailAddress: values?.emailAddress,
+                        companyAddress: values?.companyAddress,
+                        cssStyle: values?.cssStyle,
+                      },
+                      {
+                        modulename: 'Users',
+                        moduleactionname: 'Create',
+                      }
+                    );
+                    toast.success('Email Sent Successfully!');
+                  } catch (e) {
+                    toast.error(getError(e));
+                  }
+                  setLoading(false);
+                }}
+                loading={loading}
+              >
+                Send Email
+              </Button>
             </div>
           </div>
         </div>
