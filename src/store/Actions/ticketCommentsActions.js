@@ -48,3 +48,43 @@ export const addTicketComments = (data) => {
     }
   };
 };
+
+// Update Comment
+export const updateTicketComments = ({ data }) => {
+  return async (dispatch) => {
+    dispatch(setTicketCommentLoading(true));
+    try {
+      const res = await axios.put(`/api/ticketcomments/${data?.id}`, data, {
+        modulename: 'Users',
+        moduleactionname: 'Update',
+      });
+      if (res.status === 200) {
+        toast.success('Ticket Comments Updated Successfully');
+      }
+    } catch (e) {
+      toast.error(getError(e));
+    } finally {
+      dispatch(setTicketCommentLoading(false));
+    }
+  };
+};
+
+// Delete Comment
+export const deleteComment = ({ id }) => {
+  return async (dispatch) => {
+    dispatch(setTicketCommentLoading(true));
+    try {
+      const res = await axios.delete(`/api/ticketcomments/${id}`, {
+        modulename: 'Users',
+        moduleactionname: 'Delete',
+      });
+      if (res.status === 200) {
+        toast.success('Ticket Comments Deleted Successfully');
+      }
+    } catch (e) {
+      toast.error(getError(e));
+    } finally {
+      dispatch(setTicketCommentLoading(false));
+    }
+  };
+};

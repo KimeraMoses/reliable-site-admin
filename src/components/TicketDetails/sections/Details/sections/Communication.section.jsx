@@ -4,7 +4,6 @@ import { Reply as ReplyIcon } from 'icons';
 import { Formik, Form, Field } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { Dropdown, List, Button } from 'antd';
-import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
@@ -71,7 +70,6 @@ const validationSchemaReplies = Yup.object().shape({
 export const Communication = () => {
   const { t } = useTranslation('/Tickets/ns');
   const [selected, setSelected] = useState([]);
-  const navigate = useNavigate();
 
   const { commentLoading } = useSelector((state) => state?.ticketComments);
   const { repliesLoading } = useSelector((state) => state?.ticketReplies);
@@ -375,13 +373,13 @@ export const Communication = () => {
                       >
                         Delete
                       </NavLink>
-                      {/* <NavLink
+                      <NavLink
                         to="#"
                         onClick={() => handleReplyInput(item.id)}
                         className={'text-[#474761]'}
                       >
                         Pin
-                      </NavLink> */}
+                      </NavLink>
                     </div>
                   )}
                 </div>

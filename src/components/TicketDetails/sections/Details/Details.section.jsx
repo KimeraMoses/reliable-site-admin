@@ -50,14 +50,41 @@ export const Details = () => {
     }
   };
 
-  const linksArr = ['Communication', 'Drafts', 'Comments', 'History'];
+  const communication = ticket?.ticketComments?.filter(
+    (comment) => comment?.ticketCommentType === 0 && !comment?.isDraft
+  );
+  const comments = ticket?.ticketComments?.filter(
+    (comment) => comment?.ticketCommentType === 1 && !comment?.isDraft
+  );
+  const drafts = ticket?.ticketComments?.filter(
+    (comment) => comment?.isDraft === true
+  );
+
+  const linksArr = [
+    {
+      label: 'Communication',
+      count: communication?.length,
+    },
+    {
+      label: 'Drafts',
+      count: drafts?.length,
+    },
+    {
+      label: 'Comments',
+      count: comments?.length,
+    },
+    {
+      label: 'History',
+      count: 1,
+    },
+  ];
   // Handle Navigation
-  const [active, setActive] = useState(linksArr[0]);
+  const [active, setActive] = useState(linksArr[0]?.label);
   const links = linksArr?.map((link) => {
     return {
-      label: link,
-      count: 2,
-      onClick: () => setActive(link),
+      label: link?.label,
+      count: link?.count,
+      onClick: () => setActive(link?.label),
     };
   });
   return (

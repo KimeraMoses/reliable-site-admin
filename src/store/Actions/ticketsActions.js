@@ -37,9 +37,11 @@ export const getTickets = (params = []) => {
 };
 
 // Get Ticket By ID
-export const getTicketById = (id) => {
+export const getTicketById = (id, noLoading) => {
   return async (dispatch) => {
-    dispatch(setDetailsLoading(true));
+    if (!noLoading) {
+      dispatch(setDetailsLoading(true));
+    }
     try {
       const { url, config } = getTicketConfig(id);
       const res = await axios.get(url, config);

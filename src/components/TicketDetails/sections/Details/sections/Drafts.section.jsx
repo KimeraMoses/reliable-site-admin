@@ -1,26 +1,31 @@
 import { NavLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button, List, Dropdown } from 'antd';
 import { genrateFirstLetterName } from 'lib';
 import { Button as CustomButton } from 'components';
+import { deleteComment } from 'store';
+import { getTicketById } from 'store';
+import { updateTicketComments } from 'store';
 
 export const Drafts = ({ setActive }) => {
   const { ticket } = useSelector((state) => state?.tickets);
 
-  // Dropdown Menu
-  const menu = (
-    <>
-      {[
-        'Send and Mark Active',
-        'Send and Mark Waiting',
-        'Send and Mark Closed',
-        'Send and Mark Closed & Locked',
-        'Send and Schedule Follow-Up',
-      ].map((el) => {
-        return <Button onClick={() => {}}>{el}</Button>;
-      })}
-    </>
-  );
+  // // Dropdown Menu
+  // const menu = (
+  //   <>
+  //     {[
+  //       'Send and Mark Active',
+  //       'Send and Mark Waiting',
+  //       'Send and Mark Closed',
+  //       'Send and Mark Closed & Locked',
+  //       'Send and Schedule Follow-Up',
+  //     ].map((el) => {
+  //       return <Button onClick={() => {}}>{el}</Button>;
+  //     })}
+  //   </>
+  // );
+
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -31,7 +36,9 @@ export const Drafts = ({ setActive }) => {
           pagination={{
             pageSize: 20,
           }}
-          dataSource={ticket?.ticketComments}
+          dataSource={ticket?.ticketComments?.filter(
+            (comment) => comment?.isDraft === true
+          )}
           footer={''}
           renderItem={(item) => (
             <List.Item key={item.id} actions={''} extra={''}>
@@ -58,41 +65,50 @@ export const Drafts = ({ setActive }) => {
                         <span className="text-[#fff] text-[16px]">
                           {item?.userFullName}
                         </span>
-                        {item.createdBy === ticket.createdBy && (
-                          <span className="bg-[#3A2434] p-[4px] text-[#F64E60] text-[10px] rounded-[4px] ml-[16px]">
-                            AUTHOR
-                          </span>
-                        )}
                       </div>
-                      <div className="text-[#474761] text-[14px]">1 Hour</div>
+                      {/* <div className="text-[#474761] text-[14px]">1 Hour</div> */}
                     </div>
                   </div>
                   {ticket?.ticketStatus === 0 && (
                     <div className="flex items-center gap-[12px] text-[16px] absolute right-5 top-1">
-                      <CustomButton
+                      {/* <CustomButton
                         className="px-[16px] py-[5px] text-[14px] h-[36px]"
                         onClick={() => setActive('Communication')}
                       >
                         View
-                      </CustomButton>
-                      <Dropdown
-                        overlay={menu}
+                      </CustomButton> */}
+                      {/* <Dropdown
+                        // overlay={menu}
                         overlayClassName="custom-table__table-dropdown-overlay"
                         className="custom-table__table-dropdown"
                         destroyPopupOnHide
                         placement="bottomRight"
                         trigger={['click', 'contextMenu']}
+                      > */}
+                      <CustomButton
+                        className="px-[16px] py-[5px] text-[14px] h-[36px]"
+                        onClick={async () => {
+                          await updateTicketComments({
+                            ...item,
+                            isDraft: false,
+                          });
+                        }}
                       >
-                        <CustomButton className="px-[16px] py-[5px] text-[14px] h-[36px]">
-                          Send
-                        </CustomButton>
-                      </Dropdown>
-                      <CustomButton className="px-[16px] py-[5px] text-[14px] h-[36px]">
+                        Send
+                      </CustomButton>
+                      {/* </Dropdown> */}
+                      {/* <CustomButton className="px-[16px] py-[5px] text-[14px] h-[36px]">
                         Send and Pin
-                      </CustomButton>
-                      <CustomButton className="px-[16px] py-[5px] text-[14px] h-[36px]">
+                      </CustomButton> */}
+                      {/* <CustomButton
+                        className="px-[16px] py-[5px] text-[14px] h-[36px]"
+                        onClick={async () => {
+                          await dispatch(deleteComment({ id: item?.id }));
+                          await dispatch(getTicketById(ticket?.id));
+                        }}
+                      >
                         Delete
-                      </CustomButton>
+                      </CustomButton> */}
                     </div>
                   )}
                 </div>
