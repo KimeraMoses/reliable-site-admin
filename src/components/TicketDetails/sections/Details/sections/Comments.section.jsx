@@ -1,10 +1,7 @@
-import { NavLink, useParams } from 'react-router-dom';
-// import { Ticket as TicketIcon } from 'icons';
-import { Reply as ReplyIcon } from 'icons';
-import { Formik, Form, Field } from 'formik';
+import { NavLink } from 'react-router-dom';
+import { Formik, Form } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { Dropdown, List, Button } from 'antd';
-import { useState } from 'react';
+import { Dropdown, List, Button, Popconfirm } from 'antd';
 import * as Yup from 'yup';
 
 import { getTicketById, addTicketComments } from 'store';
@@ -12,34 +9,28 @@ import { Button as CustomButton, Input } from 'components';
 import { genrateFirstLetterName } from 'lib';
 import { updateTicketComments } from 'store';
 import { setTicketCommentLoading } from 'store';
+import { deleteComment } from 'store';
 
 const initialValues = {
   commentText: '',
 };
-
-const initialRepliesValues = {
-  commentText: '',
-};
-
 const validationSchema = Yup.object().shape({
   commentText: Yup.string().required('Comment text is required'),
 });
 
-const validationSchemaReplies = Yup.object().shape({
-  commentText: Yup.string().required('Comment text is required'),
-});
-
 export const Comments = () => {
-  const [selected, setSelected] = useState([]);
-
   const { commentLoading } = useSelector((state) => state?.ticketComments);
-  const { repliesLoading } = useSelector((state) => state?.ticketReplies);
-  const isSelected = (id) => selected.indexOf(id) !== -1;
-
-  const { id } = useParams();
   const dispatch = useDispatch();
 
   const { ticket } = useSelector((state) => state?.tickets);
+
+  const commentSource = ticket?.ticketComments?.filter(
+    (comment) => comment?.ticketCommentType === 1 && !comment?.isDraft
+  );
+
+  const finalComments = commentSource.sort(
+    (a, b) => Number(b?.isSticky) - Number(a?.isSticky)
+  );
 
   return (
     <>
@@ -131,9 +122,7 @@ export const Comments = () => {
           pagination={{
             pageSize: 20,
           }}
-          dataSource={ticket?.ticketComments?.filter(
-            (comment) => comment?.ticketCommentType === 1 && !comment?.isDraft
-          )}
+          dataSource={finalComments}
           footer={''}
           renderItem={(item) => (
             <List.Item key={item.id} actions={''} extra={''}>
@@ -160,24 +149,32 @@ export const Comments = () => {
                         <span className="text-[#fff] text-[16px]">
                           {item?.userFullName}
                         </span>
-                        {/* {item.createdBy === ticket.createdBy && (
-                          <span className="bg-[#3A2434] p-[4px] text-[#F64E60] text-[10px] rounded-[4px] ml-[16px]">
-                            AUTHOR
-                          </span>
-                        )} */}
                       </div>
                       <div className="text-[#474761] text-[14px]">1 Hour</div>
                     </div>
                   </div>
                   {ticket?.ticketStatus === 0 && (
                     <div className="flex items-center gap-[12px] text-[16px] absolute right-5 top-1">
-                      <NavLink
-                        to="#"
-                        // onClick={() => handleReplyInput(item.id)}
-                        className={'text-[#474761]'}
+                      <Popconfirm
+                        okButtonProps={{
+                          className: 'bg-[#40a9ff]',
+                        }}
+                        title="Are you sure you want to delete this comment?"
+                        onConfirm={async () => {
+                          await dispatch(deleteComment({ id: item?.id }));
+                          dispatch(setTicketCommentLoading(true));
+                          await dispatch(getTicketById(ticket?.id, true));
+                          dispatch(setTicketCommentLoading(false));
+                        }}
                       >
-                        Delete
-                      </NavLink>
+                        <div
+                          className={
+                            'text-[#474761] cursor-pointer hover:texxt-[#40a9ff]'
+                          }
+                        >
+                          Delete
+                        </div>
+                      </Popconfirm>
                       <NavLink
                         to="#"
                         onClick={async () => {
@@ -185,7 +182,7 @@ export const Comments = () => {
                             updateTicketComments({
                               data: {
                                 ...item,
-                                isSticky: true,
+                                isSticky: !item?.isSticky,
                               },
                             })
                           );
@@ -193,9 +190,11 @@ export const Comments = () => {
                           await dispatch(getTicketById(ticket?.id, true));
                           dispatch(setTicketCommentLoading(false));
                         }}
-                        className={'text-[#474761]'}
+                        className={
+                          item?.isSticky ? 'text-[#40a9ff]' : 'text-[#474761]'
+                        }
                       >
-                        Pin
+                        {item?.isSticky ? 'Unpin' : 'Pin'}
                       </NavLink>
                     </div>
                   )}
@@ -203,55 +202,6 @@ export const Comments = () => {
                 <div className="text-[16px] text-[#92928F] mt-[20px] leading-7">
                   {item?.commentText}
                 </div>
-                {/* {isSelected(item.id) && (
-                  <div className={'reply-box mt-[20px] relative'}>
-                    <Formik
-                      initialValues={initialRepliesValues}
-                      validationSchema={validationSchemaReplies}
-                      enableReinitialize
-                      onSubmit={async (values) => {
-                        const newValues = {
-                          commentText: values?.commentText,
-                          ticketCommentId: item.id,
-                        };
-                        (async () => {
-                          await dispatch(addTicketReplies(newValues));
-                          await dispatch(getTicketById(id));
-                          setSelected([]);
-                        })();
-                      }}
-                    >
-                      {({ errors, touched }) => {
-                        return (
-                          <Form>
-                            <div className={'relative'}>
-                              <Field
-                                className="modal__form-el-field"
-                                key="commentText"
-                                type="text"
-                                name="commentText"
-                                placeholder="Write Something"
-                              />
-                              <Button
-                                htmlType="submit"
-                                loading={repliesLoading}
-                                className="absolute bottom-5 right-4 py-[0px] px-[0px] bg-none bg-transparent"
-                              >
-                                <ReplyIcon />
-                              </Button>
-                            </div>
-                            {touched['commentText'] &&
-                              errors['commentText'] && (
-                                <div className="error mt-[8px]">
-                                  {errors['commentText']}
-                                </div>
-                              )}
-                          </Form>
-                        );
-                      }}
-                    </Formik>
-                  </div>
-                )} */}
               </div>
             </List.Item>
           )}
