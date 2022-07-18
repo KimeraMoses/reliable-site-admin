@@ -20,6 +20,9 @@ const ticketsSlice = createSlice({
     getAllTickets: (state, { payload }) => {
       state.allTickets = payload;
     },
+    getTicketHistory: (state, { payload }) => {
+      state.ticketHistory = payload;
+    },
     getDepartmentTickets: (state, { payload }) => {
       state.departmentTickets = payload;
     },
@@ -43,6 +46,7 @@ export const {
   setTicketLoading,
   getDepartmentTickets,
   setDetailsLoading,
+  getTicketHistory,
 } = actions;
 
 export default reducer;

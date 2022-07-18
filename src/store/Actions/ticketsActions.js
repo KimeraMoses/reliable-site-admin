@@ -8,6 +8,7 @@ import {
   getTicketsByClintIDConfig,
   getAssignedTicketsByIDConfig,
   getTicketsByDepartmentIdConfig,
+  getTicketHistoryByIDConfig,
 } from 'lib';
 import { toast } from 'react-toastify';
 import {
@@ -18,6 +19,7 @@ import {
   setTicketCommentLoading,
   getAllTickets,
   setDetailsLoading,
+  getTicketHistory,
 } from 'store/Slices';
 
 // Get All Admin Ticket
@@ -51,6 +53,19 @@ export const getTicketById = (id, noLoading) => {
       toast.error(getError(e));
       dispatch(getTicket(null));
       dispatch(setDetailsLoading(false));
+    }
+  };
+};
+
+// Get Ticket History By ID
+export const getTicketHistoryByID = (id) => {
+  return async (dispatch) => {
+    try {
+      const { url, config } = getTicketHistoryByIDConfig({ id });
+      const res = await axios.get(url, config);
+      dispatch(getTicketHistory(res?.data?.data));
+    } catch (e) {
+      toast.error(getError(e));
     }
   };
 };
