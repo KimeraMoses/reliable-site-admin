@@ -75,7 +75,7 @@ export const Communication = () => {
 
   const { commentLoading } = useSelector((state) => state?.ticketComments);
   const { repliesLoading } = useSelector((state) => state?.ticketReplies);
-  const { users, clients } = useSelector((state) => state?.users);
+  const { users } = useSelector((state) => state?.users);
   const isSelected = (id) => selected.indexOf(id) !== -1;
 
   const { id } = useParams();
@@ -340,7 +340,9 @@ export const Communication = () => {
           pagination={{
             pageSize: 20,
           }}
-          dataSource={ticket?.ticketComments}
+          dataSource={ticket?.ticketComments?.filter(
+            (comment) => comment?.ticketCommentType === 0
+          )}
           footer={''}
           renderItem={(item) => (
             <List.Item key={item.id} actions={''} extra={''}>
@@ -392,13 +394,13 @@ export const Communication = () => {
                       >
                         Delete
                       </NavLink>
-                      <NavLink
+                      {/* <NavLink
                         to="#"
                         onClick={() => handleReplyInput(item.id)}
                         className={'text-[#474761]'}
                       >
                         Pin
-                      </NavLink>
+                      </NavLink> */}
                     </div>
                   )}
                 </div>

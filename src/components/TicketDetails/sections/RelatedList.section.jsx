@@ -64,7 +64,10 @@ export const RelatedList = () => {
           key: b?.id,
         };
       });
-      setData(dataToSet);
+      const trueFirst = dataToSet.sort(
+        (a, b) => Number(b.pinTicket) - Number(a.pinTicket)
+      );
+      setData(trueFirst);
     }
   }, [tickets]);
 
@@ -183,13 +186,8 @@ export const RelatedList = () => {
   // Methods to Select Rows
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
-      // console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
       setSelectedRows(selectedRows);
     },
-    // getCheckboxProps: (record) => ({
-    //   disabled: logic to disable using record
-    //   name: logic to set name of checkbox,
-    // }),
   };
 
   return (
@@ -203,9 +201,9 @@ export const RelatedList = () => {
           <Table
             columns={columns}
             data={data}
-            // fieldToFilter="ticketRelatedTo"
             fieldToFilter="id"
             permissions={permissions}
+            pagination={{ pageSize: 4 }}
             additionalBtns={
               selectedRows?.length
                 ? [

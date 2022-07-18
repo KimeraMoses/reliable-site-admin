@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { getTicketsByDepartmentId } from 'store';
 import { getTicketsByAdminID } from 'store';
+import { getTicketById } from 'store';
 import { getTickets } from 'store';
 import { editTicket } from 'store';
 // import { Icon } from 'antd';
@@ -25,8 +26,9 @@ export const TicketMenu = ({ visible, options, record, x, y }) => {
   const defaultOptions = [
     {
       label: 'Transfer',
-      onClick: (record) => {
+      onClick: async (record) => {
         setAssign(true);
+        await dispatch(getTicketById(record?.id));
       },
     },
     {

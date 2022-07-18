@@ -1,18 +1,17 @@
+import { Spin } from 'antd';
 import { Modal } from 'components';
-import { useSelector } from 'react-redux';
-import * as Yup from 'yup';
-
-const initialValues = {};
-
-const validationSchema = Yup.object().shape({});
+import { useDispatch, useSelector } from 'react-redux';
+import { addTicketComments } from 'store';
+import { editTicket } from 'store';
 
 export const AssignTicket = ({ show, setShow, id }) => {
   const { users } = useSelector((state) => state?.users);
+  const { ticket, detailsLoading } = useSelector((state) => state?.tickets);
 
   const fields = [
     {
       type: 'select',
-      name: 'adminId',
+      name: 'assignedTo',
       placeholder: 'Select Admin',
       options: users?.map((user) => ({
         label: user?.fullName ? user?.fullName : user?.email,
@@ -27,19 +26,51 @@ export const AssignTicket = ({ show, setShow, id }) => {
       placeholder: 'Enter Comment Here...',
     },
   ];
+
+  const initialValues = {
+    assignedTo: ticket?.assignedTo,
+    comment: '',
+  };
+
+  const dispatch = useDispatch();
+
   return (
-    <Modal
-      heading="Assign Ticket"
-      submitText="Assign Ticket"
-      show={show}
-      setShow={setShow}
-      fields={fields}
-      initialValues={initialValues}
-      validationSchema={validationSchema}
-      handleSubmit={async (values) => {
-        setShow(false);
-        console.log(id);
-      }}
-    />
+    <Spin spinning={detailsLoading}>
+      <Modal
+        heading="Assign Ticket"
+        submitText="Assign Ticket"
+        show={show}
+        setShow={setShow}
+        fields={fields}
+        initialValues={initialValues}
+        loading={detailsLoading}
+        // validationSchema={validationSchema}
+        handleSubmit={async (values) => {
+          const finalTicketValues = {
+            ...ticket,
+            assignedTo: values?.assignedTo,
+          };
+
+          // Edit Ticket Assigned To
+          await dispatch(editTicket({ data: finalTicketValues }));
+
+          await dispatch(
+            addTicketComments({
+              ticketId: ticket?.id,
+              commentText: values?.comment,
+              isSticky: false,
+              isDraft: false,
+              ticketCommentAction: 1,
+              ticketCommentType: 1,
+            })
+          );
+          // editTicket
+          // addTicketComments
+
+          // setShow(false);
+          console.log(finalTicketValues);
+        }}
+      />
+    </Spin>
   );
 };
