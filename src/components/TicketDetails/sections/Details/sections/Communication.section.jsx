@@ -278,7 +278,7 @@ export const Communication = () => {
                                   isSticky: false,
                                   isDraft: false,
                                   ticketCommentType: 0,
-                                  ticketCommentAction: idx,
+                                  ticketCommentAction: 0,
                                 };
                                 await dispatch(addTicketComments(newValues));
                                 dispatch(setTicketCommentLoading(true));
