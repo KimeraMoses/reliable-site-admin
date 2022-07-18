@@ -3,7 +3,7 @@ import { NavLink, useParams } from 'react-router-dom';
 import { Reply as ReplyIcon } from 'icons';
 import { Formik, Form, Field } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
-import { Dropdown, List, Button } from 'antd';
+import { Dropdown, List, Button, Popconfirm } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
@@ -16,7 +16,9 @@ import {
 } from 'store';
 import { Button as CustomButton, Input, FollowUp } from 'components';
 import { genrateFirstLetterName } from 'lib';
-// import { checkModule } from 'lib/checkModule';
+import { deleteComment } from 'store';
+import { setTicketCommentLoading } from 'store';
+import { updateTicketComments } from 'store';
 
 const CustomSelectUpdate = ({
   label,
@@ -80,6 +82,13 @@ export const Communication = () => {
   const dispatch = useDispatch();
 
   const { ticket } = useSelector((state) => state?.tickets);
+
+  const commentSource = ticket?.ticketComments?.filter(
+    (comment) => comment?.ticketCommentType === 0 && !comment?.isDraft
+  );
+  const finalComments = commentSource.sort(
+    (a, b) => Number(b?.isSticky) - Number(a?.isSticky)
+  );
 
   const fields = [
     {
@@ -261,55 +270,68 @@ export const Communication = () => {
           validationSchema={validationSchema}
           enableReinitialize
           onSubmit={async (values) => {
-            const newValues = {
-              commentText: values?.commentText,
-              ticketId: id,
-            };
-            (async () => {
-              await dispatch(addTicketComments(newValues));
-              await dispatch(getTicketById(id));
-            })();
+            // const newValues = {
+            //   commentText: values?.commentText,
+            //   ticketId: id,
+            // };
+            // (async () => {
+            //   await dispatch(addTicketComments(newValues));
+            //   await dispatch(getTicketById(id));
+            // })();
           }}
         >
-          <Form>
-            <div
-              className={`relative mb-[32px] items-end ${
-                ticket?.ticketStatus > 0 && 'pointer-events-none opacity-30'
-              }`}
-            >
-              <Input
-                key={'commentText'}
-                name={'commentText'}
-                label={''}
-                placeholder={'Share Your Comments'}
-                type={'textarea'}
-                rows={'7'}
-              />
-              <div className="absolute bottom-5 right-5 flex items-center gap-[12px]">
-                <Dropdown
-                  overlay={menu}
-                  overlayClassName="custom-table__table-dropdown-overlay"
-                  className="custom-table__table-dropdown"
-                  destroyPopupOnHide
-                  placement="bottomRight"
-                  trigger={['click', 'contextMenu']}
-                >
+          {({ values }) => (
+            <Form>
+              <div
+                className={`relative mb-[32px] items-end ${
+                  ticket?.ticketStatus > 0 && 'pointer-events-none opacity-30'
+                }`}
+              >
+                <Input
+                  key={'commentText'}
+                  name={'commentText'}
+                  label={''}
+                  placeholder={'Share Your Comments'}
+                  type={'textarea'}
+                  rows={'7'}
+                />
+                <div className="absolute bottom-5 right-5 flex items-center gap-[12px]">
+                  <Dropdown
+                    overlay={menu}
+                    overlayClassName="custom-table__table-dropdown-overlay"
+                    className="custom-table__table-dropdown"
+                    destroyPopupOnHide
+                    placement="bottomRight"
+                    trigger={['click', 'contextMenu']}
+                  >
+                    <CustomButton
+                      loading={commentLoading}
+                      className="px-[16px] py-[5px] text-[14px] h-[36px]"
+                    >
+                      Send
+                    </CustomButton>
+                  </Dropdown>
                   <CustomButton
                     loading={commentLoading}
+                    onClick={async () => {
+                      const newValues = {
+                        commentText: values?.commentText,
+                        ticketId: ticket?.id,
+                        isSticky: false,
+                        isDraft: true,
+                        ticketCommentType: 0,
+                      };
+                      await dispatch(addTicketComments(newValues));
+                      await dispatch(getTicketById(ticket?.id));
+                    }}
                     className="px-[16px] py-[5px] text-[14px] h-[36px]"
                   >
-                    Send
+                    Save as Draft
                   </CustomButton>
-                </Dropdown>
-                <CustomButton
-                  loading={commentLoading}
-                  className="px-[16px] py-[5px] text-[14px] h-[36px]"
-                >
-                  Save as Draft
-                </CustomButton>
+                </div>
               </div>
-            </div>
-          </Form>
+            </Form>
+          )}
         </Formik>
       </div>
       <div className={'ticket-list-wrap custom-table__table'}>
@@ -319,9 +341,7 @@ export const Communication = () => {
           pagination={{
             pageSize: 20,
           }}
-          dataSource={ticket?.ticketComments?.filter(
-            (comment) => comment?.ticketCommentType === 0
-          )}
+          dataSource={finalComments}
           footer={''}
           renderItem={(item) => (
             <List.Item key={item.id} actions={''} extra={''}>
@@ -366,19 +386,46 @@ export const Communication = () => {
                       >
                         Reply
                       </NavLink>
+                      <Popconfirm
+                        okButtonProps={{
+                          className: 'bg-[#40a9ff]',
+                        }}
+                        title="Are you sure you want to delete this comment?"
+                        onConfirm={async () => {
+                          await dispatch(deleteComment({ id: item?.id }));
+                          dispatch(setTicketCommentLoading(true));
+                          await dispatch(getTicketById(ticket?.id, true));
+                          dispatch(setTicketCommentLoading(false));
+                        }}
+                      >
+                        <div
+                          className={
+                            'text-[#474761] cursor-pointer hover:text-[#40a9ff]'
+                          }
+                        >
+                          Delete
+                        </div>
+                      </Popconfirm>
                       <NavLink
                         to="#"
-                        onClick={() => handleReplyInput(item.id)}
-                        className={'text-[#474761]'}
+                        onClick={async () => {
+                          await dispatch(
+                            updateTicketComments({
+                              data: {
+                                ...item,
+                                isSticky: !item?.isSticky,
+                              },
+                            })
+                          );
+                          dispatch(setTicketCommentLoading(true));
+                          await dispatch(getTicketById(ticket?.id, true));
+                          dispatch(setTicketCommentLoading(false));
+                        }}
+                        className={
+                          item?.isSticky ? 'text-[#40a9ff]' : 'text-[#474761]'
+                        }
                       >
-                        Delete
-                      </NavLink>
-                      <NavLink
-                        to="#"
-                        onClick={() => handleReplyInput(item.id)}
-                        className={'text-[#474761]'}
-                      >
-                        Pin
+                        {item?.isSticky ? 'Unpin' : 'Pin'}
                       </NavLink>
                     </div>
                   )}

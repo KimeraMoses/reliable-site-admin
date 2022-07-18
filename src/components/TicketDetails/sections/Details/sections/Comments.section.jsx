@@ -27,7 +27,6 @@ export const Comments = () => {
   const commentSource = ticket?.ticketComments?.filter(
     (comment) => comment?.ticketCommentType === 1 && !comment?.isDraft
   );
-
   const finalComments = commentSource.sort(
     (a, b) => Number(b?.isSticky) - Number(a?.isSticky)
   );
@@ -169,7 +168,7 @@ export const Comments = () => {
                       >
                         <div
                           className={
-                            'text-[#474761] cursor-pointer hover:texxt-[#40a9ff]'
+                            'text-[#474761] cursor-pointer hover:text-[#40a9ff]'
                           }
                         >
                           Delete

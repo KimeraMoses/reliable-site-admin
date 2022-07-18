@@ -218,7 +218,7 @@ export const RelatedList = () => {
       <Status show={status} setShow={setStatus} />
       {loading || departmentsLoading || usersLoading ? (
         <div className="w-full flex items-center justify-center min-h-[400px]">
-          {/* <Spin spinning size="large" /> */}
+          <Spin spinning size="large" />
         </div>
       ) : (
         <div>
