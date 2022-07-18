@@ -6,8 +6,6 @@ export function Details({ show, setShow, details }) {
     setShow(false);
   };
 
-  console.log(details);
-
   return (
     <BSModal show={show} onHide={handleClose} className="details-modal">
       <BSModal.Body className="details-modal__bg">
@@ -18,19 +16,23 @@ export function Details({ show, setShow, details }) {
         <div className="details-modal__body">
           {/* Details Here */}
           <div className="details-modal__details grid gap-[12px] grid-cols-2 mb-[40px]">
-            {Object.keys(details)?.map((key, idx) => {
-              const result = key?.replace(/([A-Z])/g, ' $1');
-              const finalResult =
-                result?.charAt(0)?.toUpperCase() + result?.slice(1);
-              return (
-                <div key={`${key}-${idx}`}>
-                  <div className="text-gray-500 mb-[8px]">{finalResult}:</div>
-                  <div className="text-[16px] rounded-[8px]">
-                    {details[key] ? details[key] : 'N/A'}
-                  </div>
-                </div>
-              );
-            })}
+            {details
+              ? Object.keys(details)?.map((key, idx) => {
+                  const result = key?.replace(/([A-Z])/g, ' $1');
+                  const finalResult =
+                    result?.charAt(0)?.toUpperCase() + result?.slice(1);
+                  return (
+                    <div key={`${key}-${idx}`}>
+                      <div className="text-gray-500 mb-[8px]">
+                        {finalResult}:
+                      </div>
+                      <div className="text-[16px] rounded-[8px]">
+                        {details[key] ? details[key] : 'N/A'}
+                      </div>
+                    </div>
+                  );
+                })
+              : null}
           </div>
           <div className="details-modal__buttons">
             <button
