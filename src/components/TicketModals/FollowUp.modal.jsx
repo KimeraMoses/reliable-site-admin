@@ -1,33 +1,37 @@
 import { Modal } from 'components';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment';
+import { editTicket, addTicketComments } from 'store';
 import * as Yup from 'yup';
 
-const initialValues = {
-  // name: '',
-  // apiKey: '',
-  // status: true,
-};
-
-const validationSchema = Yup.object().shape({
-  // name: Yup.string().required('This field is required!'),
-  // apiKey: Yup.string().required('This field is required!'),
-  // status: Yup.boolean().required('This field is required!'),
-});
+const validationSchema = Yup.object().shape({});
 
 export const FollowUp = ({ show, setShow }) => {
   const { users } = useSelector((state) => state?.users);
   const { departments } = useSelector((state) => state?.departments);
 
+  const { ticket, detailsLoading, loading } = useSelector(
+    (state) => state?.tickets
+  );
+
+  const initialValues = {
+    followUpOn: ticket?.followUpOn,
+    assignedTo: ticket?.assignedTo,
+    departmentId: ticket?.departmentId,
+    ticketPriority: ticket?.ticketPriority,
+    pinTicket: ticket?.pinTicket,
+  };
+
   const fields = [
     {
       type: 'date',
-      name: 'followUpDate',
+      name: 'followUpOn',
       placeholder: 'Select a date to follow up',
       title: 'Follow Up Date',
     },
     {
       type: 'select',
-      name: 'adminId',
+      name: 'assignedTo',
       placeholder: 'Select Admin',
       options: users?.map((user) => ({
         label: user?.fullName ? user?.fullName : user?.email,
@@ -47,20 +51,21 @@ export const FollowUp = ({ show, setShow }) => {
     },
     {
       type: 'select',
-      name: 'priority',
-      placeholder: 'Priority',
+      name: 'ticketPriority',
+      placeholder: 'Select Priority',
       options: [
-        { name: 'Urgent', value: 0 },
-        { name: 'Not-Urgent', value: 1 },
+        { name: 'Low', value: 0 },
+        { name: 'Normal', value: 1 },
+        { name: 'High', value: 2 },
       ]?.map((priority) => ({
         label: priority?.name,
-        value: priority?.id,
+        value: priority?.value,
       })),
       title: 'Priority',
     },
     {
       type: 'switch',
-      name: 'pinned',
+      name: 'pinTicket',
       title: 'Pin Ticket',
     },
     {
@@ -70,16 +75,41 @@ export const FollowUp = ({ show, setShow }) => {
       placeholder: 'Enter Comment Here...',
     },
   ];
+
+  const dispatch = useDispatch();
+
   return (
     <Modal
       heading="Follow Up"
       submitText="Follow Up"
       show={show}
       setShow={setShow}
+      loading={detailsLoading || loading}
       fields={fields}
       initialValues={initialValues}
       validationSchema={validationSchema}
       handleSubmit={async (values) => {
+        const finalTicketValues = {
+          ...ticket,
+          followUpOn: moment(values?.followUpOn)?.toISOString(),
+          departmentId: values?.departmentId,
+          ticketPriority: Number(values?.ticketPriority),
+          pinTicket: values?.pinTicket,
+          followUpComment: values?.comment ? values?.comment : null,
+        };
+        await dispatch(editTicket({ data: finalTicketValues }));
+        if (values?.comment) {
+          await dispatch(
+            addTicketComments({
+              ticketId: ticket?.id,
+              commentText: values?.comment,
+              isSticky: false,
+              isDraft: false,
+              ticketCommentAction: 2,
+              ticketCommentType: 1,
+            })
+          );
+        }
         setShow(false);
       }}
     />

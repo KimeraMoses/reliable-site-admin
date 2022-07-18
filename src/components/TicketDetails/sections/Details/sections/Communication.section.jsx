@@ -105,27 +105,24 @@ export const Communication = () => {
       label: t('status'),
       type: 'select',
       value: ticket?.ticketStatus,
-      options: () => {
-        return [
-          { value: '', label: 'Select' },
-          { value: 0, label: 'Active' },
-          { value: 1, label: 'Closed' },
-          { value: 2, label: 'Disabled' },
-        ];
-      },
+      options: () =>
+        ['Active', 'Waiting', 'Closed', 'Closed and Locked']?.map(
+          (el, idx) => ({
+            label: el,
+            value: idx,
+          })
+        ),
     },
     {
       name: 'ticketPriority',
       label: t('priority'),
       type: 'select',
       value: ticket?.ticketPriority,
-      options: () => {
-        return [
-          { value: '', label: 'Select' },
-          { value: 0, label: 'Urgent' },
-          { value: 1, label: 'NotUrgent ' },
-        ];
-      },
+      options: () =>
+        ['Low', 'Normal', 'High'].map((el, idx) => ({
+          label: el,
+          value: idx,
+        })),
     },
   ];
 
@@ -177,34 +174,18 @@ export const Communication = () => {
   const handleUpdateTicket = (e) => {
     if (e.target.value !== '') {
       const newValues = {
-        description: ticket?.description,
-        id: id,
-        ticketRelatedTo: ticket?.ticketRelatedTo,
-        ticketRelatedToId: ticket?.ticketRelatedToId,
-        departmentId: ticket?.departmentId,
+        ...ticket,
       };
-
       if (e.target.name === 'assignedTo') {
         newValues[e.target.name] = e.target.value;
-        newValues['ticketPriority'] = parseInt(ticket?.ticketPriority);
-        newValues['ticketStatus'] = parseInt(ticket?.ticketStatus);
       } else if (e.target.name === 'ticketStatus') {
         newValues[e.target.name] = parseInt(e.target.value);
-        newValues['assignedTo'] = ticket?.assignedTo;
-        newValues['ticketPriority'] = parseInt(ticket?.ticketPriority);
       } else {
         newValues[e.target.name] = parseInt(e.target.value);
-        newValues['assignedTo'] = ticket?.assignedTo;
-        newValues['ticketStatus'] = parseInt(ticket?.ticketStatus);
       }
-
       (async () => {
         await dispatch(editTicket({ data: newValues }));
-        if (e.target.name === 'assignedTo') {
-          navigate(`/admin/dashboard/support/tickets`);
-        } else {
-          await dispatch(getTicketById(id));
-        }
+        await dispatch(getTicketById(ticket?.id));
       })();
     }
   };

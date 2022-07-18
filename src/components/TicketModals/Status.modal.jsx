@@ -1,20 +1,18 @@
 import { Modal } from 'components';
-import * as Yup from 'yup';
-
-const initialValues = {};
-
-const validationSchema = Yup.object().shape({});
+import { useDispatch, useSelector } from 'react-redux';
+import { addTicketComments } from 'store';
+import { editTicket } from 'store';
 
 export const Status = ({ show, setShow, id }) => {
   const fields = [
     {
       type: 'select',
-      name: 'status',
+      name: 'ticketStatus',
       placeholder: 'Select Status',
       options: ['Active', 'Waiting', 'Closed', 'Closed and Locked']?.map(
-        (el) => ({
+        (el, idx) => ({
           label: el,
-          value: el,
+          value: idx,
         })
       ),
       title: 'Status',
@@ -26,18 +24,45 @@ export const Status = ({ show, setShow, id }) => {
       placeholder: 'Enter Comment Here...',
     },
   ];
+
+  const { ticket, detailsLoading, loading } = useSelector(
+    (state) => state?.tickets
+  );
+  const initialValues = {
+    ticketStatus: ticket?.ticketStatus,
+    comment: '',
+  };
+
+  const dispatch = useDispatch();
   return (
     <Modal
-      heading="Set Status"
-      submitText="Set Status"
+      heading="Change Status"
+      submitText="Change Status"
       show={show}
       setShow={setShow}
       fields={fields}
+      loading={detailsLoading || loading}
       initialValues={initialValues}
-      validationSchema={validationSchema}
       handleSubmit={async (values) => {
+        const finalTicketValues = {
+          ...ticket,
+          ticketStatus: Number(values?.ticketStatus),
+        };
+        // Edit Ticket Assigned To
+        await dispatch(editTicket({ data: finalTicketValues }));
+        if (values?.comment) {
+          await dispatch(
+            addTicketComments({
+              ticketId: ticket?.id,
+              commentText: values?.comment,
+              isSticky: false,
+              isDraft: false,
+              ticketCommentAction: 0,
+              ticketCommentType: 1,
+            })
+          );
+        }
         setShow(false);
-        console.log(id);
       }}
     />
   );

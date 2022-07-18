@@ -1,22 +1,25 @@
 import { Modal } from 'components';
-// import { useSelector } from 'react-redux';
-import * as Yup from 'yup';
-
-const initialValues = {};
-
-const validationSchema = Yup.object().shape({});
+import { useDispatch, useSelector } from 'react-redux';
+import { addTicketComments } from 'store';
+import { editTicket } from 'store';
 
 export const Priority = ({ show, setShow, id }) => {
-  // const { users } = useSelector((state) => state?.users);
+  const { ticket, detailsLoading, loading } = useSelector(
+    (state) => state?.tickets
+  );
+
+  const initialValues = {
+    ticketPriority: ticket?.ticketPriority,
+  };
 
   const fields = [
     {
       type: 'select',
-      name: 'priority',
+      name: 'ticketPriority',
       placeholder: 'Select Priority',
-      options: ['Urgent', 'Not-Urgent'].map((el) => ({
+      options: ['Low', 'Normal', 'High'].map((el, idx) => ({
         label: el,
-        value: el,
+        value: idx,
       })),
       title: 'Priority',
     },
@@ -27,19 +30,38 @@ export const Priority = ({ show, setShow, id }) => {
       placeholder: 'Enter Comment Here...',
     },
   ];
+
+  const dispatch = useDispatch();
   return (
     <Modal
       heading="Set Priority"
       submitText="Set Priority"
       show={show}
       setShow={setShow}
+      loading={loading || detailsLoading}
+      handleSubmit={async (values) => {
+        const finalTicketValues = {
+          ...ticket,
+          ticketPriority: Number(values?.ticketPriority),
+        };
+        await dispatch(editTicket({ data: finalTicketValues }));
+
+        if (values?.comment) {
+          await dispatch(
+            addTicketComments({
+              ticketId: ticket?.id,
+              commentText: values?.comment,
+              isSticky: false,
+              isDraft: false,
+              ticketCommentAction: 3,
+              ticketCommentType: 1,
+            })
+          );
+        }
+        setShow(false);
+      }}
       fields={fields}
       initialValues={initialValues}
-      validationSchema={validationSchema}
-      handleSubmit={async (values) => {
-        setShow(false);
-        console.log(id);
-      }}
     />
   );
 };

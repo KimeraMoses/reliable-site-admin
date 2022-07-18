@@ -6,7 +6,9 @@ import { editTicket } from 'store';
 
 export const AssignTicket = ({ show, setShow, id }) => {
   const { users } = useSelector((state) => state?.users);
-  const { ticket, detailsLoading } = useSelector((state) => state?.tickets);
+  const { ticket, detailsLoading, loading } = useSelector(
+    (state) => state?.tickets
+  );
 
   const fields = [
     {
@@ -43,32 +45,28 @@ export const AssignTicket = ({ show, setShow, id }) => {
         setShow={setShow}
         fields={fields}
         initialValues={initialValues}
-        loading={detailsLoading}
-        // validationSchema={validationSchema}
+        loading={detailsLoading || loading}
         handleSubmit={async (values) => {
           const finalTicketValues = {
             ...ticket,
             assignedTo: values?.assignedTo,
           };
-
           // Edit Ticket Assigned To
           await dispatch(editTicket({ data: finalTicketValues }));
 
-          await dispatch(
-            addTicketComments({
-              ticketId: ticket?.id,
-              commentText: values?.comment,
-              isSticky: false,
-              isDraft: false,
-              ticketCommentAction: 1,
-              ticketCommentType: 1,
-            })
-          );
-          // editTicket
-          // addTicketComments
-
-          // setShow(false);
-          console.log(finalTicketValues);
+          if (values?.comment) {
+            await dispatch(
+              addTicketComments({
+                ticketId: ticket?.id,
+                commentText: values?.comment,
+                isSticky: false,
+                isDraft: false,
+                ticketCommentAction: 1,
+                ticketCommentType: 1,
+              })
+            );
+          }
+          setShow(false);
         }}
       />
     </Spin>

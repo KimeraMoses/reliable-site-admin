@@ -3,14 +3,11 @@ import {
   axios,
   getTicketCommentsConfig,
   addTicketCommentConfig,
-  getTicketConfig,
 } from 'lib';
 import { toast } from 'react-toastify';
 import {
   getTicketCommentsDispatch,
   setTicketCommentLoading,
-  getTicket,
-  setTicketLoading,
 } from 'store/Slices';
 
 // Get All Admin Ticket Comments

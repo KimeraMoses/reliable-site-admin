@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  CheckCircleOutlined,
   FieldTimeOutlined,
   PushpinOutlined,
   RiseOutlined,
@@ -17,8 +16,16 @@ import {
 } from 'store';
 import { getUsers } from 'store';
 import { getClients } from 'store';
-import { Button, Spin } from 'antd';
+import { Button, message, Spin } from 'antd';
 import moment from 'moment';
+import {
+  AssignTicket,
+  FollowUp,
+  Priority,
+  Status,
+} from 'components/TicketModals';
+import { getTicketById } from 'store';
+import { editTicket } from 'store';
 
 export const RelatedList = () => {
   const location = useLocation();
@@ -75,19 +82,28 @@ export const RelatedList = () => {
 
   const columns = [
     {
-      title: 'Status | Follow Up | High Priority | Pinned',
+      title: 'Follow Up | High Priority | Pinned',
       dataIndex: 'actions',
       key: 'actions',
       render: (text, record) => {
         return (
           <div className="flex items-center gap-[12px]">
-            <div className="action-icon">
-              <CheckCircleOutlined />
-            </div>
-            <div className="action-icon action-icon-active">
+            <div
+              className={
+                record?.followUpOn
+                  ? 'action-icon action-icon-active'
+                  : 'action-icon'
+              }
+            >
               <FieldTimeOutlined />
             </div>
-            <div className="action-icon">
+            <div
+              className={
+                record?.ticketPriority === 2
+                  ? 'action-icon action-icon-active'
+                  : 'action-icon'
+              }
+            >
               <RiseOutlined />
             </div>
             <div
@@ -190,8 +206,16 @@ export const RelatedList = () => {
     },
   };
 
+  const [showPriority, setShowPriority] = useState(false);
+  const [followup, setFollowUp] = useState(false);
+  const [status, setStatus] = useState(false);
+  const [assign, setAssign] = useState(false);
   return (
     <div className={`p-[40px] bg-[#1E1E2D] rounded-[8px]`}>
+      <Priority show={showPriority} setShow={setShowPriority} />
+      <FollowUp show={followup} setShow={setFollowUp} />
+      <AssignTicket show={assign} setShow={setAssign} />
+      <Status show={status} setShow={setStatus} />
       {loading || departmentsLoading || usersLoading ? (
         <div className="w-full flex items-center justify-center min-h-[400px]">
           <Spin spinning size="large" />
@@ -217,10 +241,52 @@ export const RelatedList = () => {
             editAction={(record) => {
               return (
                 <>
-                  <Button>Reply</Button>
-                  <Button>Transfer</Button>
-                  <Button>Follow-Up</Button>
-                  <Button>Pin</Button>
+                  {/* <Button>Reply</Button> */}
+                  <Button
+                    onClick={async () => {
+                      setAssign(true);
+                      await dispatch(getTicketById(record?.id));
+                    }}
+                  >
+                    Transfer
+                  </Button>
+                  <Button
+                    onClick={async () => {
+                      setShowPriority(true);
+                      await dispatch(getTicketById(record?.id));
+                    }}
+                  >
+                    Priority
+                  </Button>
+                  <Button
+                    onClick={async () => {
+                      setFollowUp(true);
+                      await dispatch(getTicketById(record?.id));
+                    }}
+                  >
+                    Follow-Up
+                  </Button>
+                  <Button
+                    onClick={async () => {
+                      await dispatch(
+                        editTicket({ data: { ...record, pinTicket: true } })
+                      );
+                      if (location?.pathname.includes('show-all')) {
+                        await dispatch(getTickets());
+                      } else if (
+                        location?.pathname?.includes('by-department')
+                      ) {
+                        getTicketsByDepartmentId({
+                          id: location?.state?.departmentId,
+                        });
+                      } else {
+                        await dispatch(getTicketsByAdminID({ id: user?.id }));
+                      }
+                      message.success('Ticket Pinned');
+                    }}
+                  >
+                    Pin
+                  </Button>
                 </>
               );
             }}

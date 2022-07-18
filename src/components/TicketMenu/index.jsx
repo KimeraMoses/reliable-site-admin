@@ -33,20 +33,23 @@ export const TicketMenu = ({ visible, options, record, x, y }) => {
     },
     {
       label: 'Status',
-      onClick: (record) => {
+      onClick: async (record) => {
         setStatus(true);
+        await dispatch(getTicketById(record?.id));
       },
     },
     {
       label: 'Follow-Up',
-      onClick: (record) => {
+      onClick: async (record) => {
         setFollowUp(true);
+        await dispatch(getTicketById(record?.id));
       },
     },
     {
       label: 'Priority',
-      onClick: (record) => {
+      onClick: async (record) => {
         setShowPriority(true);
+        await dispatch(getTicketById(record?.id));
       },
     },
     {
