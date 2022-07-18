@@ -196,33 +196,6 @@ export const Communication = () => {
       })();
     }
   };
-
-  // Dropdown Menu
-  const menu = (
-    <>
-      {[
-        'Send and Mark Active',
-        'Send and Mark Waiting',
-        'Send and Mark Closed',
-        'Send and Mark Closed & Locked',
-        'Send and Schedule Follow-Up',
-      ].map((el) => {
-        return (
-          <Button
-            onClick={() => {
-              if (el === 'Send and Schedule Follow-Up') {
-                setShowFollowUp(true);
-              }
-            }}
-            loading={commentLoading}
-          >
-            {el}
-          </Button>
-        );
-      })}
-    </>
-  );
-
   // Follow-Up Modal
   const [showFollowUp, setShowFollowUp] = useState(false);
 
@@ -269,16 +242,7 @@ export const Communication = () => {
           initialValues={initialValues}
           validationSchema={validationSchema}
           enableReinitialize
-          onSubmit={async (values) => {
-            // const newValues = {
-            //   commentText: values?.commentText,
-            //   ticketId: id,
-            // };
-            // (async () => {
-            //   await dispatch(addTicketComments(newValues));
-            //   await dispatch(getTicketById(id));
-            // })();
-          }}
+          onSubmit={async (values) => {}}
         >
           {({ values }) => (
             <Form>
@@ -297,7 +261,43 @@ export const Communication = () => {
                 />
                 <div className="absolute bottom-5 right-5 flex items-center gap-[12px]">
                   <Dropdown
-                    overlay={menu}
+                    overlay={
+                      <>
+                        {[
+                          'Send and Mark Active',
+                          'Send and Mark Waiting',
+                          'Send and Mark Closed',
+                          'Send and Mark Closed & Locked',
+                        ].map((el, idx) => {
+                          return (
+                            <Button
+                              onClick={async () => {
+                                const newValues = {
+                                  commentText: values?.commentText,
+                                  ticketId: ticket?.id,
+                                  isSticky: false,
+                                  isDraft: false,
+                                  ticketCommentType: 0,
+                                  ticketCommentAction: idx,
+                                };
+                                await dispatch(addTicketComments(newValues));
+                                dispatch(setTicketCommentLoading(true));
+                                await dispatch(
+                                  editTicket({
+                                    data: { ...ticket, ticketStatus: idx },
+                                  })
+                                );
+                                await dispatch(getTicketById(ticket?.id, true));
+                                dispatch(setTicketCommentLoading(false));
+                              }}
+                              loading={commentLoading}
+                            >
+                              {el}
+                            </Button>
+                          );
+                        })}
+                      </>
+                    }
                     overlayClassName="custom-table__table-dropdown-overlay"
                     className="custom-table__table-dropdown"
                     destroyPopupOnHide
@@ -322,7 +322,9 @@ export const Communication = () => {
                         ticketCommentType: 0,
                       };
                       await dispatch(addTicketComments(newValues));
-                      await dispatch(getTicketById(ticket?.id));
+                      dispatch(setTicketCommentLoading(true));
+                      await dispatch(getTicketById(ticket?.id, true));
+                      dispatch(setTicketCommentLoading(false));
                     }}
                     className="px-[16px] py-[5px] text-[14px] h-[36px]"
                   >

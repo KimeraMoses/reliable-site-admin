@@ -72,7 +72,6 @@ export const getTicketsByClientID = ({ id }) => {
 };
 
 export const getTicketsByAdminID = ({ id }) => {
-  // getAssignedTicketsByIDConfig
   return async (dispatch) => {
     dispatch(setTicketLoading(true));
     try {
@@ -89,7 +88,6 @@ export const getTicketsByAdminID = ({ id }) => {
 };
 // getTicketsByDepartmentId
 export const getTicketsByDepartmentId = ({ id }) => {
-  // getAssignedTicketsByIDConfig
   return async (dispatch) => {
     dispatch(setTicketLoading(true));
     try {

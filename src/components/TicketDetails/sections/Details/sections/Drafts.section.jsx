@@ -1,29 +1,15 @@
-import { NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, List, Dropdown } from 'antd';
+import { List, Popconfirm } from 'antd';
 import { genrateFirstLetterName } from 'lib';
 import { Button as CustomButton } from 'components';
 import { deleteComment } from 'store';
 import { getTicketById } from 'store';
 import { updateTicketComments } from 'store';
+import { setTicketCommentLoading } from 'store';
 
-export const Drafts = ({ setActive }) => {
+export const Drafts = () => {
   const { ticket } = useSelector((state) => state?.tickets);
-
-  // // Dropdown Menu
-  // const menu = (
-  //   <>
-  //     {[
-  //       'Send and Mark Active',
-  //       'Send and Mark Waiting',
-  //       'Send and Mark Closed',
-  //       'Send and Mark Closed & Locked',
-  //       'Send and Schedule Follow-Up',
-  //     ].map((el) => {
-  //       return <Button onClick={() => {}}>{el}</Button>;
-  //     })}
-  //   </>
-  // );
+  const { commentLoading } = useSelector((state) => state?.ticketComments);
 
   const dispatch = useDispatch();
 
@@ -77,38 +63,64 @@ export const Drafts = ({ setActive }) => {
                       >
                         View
                       </CustomButton> */}
-                      {/* <Dropdown
-                        // overlay={menu}
-                        overlayClassName="custom-table__table-dropdown-overlay"
-                        className="custom-table__table-dropdown"
-                        destroyPopupOnHide
-                        placement="bottomRight"
-                        trigger={['click', 'contextMenu']}
-                      > */}
                       <CustomButton
                         className="px-[16px] py-[5px] text-[14px] h-[36px]"
+                        loading={commentLoading}
                         onClick={async () => {
-                          await updateTicketComments({
-                            ...item,
-                            isDraft: false,
-                          });
+                          await dispatch(
+                            updateTicketComments({
+                              data: {
+                                ...item,
+                                isDraft: false,
+                              },
+                            })
+                          );
+                          dispatch(setTicketCommentLoading(true));
+                          await dispatch(getTicketById(ticket?.id, false));
+                          dispatch(setTicketCommentLoading(false));
                         }}
                       >
                         Send
                       </CustomButton>
-                      {/* </Dropdown> */}
-                      {/* <CustomButton className="px-[16px] py-[5px] text-[14px] h-[36px]">
-                        Send and Pin
-                      </CustomButton> */}
-                      {/* <CustomButton
+                      <CustomButton
                         className="px-[16px] py-[5px] text-[14px] h-[36px]"
+                        loading={commentLoading}
                         onClick={async () => {
-                          await dispatch(deleteComment({ id: item?.id }));
-                          await dispatch(getTicketById(ticket?.id));
+                          await dispatch(
+                            updateTicketComments({
+                              data: {
+                                ...item,
+                                isDraft: false,
+                                isSticky: true,
+                              },
+                            })
+                          );
+                          dispatch(setTicketCommentLoading(true));
+                          await dispatch(getTicketById(ticket?.id, false));
+                          dispatch(setTicketCommentLoading(false));
                         }}
                       >
-                        Delete
-                      </CustomButton> */}
+                        Send and Pin
+                      </CustomButton>
+                      <Popconfirm
+                        okButtonProps={{
+                          className: 'bg-[#40a9ff]',
+                        }}
+                        title="Are you sure you want to delete this comment?"
+                        onConfirm={async () => {
+                          await dispatch(deleteComment({ id: item?.id }));
+                          dispatch(setTicketCommentLoading(true));
+                          await dispatch(getTicketById(ticket?.id, true));
+                          dispatch(setTicketCommentLoading(false));
+                        }}
+                      >
+                        <CustomButton
+                          loading={commentLoading}
+                          className="px-[16px] py-[5px] text-[14px] h-[36px]"
+                        >
+                          Delete
+                        </CustomButton>
+                      </Popconfirm>
                     </div>
                   )}
                 </div>
