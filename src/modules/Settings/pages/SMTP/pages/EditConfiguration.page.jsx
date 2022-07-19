@@ -19,6 +19,8 @@ const validationSchema = Yup.object().shape({
   port: Yup.string().required('Port is required'),
   httpsProtocol: Yup.boolean().required('Protocol is required'),
   fromName: Yup.string().required('From Name is required'),
+  username: Yup.string().required('Username is required!'),
+  password: Yup.string().required('Password is required'),
   fromEmail: Yup.string()
     .required('From Email is required')
     .email('Please enter a valid email.'),
@@ -79,6 +81,8 @@ export function EditConfiguration() {
     port: smtp?.port,
     httpsProtocol: smtp?.httpsProtocol,
     fromName: smtp?.fromName,
+    username: smtp?.username,
+    password: smtp?.password,
     fromEmail: smtp?.fromEmail,
     companyAddress: smtp?.companyAddress,
     bcc: smtp?.bcc ? smtp?.bcc?.split(',') : [],
@@ -108,6 +112,8 @@ export function EditConfiguration() {
             host: values?.host,
             port: values?.port,
             httpsProtocol: values?.httpsProtocol,
+            username: values?.username,
+            password: values?.password,
             fromName: values?.fromName,
             fromEmail: values?.fromEmail,
             companyAddress: values?.companyAddress,
@@ -144,6 +150,17 @@ export function EditConfiguration() {
                       name="httpsProtocol"
                       label="HTTPs Protocol"
                       type="switch"
+                    />
+                    <Input
+                      name="username"
+                      label="Username"
+                      placeholder="Enter SMTP Username"
+                    />
+                    <Input
+                      name="password"
+                      label="Password"
+                      type="password"
+                      placeholder="Enter SMTP Password"
                     />
                     <Input
                       name="fromName"

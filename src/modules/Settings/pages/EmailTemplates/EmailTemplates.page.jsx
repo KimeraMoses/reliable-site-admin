@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import { getAllEmailTemplates } from 'store';
 import { getAllSMTPs } from 'store';
+import { getUsers } from 'store';
 
 function EmailTemplates() {
   const dispatch = useDispatch();
@@ -12,6 +13,7 @@ function EmailTemplates() {
     (async () => {
       await dispatch(getAllEmailTemplates());
       await dispatch(getAllSMTPs());
+      await dispatch(getUsers());
     })();
   }, []);
 
