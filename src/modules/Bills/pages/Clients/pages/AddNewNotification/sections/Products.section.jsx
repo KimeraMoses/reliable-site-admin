@@ -10,22 +10,23 @@ export const Products = () => {
   return (
     <>
       <div className="flex flex-col gap-[20px]">
-        <Input
+        {/* <Input
           name="targetUserType"
           placeholder="Select User Type"
           type="select"
           label="User Type"
           options={[
-            { label: 'Admins', value: 1 },
+            // { label: 'Admins', value: 1 },
             { label: 'Clients', value: 0 },
           ]}
-        />
+        /> */}
         <Input
           label="Property"
           type="select"
           name="property"
           placeholder="Select Property"
           options={[
+            { label: 'Show All', value: '' },
             { label: 'Bills', value: 0 },
             { label: 'Tickets', value: 1 },
             { label: 'Orders', value: 2 },
@@ -39,6 +40,7 @@ export const Products = () => {
           name="operatorType"
           placeholder="Select Operator"
           options={[
+            { label: 'Show All', value: '' },
             { label: '>=', value: '>=' },
             { label: '<=', value: '<=' },
             { label: '<', value: '<' },

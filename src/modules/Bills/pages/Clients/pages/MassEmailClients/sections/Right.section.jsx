@@ -131,19 +131,6 @@ export function Right() {
                 errors={errors}
                 type="readOnly"
               />
-              {/* <EmailBodyInput
-                name="emailTo"
-                label="Email To"
-                options={[
-                  { label: 'Client # 1', value: 'client1' },
-                  { label: 'Client # 2', value: 'client2' },
-                ]}
-                placeholder="[Cc and Bcc]"
-                touched={touched}
-                errors={errors}
-                type="multiselect"
-                darkBg
-              /> */}
             </div>
             <ConfigurationEditor
               editorState={values?.bodyHolder}
@@ -221,6 +208,7 @@ export function Right() {
                   }
                   setLoading(false);
                 }}
+                htmlType="button"
                 loading={loading}
               >
                 Send Email

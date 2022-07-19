@@ -18,9 +18,13 @@ const initialValues = {
   emailAddress: '',
   companyAddress: '',
   cssStyle: '',
+  emailTemplate: '',
+  bodyHolder: EditorState.createEmpty(),
   headerContentHolder: EditorState.createEmpty(),
   signatureHolder: EditorState.createEmpty(),
   footerContentHolder: EditorState.createEmpty(),
+  operatorType: '',
+  property: '',
 };
 
 const validationSchema = Yup.object().shape({

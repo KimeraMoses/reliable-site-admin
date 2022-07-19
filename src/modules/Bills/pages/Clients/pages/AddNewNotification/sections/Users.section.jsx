@@ -1,6 +1,9 @@
 import { List } from 'components';
-import { useSelector } from 'react-redux';
-import './Users.styles.scss';
+import { useFormikContext } from 'formik';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSpecificUsersDispatch } from 'store';
+import { getClients } from 'store';
 
 const Info = ({ fullName }) => {
   return (
@@ -10,38 +13,46 @@ const Info = ({ fullName }) => {
       </div>
       <div className="flex flex-col gap-[4px]">
         <div className="text-[16px] text-white">{fullName}</div>
-        {/* <div className="text-[14px] text-[#474761]">${amount}</div> */}
       </div>
     </div>
   );
 };
 
-let data = [];
-for (let i = 0; i <= 10; i++) {
-  data.push({
-    name: `Paul ${i}`,
-    amount: i + 30,
-  });
-}
-
 export const Users = () => {
-  const { specificUsers, loading } = useSelector((state) => state?.users);
+  const { clients, specificUsers, loading } = useSelector(
+    (state) => state?.users
+  );
+
+  const { setFieldValue } = useFormikContext();
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    (async () => {
+      await dispatch(getSpecificUsersDispatch([]));
+      await dispatch(getClients());
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (clients || specificUsers) {
+      const idHolder = specificUsers?.length
+        ? specificUsers?.map((user) => user?.id)
+        : clients?.map((user) => user?.id);
+      setFieldValue('clientIds', idHolder);
+    }
+  }, [clients, specificUsers]);
+
   return (
     <>
-      <h6 className="text-white my-[32px] text-[16px]">
-        Targeted Clients/Admins
-      </h6>
+      <h6 className="text-white my-[32px] text-[16px]">Selected Users</h6>
       <div className="flex flex-col gap-[20px] mb-[20px] custom-users-list">
         <List
           grid={{ gutter: 0, column: 1 }}
-          data={specificUsers}
+          data={specificUsers?.length ? specificUsers : clients}
           renderFn={(item) => <Info {...item} />}
           pageSize={5}
           loading={loading}
         />
-        {/* <Info label="SMTP Configuration" value="Choose Configuration" />
-        <Info label="Name" value="Paul Elliot" />
-        <Info label="Email Address" value="paul@fakemail.com" /> */}
       </div>
     </>
   );
