@@ -59,6 +59,16 @@ export function MFASettings() {
       label: 'Microsoft Authentication',
       type: 'switch',
     },
+    {
+      name: 'enableClientRecaptcha',
+      label: 'Enable Client Recaptcha',
+      type: 'switch',
+    },
+    {
+      name: 'enableAdminRecaptcha',
+      label: 'Enable Admin Recaptcha',
+      type: 'switch',
+    },
   ];
 
   return (
