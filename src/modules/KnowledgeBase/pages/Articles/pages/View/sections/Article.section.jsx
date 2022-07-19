@@ -1,9 +1,10 @@
 import { Dropdown, Spin } from 'antd';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getArticleByID } from 'store';
 import './Article.styles.scss';
+import { Delete } from './Delete.section';
 
 export const Article = () => {
   const { id } = useParams();
@@ -13,11 +14,16 @@ export const Article = () => {
     dispatch(getArticleByID({ id }));
   }, [id]);
 
+  const navigate = useNavigate();
+
+  const [showDel, setShowDel] = useState(false);
+
   const { article, loading } = useSelector((state) => state?.articles);
   const [imgError, setImgError] = useState(false);
   return (
     <Spin spinning={loading}>
       <div>
+        <Delete show={showDel} setShow={setShowDel} id={id} />
         <div className="flex flex-row justify-between items-center ">
           <h5 className="font-medium text-[24px] text-white">
             {article?.title ? article?.title : 'No Title Found'}
@@ -59,13 +65,19 @@ export const Article = () => {
               <div className="rounded-[8px] custom-article-card__more-dd z-50 flex flex-col gap-[20px] min-w-[120px] py-[20px] px-[12px]">
                 <button
                   className="text-[#6D6D80] text-[12px] hover:text-[#3699FF] text-left"
-                  // onClick={onEdit}
+                  onClick={() =>
+                    navigate(
+                      `/admin/dashboard/knowledge-base/articles/edit/${id}`
+                    )
+                  }
                 >
                   Edit
                 </button>
                 <button
                   className="text-[#6D6D80] text-[12px] hover:text-[#3699FF] text-left"
-                  // onClick={onDelete}
+                  onClick={() => {
+                    setShowDel(true);
+                  }}
                 >
                   Delete
                 </button>
