@@ -1,4 +1,8 @@
-import { Article, RecentArticle } from './sections';
+import {
+  Article,
+  // GenerateTicket,
+  RecentArticle,
+} from './sections';
 import './View.styles.scss';
 
 export const View = () => {
@@ -17,6 +21,7 @@ export const View = () => {
             </div>
           </div>
         </div>
+        {/* <GenerateTicket /> */}
       </div>
     </>
   );

@@ -30,7 +30,11 @@ export {
   getInvoice,
 } from './invoicesSlice';
 
-export { getOrders as getOrdersDispatch, setOrderLoading } from './ordersSlice';
+export {
+  getOrders as getOrdersDispatch,
+  getOrderTemplates as getOrderTemplatesDispatch,
+  setOrderLoading,
+} from './ordersSlice';
 
 export {
   getNotifications as getNotificationsDispatch,
@@ -40,7 +44,11 @@ export {
 export {
   getTickets as getTicketsDispatch,
   setTicketLoading,
+  getDepartmentTickets,
   getTicket,
+  getAllTickets,
+  setDetailsLoading,
+  getTicketHistory,
 } from './ticketsSlice';
 
 export {
@@ -56,6 +64,7 @@ export {
 export * from './apiKeysSlice';
 export * from './appSettings';
 export * from './paymentGateways';
+export * from './webhooks';
 export * from './smtp';
 export * from './emailTemplates';
 export * from './products';

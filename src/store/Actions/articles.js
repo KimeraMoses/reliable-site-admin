@@ -8,10 +8,11 @@ import {
   getDraftArticlesConfig,
   getPrivateArticlesConfig,
   getPublicArticlesConfig,
+  getRecentArticlesConfig,
   updateArticleConfig,
 } from 'lib/requests/articles';
 import { toast } from 'react-toastify';
-import { getArticles, getArticle, setArticlesLoading } from 'store/Slices';
+import { getArticles, getArticle, setArticlesLoading, getRecentArticles } from 'store/Slices';
 
 // Get All Articles
 export const getAllArticles = () => {
@@ -95,6 +96,22 @@ export const getDraftArticles = () => {
       const { url, defaultData, config } = getDraftArticlesConfig();
       const res = await axios.post(url, defaultData, config);
       dispatch(getArticles(res?.data?.data));
+    } catch (e) {
+      toast.error(getError(e));
+    } finally {
+      dispatch(setArticlesLoading(false));
+    }
+  };
+};
+
+// Get Recent Articles
+export const getAllRecentArticles = () => {
+  return async (dispatch) => {
+    dispatch(setArticlesLoading(true));
+    try {
+      const { url, defaultData, config } = getRecentArticlesConfig();
+      const res = await axios.post(url, defaultData, config);
+      dispatch(getRecentArticles(res?.data?.data));
     } catch (e) {
       toast.error(getError(e));
     } finally {

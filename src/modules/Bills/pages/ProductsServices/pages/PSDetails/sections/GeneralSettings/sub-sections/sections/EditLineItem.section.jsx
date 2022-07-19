@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 const fields = [
   {
     type: 'input',
-    name: 'name',
+    name: 'lineItem',
     placeholder: 'Enter Line Item Name',
     title: 'Line Item Name',
   },
@@ -17,13 +17,13 @@ const fields = [
 ];
 
 const validationSchema = Yup.object().shape({
-  name: Yup.string().required('This field is required!'),
+  lineItem: Yup.string().required('This field is required!'),
   price: Yup.number().required('This field is required!'),
 });
 
 export const EditLineItem = ({ show, setShow, editValue, handleEdit }) => {
   const initialValues = {
-    name: editValue?.name,
+    lineItem: editValue?.lineItem,
     price: editValue?.price,
   };
   return (

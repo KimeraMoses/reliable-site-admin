@@ -1,5 +1,5 @@
 import { Route, Routes, Navigate } from 'react-router-dom';
-import { PSList, PSDetails } from './pages';
+import { PSList, PSDetails, CancellationRequests } from './pages';
 
 const ProductsServices = () => {
   return (
@@ -12,6 +12,7 @@ const ProductsServices = () => {
       />
       <Route path="list/show" element={<PSList />} />
       <Route path="list/details/:id" element={<PSDetails />} />
+      <Route path="cancellation/requests" element={<CancellationRequests />} />
     </Routes>
   );
 };

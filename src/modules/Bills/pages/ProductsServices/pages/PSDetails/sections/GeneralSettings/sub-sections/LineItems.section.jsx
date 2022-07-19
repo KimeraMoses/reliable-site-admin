@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Button } from 'components';
 import { AddLineItem, DeleteItem, EditLineItem } from './sections';
-import { nanoid } from 'nanoid';
 import { useFormikContext } from 'formik';
 import { toast } from 'react-toastify';
 
@@ -11,7 +10,9 @@ const LineItem = ({ item, setDel, setId, setEdit, setEditData }) => {
       <div className="flex gap-[16px]">
         <div className="h-[52px] w-[3px] bg-[#8950FC] rounded-[8px]" />
         <div>
-          <div className="text-white text-[16px] font-normal">{item?.name}</div>
+          <div className="text-white text-[16px] font-normal">
+            {item?.lineItem}
+          </div>
           <div className="text-[#474761] text-[14px] font-normal">
             ${item?.price}
           </div>
@@ -51,14 +52,9 @@ export const LineItems = () => {
 
   const { values, setFieldValue } = useFormikContext();
 
-  console.log(values);
-
   const addLineItem = (item) => {
     const currentLineItems = values?.productLineItems;
-    const newLineItems = [
-      ...currentLineItems,
-      { ...item, id: item?.id || nanoid(), isDeleted: false },
-    ];
+    const newLineItems = [...currentLineItems, { ...item, isDeleted: false }];
     setFieldValue('productLineItems', newLineItems);
   };
   const editLineItem = (id, editItem) => {
@@ -109,6 +105,8 @@ export const LineItems = () => {
     });
     setTotal(sum);
   }, [values?.productLineItems]);
+
+  console.log(values?.productLineItems);
 
   return (
     <>

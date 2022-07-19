@@ -46,12 +46,12 @@ export function SMTPEditor({
         image: {
           icon: '/icon/smtp/image.svg',
           urlEnabled: true,
-          uploadEnabled: true,
-          alignmentEnabled: true,
+          // uploadEnabled: true,
+          // alignmentEnabled: true,
           // uploadCallback: undefined,
           // previewImage: false,
-          inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
-          alt: { present: false, mandatory: false },
+          // inputAccept: 'image/gif,image/jpeg,image/jpg,image/png,image/svg',
+          // alt: { present: false, mandatory: false },
           defaultSize: {
             height: 'auto',
             width: 'auto',

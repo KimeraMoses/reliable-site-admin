@@ -82,7 +82,7 @@ export const TicketList = () => {
             className="flex cursor-pointer"
             onClick={() => {
               navigate(
-                `/admin/dashboard/support/tickets/details/${record?.id}`
+                `/admin/dashboard/support/tickets/list/details/${record?.id}`
               );
             }}
           >
@@ -142,7 +142,13 @@ export const TicketList = () => {
           fieldToFilter="ticketRelatedTo"
           permissions={permissions}
           hideActions={true}
-          headingTitle={t('publicTickets')}
+          headingTitle={
+            active === t('active')
+              ? 'Active Tickets'
+              : active === t('waiting')
+              ? 'Waiting Tickets'
+              : 'Closed Tickets'
+          }
           t={t}
         />
       </div>

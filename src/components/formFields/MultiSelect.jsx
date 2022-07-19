@@ -32,8 +32,12 @@ export const MultiSelect = ({
               className={`custom-select ${className}`}
               dropdownClassName={`custom-select__dropdown ${dropdownClassName}`}
               options={options}
+              dropdownStyle={{
+                zIndex: 999999999,
+              }}
               value={meta?.value}
               onChange={(value, option) => {
+                console.log(value, option);
                 setFieldValue(name, value);
                 if (onChange) {
                   onChange(value, option);

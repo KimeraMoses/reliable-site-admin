@@ -86,6 +86,25 @@ export const getDraftArticlesConfig = () => ({
   config: articlesConfig('View'),
 });
 
+// Get Recent Articles
+export const getRecentArticlesConfig = () => ({
+  url: `${prefix}/search`,
+  defaultData: {
+    advancedSearch: {
+      fields: [''],
+      keyword: '',
+    },
+    keyword: '',
+    pageNumber: 0,
+    pageSize: 5,
+    orderBy: [''],
+    categoryId: null,
+    minimumRate: 0,
+    maximumRate: 0,
+  },
+  config: articlesConfig('View'),
+});
+
 // Create Article
 export const createArticleConfig = () => ({
   url: prefix,

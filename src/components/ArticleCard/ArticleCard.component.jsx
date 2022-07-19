@@ -11,16 +11,17 @@ export const ArticleCard = ({
   onEdit,
   onDelete,
   articleType,
+  base64Image,
 }) => {
   const [imgError, setImgError] = useState(false);
   return (
     <div className="p-[32px] bg-[#1e1e2d] flex flex-col gap-[32px] custom-article-card rounded-[8px] h-full w-full">
       <div className="relative h-[204px] w-full">
-        {imagePath && !imgError ? (
+        {base64Image && !imgError ? (
           <img
             className="h-[204px] w-full rounded-[8px] object-cover"
             onError={() => setImgError(true)}
-            src={imagePath}
+            src={base64Image}
             alt={title}
           />
         ) : (

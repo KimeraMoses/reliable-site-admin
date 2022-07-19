@@ -4,6 +4,7 @@ const initialState = {
   articles: [],
   article: null,
   loading: false,
+  recentArticles: [],
 };
 
 const articlesSlice = createSlice({
@@ -19,11 +20,19 @@ const articlesSlice = createSlice({
     getArticle: (state, { payload }) => {
       state.article = payload;
     },
+    getRecentArticles: (state, { payload }) => {
+      state.recentArticles = payload;
+    },
   },
 });
 
 const { actions, reducer } = articlesSlice;
 
-export const { setArticlesLoading, getArticles, getArticle } = actions;
+export const {
+  setArticlesLoading,
+  getArticles,
+  getArticle,
+  getRecentArticles,
+} = actions;
 
 export default reducer;

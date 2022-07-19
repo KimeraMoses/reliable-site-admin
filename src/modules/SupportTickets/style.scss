@@ -1,7 +1,7 @@
 .dashboard-ticket {
   & .custom-table__top-row {
-    &>div:first-child {
-      width: 100%
+    & > div:first-child {
+      width: 100%;
     }
   }
 
@@ -13,33 +13,34 @@
         display: none;
       }
       // For Both Header & Body
-      .ant-table-thead>tr>th,
-      .ant-table-tbody>tr>td {
+      .ant-table-thead > tr > th,
+      .ant-table-tbody > tr > td {
         border-bottom: none;
       }
     }
   }
 }
-.tick > svg{
-   width: 100%;
-   height: auto;
+.tick > svg {
+  width: 100%;
+  height: auto;
 }
-.ticket-list-wrap li.ant-list-item{
+.ticket-list-wrap li.ant-list-item {
   padding: 0;
   border-bottom: 0 !important;
 }
-.ticket-list-wrap li.ant-list-item + li{
+.ticket-list-wrap li.ant-list-item + li {
   margin-top: 20px;
 }
-.reply-box button{
+.reply-box button {
   top: 50%;
   transform: translateY(-50%);
 }
-.ticket-list-wrap .ant-list-pagination{
+.ticket-list-wrap .ant-list-pagination {
   text-align: left;
 }
-.ticket-form .ant-btn, .reply-box .ant-btn{
-  position: absolute !important;
+.ticket-form .ant-btn,
+.reply-box .ant-btn {
+  // position: absolute !important;
 }
 .reply-box .ant-btn span {
   position: absolute;
@@ -50,7 +51,7 @@
 .reply-box .ant-btn::before {
   opacity: 0;
 }
-.reply-box .ant-btn-loading > svg{
+.reply-box .ant-btn-loading > svg {
   opacity: 0;
   pointer-events: none;
 }

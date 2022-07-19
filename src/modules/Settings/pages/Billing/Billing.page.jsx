@@ -29,6 +29,26 @@ export default function Billing() {
       label: 'Refund Retain Percentage',
       type: 'number',
     },
+    {
+      name: 'autoInvoiceGeneration',
+      label: 'Auto Invoice Generation',
+      type: 'switch',
+    },
+    {
+      name: 'autoInvoicePriorToDueDateInDays',
+      label: 'Auto Invoice Prior To Due Date In Days',
+      type: 'number',
+    },
+    {
+      name: 'enableProductlevelInvoiceGen',
+      label: 'Enable Product Level Invoice Generation',
+      type: 'switch',
+    },
+    {
+      name: 'productLevelInvoiceGenPriorToDueDateInDays',
+      label: 'Product Level Invoice Generation Prior To Due Date In Days',
+      type: 'number',
+    },
   ];
 
   const dispatch = useDispatch();
@@ -39,6 +59,12 @@ export default function Billing() {
     maxNumberOfRefunds: billingSettings?.maxNumberOfRefunds,
     minOrderAmount: billingSettings?.minOrderAmount,
     refundRetainPercentage: billingSettings?.refundRetainPercentage,
+    autoInvoiceGeneration: billingSettings?.autoInvoiceGeneration,
+    autoInvoicePriorToDueDateInDays:
+      billingSettings?.autoInvoicePriorToDueDateInDays,
+    enableProductlevelInvoiceGen: billingSettings?.enableProductlevelInvoiceGen,
+    productLevelInvoiceGenPriorToDueDateInDays:
+      billingSettings?.productLevelInvoiceGenPriorToDueDateInDays,
   };
 
   return (
@@ -59,7 +85,7 @@ export default function Billing() {
           }}
         >
           <Form>
-            <div className="grid grid-cols-4 gap-[20px] mb-[32px]">
+            <div className="grid grid-cols-4 gap-[20px] mb-[32px] items-end">
               {fields.map((field) => (
                 <Input
                   key={field.name}

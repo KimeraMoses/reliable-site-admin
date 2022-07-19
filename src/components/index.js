@@ -11,3 +11,6 @@ export { Card } from './Card/Card.component';
 export * from './formFields';
 export { ArticleCard } from './ArticleCard/ArticleCard.component';
 export { Notifications } from './Notifications/Notifications.component';
+export * from './TicketMenu';
+export * from './TicketModals';
+export { TicketDetailsComponent } from './TicketDetails/TicketDetails.page';
