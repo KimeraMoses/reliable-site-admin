@@ -29,6 +29,7 @@ import notificationsReducer from './Slices/notificationsSlice';
 import ticketsReducer from './Slices/ticketsSlice';
 import ticketCommentsReducer from './Slices/ticketCommentsSlice';
 import ticketRepliesReducer from './Slices/ticketRepliesSlice';
+import webHooks from './Slices/webhooks';
 
 const store = configureStore({
   reducer: {
@@ -62,6 +63,7 @@ const store = configureStore({
     tickets: ticketsReducer,
     ticketComments: ticketCommentsReducer,
     ticketReplies: ticketRepliesReducer,
+    webhooks: webHooks,
   },
 });
 

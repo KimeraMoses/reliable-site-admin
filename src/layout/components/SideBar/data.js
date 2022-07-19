@@ -155,6 +155,10 @@ export const useSidebarData = () => {
             { name: 'Gateway Logs', path: '#' },
           ],
         },
+        {
+          name: 'WebHooks',
+          path: '/admin/dashboard/billing/webhooks',
+        },
       ],
     },
     {
