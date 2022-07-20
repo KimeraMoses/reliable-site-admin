@@ -15,7 +15,9 @@ import {
   CategoryGenerator,
   Bills,
 } from './sections';
-import { groupBy } from 'lib';
+import moment from 'moment';
+import { getNotificationLink, getNotificationType, groupBy } from 'lib';
+import { Bell } from 'icons/Notifications';
 //import { getNotifications } from 'store';
 
 export function Notifications({ toggleNotification }) {
@@ -33,8 +35,8 @@ export function Notifications({ toggleNotification }) {
 
   useEffect(() => {
     if (notifications.length) {
-      const dataToSet = groupBy(notifications, 'type');
-      setData(dataToSet);
+      // const dataToSet = groupBy(notifications, 'type');
+      setData(notifications);
     }
   }, [notifications]);
 
@@ -50,9 +52,7 @@ export function Notifications({ toggleNotification }) {
       </div>
       <div className={`notifications-wrap px-[32px] pt-[32px] pb-[32px]`}>
         {loading || data === null ? (
-          <div
-            className={`notification-block pl-[60px] pt-[13px] pb-[13px] relative text-center`}
-          >
+          <div className={`pl-[60px] pt-[13px] pb-[13px] relative text-center`}>
             <Spin
               size="large"
               style={{ gridColumn: '1/3', alignSelf: 'center' }}
@@ -60,7 +60,46 @@ export function Notifications({ toggleNotification }) {
           </div>
         ) : (
           <>
-            {Object.entries(data).map(([key, value]) => {
+            {notifications?.map((notification) => {
+              return (
+                <>
+                  <div
+                    className={`notification-block pl-[60px] pt-[13px] relative`}
+                  >
+                    <div className={`noti-icon`}>
+                      <Bell fill={'#fff'} />
+                    </div>
+                    <div className={`noti-content`}>
+                      <div className="flex justify-between">
+                        <Link
+                          className={`text-[#1890ff]`}
+                          to={getNotificationLink({ type: notification?.type })}
+                        >
+                          {notification?.body
+                            .replace('[[firstName]]', user.fullName)
+                            .replace('[[fullName]]', user.fullName)}
+                        </Link>
+                        <div className={`flex`}>
+                          {notification?.userImage && (
+                            <img
+                              alt={notification?.fullName}
+                              src={notification?.userImage}
+                              className="w-[20px] h-[20px] object-cover rounded-[50%]"
+                            />
+                          )}
+                          <div className={`text-[#474761] ml-2`}>{`${
+                            notification?.fullName
+                          } added at ${moment(notification?.sentAt).format(
+                            'hh:mm A'
+                          )}`}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              );
+            })}
+            {/* {Object.entries(data).map(([key, value]) => {
               return (
                 <React.Fragment key={key}>
                   {parseInt(key) === 0 ? (
@@ -69,13 +108,13 @@ export function Notifications({ toggleNotification }) {
                     <TicketCreated value={value} user={user} />
                   ) : parseInt(key) === 2 ? (
                     <TickedUpdated value={value} user={user} />
-                  ) : parseInt(key) === 3 ? (
+                  ) : parseInt(key) === 6 ? (
                     <OrderCreated value={value} user={user} />
                   ) : parseInt(key) === 4 ? (
                     <OrderUpdated value={value} user={user} />
                   ) : parseInt(key) === 5 ? (
                     <TicketNewComments value={value} user={user} />
-                  ) : parseInt(key) === 6 ? (
+                  ) : parseInt(key) === 3 ? (
                     <TicketNewReply value={value} user={user} />
                   ) : parseInt(key) === 7 ? (
                     <CategoryGenerator value={value} user={user} />
@@ -84,7 +123,7 @@ export function Notifications({ toggleNotification }) {
                   )}
                 </React.Fragment>
               );
-            })}
+            })} */}
             {/* <div
               className={`fixed bottom-0 left-0 w-full p-[32px] border-t-2 border-current border-dashed border-[#474761] text-center`}
             >

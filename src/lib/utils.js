@@ -293,6 +293,51 @@ export const getNotificationType = ({ type }) => {
   }
 };
 
+export const getNotificationLink = ({ type }) => {
+  switch (type) {
+    case 0:
+      return '/admin/dashboard/billing/clients/list/show';
+    case 1:
+      return '/admin/dashboard/support/tickets/list';
+    case 2:
+      return '/admin/dashboard/support/tickets/list';
+    case 3:
+      return '/admin/dashboard/support/tickets/list';
+    case 4:
+      return '/admin/dashboard/billing/orders/your-orders/list';
+    case 5:
+      return '/admin/dashboard/billing/orders/your-orders/list';
+    case 6:
+      return '/admin/dashboard/billing/orders/your-orders/list';
+    case 7:
+      return '/admin/dashboard/support/tickets/list';
+    case 8:
+      return '/admin/dashboard/support/tickets/list';
+    case 9:
+      return '#';
+    case 10:
+      return '#';
+    case 11:
+      return '/admin/dashboard/billing/invoices/list/show';
+    case 12:
+      return '/admin/dashboard/billing/invoices/list/show';
+    case 13:
+      return '#';
+    case 14:
+      return '#';
+    case 15:
+      return '/admin/dashboard/knowledge-base/feedback';
+    case 16:
+      return '/admin/dashboard/knowledge-base/feedback';
+    case 17:
+      return '/admin/dashboard/knowledge-base/feedback';
+    case 18:
+      return '/admin/dashboard/billing/products-services/list/show';
+    default:
+      return '#';
+  }
+};
+
 export const getNotificationTarget = ({ target }) => {
   switch (target) {
     case 0:

@@ -15,6 +15,10 @@ export const Products = () => {
   const { products, loading } = useSelector((state) => state?.products);
   const { smtps } = useSelector((state) => state?.smtps);
   const { emailTemplates } = useSelector((state) => state?.emailTemplates);
+  const smtpsLoading = useSelector((state) => state?.smtps?.loading);
+  const emailTemplatesLoading = useSelector(
+    (state) => state?.emailTemplates?.loading
+  );
   const { values, setFieldValue } = useFormikContext();
 
   useEffect(() => {
@@ -58,7 +62,7 @@ export const Products = () => {
   }, [emailTemplate]);
 
   return (
-    <Spin spinning={loading}>
+    <Spin spinning={loading || emailTemplatesLoading || smtpsLoading}>
       <div className="flex flex-col gap-[20px]">
         <h6 className="text-white text-[16px]">Products & Services</h6>
         <MultiSelect

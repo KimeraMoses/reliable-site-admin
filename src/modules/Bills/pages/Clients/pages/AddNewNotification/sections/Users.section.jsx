@@ -1,4 +1,4 @@
-import { List } from 'components';
+import { Input, List } from 'components';
 import { useFormikContext } from 'formik';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -54,6 +54,16 @@ export const Users = () => {
           loading={loading}
         />
       </div>
+      <Input
+        name="targetUserType"
+        placeholder="Select User Type"
+        type="select"
+        label="User Type"
+        options={[
+          { label: 'Admins', value: 1 },
+          { label: 'Clients', value: 0 },
+        ]}
+      />
     </>
   );
 };

@@ -10,16 +10,6 @@ export const Products = () => {
   return (
     <>
       <div className="flex flex-col gap-[20px]">
-        {/* <Input
-          name="targetUserType"
-          placeholder="Select User Type"
-          type="select"
-          label="User Type"
-          options={[
-            // { label: 'Admins', value: 1 },
-            { label: 'Clients', value: 0 },
-          ]}
-        /> */}
         <Input
           label="Property"
           type="select"
