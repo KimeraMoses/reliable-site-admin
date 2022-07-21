@@ -18,7 +18,6 @@ const validationSchema = Yup.object().shape({
   smtpConfigurationId: Yup.string().required('Configuration is required'),
   status: Yup.boolean().required('Status is required'),
   body: Yup.string().required('Email body is required'),
-  isSystem: Yup.boolean().required('This field is required'),
   emailTemplateType: Yup.number().required('This field is required'),
 });
 
@@ -48,7 +47,6 @@ export const EditTemplate = () => {
     tenant: emailTemplate?.tenant || 'Admin',
     status: emailTemplate?.status || false,
     smtpConfigurationId: emailTemplate?.smtpConfigurationId || '',
-    isSystem: emailTemplate?.isSystem,
     emailTemplateType: emailTemplate?.emailTemplateType,
     bodyHolder: emailTemplate?.body
       ? convertHTMLToDraftState(emailTemplate?.body)
@@ -67,6 +65,7 @@ export const EditTemplate = () => {
             data: {
               ...values,
               emailTemplateType: Number(values?.emailTemplateType),
+              isSystem: Number(values?.emailTemplateType) === 0 ? false : true,
             },
           })
         );
@@ -115,11 +114,6 @@ export const EditTemplate = () => {
                       })}
                     />
                     <Input name="status" label="Status" type="switch" />
-                    <Input
-                      name="isSystem"
-                      label="System Template"
-                      type="switch"
-                    />
                   </div>
                   <Button className="mt-[32px]" htmlType="submit">
                     Edit Template
