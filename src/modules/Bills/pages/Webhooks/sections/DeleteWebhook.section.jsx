@@ -13,7 +13,7 @@ export const DeleteWebhook = ({ show, setShow, id }) => {
   };
 
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state?.paymentGateways);
+  const { loading } = useSelector((state) => state?.webhooks);
 
   return (
     <Modal

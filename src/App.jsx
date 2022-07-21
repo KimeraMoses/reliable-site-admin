@@ -6,6 +6,7 @@ import {
   Route,
   Routes,
 } from 'react-router-dom';
+import moment from 'moment';
 import pages, { Error404, dashboardPages } from 'pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -19,6 +20,8 @@ import { ChangeMfaStatus } from 'store/Slices/authSlice';
 import { toast } from 'react-toastify';
 import { axios, getCurrentMFAStatus, getError } from 'lib';
 import { getDepartmentsByUserId } from 'store';
+import { getAppSettingsByTenant } from 'store';
+import { updateMaintenanceSettings } from 'store';
 
 const SignIn = React.lazy(() => import('pages/sign-in/SignIn.page'));
 const SignUp = React.lazy(() => import('pages/sign-up/SignUp.page'));
@@ -47,7 +50,9 @@ const LockScreen = React.lazy(() =>
 function App() {
   const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn);
   const user = useSelector((state) => state?.auth?.user);
-  const { maintenance, suspended } = useSelector((state) => state.settings);
+  const { maintenance, maintenanceDetails, suspended } = useSelector(
+    (state) => state.settings
+  );
   const isIdle = useSelector((state) => state.settings.isIdle);
   const Timeout = 1000 * 900;
   const idleTimer = useRef(null);
@@ -60,13 +65,16 @@ function App() {
   useEffect(() => {
     AutoAuthenticate(dispatch);
     dispatch(maintenanceStatus());
+    dispatch(getAppSettingsByTenant({ isAdmin: true }));
   }, [dispatch]);
 
   useEffect(() => {
     if (isLoggedIn) {
-      dispatch(getDepartmentsByUserId({ id: user?.id }));
-      dispatch(getAppModules());
-      dispatch(getUserModules({ id: user?.id }));
+      (async () => {
+        await dispatch(getDepartmentsByUserId({ id: user?.id }));
+        await dispatch(getAppModules());
+        await dispatch(getUserModules({ id: user?.id }));
+      })();
     }
   }, [isLoggedIn]);
 
@@ -87,6 +95,29 @@ function App() {
       checkMFAStatus();
     }
   }, [isLoggedIn, dispatch]);
+
+  // maintenanceDetails
+  useEffect(() => {
+    if (maintenanceDetails?.isExpirationDateSpecified) {
+      const { expirationDate } = maintenanceDetails;
+      const dateIsAfter = moment().isAfter(moment(expirationDate));
+      if (dateIsAfter) {
+        const finalObject = {
+          expirationDateTime: expirationDate,
+          status: false,
+          message: maintenanceDetails?.reason,
+          byPassuserRoles: [],
+          byPassUsers: [],
+        };
+        (async () => {
+          await dispatch(
+            updateMaintenanceSettings({ data: finalObject, isAdmin: true })
+          );
+        })();
+        window.location.reload();
+      }
+    }
+  }, [maintenanceDetails]);
 
   return (
     <div className="App bg-custom-main flex items-center content-center">

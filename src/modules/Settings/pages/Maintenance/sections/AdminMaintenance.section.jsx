@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import { getMaintenanceSettingsByTenant } from 'store';
 import { updateMaintenanceSettings } from 'store';
+import { logout } from 'store/Slices/authSlice';
 
 const validationSchema = Yup.object().shape({
   isMaintenanceOn: Yup.boolean().required('Status is required'),
@@ -57,8 +58,12 @@ export const AdminMaintenance = () => {
               .toISOString(),
             status: values.isMaintenanceOn,
             message: values.message,
+            byPassuserRoles: [],
+            byPassUsers: [],
           };
           await dispatch(updateMaintenanceSettings({ data: finalObject }));
+          dispatch(logout());
+          window.location.reload();
         }}
       >
         <Form>

@@ -3,6 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   isLoading: false,
   maintenance: false,
+  maintenanceDetails: null,
   suspended: false,
   message: null,
   isIdle: false,
@@ -18,6 +19,7 @@ const settingSlice = createSlice({
     checkMaintenanceSuccess: (state, { payload }) => {
       state.isLoading = false;
       state.maintenance = payload.isMaintenanceOn;
+      state.maintenanceDetails = payload;
     },
     checkMaintenanceFail: (state, { payload }) => {
       state.isLoading = false;
@@ -26,24 +28,24 @@ const settingSlice = createSlice({
     accountSuspended: (state) => {
       state.suspended = true;
     },
-    initiateLockScreen: (state)=>{
+    initiateLockScreen: (state) => {
       state.isIdle = true;
       localStorage.removeItem('AuthToken');
     },
-    closeLockScreen: (state)=>{
-      state.isIdle = false
+    closeLockScreen: (state) => {
+      state.isIdle = false;
     },
-    fetchSettingsPending: (state)=>{
+    fetchSettingsPending: (state) => {
       state.isLoading = true;
     },
-    fetchSettingsSuccess: (state, {payload})=>{
+    fetchSettingsSuccess: (state, { payload }) => {
       state.isLoading = false;
-      state.settings = payload
+      state.settings = payload;
     },
-    fetchSettingsFail: (state, {payload})=>{
+    fetchSettingsFail: (state, { payload }) => {
       state.isLoading = false;
       state.message = payload;
-    }
+    },
   },
 });
 
@@ -58,7 +60,6 @@ export const {
   closeLockScreen,
   fetchSettingsPending,
   fetchSettingsSuccess,
-  fetchSettingsFail
-
+  fetchSettingsFail,
 } = actions;
 export default reducer;

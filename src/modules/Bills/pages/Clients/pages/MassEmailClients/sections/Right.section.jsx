@@ -179,29 +179,26 @@ export function Right() {
               <Button
                 onClick={async () => {
                   setLoading(true);
+                  const finalVaues = {
+                    productIds: values?.productIds,
+                    clientIds: values?.clientIds,
+                    headerContent: values?.headerContent,
+                    footerConent: values?.footerContent,
+                    signatureContent: values?.signatureContent,
+                    emailBody: values?.emailBody,
+                    numberOfEmails: values?.numberOfEmails,
+                    intervalInSeconds: values?.intervalInSeconds,
+                    smtpConfigId: values?.smtpConfigId,
+                    name: values?.name,
+                    emailAddress: values?.emailAddress,
+                    companyAddress: values?.companyAddress,
+                    cssStyle: values?.cssStyle,
+                  };
                   try {
-                    await axios.post(
-                      '/api/v1/admin/massemails',
-                      {
-                        productIds: values?.productIds,
-                        clientIds: values?.clientIds,
-                        headerContent: values?.headerContent,
-                        footerConent: values?.footerContent,
-                        signatureContent: values?.signatureContent,
-                        emailBody: values?.emailBody,
-                        numberOfEmails: values?.numberOfEmails,
-                        intervalInSeconds: values?.intervalInSeconds,
-                        smtpConfigId: values?.smtpConfigId,
-                        name: values?.name,
-                        emailAddress: values?.emailAddress,
-                        companyAddress: values?.companyAddress,
-                        cssStyle: values?.cssStyle,
-                      },
-                      {
-                        modulename: 'Users',
-                        moduleactionname: 'Create',
-                      }
-                    );
+                    await axios.post('/api/v1/admin/massemails', finalVaues, {
+                      modulename: 'Users',
+                      moduleactionname: 'Create',
+                    });
                     toast.success('Email Sent Successfully!');
                   } catch (e) {
                     toast.error(getError(e));

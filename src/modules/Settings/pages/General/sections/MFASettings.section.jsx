@@ -16,6 +16,8 @@ export function MFASettings() {
   const dispatch = useDispatch();
 
   const initialValues = {
+    enableAdminMFA: settings?.enableAdminMFA,
+    enableClientMFA: settings?.enableClientMFA,
     forceAdminMFA: settings?.forceAdminMFA,
     forceClientMFA: settings?.forceClientMFA,
     googleAuthenticator: settings?.googleAuthenticator,
@@ -59,16 +61,6 @@ export function MFASettings() {
       label: 'Microsoft Authentication',
       type: 'switch',
     },
-    {
-      name: 'enableClientRecaptcha',
-      label: 'Enable Client Recaptcha',
-      type: 'switch',
-    },
-    {
-      name: 'enableAdminRecaptcha',
-      label: 'Enable Admin Recaptcha',
-      type: 'switch',
-    },
   ];
 
   return (
@@ -82,10 +74,7 @@ export function MFASettings() {
             toast.info('No changes were made');
           } else {
             await dispatch(
-              updateAppSettings({
-                id: settings?.id,
-                data: { ...settings, ...values },
-              })
+              updateAppSettings({ id: settings?.id, data: values })
             );
           }
         }}
