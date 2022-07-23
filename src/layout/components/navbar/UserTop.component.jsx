@@ -27,14 +27,14 @@ function UserTop({ toggleNotification }) {
 
   // const [notifications, setNotifications] = useState(false);
   const links = [
-    {
-      name: 'Active Departments',
-      Icon: <Right fill={showDepartments ? '#3699ff' : '#494b74'} />,
-      onClick: () => {
-        setShowDepartments((dept) => !dept);
-      },
-      active: showDepartments,
-    },
+    // {
+    //   name: 'Active Departments',
+    //   Icon: <Right fill={showDepartments ? '#3699ff' : '#494b74'} />,
+    //   onClick: () => {
+    //     setShowDepartments((dept) => !dept);
+    //   },
+    //   active: showDepartments,
+    // },
     {
       name: 'Account Settings',
       onClick: () => {
@@ -51,7 +51,10 @@ function UserTop({ toggleNotification }) {
     },
     {
       name: 'Sign Out',
-      onClick: () => dispatch(logout()),
+      onClick: () => {
+        dispatch(logout());
+        navigate('/admin/sign-in');
+      },
     },
   ];
 

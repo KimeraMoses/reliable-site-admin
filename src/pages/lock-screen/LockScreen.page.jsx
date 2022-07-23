@@ -91,7 +91,6 @@ function LockScreen() {
       SaveTokenInLocalStorage(res.data);
     };
   };
-  console.log(imgError);
   const LoginHandler = async (e) => {
     e.preventDefault();
     setIsLoading(true);

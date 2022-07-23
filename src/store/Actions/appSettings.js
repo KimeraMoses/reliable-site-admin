@@ -18,15 +18,32 @@ import {
   getSupportSettings,
   setAppSettingsLoading,
 } from 'store/Slices';
+import { logout } from 'store/Slices/authSlice';
+import { maintenanceStatus } from './AuthActions';
 
 // Get Settings By Tenant
-export const getAppSettingsByTenant = () => {
+export const getAppSettingsByTenant = (values) => {
   return async (dispatch) => {
     dispatch(setAppSettingsLoading(true));
     try {
-      const { url, config } = getSettingsByTenant();
-      const response = await axios.get(url, config);
-      dispatch(getAppSettings(response.data.data));
+      if (values?.isAdmin) {
+        // process.env.REACT_APP_BASEURL
+        const response = await axios.get(
+          '/api/v1/admin/settings/getsettingswithtenant/admin',
+          {
+            headers: {
+              'Content-type': 'application/json',
+              'admin-api-key': process.env.REACT_APP_ADMIN_APIKEY,
+              tenant: 'admin',
+            },
+          }
+        );
+        dispatch(getAppSettings(response.data.data));
+      } else {
+        const { url, config } = getSettingsByTenant();
+        const response = await axios.get(url, config);
+        dispatch(getAppSettings(response.data.data));
+      }
     } catch (error) {
       toast.error(getError(error));
     } finally {
@@ -110,17 +127,32 @@ export const getMaintenanceSettingsByTenant = () => {
 };
 
 // // Update Maintenance Settings
-export const updateMaintenanceSettings = ({ data }) => {
+export const updateMaintenanceSettings = ({ data, isAdmin }) => {
   return async (dispatch) => {
     dispatch(setAppSettingsLoading(true));
     try {
-      const { url, config } = postMaintenanceSettingsConfig();
-      const response = await axios.post(url, data, config);
-      if (response.status === 200) {
-        const { url, config } = getMaintenanceSettingsConfig();
-        const response = await axios.get(url, config);
-        dispatch(getMaintenanceSettings(response?.data));
-        toast.success('Settings updated successfully');
+      if (isAdmin) {
+        const response = await axios.post(
+          '/api/maintenance/togglemaintenancemode',
+          data,
+          {
+            headers: {
+              'Content-type': 'application/json',
+              'admin-api-key': process.env.REACT_APP_ADMIN_APIKEY,
+              tenant: 'admin',
+            },
+          }
+        );
+        dispatch(getAppSettings(response.data.data));
+      } else {
+        const { url, config } = postMaintenanceSettingsConfig();
+        const response = await axios.post(url, data, config);
+        if (response.status === 200) {
+          const { url, config } = getMaintenanceSettingsConfig();
+          const response = await axios.get(url, config);
+          dispatch(getMaintenanceSettings(response?.data));
+          toast.success('Settings updated successfully');
+        }
       }
     } catch (error) {
       toast.error(getError(error));

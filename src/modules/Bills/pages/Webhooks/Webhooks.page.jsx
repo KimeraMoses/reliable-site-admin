@@ -14,9 +14,9 @@ const columns = [
     width: '20%',
   },
   {
-    title: 'API Key',
-    dataIndex: 'apiKey',
-    key: 'apiKey',
+    title: 'Module Name',
+    dataIndex: 'moduleId',
+    key: 'moduleId',
   },
   {
     title: 'Status',
@@ -25,22 +25,12 @@ const columns = [
     render: (value) => <Switch checked={value} disabled={true} />,
   },
   {
-    title: 'Content Type',
-    dataIndex: 'contentType',
-    key: 'contentType',
-  },
-  // [ 0 = hook, 1 = file, 2 = note, 3 = project, 4 = milestone ]
-  {
-    title: 'Events',
-    dataIndex: 'hookEvents',
-    key: 'hookEvents',
-    render: (events) => (
-      <>
-        {events?.map((evt) => (
-          <p>{evt}</p>
-        ))}
-      </>
-    ),
+    title: 'Action',
+    dataIndex: 'action',
+    key: 'action',
+    render: (events) => {
+      return events === 0 ? 'Create' : events === 1 ? 'Update' : 'Delete';
+    },
   },
 ];
 
@@ -67,20 +57,6 @@ const WebHooks = () => {
   });
   // Check for permissions End
 
-  // Setting data properly
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    if (webhooks.length) {
-      const dataToSet = webhooks.map((pg) => {
-        return {
-          ...pg,
-          key: pg?.id,
-        };
-      });
-      setData(dataToSet);
-    }
-  }, [webhooks]);
-
   return (
     <div className="m-[40px] p-[40px] bg-[#1E1E2D] rounded-[8px]">
       <AddWebhook show={addModalShow} setShow={setAddModalShow} />
@@ -96,7 +72,7 @@ const WebHooks = () => {
       />
       <Table
         columns={columns}
-        data={data}
+        data={webhooks}
         permissions={permissions}
         loading={loading}
         fieldToFilter="name"
@@ -125,6 +101,7 @@ const WebHooks = () => {
             Delete
           </Button>
         )}
+        rowKey={(record) => record?.id}
       />
     </div>
   );

@@ -20,6 +20,8 @@ const initialValues = {
   fromName: '',
   fromEmail: '',
   companyAddress: '',
+  username: '',
+  password: '',
   bcc: [],
   headerContent: '',
   signature: '',
@@ -37,6 +39,8 @@ const validationSchema = Yup.object().shape({
   fromEmail: Yup.string()
     .required('From Email is required')
     .email('Please enter a valid email.'),
+  username: Yup.string().required('Username is required!'),
+  password: Yup.string().required('Password is required'),
   companyAddress: Yup.string().required('Company Address is required'),
   bcc: Yup.lazy((val) => {
     if (Array.isArray(val)) {
@@ -62,7 +66,7 @@ export function AddConfiguration() {
 
   useEffect(() => {
     (async () => {
-      await getBrands();
+      await dispatch(getBrands());
     })();
   }, []);
 
@@ -79,6 +83,8 @@ export function AddConfiguration() {
           httpsProtocol: values?.httpsProtocol,
           fromName: values?.fromName,
           fromEmail: values?.fromEmail,
+          username: values?.username,
+          password: values?.password,
           companyAddress: values?.companyAddress,
           bcc: `${values?.bcc}`,
           cssStyle: '',
@@ -112,6 +118,17 @@ export function AddConfiguration() {
                       name="httpsProtocol"
                       label="HTTPs Protocol"
                       type="switch"
+                    />
+                    <Input
+                      name="username"
+                      label="Username"
+                      placeholder="Enter SMTP Username"
+                    />
+                    <Input
+                      name="password"
+                      label="Password"
+                      type="password"
+                      placeholder="Enter SMTP Password"
                     />
                     <Input
                       name="fromName"

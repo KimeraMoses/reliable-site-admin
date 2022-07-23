@@ -1,73 +1,27 @@
-import { EditorState, convertToRaw } from 'draft-js';
-import { convertToHTML } from 'draft-convert';
 import * as Yup from 'yup';
 import { Formik, Form } from 'formik';
 
-import { Input, ConfigurationEditor, Button, EmailBodyInput } from 'components';
+import { Input, Button } from 'components';
 import './styles.scss';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getEmailTemplateByID } from 'store';
-import { convertHTMLToDraftState } from 'lib';
 import { Spin } from 'antd';
-import { updateEmailTemplate } from 'store';
+import EmailEditor from 'react-email-editor';
+import { updateEmailTemplate, getEmailTemplateByID } from 'store';
+import { getTemplateVariables } from 'lib';
 
 const validationSchema = Yup.object().shape({
   subject: Yup.string().required('Subject is required'),
   smtpConfigurationId: Yup.string().required('Configuration is required'),
   status: Yup.boolean().required('Status is required'),
-  // clientName: Yup.string().required('Client name is required'),
-  // company: Yup.string().required('Company is required'),
-  // address: Yup.string().required('Address is required'),
-  body: Yup.string().required('Email body is required'),
+  emailTemplateType: Yup.number().required('This field is required'),
 });
 
-// const ConfigurationEditor = ({ editorState, onEditorStateChange, onBlur }) => {
-//   return (
-//     <div className="configuration-editor">
-//       <div className="configuration-editor__container">
-//         <SMTPEditor
-//           editorState={editorState}
-//           wrapperClassName="configuration-editor__container-wrapper"
-//           editorClassName="configuration-editor__container-editor"
-//           onChange={onEditorStateChange}
-//           placeholder="Start typing here..."
-//           onBlur={onBlur}
-//         />
-//       </div>
-//     </div>
-//   );
-// };
-
-// const EmailBodyInput = ({ touched, errors, name, placeholder, label }) => {
-//   return (
-//     <div className="flex gap-[20px] bg-[#28283a] items-center">
-//       <h6 className="px-[32px] w-[20%] text-white whitespace-nowrap">
-//         {label}
-//       </h6>
-//       <Field
-//         name={name}
-//         placeholder={placeholder}
-//         className="h-[52px] w-[60%] text-[#92928f] placeholder:text-[#92928f] bg-[#28283a] focus-visible:outline-none"
-//       />
-//       {touched[name] && errors[name] && (
-//         <div className="error whitespace-nowrap mr-[12px] mt-[0px] w-[20%]">
-//           {errors[name]}
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
 export const EditTemplate = () => {
-  let { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  useEffect(() => {
-    dispatch(getEmailTemplateByID({ id }));
-  }, [id, dispatch]);
-  const { emailTemplate, loading } = useSelector(
+  const { loading, emailTemplate } = useSelector(
     (state) => state?.emailTemplates
   );
   const { smtps } = useSelector((state) => state?.smtps);
@@ -79,21 +33,38 @@ export const EditTemplate = () => {
     };
   });
 
-  const initialValues = {
-    createdBy: emailTemplate?.createdBy || '',
-    subject: emailTemplate?.subject || '',
-    body: emailTemplate?.body || '',
-    // TODO: Change when multi-tenancy enabled
-    tenant: emailTemplate?.tenant || 'Admin',
-    status: emailTemplate?.status || false,
-    smtpConfigurationId: emailTemplate?.smtpConfigurationId || '',
-    // clientName: emailTemplate?.clientName || '',
-    // company: emailTemplate?.company || '',
-    // address: emailTemplate?.address || '',
-    bodyHolder: emailTemplate?.body
-      ? convertHTMLToDraftState(emailTemplate?.body)
-      : EditorState.createEmpty(),
+  let { id } = useParams();
+  useEffect(() => {
+    dispatch(getEmailTemplateByID({ id }));
+  }, [id, dispatch]);
+
+  // Email Editor Settings Start
+  const emailEditorRef = useRef(null);
+
+  const onReady = () => {
+    console.log('onReady');
   };
+  // Email Editor Settings End
+
+  // Load Template
+  useEffect(() => {
+    if (emailTemplate?.id && emailTemplate?.jsonBody) {
+      const templateJson = JSON.parse(emailTemplate?.jsonBody);
+      if (emailEditorRef !== null) {
+        emailEditorRef?.current?.editor?.loadDesign(templateJson);
+      }
+    }
+  }, [emailTemplate, emailEditorRef?.current]);
+
+  const initialValues = {
+    subject: emailTemplate?.subject || '',
+    tenant: 'Admin',
+    status: emailTemplate?.status || true,
+    smtpConfigurationId: emailTemplate?.smtpConfigurationId || '',
+    emailTemplateType: emailTemplate?.emailTemplateType || 0,
+  };
+
+  const { user } = useSelector((state) => state?.auth);
 
   return (
     <Formik
@@ -101,10 +72,27 @@ export const EditTemplate = () => {
       validationSchema={validationSchema}
       enableReinitialize
       onSubmit={async (values) => {
-        await dispatch(
-          updateEmailTemplate({ id: emailTemplate?.id, data: values })
-        );
-        navigate('/admin/dashboard/settings/email-templates');
+        emailEditorRef.current.editor.exportHtml(async (data) => {
+          const { design, html } = data;
+          const finalValues = {
+            ...values,
+            variables: '[fullName], [company], [address]',
+            createdBy: user?.id,
+            emailTemplateType: Number(values?.emailTemplateType),
+            isSystem: Number(values?.emailTemplateType) === 0 ? false : true,
+            jsonBody: JSON.stringify(design),
+            body: html,
+          };
+
+          await dispatch(
+            updateEmailTemplate({
+              id: emailTemplate?.id,
+              data: finalValues,
+            })
+          );
+
+          navigate('/admin/dashboard/settings/email-templates');
+        });
       }}
     >
       {({ values, errors, touched, setFieldValue, setFieldTouched }) => {
@@ -128,70 +116,53 @@ export const EditTemplate = () => {
                       type="select"
                       options={smtpOptions}
                     />
+                    <Input
+                      name="emailTemplateType"
+                      label="Template Type"
+                      placeholder="Select Template Type"
+                      type="select"
+                      // [ 0 = General, 1 = EmailConfirmation, 2 = EmailOTP, 3 = ProductCancellation, 4 = ResetPassword, 5 = TicketUpdate ]
+                      options={[
+                        'General',
+                        'Email Confirmation',
+                        'Email OTP',
+                        'Product Cancellation',
+                        'Reset Password',
+                        'Ticket Update',
+                        'Ticket Create',
+                        'Ticket Assignment',
+                        'Orders',
+                        'Invoice',
+                        'Product Status Updated',
+                      ].map((el, idx) => {
+                        return {
+                          value: idx,
+                          label: el,
+                        };
+                      })}
+                    />
                     <Input name="status" label="Status" type="switch" />
                   </div>
                   <Button className="mt-[32px]" htmlType="submit">
                     Edit Template
                   </Button>
                 </div>
-                {/* Email Body Side */}
-                <div className="flex flex-col gap-[20px]">
-                  <div className="bg-[#1E1E2D] rounded-[8px]">
-                    <h6 className="text-white font-medium p-[32px]">
-                      Email Body
-                    </h6>
-                    {/* Other Inputs */}
-                    <div className="flex flex-col gap-[2px]">
-                      <EmailBodyInput
-                        name="clientName"
-                        label="Client Name"
-                        placeholder="[[fullName]]"
-                        touched={touched}
-                        errors={errors}
-                        type="readOnly"
-                      />
-                      <EmailBodyInput
-                        name="company"
-                        label="Company"
-                        placeholder="[[company]]"
-                        touched={touched}
-                        errors={errors}
-                        type="readOnly"
-                      />
-                      <EmailBodyInput
-                        name="address"
-                        label="Address"
-                        placeholder="[[address]]"
-                        touched={touched}
-                        errors={errors}
-                        type="readOnly"
-                      />
-                    </div>
-                    <ConfigurationEditor
-                      editorState={values.bodyHolder}
-                      onBlur={() => setFieldTouched('body', true)}
-                      onEditorStateChange={(state) => {
-                        setFieldValue('bodyHolder', state);
-                        const currentContentAsHTML = convertToHTML(
-                          state.getCurrentContent()
-                        );
-                        if (
-                          convertToRaw(state.getCurrentContent()).blocks
-                            .length === 1 &&
-                          convertToRaw(state.getCurrentContent()).blocks[0]
-                            .text === ''
-                        ) {
-                          setFieldValue('body', '');
-                        } else {
-                          setFieldValue('body', currentContentAsHTML);
-                        }
-                      }}
+                <div>
+                  <div className="bg-[#1E1E2D] p-[18px] rounded-[8px]">
+                    <h4 className="text-white mb-[12px] text-[24px]">
+                      Variables
+                    </h4>
+                    <p className="text-white">
+                      {getTemplateVariables(Number(values?.emailTemplateType))}
+                    </p>
+                  </div>
+                  <div className="bg-[#1E1E2D] p-[32px] rounded-[8px] mt-[20px]">
+                    <EmailEditor
+                      appearance={{ theme: 'dark' }}
+                      ref={emailEditorRef}
+                      onReady={onReady}
+                      minHeight={600}
                     />
-                    {touched['body'] && errors['body'] && (
-                      <div className="error whitespace-nowrap ml-[32px] mb-[16px] w-[20%]">
-                        {errors['body']}
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>

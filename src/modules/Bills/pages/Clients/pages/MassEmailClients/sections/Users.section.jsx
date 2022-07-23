@@ -1,7 +1,9 @@
 import { List } from 'components';
 import { useFormikContext } from 'formik';
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSpecificUsersDispatch } from 'store';
+import { getClients } from 'store';
 
 const Info = ({ fullName }) => {
   return (
@@ -16,22 +18,29 @@ const Info = ({ fullName }) => {
   );
 };
 
-let data = [];
-for (let i = 0; i <= 10; i++) {
-  data.push({
-    name: `Paul ${i}`,
-    amount: i + 30,
-  });
-}
-
 export const Users = () => {
-  const { specificUsers, loading } = useSelector((state) => state?.users);
+  const { clients, specificUsers, loading } = useSelector(
+    (state) => state?.users
+  );
 
   const { setFieldValue } = useFormikContext();
+
+  const dispatch = useDispatch();
   useEffect(() => {
-    const idHolder = specificUsers?.map((user) => user?.id);
-    setFieldValue('clientIds', idHolder);
-  }, [specificUsers]);
+    (async () => {
+      await dispatch(getSpecificUsersDispatch([]));
+      await dispatch(getClients());
+    })();
+  }, []);
+
+  useEffect(() => {
+    if (clients || specificUsers) {
+      const idHolder = specificUsers?.length
+        ? specificUsers?.map((user) => user?.id)
+        : clients?.map((user) => user?.id);
+      setFieldValue('clientIds', idHolder);
+    }
+  }, [clients, specificUsers]);
 
   return (
     <>
@@ -39,7 +48,7 @@ export const Users = () => {
       <div className="flex flex-col gap-[20px] mb-[20px] custom-users-list">
         <List
           grid={{ gutter: 0, column: 1 }}
-          data={specificUsers}
+          data={specificUsers?.length ? specificUsers : clients}
           renderFn={(item) => <Info {...item} />}
           pageSize={5}
           loading={loading}

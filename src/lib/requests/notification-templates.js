@@ -63,6 +63,6 @@ export const deleteNotificationTemplateConfig = ({ id }) => ({
 
 // Send Notification
 export const sendNotificatoinConfig = () => ({
-  url: `/send`,
+  url: `/api/v1/admin/notifications/send`,
   config: getConfig({ module: NotificationTemplate, action: 'Create' }),
 });

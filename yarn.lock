@@ -8065,6 +8065,13 @@ react-cookie@^4.1.1:
     hoist-non-react-statics "^3.0.0"
     universal-cookie "^4.0.0"
 
+react-countdown@^2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/react-countdown/-/react-countdown-2.3.2.tgz#4cc27f28f2dcd47237ee66e4b9f6d2a21fc0b0ad"
+  integrity sha512-Q4SADotHtgOxNWhDdvgupmKVL0pMB9DvoFcxv5AzjsxVhzOVxnttMbAywgqeOdruwEAmnPhOhNv/awAgkwru2w==
+  dependencies:
+    prop-types "^15.7.2"
+
 react-dev-utils@^12.0.0:
   version "12.0.0"
   resolved "https://registry.npmjs.org/react-dev-utils/-/react-dev-utils-12.0.0.tgz"
@@ -8121,6 +8128,11 @@ react-draft-wysiwyg@^1.14.7:
     html-to-draftjs "^1.5.0"
     linkify-it "^2.2.0"
     prop-types "^15.7.2"
+
+react-email-editor@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/react-email-editor/-/react-email-editor-1.6.1.tgz#e455398550b73fddae2e6f2597a7606a61d85761"
+  integrity sha512-pEWpRmTY0ok03cwTGqEOoEldnzThhuRGTrcMnv8W3/jc5MTfcr9USU/IQ9HrVvFStLKoxYBIQnSKY+iCYWOtSQ==
 
 react-error-overlay@^6.0.10:
   version "6.0.10"
