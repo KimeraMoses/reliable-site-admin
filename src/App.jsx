@@ -7,7 +7,7 @@ import {
   Routes,
 } from 'react-router-dom';
 import moment from 'moment';
-import pages, { Error404, dashboardPages } from 'pages';
+import { Error404, dashboardPages } from 'pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -22,6 +22,7 @@ import { axios, getCurrentMFAStatus, getError } from 'lib';
 import { getDepartmentsByUserId } from 'store';
 import { getAppSettingsByTenant } from 'store';
 import { updateMaintenanceSettings } from 'store';
+import { ProtectedRoute } from 'components/ProtectedRoute.component';
 
 const SignIn = React.lazy(() => import('pages/sign-in/SignIn.page'));
 const SignUp = React.lazy(() => import('pages/sign-up/SignUp.page'));
@@ -37,23 +38,14 @@ const EmailVerification = React.lazy(() =>
 const ConfirmOtp = React.lazy(() =>
   import('pages/one-time-password/OneTimePassword.page')
 );
-const UnderMaintenance = React.lazy(() =>
-  import('pages/under-maintenance/UnderMaintenance.page')
-);
-const SuspendedAccount = React.lazy(() =>
-  import('pages/account-suspended/AccountSuspended.page')
-);
-const LockScreen = React.lazy(() =>
-  import('pages/lock-screen/LockScreen.page')
-);
 
 function App() {
   const isLoggedIn = useSelector((state) => state?.auth?.isLoggedIn);
   const user = useSelector((state) => state?.auth?.user);
+  const { token } = useSelector((state) => state?.auth);
   const { maintenance, maintenanceDetails, suspended } = useSelector(
     (state) => state.settings
   );
-  const isIdle = useSelector((state) => state.settings.isIdle);
   const Timeout = 1000 * 900;
   const idleTimer = useRef(null);
 
@@ -69,14 +61,14 @@ function App() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (user?.id && token) {
       (async () => {
         await dispatch(getDepartmentsByUserId({ id: user?.id }));
         await dispatch(getAppModules());
         await dispatch(getUserModules({ id: user?.id }));
       })();
     }
-  }, [isLoggedIn]);
+  }, [user, token]);
 
   // Check MFA Status
   const checkMFAStatus = async () => {
@@ -127,30 +119,21 @@ function App() {
           <Routes>
             <Route path="/" element={<Navigate to="/admin/sign-in" />} />
             <Route
-              path="/admin/sign-up"
+              path="/admin"
               element={
-                !isLoggedIn ? <SignUp /> : <Navigate to="/admin/sign-in" />
-              }
-            />
-            <Route
-              path="/admin/lock-screen"
-              element={
-                isIdle ? <LockScreen /> : <Navigate to="/admin/dashboard" />
-              }
-            />
-
-            <Route path="/admin" element={<Navigate to="/admin/sign-in" />} />
-            <Route
-              path="/admin/account-suspended"
-              element={
-                !suspended ? (
-                  <Navigate to="/admin/sign-in" />
+                isLoggedIn ? (
+                  <Navigate to="/admin/dashboard" />
                 ) : (
-                  <SuspendedAccount />
+                  <Navigate to="/admin/sign-in" />
                 )
               }
             />
-
+            <Route
+              path="/admin/sign-up"
+              element={
+                isLoggedIn ? <Navigate to="/admin/dashboard" /> : <SignUp />
+              }
+            />
             <Route
               path="/admin/verify-email/:userId"
               element={
@@ -163,7 +146,6 @@ function App() {
                 )
               }
             />
-
             <Route
               path="/admin/reset-password"
               element={
@@ -201,18 +183,6 @@ function App() {
               }
             />
             <Route
-              path="/admin/under-maintenance"
-              element={
-                maintenance ? (
-                  <UnderMaintenance />
-                ) : isLoggedIn ? (
-                  <Navigate to="/admin/dashboard" />
-                ) : (
-                  <Navigate to="/admin/sign-in" />
-                )
-              }
-            />
-            <Route
               path="/admin/sign-in"
               element={
                 maintenance ? (
@@ -224,43 +194,23 @@ function App() {
                 )
               }
             />
-            {pages.map(({ path, Component }) => (
+            <Route element={<ProtectedRoute />}>
               <Route
-                key={path}
-                path={`/admin${path}`}
-                element={<Component />}
-                exact
+                path="/admin/dashboard/*"
+                element={
+                  <Routes>
+                    {dashboardPages.map(({ path, Component }) => (
+                      <Route
+                        key={path}
+                        path={`${path}`}
+                        index={path === '/'}
+                        element={<Component />}
+                      />
+                    ))}
+                  </Routes>
+                }
               />
-            ))}
-            {/* <Route path="/admin/dashboard"> */}
-            <Route
-              path="/admin/dashboard/*"
-              element={
-                <Routes>
-                  {dashboardPages.map(({ path, Component }) => (
-                    <Route
-                      key={path}
-                      path={`${path}`}
-                      index={path === '/'}
-                      element={
-                        maintenance ? (
-                          <Navigate to="/admin/under-maintenance" />
-                        ) : isIdle ? (
-                          <Navigate to="/admin/lock-screen" />
-                        ) : suspended ? (
-                          <Navigate to="/admin/account-suspended" />
-                        ) : !isLoggedIn ? (
-                          <Navigate to="/admin/sign-in" />
-                        ) : (
-                          <Component />
-                        )
-                      }
-                    />
-                  ))}
-                </Routes>
-              }
-            />
-            {/* </Route> */}
+            </Route>
             <Route path="*" element={<Error404 />} />
           </Routes>
         </Router>

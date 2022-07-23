@@ -1,5 +1,7 @@
+import { Button } from 'components';
 import React from 'react';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 
 function UnauthorizedAccess() {
   const { t } = useTranslation('/UnauthorizedAccessPage/ns');
@@ -14,17 +16,15 @@ function UnauthorizedAccess() {
           />
           <h3 className="text-4xl text-white font-normal mt-5">{t('title')}</h3>
           <p className="custom-text-light border-b-1 border-indigo-900 mb-5 text-base border-dashed-bottom pb-5">
-            {t('description1')}
+            Sorry, You are not authorized to access this page. In order to
+            access this page you must be logged in with valid credentials.
           </p>
         </div>
+
         <div>
-          <h3 className="text-sm text-white text-base">{t('subTitle')}</h3>
-          <p className="custom-text-light border-b-1 border-indigo-900 mb-5 text-base">
-            {t('description2')}
-          </p>
-        </div>
-        <div className="countdown text-4xl text-white">
-          <span>00</span> : <span>06</span> : <span>30</span> : <span>30</span>
+          <Link to="/admin/sign-in">
+            <Button htmlType="button">Login with Username & Password</Button>
+          </Link>
         </div>
       </div>
       <div className="col d-none d-md-flex bg-custom-secondary flex items-center justify-center">

@@ -65,6 +65,8 @@ export const List = () => {
   const { emailTemplates, loading } = useSelector(
     (state) => state.emailTemplates
   );
+
+  console.log(emailTemplates);
   const { smtps } = useSelector((state) => state?.smtps);
   const { users } = useSelector((state) => state?.users);
   const smtpsLoading = useSelector((state) => state?.smtps?.loading);

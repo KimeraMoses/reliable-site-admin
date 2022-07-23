@@ -13,10 +13,9 @@ import {
   initAuthenticationPending,
   initAuthenticationSuccess,
 } from 'store/Slices/authSlice';
-import { accountSuspended } from 'store/Slices/settingSlice';
+import { accountSuspended, closeLockScreen } from 'store/Slices/settingSlice';
 import Recaptcha from 'pages/Google-Recaptcha/Recaptcha';
 import { useCookies } from 'react-cookie';
-import { getAppModules, getUserModules } from 'store/Actions/moduleActions';
 import { useTranslation } from 'react-i18next';
 import { getIPData, getDeviceName } from 'lib';
 
@@ -103,10 +102,8 @@ function SignIn() {
           });
         }
       }
-      // localStorage.removeItem("Account-Suspended");
-      // await dispatch(getAppModules());
-      // await dispatch(getUserModules());
       dispatch(initAuthenticationSuccess(res.data));
+      dispatch(closeLockScreen());
       dispatch(getUserProfile(res.data.token));
       localStorage.setItem('AuthToken', JSON.stringify(res.data));
     };
