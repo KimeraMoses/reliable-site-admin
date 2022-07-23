@@ -1,9 +1,10 @@
 import { Button } from 'antd';
 import { Table } from 'components';
 import { checkModule } from 'lib/checkModule';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { getEmailTemplate } from 'store';
 import { Delete } from './sections';
 
 const columns = [
@@ -93,6 +94,11 @@ export const List = () => {
       status: emailTemplate?.status,
     });
   });
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getEmailTemplate(null));
+  }, [dispatch]);
 
   return (
     <div className="m-[40px] p-[40px] bg-[#1E1E2D] rounded-[8px]">

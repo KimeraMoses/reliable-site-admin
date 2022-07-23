@@ -15,47 +15,47 @@ const pages = [
 
 export const dashboardPages = [
   {
-    path: '/dashboard',
+    path: '/',
     Component: lazy(() => import('./Dashboard/Home/Home.page')),
   },
   {
-    path: '/dashboard/about',
+    path: '/about',
     Component: lazy(() => import('./Dashboard/About/About.page')),
   },
   {
-    path: '/dashboard/editor',
+    path: '/editor',
     Component: lazy(() => import('./Dashboard/Editor/Editor.page')),
   },
   {
-    path: '/dashboard/users/*',
+    path: '/users/*',
     Component: lazy(() => import('./Dashboard/Users/Users.page')),
   },
   {
-    path: '/dashboard/billing/*',
+    path: '/billing/*',
     Component: lazy(() => import('./Dashboard/Billing/Billing.page')),
   },
   {
-    path: '/dashboard/account-settings/*',
+    path: '/account-settings/*',
     Component: lazy(() =>
       import('./Dashboard/AccountSettings/AccountSettings.page')
     ),
   },
   {
-    path: '/dashboard/settings/*',
+    path: '/settings/*',
     Component: lazy(() => import('./Dashboard/Settings/Settings.page')),
   },
   {
-    path: '/dashboard/knowledge-base/*',
+    path: '/knowledge-base/*',
     Component: lazy(() =>
       import('./Dashboard/KnowledgeBase/KnowledgeBase.page')
     ),
   },
   {
-    path: '/dashboard/reports/*',
+    path: '/reports/*',
     Component: lazy(() => import('./Dashboard/Reports/Reports.page')),
   },
   {
-    path: '/dashboard/support/*',
+    path: '/support/*',
     Component: lazy(() => import('./Dashboard/Support/Support.page')),
   },
 ];

@@ -8129,6 +8129,11 @@ react-draft-wysiwyg@^1.14.7:
     linkify-it "^2.2.0"
     prop-types "^15.7.2"
 
+react-email-editor@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/react-email-editor/-/react-email-editor-1.6.1.tgz#e455398550b73fddae2e6f2597a7606a61d85761"
+  integrity sha512-pEWpRmTY0ok03cwTGqEOoEldnzThhuRGTrcMnv8W3/jc5MTfcr9USU/IQ9HrVvFStLKoxYBIQnSKY+iCYWOtSQ==
+
 react-error-overlay@^6.0.10:
   version "6.0.10"
   resolved "https://registry.npmjs.org/react-error-overlay/-/react-error-overlay-6.0.10.tgz"

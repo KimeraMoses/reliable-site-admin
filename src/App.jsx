@@ -232,28 +232,35 @@ function App() {
                 exact
               />
             ))}
-            <Route path="/admin/dashboard">
-              {dashboardPages.map(({ path, Component }) => (
-                <Route
-                  key={path}
-                  path={`/admin${path}`}
-                  element={
-                    maintenance ? (
-                      <Navigate to="/admin/under-maintenance" />
-                    ) : isIdle ? (
-                      <Navigate to="/admin/lock-screen" />
-                    ) : suspended ? (
-                      <Navigate to="/admin/account-suspended" />
-                    ) : !isLoggedIn ? (
-                      <Navigate to="/admin/sign-in" />
-                    ) : (
-                      <Component />
-                    )
-                  }
-                  exact
-                />
-              ))}
-            </Route>
+            {/* <Route path="/admin/dashboard"> */}
+            <Route
+              path="/admin/dashboard/*"
+              element={
+                <Routes>
+                  {dashboardPages.map(({ path, Component }) => (
+                    <Route
+                      key={path}
+                      path={`${path}`}
+                      index={path === '/'}
+                      element={
+                        maintenance ? (
+                          <Navigate to="/admin/under-maintenance" />
+                        ) : isIdle ? (
+                          <Navigate to="/admin/lock-screen" />
+                        ) : suspended ? (
+                          <Navigate to="/admin/account-suspended" />
+                        ) : !isLoggedIn ? (
+                          <Navigate to="/admin/sign-in" />
+                        ) : (
+                          <Component />
+                        )
+                      }
+                    />
+                  ))}
+                </Routes>
+              }
+            />
+            {/* </Route> */}
             <Route path="*" element={<Error404 />} />
           </Routes>
         </Router>

@@ -1,7 +1,6 @@
 import { Spin } from 'antd';
 import { Input, MultiSelect, Button } from 'components';
 import { useFormikContext } from 'formik';
-import { convertHTMLToDraftState } from 'lib';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
@@ -39,22 +38,9 @@ export const Products = () => {
       const smtpServer = smtps?.find(
         (smtp) => smtp?.id === template?.smtpConfigurationId
       );
-      setFieldValue('bodyHolder', convertHTMLToDraftState(template?.body));
-      setFieldValue('emailBody', template?.emailBody);
-      setFieldValue(
-        'headerContentHolder',
-        convertHTMLToDraftState(smtpServer?.headerContent)
-      );
+      setFieldValue('emailTemplateContent', template);
       setFieldValue('headerContent', smtpServer?.headerContent);
-      setFieldValue(
-        'footerContentHolder',
-        convertHTMLToDraftState(smtpServer?.footerContent)
-      );
       setFieldValue('footerContent', smtpServer?.footerContent);
-      setFieldValue(
-        'signatureHolder',
-        convertHTMLToDraftState(smtpServer?.signature)
-      );
       setFieldValue('signatureContent', smtpServer?.signature);
       setFieldValue('smtpConfigId', template?.smtpConfigurationId);
     } else {

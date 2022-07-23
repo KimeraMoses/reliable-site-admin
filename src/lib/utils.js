@@ -395,3 +395,30 @@ export const exportToExcel = (object) => {
     `Report-${moment().format('MM-DD-YYYY [at] HH:mm A')}` + fileExtension
   );
 };
+
+// Get Template Variables
+export const getTemplateVariables = (templateType) => {
+  const general = '[fullName], [company], [address]';
+  switch (templateType) {
+    case 0:
+      return `${general}`;
+    case 1:
+      return `${general}, [link]`;
+    case 2:
+      return `${general}, [otp]`;
+    case 3:
+      return `${general}, [link]`;
+    case 4:
+      return `${general}, [otp]`;
+    case 5:
+      return `${general}, [link]`;
+    case 7:
+      return `${general}, [link]`;
+    case 8:
+      return `${general}, [link]`;
+    case 9:
+      return `${general}, [link]`;
+    default:
+      return `${general}`;
+  }
+};
