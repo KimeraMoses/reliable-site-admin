@@ -133,6 +133,7 @@ export const EditTemplate = () => {
                         'Ticket Assignment',
                         'Orders',
                         'Invoice',
+                        'Product Status Updated',
                       ].map((el, idx) => {
                         return {
                           value: idx,

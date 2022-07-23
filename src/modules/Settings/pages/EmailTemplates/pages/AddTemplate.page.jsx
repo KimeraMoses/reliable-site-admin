@@ -125,6 +125,7 @@ export const AddTemplate = () => {
                         'Ticket Assignment',
                         'Orders',
                         'Invoice',
+                        'Product Status Updated',
                       ].map((el, idx) => {
                         return {
                           value: idx,

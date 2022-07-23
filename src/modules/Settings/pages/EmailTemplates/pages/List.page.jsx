@@ -87,6 +87,11 @@ export const List = () => {
         'Product Cancellation',
         'Reset Password',
         'Ticket Update',
+        'Ticket Create',
+        'Ticket Assignment',
+        'Orders',
+        'Invoice',
+        'Product Status Updated',
       ]?.find((evt, idx) => idx === emailTemplate?.emailTemplateType),
       addedBy: emailTemplate?.isSystem
         ? 'System'

@@ -398,27 +398,43 @@ export const exportToExcel = (object) => {
 
 // Get Template Variables
 export const getTemplateVariables = (templateType) => {
-  const general = '[fullName], [company], [address]';
+  const variables = {
+    EmailConfirmation:
+      '[fullName], [company], [address],[userName],[email],[emailVerificationUri]',
+    EmailOTP: '[fullName], [company], [address],[otpcode],[userName]',
+    General: '[userName],[email],[company],[address],[fullname]',
+    Invoice: '[fullName], [company], [address],[invoicelink]',
+    Orders: '[fullName], [company], [address],[orderlink]',
+    ProductCancellation: '[fullName], [company], [address],[productlink]',
+    ProductStatusUpdated: '[fullName], [company], [address],[productlink]',
+    ResetPassword:
+      '[fullName], [company], [address],[userName],[resetPasswordUri]',
+    TicketAssignment: '[fullName], [company], [address],[ticketlink]',
+    TicketCreated: '[fullName], [company], [address],[ticketlink]',
+    TicketUpdated: '[fullName], [company], [address],[ticketlink]',
+  };
   switch (templateType) {
     case 0:
-      return `${general}`;
+      return variables?.General;
     case 1:
-      return `${general}, [link]`;
+      return variables?.EmailConfirmation;
     case 2:
-      return `${general}, [otp]`;
+      return variables?.EmailOTP;
     case 3:
-      return `${general}, [link]`;
+      return variables?.ProductCancellation;
     case 4:
-      return `${general}, [otp]`;
+      return variables?.ResetPassword;
     case 5:
-      return `${general}, [link]`;
+      return variables?.TicketUpdated;
     case 7:
-      return `${general}, [link]`;
+      return variables?.TicketAssignment;
     case 8:
-      return `${general}, [link]`;
+      return variables?.Orders;
     case 9:
-      return `${general}, [link]`;
+      return variables?.Invoice;
+    case 10:
+      return variables?.ProductStatusUpdated;
     default:
-      return `${general}`;
+      return variables?.General;
   }
 };
