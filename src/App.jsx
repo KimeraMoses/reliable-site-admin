@@ -23,6 +23,7 @@ import { getDepartmentsByUserId } from 'store';
 import { getAppSettingsByTenant } from 'store';
 import { updateMaintenanceSettings } from 'store';
 import { ProtectedRoute } from 'components/ProtectedRoute.component';
+import { Spin } from 'antd';
 
 const SignIn = React.lazy(() => import('pages/sign-in/SignIn.page'));
 const SignUp = React.lazy(() => import('pages/sign-up/SignUp.page'));
@@ -114,7 +115,13 @@ function App() {
   return (
     <div className="App bg-custom-main flex items-center content-center">
       <IdleTimer ref={idleTimer} onIdle={OnIdle} timeout={Timeout} />
-      <Suspense fallback={<>Loading...</>}>
+      <Suspense
+        fallback={
+          <div className="h-screen w-screen flex items-center justify-center">
+            <Spin spinning size="large" />
+          </div>
+        }
+      >
         <Router>
           <Routes>
             <Route path="/" element={<Navigate to="/admin/sign-in" />} />

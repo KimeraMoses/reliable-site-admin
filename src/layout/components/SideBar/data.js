@@ -344,10 +344,10 @@ export const useSidebarData = () => {
           name: 'API',
           path: '/admin/dashboard/settings/api',
         },
-        {
-          name: 'Portal',
-          path: '/admin/dashboard/settings/portal',
-        },
+        // {
+        //   name: 'Portal',
+        //   path: '/admin/dashboard/settings/portal',
+        // },
       ],
     },
     {
@@ -669,10 +669,10 @@ export const sidebarData = [
         name: 'API',
         path: '/admin/dashboard/settings/api',
       },
-      {
-        name: 'Portal',
-        path: '/admin/dashboard/settings/portal',
-      },
+      // {
+      //   name: 'Portal',
+      //   path: '/admin/dashboard/settings/portal',
+      // },
     ],
   },
   {
