@@ -46,6 +46,7 @@ export const Table = ({
   scroll,
   size,
   headingTitle,
+  onRow,
 }) => {
   const [dataSource, setDataSource] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
@@ -260,6 +261,7 @@ export const Table = ({
                   ? emptyText || 'No Data'
                   : 'You are not authorized to view this data.',
               }}
+              onRow={onRow}
             />
           </div>
         </>

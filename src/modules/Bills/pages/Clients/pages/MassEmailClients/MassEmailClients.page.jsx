@@ -2,52 +2,46 @@ import { EditorState } from 'draft-js';
 import * as Yup from 'yup';
 import { Spin } from 'antd';
 import { Formik, Form } from 'formik';
-import { useNavigate } from 'react-router-dom';
 import { Left, Right } from './sections';
 
 const initialValues = {
-  host: '',
-  port: '',
-  httpsProtocol: false,
-  fromName: '',
-  fromEmail: '',
-  companyAddress: '',
-  bcc: [],
+  productIds: [],
+  clientIds: [],
   headerContent: '',
-  signature: '',
-  footerContent: '',
+  footerConent: '',
+  signatureContent: '',
+  emailBody: '',
+  numberOfEmails: 0,
+  intervalInSeconds: 0,
+  smtpConfigId: '',
+  name: '',
+  emailAddress: '',
+  companyAddress: '',
+  cssStyle: '',
+  emailTemplate: '',
+  bodyHolder: EditorState.createEmpty(),
   headerContentHolder: EditorState.createEmpty(),
   signatureHolder: EditorState.createEmpty(),
   footerContentHolder: EditorState.createEmpty(),
+  operatorType: '',
+  property: '',
 };
 
 const validationSchema = Yup.object().shape({
-  host: Yup.string().required('Host is required'),
-  port: Yup.string().required('Port is required'),
-  httpsProtocol: Yup.boolean().required('Protocol is required'),
-  fromName: Yup.string().required('From Name is required'),
-  fromEmail: Yup.string()
-    .required('From Email is required')
-    .email('Please enter a valid email.'),
-  companyAddress: Yup.string().required('Company Address is required'),
-  bcc: Yup.lazy((val) => {
-    if (Array.isArray(val)) {
-      return Yup.array()
-        .min(1, 'At least 1 BCC is required.')
-        .of(
-          Yup.string().email(({ value }) => `${value} is not a valid email.`)
-        );
-    } else {
-      return Yup.string().required('At least 1 BCC is required');
-    }
-  }),
-  headerContent: Yup.string().required('Header Content is required'),
-  signature: Yup.string().required('Signature is required'),
-  footerContent: Yup.string().required('Footer Content is required'),
+  headerContent: Yup.string().required('This field is required'),
+  footerConent: Yup.string().required('This field is required'),
+  signatureContent: Yup.string().required('This field is required'),
+  emailBody: Yup.string().required('This field is required'),
+  numberOfEmails: Yup.number().required('This field is required'),
+  intervalInSeconds: Yup.number().required('This field is required'),
+  smtpConfigId: Yup.string().required('This field is required'),
+  name: Yup.string().required('This field is required'),
+  emailAddress: Yup.string().required('This field is required'),
+  companyAddress: Yup.string().required('This field is required'),
+  cssStyle: Yup.string().required('This field is required'),
 });
 
 export const MassEmailClients = () => {
-  const navigate = useNavigate();
   return (
     <>
       <Formik
@@ -56,18 +50,19 @@ export const MassEmailClients = () => {
         enableReinitialize
         onSubmit={async (values) => {
           const finalValues = {
-            host: values?.host,
-            port: values?.port,
-            httpsProtocol: values?.httpsProtocol,
-            fromName: values?.fromName,
-            fromEmail: values?.fromEmail,
-            companyAddress: values?.companyAddress,
-            bcc: `${values?.bcc}`,
+            productIds: values?.productIds,
+            clientIds: values?.clientIds,
             headerContent: values?.headerContent,
-            signature: values?.signature,
-            footerContent: values?.footerContent,
-            // TODO: Change brandIds once we have multiple brands
-            brandIds: ['1ac3fe50-d86a-420a-bb04-728a2b0c394a'],
+            footerConent: values?.footerConent,
+            signatureContent: values?.signature,
+            emailBody: values?.emailBody,
+            numberOfEmails: values?.numberOfEmails,
+            intervalInSeconds: values?.intervalInSeconds,
+            smtpConfigId: values?.smtpConfigId,
+            name: values?.name,
+            emailAddress: values?.emailAddress,
+            companyAddress: values?.companyAddress,
+            cssStyle: values?.cssStyle,
           };
           // navigate('/admin/dashboard/settings/smtp');
           console.log(finalValues);

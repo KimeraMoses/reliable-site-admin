@@ -26,6 +26,25 @@ export const getProductsCall = async () => {
   return res;
 };
 
+// Get Cancelled Products
+export const getCancelledProductsCall = async () => {
+  const res = await axios.post(
+    getProductsConfig().url,
+    {
+      advancedSearch: {
+        fields: ['status'],
+        keyword: '2',
+      },
+      keyword: '',
+      pageNumber: 0,
+      pageSize: 0,
+      orderBy: [''],
+    },
+    getProductsConfig().config
+  );
+  return res;
+};
+
 // Get Products by Client ID
 export const getProductsByClientIDCall = async ({ clientId }) => {
   const res = await axios.post(

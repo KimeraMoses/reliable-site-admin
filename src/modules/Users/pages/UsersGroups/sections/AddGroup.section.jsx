@@ -8,6 +8,7 @@ const initialAddValues = {
   groupName: '',
   status: false,
   isDefault: false,
+  isSuperAdmin: false,
   tenant: 'Admin',
 };
 
@@ -15,6 +16,7 @@ const addValidationSchema = Yup.object().shape({
   groupName: Yup.string().required('This field is required!'),
   status: Yup.boolean().required('This field is required!'),
   isDefault: Yup.boolean().required('This field is required!'),
+  isSuperAdmin: Yup.boolean().required('This field is required!'),
 });
 
 export const AddGroup = ({
@@ -42,6 +44,11 @@ export const AddGroup = ({
       type: 'switch',
       name: 'isDefault',
       title: t('makeDefault'),
+    },
+    {
+      type: 'switch',
+      name: 'isSuperAdmin',
+      title: 'Make Super Admin',
     },
   ];
   return (

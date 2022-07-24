@@ -15,6 +15,7 @@ export const SigninMethods = () => {
   const [loading, setLoading] = useState(false);
 
   const { user, hasMFA } = useSelector((state) => state?.auth);
+  const { settings } = useSelector((state) => state?.appSettings);
   const dispatch = useDispatch();
 
   // Render
@@ -63,48 +64,54 @@ export const SigninMethods = () => {
               </div>
             </div>
             {/* MFA Section */}
-            <div className="p-[20px] bg-[#212E48] border-1 border-[#3699FF] border-dashed rounded-[8px] flex items-center justify-between">
-              <div className="flex items-center gap-[20px]">
-                {/* TODO: Add Icon After Discussion With Designer */}
-                <div className="h-[51px] w-[51px] bg-[#3699FF33] rounded-[8px] flex items-center justify-center"></div>
+            {settings?.enableAdminMFA ? (
+              <div className="p-[20px] bg-[#212E48] border-1 border-[#3699FF] border-dashed rounded-[8px] flex items-center justify-between">
+                <div className="flex items-center gap-[20px]">
+                  {/* TODO: Add Icon After Discussion With Designer */}
+                  <div className="h-[51px] w-[51px] bg-[#3699FF33] rounded-[8px] flex items-center justify-center"></div>
+                  <div>
+                    <p className="text-white text-[14px]">
+                      Secure Your Account
+                    </p>
+                    <p className="text-[#92928F] text-[14px]">
+                      Two-factor authentication adds an extra layer of security
+                      to your account. To log in, in addition you'll need to
+                      provide a 6 digit code
+                    </p>
+                  </div>
+                </div>
                 <div>
-                  <p className="text-white text-[14px]">Secure Your Account</p>
-                  <p className="text-[#92928F] text-[14px]">
-                    Two-factor authentication adds an extra layer of security to
-                    your account. To log in, in addition you'll need to provide
-                    a 6 digit code
-                  </p>
+                  <Button
+                    onClick={async () => {
+                      if (hasMFA) {
+                        setLoading(true);
+                        try {
+                          await enableDisable2FA({
+                            userId: user.id,
+                            flag: false,
+                          });
+                          toast.success('MFA Disabled, Please login again.');
+                          dispatch(logout());
+                        } catch (error) {
+                          toast.error(getError(error));
+                        } finally {
+                          setLoading(false);
+                        }
+                      } else {
+                        setChooseAuth(true);
+                      }
+                    }}
+                    loading={loading}
+                    type={hasMFA ? 'secondary' : 'primary'}
+                    className={hasMFA ? 'bg-slate-500' : ''}
+                  >
+                    {hasMFA ? 'Disable' : 'Enable'}
+                  </Button>
                 </div>
               </div>
-              <div>
-                <Button
-                  onClick={async () => {
-                    if (hasMFA) {
-                      setLoading(true);
-                      try {
-                        await enableDisable2FA({
-                          userId: user.id,
-                          flag: false,
-                        });
-                        toast.success('MFA Disabled, Please login again.');
-                        dispatch(logout());
-                      } catch (error) {
-                        toast.error(getError(error));
-                      } finally {
-                        setLoading(false);
-                      }
-                    } else {
-                      setChooseAuth(true);
-                    }
-                  }}
-                  loading={loading}
-                  type={hasMFA ? 'secondary' : 'primary'}
-                  className={hasMFA ? 'bg-slate-500' : ''}
-                >
-                  {hasMFA ? 'Disable' : 'Enable'}
-                </Button>
-              </div>
-            </div>
+            ) : (
+              <></>
+            )}
           </div>
           {/* Modals */}
           <UpdateEmail show={updateEmail} setShow={setUpdateEmail} />

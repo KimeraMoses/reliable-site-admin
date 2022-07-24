@@ -118,8 +118,11 @@ function UserTop({ toggleNotification }) {
       },
     },
     {
-      name: "Sign Out",
-      onClick: () => dispatch(logout()),
+      name: 'Sign Out',
+      onClick: () => {
+        dispatch(logout());
+        navigate('/admin/sign-in');
+      },
     },
   ];
 

@@ -43,7 +43,7 @@ export function Tickets() {
   const listToDisplay = Object?.keys(counts)?.map((name) => {
     return {
       name,
-      percentage: `${(counts[name] / totalTickets) * 100}%`,
+      percentage: `${((counts[name] / totalTickets) * 100).toFixed(2)}%`,
       percent: (counts[name] / totalTickets) * 100,
     };
   });
@@ -80,7 +80,14 @@ export function Tickets() {
                       className="ticket-card__inner-left-text-heading cursor-pointer"
                       style={{ color: idx % 2 === 0 ? '#0BB783' : '#3699FF' }}
                       onClick={() => {
-                        navigate('/admin/dashboard/support/tickets');
+                        navigate(
+                          '/admin/dashboard/support/tickets/by-departments',
+                          {
+                            state: {
+                              activeDepartment: name,
+                            },
+                          }
+                        );
                       }}
                     >
                       {name}

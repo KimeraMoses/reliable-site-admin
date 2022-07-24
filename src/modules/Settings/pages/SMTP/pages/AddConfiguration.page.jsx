@@ -10,6 +10,8 @@ import { Input, MultiSelect, ConfigurationEditor, Button } from 'components';
 import { addSMTP } from 'store';
 import './styles.scss';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { getBrands } from 'store';
 
 const initialValues = {
   host: '',
@@ -18,6 +20,8 @@ const initialValues = {
   fromName: '',
   fromEmail: '',
   companyAddress: '',
+  username: '',
+  password: '',
   bcc: [],
   headerContent: '',
   signature: '',
@@ -35,6 +39,8 @@ const validationSchema = Yup.object().shape({
   fromEmail: Yup.string()
     .required('From Email is required')
     .email('Please enter a valid email.'),
+  username: Yup.string().required('Username is required!'),
+  password: Yup.string().required('Password is required'),
   companyAddress: Yup.string().required('Company Address is required'),
   bcc: Yup.lazy((val) => {
     if (Array.isArray(val)) {
@@ -52,46 +58,46 @@ const validationSchema = Yup.object().shape({
   footerContent: Yup.string().required('Footer Content is required'),
 });
 
-// const ConfigurationEditor = ({ editorState, onEditorStateChange, onBlur }) => {
-//   return (
-//     <div className="configuration-editor">
-//       <div className="configuration-editor__container">
-//         <SMTPEditor
-//           editorState={editorState}
-//           wrapperClassName="configuration-editor__container-wrapper"
-//           editorClassName="configuration-editor__container-editor"
-//           onChange={onEditorStateChange}
-//           placeholder="Start typing here..."
-//           onBlur={onBlur}
-//         />
-//       </div>
-//     </div>
-//   );
-// };
-
 export function AddConfiguration() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading } = useSelector((state) => state.smtps);
+  const { loading } = useSelector((state) => state?.smtps);
+  const { brands } = useSelector((state) => state?.brands);
+
+  useEffect(() => {
+    (async () => {
+      await dispatch(getBrands());
+    })();
+  }, []);
+
   return (
     <Formik
       initialValues={initialValues}
       validationSchema={validationSchema}
       enableReinitialize
       onSubmit={async (values) => {
+        const brand = brands?.find((brand) => brand?.id === values?.brand);
         const finalValues = {
           host: values?.host,
           port: values?.port,
           httpsProtocol: values?.httpsProtocol,
           fromName: values?.fromName,
           fromEmail: values?.fromEmail,
+          username: values?.username,
+          password: values?.password,
           companyAddress: values?.companyAddress,
           bcc: `${values?.bcc}`,
+          cssStyle: '',
           headerContent: values?.headerContent,
           signature: values?.signature,
           footerContent: values?.footerContent,
-          // TODO: Change brandIds once we have multiple brands
-          brandIds: ['1ac3fe50-d86a-420a-bb04-728a2b0c394a'],
+          brandSmtpConfigurations: [
+            {
+              brandId: brand?.id,
+              departmentId: brand?.departmentId,
+            },
+          ],
+          tenant: 'Admin',
         };
         await dispatch(addSMTP({ data: finalValues }));
         navigate('/admin/dashboard/settings/smtp');
@@ -114,6 +120,17 @@ export function AddConfiguration() {
                       type="switch"
                     />
                     <Input
+                      name="username"
+                      label="Username"
+                      placeholder="Enter SMTP Username"
+                    />
+                    <Input
+                      name="password"
+                      label="Password"
+                      type="password"
+                      placeholder="Enter SMTP Password"
+                    />
+                    <Input
                       name="fromName"
                       label="From - Name"
                       placeholder="Paul Elliott"
@@ -128,12 +145,21 @@ export function AddConfiguration() {
                       label="Company Address"
                       placeholder="1244, Reppert Coal Road, Southfield"
                     />
-                    {/* TODO: Add Brands Here Once Done */}
                     <MultiSelect
                       name="bcc"
                       label="BCC"
                       placeholder="Enter Email Addresses"
                       mode="tags"
+                    />
+                    <Input
+                      type="select"
+                      name="brand"
+                      label="Brand"
+                      placeholder="Select Brand"
+                      options={brands?.map((brand) => ({
+                        label: brand?.name,
+                        value: brand?.id,
+                      }))}
                     />
                   </div>
                   <Button className="mt-[32px]" htmlType="submit">

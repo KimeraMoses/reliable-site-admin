@@ -1,4 +1,4 @@
-.ur-icon{
+.ur-icon {
   width: 20px;
   height: 20px;
   background-color: #ccc;
@@ -17,7 +17,7 @@
   left: 0;
   top: 0;
 }
-.notification-block + .notification-block{
+.notification-block + .notification-block {
   margin-top: 32px;
 }
 .book-icon {
@@ -30,33 +30,33 @@
   justify-content: center;
   margin-right: 16px;
 }
-.book-block{
+.book-block {
   border-radius: 8px;
   margin-top: 16px;
 }
-.bg-txt{
+.bg-txt {
   background-color: #323248;
   border-radius: 4px;
   padding: 4px 8px;
   display: inline-block;
   text-align: center;
 }
-.book-status span{  
+.book-status span {
   border-radius: 4px;
   padding: 4px 8px;
-  background-color: #212E48;
-  color: #3699FF;
+  background-color: #212e48;
+  color: #3699ff;
 }
-.btn-wrap .ant-btn{
-    height: auto;
+.btn-wrap .ant-btn {
+  height: auto;
 }
-.img-single{
+.img-single {
   border-radius: 50%;
   overflow: hidden;
   width: 20px;
   height: 20px;
 }
-.img-single + .img-single{
+.img-single + .img-single {
   margin-left: -7px;
 }
 .imgs {
@@ -77,7 +77,7 @@
   position: relative;
 }
 .notification-block::before {
-  content: "";
+  content: '';
   position: absolute;
   top: 45px;
   height: 100%;
@@ -87,23 +87,23 @@
 }
 .notifications-wrap {
   overflow: auto;
-  max-height: calc(100% - 180px);
+  // max-height: calc(100%);
 }
-.notifications {  
-  transform: translateX(100%);  
-  transition: transform .5s;
+.notifications {
+  transform: translateX(100%);
+  transition: transform 0.5s;
   height: 100%;
 }
 .notificationShow {
   & .notifications {
-    transform: translateX(0);  
+    transform: translateX(0);
   }
 }
 
 .notificationShow {
   position: relative;
   &:before {
-    content: "";
+    content: '';
     position: absolute;
     top: 0;
     left: 0;
@@ -113,9 +113,13 @@
   }
 }
 @-webkit-keyframes slide {
-  100% { transform: translateX(0%); }
+  100% {
+    transform: translateX(0%);
+  }
 }
 
 @keyframes slide {
-  100% { transform: translateX(0%); }
+  100% {
+    transform: translateX(0%);
+  }
 }

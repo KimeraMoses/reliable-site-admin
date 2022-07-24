@@ -8,7 +8,15 @@ import { checkModule } from 'lib/checkModule';
 import { useEffect, useState } from 'react';
 import { getProducts } from 'store';
 import { Form, Formik } from 'formik';
-import { Add, Delete } from './sections';
+import {
+  Add,
+  Cancel,
+  Delete,
+  Renew,
+  Suspend,
+  Terminate,
+  Unsuspend,
+} from './sections';
 import { getCategories } from 'store';
 
 export const PSList = () => {
@@ -60,12 +68,22 @@ export const PSList = () => {
       render: (lineItems) => {
         return (
           <div className="flex flex-col gap-[16px]">
-            {lineItems?.map((item) => (
-              <div className="flex flex-col gap-[4px]">
-                <div className="text-white text-[14px]">{item?.name}</div>
-                <div className="text-[#474761] text-[12px]">${item?.price}</div>
-              </div>
-            ))}
+            {lineItems?.map((item, idx) => {
+              if (idx >= 3) {
+                return null;
+              } else {
+                return (
+                  <div className="flex flex-col gap-[4px]">
+                    <div className="text-white text-[14px]">
+                      {item?.lineItem}
+                    </div>
+                    <div className="text-[#474761] text-[12px]">
+                      ${item?.price}
+                    </div>
+                  </div>
+                );
+              }
+            })}
           </div>
         );
       },
@@ -89,19 +107,46 @@ export const PSList = () => {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      render: (status) => (
-        <div
-          className={`${
-            status === 0
-              ? 'bg-[#392F28] text-[#FFA800]'
-              : status === 1
-              ? 'bg-[#1C3238] text-[#0BB783]'
-              : 'bg-[#3A2434] text-[#F64E60]'
-          } px-[8px] py-[4px] w-[fit-content] rounded-[4px]`}
-        >
-          {status === 0 ? 'PENDING' : status === 1 ? 'CONFIRMED' : 'CANCELLED'}
-        </div>
-      ),
+      render: (status) => {
+        let color = '';
+        let text = '';
+        switch (status) {
+          case 0:
+            color = 'bg-[#392F28] text-[#FFA800]';
+            text = 'PENDING';
+            break;
+          case 1:
+            color = 'bg-[#1C3238] text-[#0BB783]';
+            text = 'CONFIRMED';
+            break;
+          case 2:
+            color = 'bg-[#3A2434] text-[#F64E60]';
+            text = 'CANCELLED';
+            break;
+          case 3:
+            color = 'bg-[#1C3238] text-[#0BB783]';
+            text = 'RENEWED';
+            break;
+          case 4:
+            color = 'bg-[#3A2434] text-[#F64E60]';
+            text = 'SUSPENDED';
+            break;
+          case 5:
+            color = 'bg-[#3A2434] text-[#F64E60]';
+            text = 'TERMINATED';
+            break;
+          default:
+            color = '';
+            text = 'UNKNOWN';
+        }
+        return (
+          <div
+            className={`${color} px-[8px] py-[4px] w-[fit-content] rounded-[4px]`}
+          >
+            {text}
+          </div>
+        );
+      },
     },
   ];
 
@@ -118,11 +163,29 @@ export const PSList = () => {
 
   const [showAdd, setShowAdd] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
+  const [showCancel, setShowCancel] = useState(false);
+  const [showSuspend, setShowSuspend] = useState(false);
+  const [showTerminate, setShowTerminate] = useState(false);
+  const [showRenew, setShowRenew] = useState(false);
+  const [showUnsuspend, setShowUnsuspend] = useState(false);
   const [record, setRecord] = useState(null);
   return (
     <div className="p-[40px]">
       <Add show={showAdd} setShow={setShowAdd} />
       <Delete show={showDelete} setShow={setShowDelete} record={record} />
+      <Cancel show={showCancel} setShow={setShowCancel} record={record} />
+      <Suspend show={showSuspend} setShow={setShowSuspend} record={record} />
+      <Terminate
+        show={showTerminate}
+        setShow={setShowTerminate}
+        record={record}
+      />
+      <Renew show={showRenew} setShow={setShowRenew} record={record} />
+      <Unsuspend
+        show={showUnsuspend}
+        setShow={setShowUnsuspend}
+        record={record}
+      />
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
         <Formik initialValues={{ selectFilter: 'name' }}>
           {({ values }) => (
@@ -148,14 +211,53 @@ export const PSList = () => {
                   </Button>
                 )}
                 deleteAction={(record) => (
-                  <Button
-                    onClick={() => {
-                      setRecord(record);
-                      setShowDelete(true);
-                    }}
-                  >
-                    Delete
-                  </Button>
+                  <>
+                    <Button
+                      onClick={() => {
+                        setRecord(record);
+                        setShowDelete(true);
+                      }}
+                    >
+                      Delete
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setRecord(record);
+                        if (record?.status === 4) {
+                          setShowUnsuspend(true);
+                        } else {
+                          setShowSuspend(true);
+                        }
+                      }}
+                    >
+                      {record?.status === 4 ? 'Un-Suspend' : 'Suspend'}
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setRecord(record);
+                        setShowTerminate(true);
+                      }}
+                    >
+                      Terminate
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setRecord(record);
+                        setShowRenew(true);
+                      }}
+                    >
+                      Renew
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        setRecord(record);
+                        setShowCancel(true);
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                    {/* <Button>Termiate</Button> */}
+                  </>
                 )}
                 permissions={permissions}
                 customAdditionalBody={

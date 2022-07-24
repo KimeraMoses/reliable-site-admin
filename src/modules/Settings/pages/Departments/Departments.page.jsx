@@ -12,6 +12,7 @@ import {
   EditDepartment,
   AdminAssigned,
 } from './sections';
+import { getBrands } from 'store';
 
 const Brands = () => {
   const [addModalShow, setAddModalShow] = useState(false);
@@ -26,11 +27,13 @@ const Brands = () => {
   useEffect(() => {
     (async () => {
       await dispatch(getDepartments());
+      await dispatch(getBrands());
       await dispatch(getUsers());
     })();
   }, [dispatch]);
 
   const { departments, loading } = useSelector((state) => state.departments);
+  const { brands } = useSelector((state) => state?.brands);
   const { users } = useSelector((state) => state?.users);
 
   const { t } = useTranslation('/Settings/ns');
@@ -45,6 +48,15 @@ const Brands = () => {
       title: t('name'),
       dataIndex: 'name',
       key: 'name',
+    },
+    {
+      title: 'Brand',
+      dataIndex: 'brandId',
+      key: 'brandId',
+      render: (text) => {
+        const brand = brands?.find((brand) => brand?.id === text);
+        return <>{brand?.name}</>;
+      },
     },
     {
       title: t('adminAssignedTable'),

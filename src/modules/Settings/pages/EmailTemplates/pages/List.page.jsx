@@ -1,9 +1,10 @@
 import { Button } from 'antd';
 import { Table } from 'components';
 import { checkModule } from 'lib/checkModule';
-import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { getEmailTemplate } from 'store';
 import { Delete } from './sections';
 
 const columns = [
@@ -17,7 +18,16 @@ const columns = [
     title: 'Configuration',
     dataIndex: 'smtpConfigurationId',
     key: 'smtpConfigurationId',
-    width: '70%',
+  },
+  {
+    title: 'Event',
+    dataIndex: 'event',
+    key: 'event',
+  },
+  {
+    title: 'Added By',
+    dataIndex: 'addedBy',
+    key: 'addedBy',
   },
   {
     title: 'Status',
@@ -55,8 +65,12 @@ export const List = () => {
   const { emailTemplates, loading } = useSelector(
     (state) => state.emailTemplates
   );
+
+  console.log(emailTemplates);
   const { smtps } = useSelector((state) => state?.smtps);
+  const { users } = useSelector((state) => state?.users);
   const smtpsLoading = useSelector((state) => state?.smtps?.loading);
+  const usersLoading = useSelector((state) => state?.users?.loading);
   let data = [];
   emailTemplates.forEach((emailTemplate) => {
     data.push({
@@ -66,9 +80,32 @@ export const List = () => {
       smtpConfigurationId:
         smtps.find((x) => x.id === emailTemplate?.smtpConfigurationId)?.host ||
         'N/A',
+      event: [
+        'General',
+        'Email Confirmation',
+        'Email OTP',
+        'Product Cancellation',
+        'Reset Password',
+        'Ticket Update',
+        'Ticket Create',
+        'Ticket Assignment',
+        'Orders',
+        'Invoice',
+        'Product Status Updated',
+      ]?.find((evt, idx) => idx === emailTemplate?.emailTemplateType),
+      addedBy: emailTemplate?.isSystem
+        ? 'System'
+        : users?.find((x) => x?.id === emailTemplate?.createdBy)?.fullName ||
+          'N/A',
+      isSystem: emailTemplate?.isSystem,
       status: emailTemplate?.status,
     });
   });
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getEmailTemplate(null));
+  }, [dispatch]);
 
   return (
     <div className="m-[40px] p-[40px] bg-[#1E1E2D] rounded-[8px]">
@@ -84,7 +121,7 @@ export const List = () => {
             navigate('/admin/dashboard/settings/email-templates/template/add');
           },
         }}
-        loading={loading || smtpsLoading}
+        loading={loading || smtpsLoading || usersLoading}
         editAction={(record) => (
           <Button
             onClick={() => {
@@ -98,14 +135,20 @@ export const List = () => {
         )}
         deleteAction={(record) => {
           return (
-            <Button
-              onClick={() => {
-                setRecord(record);
-                setShow(true);
-              }}
-            >
-              Delete
-            </Button>
+            <>
+              {record?.isSystem ? (
+                <></>
+              ) : (
+                <Button
+                  onClick={() => {
+                    setRecord(record);
+                    setShow(true);
+                  }}
+                >
+                  Delete
+                </Button>
+              )}
+            </>
           );
         }}
       />

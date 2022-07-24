@@ -50,9 +50,22 @@ export const CategoryList = () => {
       dataIndex: 'name',
       key: 'name',
       width: 600,
-      // render: () => {
-      //   return <div className="text-sm">Category Name</div>;
-      // },
+      render: (text, record) => {
+        return (
+          <div className="flex items-center gap-[12px]">
+            {record?.categoryIcon ? (
+              <div className="h-[45px] w-[45px]">
+                <img
+                  src={record?.categoryIcon}
+                  alt="category"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+            ) : null}
+            <div>{text}</div>
+          </div>
+        );
+      },
     },
     {
       title: 'Articles Under Category',
@@ -106,7 +119,6 @@ export const CategoryList = () => {
             text: 'Add Category',
             onClick: () => setAddModalShow(true),
           }}
-          // handleDateRange={() => {}}
           editAction={(record) => (
             <Button
               onClick={async () => {

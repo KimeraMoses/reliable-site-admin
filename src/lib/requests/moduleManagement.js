@@ -6,7 +6,7 @@ export const getAppModulesConfig = () => ({
 });
 
 // UserModuleManagement End-Points
-const UserModuleManagement = 'UserModuleManagement';
+const UserModuleManagement = 'Users';
 // Get User Modules
 export const getUserModulesConfig = (userId) => ({
   url: `/api/usermodulemanagement/getmodulebyuser/${userId}`,

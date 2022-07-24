@@ -23,7 +23,7 @@ const getInputEl = ({ options, name, placeholder, type, darkBg }) => {
         <Field
           name={name}
           placeholder={placeholder}
-          className={`h-[52px] w-[60%] text-[#92928f] placeholder:text-[#92928f] focus-visible:outline-none ${
+          className={`h-[52px] w-[60%] pl-[12px] text-[#92928f] placeholder:text-[#92928f] focus-visible:outline-none ${
             darkBg ? 'bg-[#171723]' : 'bg-[transparent]'
           }`}
         />
@@ -34,7 +34,7 @@ const getInputEl = ({ options, name, placeholder, type, darkBg }) => {
           name={name}
           type="number"
           placeholder={placeholder}
-          className={`h-[52px] w-[60%] text-[#92928f] placeholder:text-[#92928f] focus-visible:outline-none ${
+          className={`h-[52px] w-[60%] pl-[12px] text-[#92928f] placeholder:text-[#92928f] focus-visible:outline-none ${
             darkBg ? 'bg-[#171723]' : 'bg-[transparent]'
           }`}
         />
@@ -43,7 +43,7 @@ const getInputEl = ({ options, name, placeholder, type, darkBg }) => {
       return (
         <input
           placeholder={placeholder}
-          className="h-[52px] w-[60%] text-[#92928f] placeholder:text-[#92928f] bg-[transparent] focus-visible:outline-none"
+          className="h-[52px] w-[60%] text-[#92928f] pl-[12px] placeholder:text-[#92928f] bg-[transparent] focus-visible:outline-none"
           readOnly
         />
       );
@@ -83,13 +83,13 @@ export const EmailBodyInput = ({
 }) => {
   return (
     <div
-      className={`flex gap-[20px] items-center ${
+      className={`grid grid-cols-[1fr_4fr] items-center ${
         darkBg
           ? 'bg-[#171723] border-b-[1px] border-b-[#323248] border-dashed'
           : 'bg-[#28283a]'
       }`}
     >
-      <h6 className="px-[32px] w-[20%] text-white whitespace-nowrap">
+      <h6 className="pl-[32px] w-[20%] text-white whitespace-nowrap">
         {label}
       </h6>
       {getInputEl({ options, name, placeholder, type, darkBg })}

@@ -11,6 +11,6 @@ export const getMaintenanceSettingsConfig = () => ({
 
 // Post Maintenance Settings
 export const postMaintenanceSettingsConfig = () => ({
-  url: `/api/maintenance`,
+  url: `/api/maintenance/togglemaintenancemode`,
   config: maintenanceSettingsConfig('Update'),
 });

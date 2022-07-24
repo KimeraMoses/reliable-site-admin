@@ -4,12 +4,13 @@ import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import moment from 'moment';
+import { Formik, Form } from 'formik';
 
 import { checkModule } from 'lib/checkModule';
 import { getTransactions } from 'store';
 import { Table, DateRangePicker } from 'components';
 import { getName } from 'lib';
-import { Formik, Form } from 'formik';
+import { Details } from './sections/Details.section';
 
 export const Transactions = () => {
   const { t } = useTranslation('/Bills/ns');
@@ -22,7 +23,9 @@ export const Transactions = () => {
   const dispatch = useDispatch();
   const { loading, transactions } = useSelector((state) => state?.transactions);
   useEffect(() => {
-    dispatch(getTransactions());
+    (async () => {
+      await dispatch(getTransactions());
+    })();
   }, []);
 
   // Set Columns
@@ -145,12 +148,16 @@ export const Transactions = () => {
     }
   }, [transactions]);
 
+  const [transaction, setTransaction] = useState(null);
+  const [show, setShow] = useState(false);
+
   return (
     <Formik initialValues={{ dateRange: [] }}>
       {() => {
         return (
           <Form>
             <div className="p-[40px]">
+              <Details show={show} setShow={setShow} details={transaction} />
               <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
                 <Table
                   columns={columns}
@@ -171,6 +178,19 @@ export const Transactions = () => {
                       />
                     </>
                   }
+                  onRow={(record, rowIndex) => {
+                    return {
+                      onClick: (event) => {
+                        event.preventDefault();
+                        setShow(true);
+                        setTransaction(record);
+                      }, // click row
+                      onDoubleClick: (event) => {}, // double click row
+                      onContextMenu: (event) => {}, // right button click row
+                      onMouseEnter: (event) => {}, // mouse enter row
+                      onMouseLeave: (event) => {}, // mouse leave row
+                    };
+                  }}
                   t={t}
                 />
               </div>

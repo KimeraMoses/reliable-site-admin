@@ -1,21 +1,51 @@
 import { getConfig } from 'lib';
 
-const ordersConfig = (action) =>
-    getConfig({ module: 'Users', action });
+const ordersConfig = (action) => getConfig({ module: 'Users', action });
 
 const prefix = `/api/v1/admin/orders`;
+const otprefix = '/api/v1/admin/ordertemplates';
 
 export const getOrdersConfig = () => ({
-    url: `${prefix}/search`,
-    defaultData: {
-        advancedSearch: {
-            fields: [],
-            keyword: '',
-        },
-        keyword: '',
-        pageNumber: 0,
-        pageSize: 0,
-        orderBy: ['']
+  url: `${prefix}/search`,
+  defaultData: {
+    advancedSearch: {
+      fields: [],
+      keyword: '',
     },
-    config: ordersConfig('View'),
+    keyword: '',
+    pageNumber: 0,
+    pageSize: 0,
+    orderBy: [''],
+  },
+  config: ordersConfig('View'),
+});
+
+export const createOrderConfig = () => ({
+  url: `${prefix}`,
+  config: ordersConfig('Create'),
+});
+
+export const getOrderTemplatesConfig = () => ({
+  url: `${otprefix}/search`,
+  defaultData: {
+    advancedSearch: {
+      fields: [],
+      keyword: '',
+    },
+    keyword: '',
+    pageNumber: 0,
+    pageSize: 0,
+    orderBy: [''],
+  },
+  config: ordersConfig('View'),
+});
+
+export const createOrderTemplateConfig = () => ({
+  url: `${otprefix}`,
+  config: ordersConfig('Create'),
+});
+
+export const editOrderTemplateConfig = ({ id }) => ({
+  url: `${otprefix}/${id}`,
+  config: ordersConfig('Update'),
 });

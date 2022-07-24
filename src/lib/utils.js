@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { EditorState, ContentState, convertFromHTML } from 'draft-js';
 import { browserName, browserVersion } from 'react-device-detect';
+import moment from 'moment';
+import * as XLSX from 'xlsx';
+import * as FileSaver from 'file-saver';
 
 export const getGroupModules = ({ appModules = [], groupModules = [] }) => {
   const groupNames = groupModules?.map((el) => el?.name);
@@ -290,6 +293,51 @@ export const getNotificationType = ({ type }) => {
   }
 };
 
+export const getNotificationLink = ({ type }) => {
+  switch (type) {
+    case 0:
+      return '/admin/dashboard/billing/clients/list/show';
+    case 1:
+      return '/admin/dashboard/support/tickets/list';
+    case 2:
+      return '/admin/dashboard/support/tickets/list';
+    case 3:
+      return '/admin/dashboard/support/tickets/list';
+    case 4:
+      return '/admin/dashboard/billing/orders/your-orders/list';
+    case 5:
+      return '/admin/dashboard/billing/orders/your-orders/list';
+    case 6:
+      return '/admin/dashboard/billing/orders/your-orders/list';
+    case 7:
+      return '/admin/dashboard/support/tickets/list';
+    case 8:
+      return '/admin/dashboard/support/tickets/list';
+    case 9:
+      return '#';
+    case 10:
+      return '#';
+    case 11:
+      return '/admin/dashboard/billing/invoices/list/show';
+    case 12:
+      return '/admin/dashboard/billing/invoices/list/show';
+    case 13:
+      return '#';
+    case 14:
+      return '#';
+    case 15:
+      return '/admin/dashboard/knowledge-base/feedback';
+    case 16:
+      return '/admin/dashboard/knowledge-base/feedback';
+    case 17:
+      return '/admin/dashboard/knowledge-base/feedback';
+    case 18:
+      return '/admin/dashboard/billing/products-services/list/show';
+    default:
+      return '#';
+  }
+};
+
 export const getNotificationTarget = ({ target }) => {
   switch (target) {
     case 0:
@@ -325,5 +373,68 @@ export const genrateFirstLetterName = (value) => {
       name = userN[0].charAt(0) + userN[1].charAt(0);
     }
     return name;
+  }
+};
+
+export const exportToExcel = (object) => {
+  const fileType = 'text/csv;charset=utf-8';
+  const fileExtension = '.csv';
+
+  // const json = JSON.stringify(object);
+  const ws = XLSX.utils.json_to_sheet(object);
+
+  const wb = {
+    Sheets: { data: ws },
+    SheetNames: [`data`],
+  };
+
+  const excelBuffer = XLSX.write(wb, { bookType: 'csv', type: 'array' });
+  const data = new Blob([excelBuffer], { type: fileType });
+  FileSaver.saveAs(
+    data,
+    `Report-${moment().format('MM-DD-YYYY [at] HH:mm A')}` + fileExtension
+  );
+};
+
+// Get Template Variables
+export const getTemplateVariables = (templateType) => {
+  const variables = {
+    EmailConfirmation:
+      '[fullName], [company], [address],[userName],[email],[emailVerificationUri]',
+    EmailOTP: '[fullName], [company], [address],[otpcode],[userName]',
+    General: '[userName],[email],[company],[address],[fullname]',
+    Invoice: '[fullName], [company], [address],[invoicelink]',
+    Orders: '[fullName], [company], [address],[orderlink]',
+    ProductCancellation: '[fullName], [company], [address],[productlink]',
+    ProductStatusUpdated: '[fullName], [company], [address],[productlink]',
+    ResetPassword:
+      '[fullName], [company], [address],[userName],[resetPasswordUri]',
+    TicketAssignment: '[fullName], [company], [address],[ticketlink]',
+    TicketCreated: '[fullName], [company], [address],[ticketlink]',
+    TicketUpdated: '[fullName], [company], [address],[ticketlink]',
+  };
+  switch (templateType) {
+    case 0:
+      return variables?.General;
+    case 1:
+      return variables?.EmailConfirmation;
+    case 2:
+      return variables?.EmailOTP;
+    case 3:
+      return variables?.ProductCancellation;
+    case 4:
+      return variables?.ResetPassword;
+    case 5:
+      return variables?.TicketUpdated;
+    case 7:
+      return variables?.TicketAssignment;
+    case 8:
+      return variables?.Orders;
+    case 9:
+      return variables?.Invoice;
+    case 10:
+      return variables?.ProductStatusUpdated;
+    default:
+      return variables?.General;
   }
 };

@@ -7,7 +7,6 @@ import { Input, Button } from 'components';
 import './FeedbackDetails.styles.scss';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getArticleByID } from 'store';
 import { getArticleFeedbackByID } from 'store';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -15,6 +14,8 @@ import { toast } from 'react-toastify';
 import { createTicket, getUsers, getDepartments } from 'store';
 import { createArticleFeedbackComment } from 'store/Actions/articleFeedbackComments';
 import { createArticleFeedbackCommentReply } from 'store/Actions/articleFeedbackCommentReplies';
+import { MarkAsReviewed } from '../common-sections/MarkAsReviewed.section';
+import { getClients } from 'store';
 
 const CommentCard = ({
   imgSrc,
@@ -57,11 +58,6 @@ const CommentCard = ({
                 <h5 className="text-sm text-[#FFFFFF]">
                   {userFullName || 'Anonymous'}
                 </h5>
-                {/* {author && (
-                  <p className="bg-[#3A2434] py-[4px] px-[8px] text-[#F64E60] rounded-[8px] text-xs">
-                    Author
-                  </p>
-                )} */}
               </div>
               <p className="text-xs text-[#474761]">
                 {createdOn
@@ -70,7 +66,7 @@ const CommentCard = ({
               </p>
             </div>
           </div>
-          {!reply && (
+          {/* {!reply && (
             <div
               className={`cursor-pointer text-base hover:text-[#3699FF]
               ${active ? 'text-[#3699FF]' : 'text-[#474761]'}
@@ -79,7 +75,7 @@ const CommentCard = ({
             >
               Reply
             </div>
-          )}
+          )} */}
         </div>
         <div className="mt-[20px]">
           <p className=" text-base text-[#92928F]">{commentText}</p>
@@ -93,14 +89,10 @@ const CommentCard = ({
               onSubmit={async (values) => {
                 dispatch(
                   createArticleFeedbackCommentReply({
-                    // articleFeedbackId: params?.id,
                     commentText: values?.commentText,
-                    // articleFeedbackCommentParentReplyId:
-                    //   '3fa85f64-5717-4562-b3fc-2c963f66afa6',
                     articleFeedbackCommentId: id,
                   })
                 );
-                await dispatch(getArticleByID({ id: params?.articleId }));
                 await dispatch(getArticleFeedbackByID({ id: params?.id }));
                 setActive(false);
               }}
@@ -138,20 +130,20 @@ const CommentCard = ({
 
 export const FeedbackDetails = () => {
   const dispatch = useDispatch();
-  const { articleId, id } = useParams();
+  const { id } = useParams();
   useEffect(() => {
     (async () => {
-      await dispatch(getArticleByID({ id: articleId }));
       await dispatch(getArticleFeedbackByID({ id }));
       await dispatch(getUsers());
+      await dispatch(getClients());
       await dispatch(getDepartments());
     })();
   }, []);
 
-  const { article, loading } = useSelector((state) => state?.articles);
+  // const { article, loading } = useSelector((state) => state?.articles);
   const { departments } = useSelector((state) => state?.departments);
   const { articlesFeedback } = useSelector((state) => state?.articlesFeedback);
-  const { users } = useSelector((state) => state?.users);
+  const { users, clients } = useSelector((state) => state?.users);
   let usersData = [{ value: '', label: 'Select User' }];
   users?.forEach((user) => {
     usersData.push({
@@ -173,12 +165,14 @@ export const FeedbackDetails = () => {
   const departmentsLoading = useSelector(
     (state) => state?.departments?.loading
   );
-
   const navigate = useNavigate();
   const [imgError, setImgError] = useState(false);
+
+  const [show, setShow] = useState(false);
   return (
     <>
-      <Spin spinning={loading || feedbackLoading || ticketLoading}>
+      <Spin spinning={feedbackLoading || ticketLoading || departmentsLoading}>
+        <MarkAsReviewed show={show} setShow={setShow} />
         <div className="bg-[#1E1E2D] m-[40px] p-[32px] rounded-[8px]">
           <h6 className="text-white text-[20px]">
             Generate Ticket For This Feedback
@@ -257,16 +251,26 @@ export const FeedbackDetails = () => {
                       options={departmentsData}
                       type="select"
                       name="departmentId"
-                      label="departmentId"
+                      label="Department"
                     />
                   </div>
-                  <div>
+                  <div className="flex items-center gap-[12px]">
                     <Button
-                      type="ghost"
+                      type="primary"
                       htmlType="submit"
                       className="w-[fit_content] h-[55px] mt-[32px]"
                     >
                       Generate Ticket
+                    </Button>
+                    <Button
+                      type="ghost"
+                      htmlType="button"
+                      className="w-[fit_content] h-[55px] mt-[32px]"
+                      onClick={() => setShow(true)}
+                    >
+                      {articlesFeedback?.isReviewed
+                        ? 'Mark as Not Reviewed'
+                        : 'Mark as Reviewed'}
                     </Button>
                   </div>
                 </Form>
@@ -276,12 +280,12 @@ export const FeedbackDetails = () => {
         </div>
         <div className="m-[40px] p-[32px] bg-[#1E1E2D] rounded-[8px]">
           <div className="flex gap-[12px]">
-            {article?.imagePath && !imgError ? (
+            {articlesFeedback?.articleImage && !imgError ? (
               <img
                 className="w-[90px] rounded-[8px] object-cover"
                 onError={() => setImgError(true)}
-                src={article?.imagePath}
-                alt={article?.title}
+                src={articlesFeedback?.articleImage}
+                alt={articlesFeedback?.articleTitle}
               />
             ) : (
               <div className="w-[90px] rounded-[8px] object-cover border-1 border-blue-600 flex items-center justify-center text-white text-[16px] font-medium">
@@ -290,21 +294,33 @@ export const FeedbackDetails = () => {
             )}
             <div className="flex flex-col gap-[8px] ">
               <p className="text-[24px] text-[#FFFFFF] ">
-                {article?.title || 'No Title'}
+                {articlesFeedback?.articleTitle || 'No Title'}
               </p>
               <p className="text-[#474761] text-[14px]">
                 Created On{' '}
                 {articlesFeedback?.createdOn
                   ? moment(articlesFeedback?.createdOn).format('MM/DD/YYYY')
-                  : 'N/A'}
+                  : 'N/A'}{' '}
+                by{' '}
+                {clients?.find(
+                  (client) => client?.id === articlesFeedback?.createdBy
+                )?.fullName || 'Super Admin'}
+                &nbsp;
+                {articlesFeedback?.lastModifiedOn
+                  ? `and Updated on ${moment(
+                      articlesFeedback?.lastModifiedOn
+                    ).format('MM/DD/YYYY')}`
+                  : ''}
               </p>
             </div>
           </div>
           <div className="flex justify-between gap-[40px] mt-[40px]">
-            {article?.bodyText ? (
+            {articlesFeedback?.articleDescription ? (
               <p
                 className="text-base text-[#FFFFFF]"
-                dangerouslySetInnerHTML={{ __html: article?.bodyText }}
+                dangerouslySetInnerHTML={{
+                  __html: articlesFeedback?.articleDescription,
+                }}
               />
             ) : (
               <p className="text-base text-[#FFFFFF]">
@@ -329,7 +345,6 @@ export const FeedbackDetails = () => {
                     commentText: values?.commentText,
                   };
                   dispatch(createArticleFeedbackComment(final));
-                  await dispatch(getArticleByID({ id: articleId }));
                   await dispatch(getArticleFeedbackByID({ id }));
                 }
               }}
@@ -375,7 +390,7 @@ export const FeedbackDetails = () => {
                     imgSrc={image}
                     {...comment}
                   />
-                  {comment?.articleFeedbackCommentReplies ? (
+                  {/* {comment?.articleFeedbackCommentReplies ? (
                     comment?.articleFeedbackCommentReplies?.map((reply) => {
                       return (
                         <CommentCard
@@ -394,15 +409,10 @@ export const FeedbackDetails = () => {
                     })
                   ) : (
                     <></>
-                  )}
+                  )} */}
                 </>
               );
             })}
-            {/* <CommentCard imgTxt="P" />
-            <CommentCard imgSrc="/article.jpg" author />
-
-            <CommentCard imgTxt="P" reply />
-            <CommentCard imgTxt="P" /> */}
           </div>
         </div>
       </Spin>

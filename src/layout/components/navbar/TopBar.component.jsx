@@ -1,13 +1,22 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import UserTop from './UserTop.component';
 import Logo from './Logo.component';
-import { sidebarData } from '../SideBar/data';
+// import { sidebarData } from '../SideBar/data';
 import { Link, useLocation } from 'react-router-dom';
 import { Dropdown } from 'antd';
+import { useSidebarData } from '../SideBar/data';
 
-export function TopBar({ hide = false, hideSide, toggleSide, innerSubLinks, toggleNotification }) {
+export function TopBar({
+  hide = false,
+  hideSide,
+  toggleSide,
+  innerSubLinks,
+  toggleNotification,
+}) {
   const [active, setActive] = useState(null);
   const { pathname } = useLocation();
+
+  const sidebarData = useSidebarData();
 
   useEffect(() => {
     const activeLink = sidebarData.filter((sideItem) => {

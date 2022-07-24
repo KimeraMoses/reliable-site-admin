@@ -137,6 +137,16 @@ export function GeneralSettings() {
       label: 'VAT',
       type: 'number',
     },
+    {
+      name: 'enableClientRecaptcha',
+      label: 'Enable Client Recaptcha',
+      type: 'switch',
+    },
+    {
+      name: 'enableAdminRecaptcha',
+      label: 'Enable Admin Recaptcha',
+      type: 'switch',
+    },
   ];
 
   const { settings } = useSelector((state) => state?.appSettings);
@@ -162,6 +172,8 @@ export function GeneralSettings() {
     requestsPerIPClient: settings?.requestsPerIPClient,
     vat: settings?.vat,
     companyName: settings?.companyName,
+    enableClientRecaptcha: settings?.enableClientRecaptcha,
+    enableAdminRecaptcha: settings?.enableAdminRecaptcha,
   };
 
   return (

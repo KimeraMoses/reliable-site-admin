@@ -11,6 +11,7 @@ const InputType = ({
   options,
   disabled,
   rows,
+  customOnChange,
 }) => {
   switch (type) {
     case 'switch':
@@ -25,14 +26,20 @@ const InputType = ({
         </div>
       );
     case 'select':
+      const finalOptions = [...options, { label: placeholder, value: '' }];
       return (
         <select
           disabled={disabled}
           value={values[name]}
-          onChange={(e) => setFieldValue(name, e.target.value)}
+          onChange={(e) => {
+            setFieldValue(name, e.target.value);
+            if (customOnChange) {
+              customOnChange(e);
+            }
+          }}
           className="form-select appearance-none text-[14px] block w-full px-[16px] h-[52px] text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0 focus:bg-[#171723] focus:border-none focus:outline-none"
         >
-          {options?.map((option) => (
+          {finalOptions?.map((option) => (
             <option value={option?.value} key={option?.value}>
               {option?.label}
             </option>
@@ -73,6 +80,7 @@ export const Input = ({
   disabled,
   rows,
   className,
+  customOnChange,
 }) => {
   return (
     <Field name={name}>
@@ -93,6 +101,7 @@ export const Input = ({
             options={options}
             disabled={disabled}
             rows={rows}
+            customOnChange={customOnChange}
           />
           {meta.touched && meta.error && (
             <div className="error mt-[8px]">{meta.error}</div>
