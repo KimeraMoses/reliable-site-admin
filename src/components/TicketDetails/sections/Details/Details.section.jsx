@@ -13,6 +13,7 @@ import {
   Drafts,
 } from './sections';
 import { useLocation } from 'react-router-dom';
+import { getUsersByDepartmentID } from 'store';
 
 function useQuery() {
   const { search } = useLocation();
@@ -22,6 +23,7 @@ function useQuery() {
 export const Details = () => {
   const dispatch = useDispatch();
   const { detailsLoading, ticket } = useSelector((state) => state?.tickets);
+  const { usersLoading } = useSelector((state) => state?.departments);
   const { users, clients } = useSelector((state) => state?.users);
   let search = window.location.search;
   let params = new URLSearchParams(search);
@@ -42,6 +44,12 @@ export const Details = () => {
       }
     })();
   }, [id]);
+
+  useEffect(() => {
+    (async () => {
+      await dispatch(getUsersByDepartmentID({ id: ticket?.departmentId }));
+    })();
+  }, [ticket]);
 
   const goToViolation = (id) => {
     const violation = document.getElementById(id);
@@ -89,9 +97,9 @@ export const Details = () => {
   });
   return (
     <div className="ticket-wrap bg-[#1E1E2D] text-[#ffffff] p-[40px] rounded-[8px]">
-      {ticket === null && !detailsLoading ? (
+      {ticket === null && !detailsLoading && !usersLoading ? (
         <></>
-      ) : detailsLoading ? (
+      ) : detailsLoading || usersLoading ? (
         <div className="text-center">
           <Spin
             size="large"

@@ -75,9 +75,8 @@ export const Communication = () => {
 
   const { commentLoading } = useSelector((state) => state?.ticketComments);
   const { repliesLoading } = useSelector((state) => state?.ticketReplies);
-  const { users } = useSelector((state) => state?.users);
   const isSelected = (id) => selected.indexOf(id) !== -1;
-
+  const { departmentUsers } = useSelector((state) => state?.departments);
   const { id } = useParams();
   const dispatch = useDispatch();
 
@@ -98,7 +97,7 @@ export const Communication = () => {
       value: ticket?.assignedTo,
       options: () => {
         let usersData = [{ value: '', label: 'Select' }];
-        users.forEach((user) => {
+        departmentUsers?.forEach((user) => {
           usersData.push({
             value: user?.id,
             label: user?.fullName,

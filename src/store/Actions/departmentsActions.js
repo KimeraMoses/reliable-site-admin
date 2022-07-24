@@ -6,6 +6,7 @@ import {
   editDepartmentConfig,
   deleteDepartmentConfig,
   getDepartmentsByUserIdConfig,
+  getUsersByDepartmentIdConfig,
   assignDepartmentConfig,
   unAssignDepartmentConfig,
 } from 'lib';
@@ -15,6 +16,8 @@ import {
   getDepartmentsDispatch,
   setDepartmentsLoading,
   getUsersDepartmentsDispatch,
+  getDepartmentUsersDispatch,
+  setDepartmentsUsersLoading,
 } from 'store/Slices';
 
 // Get All Departments
@@ -45,6 +48,22 @@ export const getDepartmentsByUserId = ({ id }) => {
     } catch (e) {
       toast.error(getError(e));
       dispatch(setDepartmentsLoading(false));
+    }
+  };
+};
+
+// Get Departments By User ID
+export const getUsersByDepartmentID = ({ id }) => {
+  return async (dispatch) => {
+    dispatch(setDepartmentsUsersLoading(true));
+    try {
+      const { url, config } = getUsersByDepartmentIdConfig({ id });
+      const res = await axios.get(url, config);
+      dispatch(getDepartmentUsersDispatch(res?.data?.data));
+      dispatch(setDepartmentsUsersLoading(false));
+    } catch (e) {
+      toast.error(getError(e));
+      dispatch(setDepartmentsUsersLoading(false));
     }
   };
 };

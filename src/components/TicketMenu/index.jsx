@@ -4,11 +4,14 @@ import { AssignTicket, FollowUp, Status } from 'components/TicketModals';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { getTicketsByDepartmentId } from 'store';
-import { getTicketsByAdminID } from 'store';
-import { getTicketById } from 'store';
-import { getTickets } from 'store';
-import { editTicket } from 'store';
+import {
+  getTicketsByAdminID,
+  getUsersByDepartmentID,
+  getTicketById,
+  getTickets,
+  editTicket,
+  getTicketsByDepartmentId,
+} from 'store';
 // import { Icon } from 'antd';
 import './index.scss';
 
@@ -29,6 +32,7 @@ export const TicketMenu = ({ visible, options, record, x, y }) => {
       onClick: async (record) => {
         setAssign(true);
         await dispatch(getTicketById(record?.id));
+        await dispatch(getUsersByDepartmentID({ id: record?.departmentId }));
       },
     },
     {

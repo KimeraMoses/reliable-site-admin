@@ -23,6 +23,11 @@ export const getDepartmentsByUserIdConfig = ({ id }) => ({
   config: departmentsConfig('View'),
 });
 
+export const getUsersByDepartmentIdConfig = ({ id }) => ({
+  url: `/api/departments/getdepartmentusers/${id}`,
+  config: departmentsConfig('View'),
+});
+
 export const addDepartmentConfig = () => ({
   url: `${prefix}`,
   config: departmentsConfig('Create'),
