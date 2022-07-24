@@ -55,38 +55,38 @@ function UserTop({ toggleNotification }) {
     Authorization: `Bearer ${AuthToken}`,
   };
 
-  console.log("headers", headers);
+  // console.log("headers", headers);
 
-  console.log("IsOnline", online);
+  // console.log("IsOnline", online);
 
   //ONLINE STATUS
-  useEffect(() => {
-    const connect = new HubConnectionBuilder()
-      .withUrl(`${process.env.REACT_APP_BASEURL}/signalRHub`, {
-        skipNegotiation: true,
-        // transport: HttpTransportType.WebSockets,
-      })
-      .withAutomaticReconnect()
-      .build();
-    console.log(connect);
-    setConnection(connect);
-  }, []);
+  // useEffect(() => {
+  //   const connect = new HubConnectionBuilder()
+  //     .withUrl(`${process.env.REACT_APP_BASEURL}/signalRHub`, {
+  //       skipNegotiation: true,
+  //       transport: HttpTransportType.WebSockets,
+  //     })
+  //     .withAutomaticReconnect()
+  //     .build();
+  //   console.log(connect);
+  //   setConnection(connect);
+  // }, []);
 
-  useEffect(() => {
-    if (connection) {
-      connection
-        .start()
-        .then((result) => {
-          console.log("Connected!", result);
-          connection.on("ReceiveMessage", (message) => {
-            console.log("Message", message);
-          });
-        })
-        .catch((error) =>
-          console.log("Connection Failed!", error, error.status)
-        );
-    }
-  }, [connection]);
+  // useEffect(() => {
+  //   if (connection) {
+  //     connection
+  //       .start()
+  //       .then((result) => {
+  //         console.log("Connected!", result);
+  //         connection.on("ReceiveMessage", (message) => {
+  //           console.log("Message", message);
+  //         });
+  //       })
+  //       .catch((error) =>
+  //         console.log("Connection Failed!", error, error.status)
+  //       );
+  //   }
+  // }, [connection]);
 
   // const sendMessage = async () => {
   //   if (connection) await connection.send("SendMessage", inputText);
@@ -95,14 +95,14 @@ function UserTop({ toggleNotification }) {
 
   // const [notifications, setNotifications] = useState(false);
   const links = [
-    {
-      name: "Active Departments",
-      Icon: <Right fill={showDepartments ? "#3699ff" : "#494b74"} />,
-      onClick: () => {
-        setShowDepartments((dept) => !dept);
-      },
-      active: showDepartments,
-    },
+    // {
+    //   name: 'Active Departments',
+    //   Icon: <Right fill={showDepartments ? '#3699ff' : '#494b74'} />,
+    //   onClick: () => {
+    //     setShowDepartments((dept) => !dept);
+    //   },
+    //   active: showDepartments,
+    // },
     {
       name: "Account Settings",
       onClick: () => {
@@ -118,10 +118,10 @@ function UserTop({ toggleNotification }) {
       },
     },
     {
-      name: 'Sign Out',
+      name: "Sign Out",
       onClick: () => {
         dispatch(logout());
-        navigate('/admin/sign-in');
+        navigate("/admin/sign-in");
       },
     },
   ];

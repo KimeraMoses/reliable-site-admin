@@ -1,21 +1,23 @@
-import axiosMain from 'axios';
+import axiosMain from "axios";
 
 export const axios = axiosMain.create({
   baseURL: process.env.REACT_APP_BASEURL,
 });
 
 function setCurrentTokenState(tokenState) {
-  localStorage.setItem('AuthToken', JSON.stringify(tokenState));
+  console.log("tobe Saved", tokenState);
+  localStorage.setItem("AuthToken", JSON.stringify(tokenState));
 }
 
 function getCurrentTokenState() {
-  const AuthToken = localStorage.getItem('AuthToken');
+  const AuthToken = localStorage.getItem("AuthToken");
   const tokenObj = JSON.parse(AuthToken);
   return tokenObj;
 }
 
 function refreshToken() {
   const current = getCurrentTokenState();
+  console.log("Current Token", current);
   return axiosMain.post(
     `${process.env.REACT_APP_BASEURL}/api/tokens/refresh`,
     {
@@ -24,9 +26,9 @@ function refreshToken() {
     },
     {
       headers: {
-        'Content-type': 'application/json',
-        'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
-        tenant: 'admin',
+        "Content-type": "application/json",
+        "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
+        tenant: "admin",
       },
     }
   );
@@ -34,14 +36,14 @@ function refreshToken() {
 
 axios.interceptors.request.use(
   function (config) {
-    const AuthToken = localStorage.getItem('AuthToken');
+    const AuthToken = localStorage.getItem("AuthToken");
     const tokenObj = JSON.parse(AuthToken);
     const token = tokenObj?.token;
     config.headers = {
       ...config.headers,
-      'Content-type': 'application/json',
-      'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
-      tenant: 'admin',
+      "Content-type": "application/json",
+      "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
+      tenant: "admin",
       Authorization: `Bearer ${token}`,
     };
     return config;
@@ -63,6 +65,7 @@ axios.interceptors.response.use(
       try {
         refreshing_token = refreshing_token ? refreshing_token : refreshToken();
         let res = await refreshing_token;
+        console.log("Refresh token res", res, res?.data?.data);
         refreshing_token = null;
         if (res.data?.data?.token) {
           setCurrentTokenState(res?.data?.data);
