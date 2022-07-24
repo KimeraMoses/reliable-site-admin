@@ -118,11 +118,6 @@ export const UsersList = () => {
       dataIndex: 'email',
       key: 'email',
     },
-    // {
-    //   title: t('companyName'),
-    //   dataIndex: 'companyName',
-    //   key: 'companyName',
-    // },
     {
       title: t('createDate'),
       key: 'createdAt',
@@ -223,7 +218,6 @@ export const UsersList = () => {
             editAction={(record) => (
               <Button
                 onClick={() => {
-                  console.log(record);
                   setEditUser(record);
                   setEditModal(true);
                 }}
