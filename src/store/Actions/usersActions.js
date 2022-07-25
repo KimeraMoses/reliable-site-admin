@@ -14,8 +14,8 @@ import {
   addUserAppSettings,
   registerClientConfig,
   getSpecificConfig,
-} from 'lib';
-import { toast } from 'react-toastify';
+} from "lib";
+import { toast } from "react-toastify";
 import {
   getUser,
   getUserModule,
@@ -23,8 +23,8 @@ import {
   getSpecificUsersDispatch,
   getClientsDispatch,
   setUserLoading,
-} from 'store/Slices';
-import { getUserSettingsSlice } from 'store/Slices/usersSlice';
+} from "store/Slices";
+import { getUserSettingsSlice } from "store/Slices/usersSlice";
 
 // Get All Admin Users
 export const getUsers = () => {
@@ -33,11 +33,13 @@ export const getUsers = () => {
     try {
       const { url, config } = getUsersConfig();
       const res = await axios.get(url, config);
+      console.log("get user res", res);
       dispatch(getUsersDispatch(res?.data?.data));
       dispatch(setUserLoading(false));
     } catch (e) {
       toast.error(getError(e));
       dispatch(setUserLoading(false));
+      console.log("get users errrrr", e);
     }
   };
 };
@@ -85,7 +87,7 @@ export const addUser = (data) => {
         const { url, config } = getUsersConfig();
         const res = await axios.get(url, config);
         dispatch(getUsers(res?.data?.data));
-        toast.success('User Added Successfully');
+        toast.success("User Added Successfully");
       }
     } catch (e) {
       toast.error(getError(e));
@@ -106,7 +108,7 @@ export const addClientUser = (data) => {
         const { url, config } = getClientsConfig();
         const res = await axios.get(url, config);
         dispatch(getClients(res?.data?.data));
-        toast.success('Client Added Successfully');
+        toast.success("Client Added Successfully");
       }
     } catch (e) {
       toast.error(getError(e));
@@ -120,6 +122,7 @@ export const addClientUser = (data) => {
 export const updateUser = (id, data) => {
   return async (dispatch) => {
     dispatch(setUserLoading(true));
+    console.log("updated user", data);
     try {
       const { url, config } = updateUserProfileByIDConfig(id);
       const res = await axios.put(url, data, config);
@@ -127,6 +130,7 @@ export const updateUser = (id, data) => {
       if (res.status === 200) {
         const { url, config } = getUserConfig(id);
         const res = await axios.get(url, config);
+        console.log("update user res", res);
         dispatch(getUser(res?.data?.data));
         // If Get User Done Then Get All Users
         if (res.status === 200) {
@@ -134,10 +138,11 @@ export const updateUser = (id, data) => {
           const res = await axios.get(url, config);
           dispatch(getUsers(res?.data?.data));
         }
-        toast.success('User Updated Successfully');
+        toast.success("User Updated Successfully");
       }
     } catch (e) {
       toast.error(getError(e));
+      console.log("Update err", e);
     } finally {
       dispatch(setUserLoading(false));
     }
@@ -170,7 +175,7 @@ export const editUserPermissions = ({ permission, uid }) => {
         const updateObj = {
           name: permission?.name,
           permissionDetail: JSON.stringify(permission?.permissionDetail),
-          tenant: 'Admin',
+          tenant: "Admin",
           isActive: true,
           adminGroupId: permission?.adminGroupId,
         };
@@ -180,7 +185,7 @@ export const editUserPermissions = ({ permission, uid }) => {
         const createObj = {
           name: permission?.name,
           permissionDetail: JSON.stringify(permission?.permissionDetail),
-          tenant: 'Admin',
+          tenant: "Admin",
           isActive: true,
           userId: uid,
         };
@@ -224,7 +229,7 @@ export const updateUserSettings = ({ data }) => {
         const { url, config } = getUserAppSettingsConfig(data?.userId);
         const res = await axios.get(url, config);
         dispatch(getUserSettingsSlice(res?.data?.data));
-        toast.success('User Settings Updated Successfully');
+        toast.success("User Settings Updated Successfully");
       }
     } catch (e) {
       toast.error(getError(e));

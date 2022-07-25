@@ -1,29 +1,68 @@
 // import { Switch } from 'antd';
 // import { Input } from 'components';
 // import { Formik } from 'formik';
-import { useOutside } from 'hooks';
-import { Right } from 'icons';
-import React, { useRef, useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useMediaQuery } from 'react-responsive';
-import { useNavigate } from 'react-router-dom';
-import { logout } from 'store/Slices/authSlice';
-import { Departments } from './Departments.component';
-import UserName from './UserProfileCard/UserName';
-import { getNotificationss, notificationsRead } from 'store';
-import './UserTop.css';
+import { HubConnectionBuilder, HttpTransportType } from "@microsoft/signalr";
+import { useOutside } from "hooks";
+import React, { useRef, useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useMediaQuery } from "react-responsive";
+import { useNavigate } from "react-router-dom";
+import { logout } from "store/Slices/authSlice";
+import { Departments } from "./Departments.component";
+import UserName from "./UserProfileCard/UserName";
+import { getNotificationss, notificationsRead } from "store";
+
+import "./UserTop.css";
 
 function UserTop({ toggleNotification }) {
+  const [connection, setConnection] = useState(null);
+  const AuthToken = useSelector((state) => state.auth.token);
   const [dropdown, setDropdown] = useState(false);
   const [showDepartments, setShowDepartments] = useState(false);
   const { user, isLoggedIn } = useSelector((state) => state.auth);
   const { notifications } = useSelector((state) => state?.notifications);
   const [imgError, setImgError] = useState(false);
   const lessThanDesktop = useMediaQuery({
-    query: '(max-width: 900px)',
+    query: "(max-width: 900px)",
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const isOnline = window.navigator.onLine;
+
+  // ONLINE STATUS
+
+  useEffect(() => {
+    const connect = new HubConnectionBuilder()
+      .withUrl(`${process.env.REACT_APP_BASEURL}/api/ws/signalRHub`, {
+        accessTokenFactory: () => {
+          return AuthToken;
+        },
+        withCredentials: false,
+        transport: HttpTransportType.LongPolling,
+        headers: {
+          "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
+          tenant: "admin",
+          Authorization: `Bearer ${AuthToken}`,
+        },
+      })
+      .withAutomaticReconnect()
+      .build();
+    setConnection(connect);
+  }, [AuthToken]);
+
+  useEffect(() => {
+    if (connection) {
+      connection.start();
+      // .then(() => {
+      //   console.log("Connected!", connection);
+      //   connection.on("ReceiveMessage", (message) => {
+      //     console.log("Message", message);
+      //   });
+      // })
+      // .catch((error) => console.log("Connection Failed!", error));
+    }
+  }, [connection]);
 
   // const [notifications, setNotifications] = useState(false);
   const links = [
@@ -36,24 +75,24 @@ function UserTop({ toggleNotification }) {
     //   active: showDepartments,
     // },
     {
-      name: 'Account Settings',
+      name: "Account Settings",
       onClick: () => {
         setDropdown((dropdownValue) => !dropdownValue);
-        navigate('/admin/dashboard/account-settings/general');
+        navigate("/admin/dashboard/account-settings/general");
       },
     },
     {
-      name: 'Notifications',
+      name: "Notifications",
       onClick: () => {
         setDropdown((dropdownValue) => !dropdownValue);
         handleNotification();
       },
     },
     {
-      name: 'Sign Out',
+      name: "Sign Out",
       onClick: () => {
         dispatch(logout());
-        navigate('/admin/sign-in');
+        navigate("/admin/sign-in");
       },
     },
   ];
@@ -100,7 +139,11 @@ function UserTop({ toggleNotification }) {
         visible={notifications}
         onClose={() => setNotifications(false)}
       /> */}
-      <div className="h-12 w-12 rounded-lg border-2 border-[#3699FF] p-1 userName">
+      <div
+        className={`h-12 w-12 rounded-lg border-2 border-[#3699FF] p-1 userName ${
+          isOnline ? "isOnline" : "isOffline"
+        }`}
+      >
         {user?.base64Image ? (
           <img
             src={user?.base64Image}
@@ -115,13 +158,13 @@ function UserTop({ toggleNotification }) {
         {/* Dropdown */}
         <div
           className={`w-[278px] bg-[#1E1E2D] ${
-            dropdown ? '' : 'hidden'
+            dropdown ? "" : "hidden"
           } rounded-lg text-gray-300`}
           style={{
-            position: 'absolute',
-            top: '58px',
+            position: "absolute",
+            top: "58px",
             right: 0,
-            boxShadow: '0px 0px 40px #00000066',
+            boxShadow: "0px 0px 40px #00000066",
             zIndex: 2,
           }}
         >
@@ -158,7 +201,7 @@ function UserTop({ toggleNotification }) {
             {links?.map(({ onClick, name, Icon, active }, index) => (
               <p
                 className={`pt-[20px] px-[20px] ${
-                  active ? 'text-[#3699FF]' : 'text-[#92928F]'
+                  active ? "text-[#3699FF]" : "text-[#92928F]"
                 } flex items-center justify-between hover:text-[#3699FF] transition-all text-[14px] last:pb-[20px]`}
                 onClick={onClick}
                 key={name}

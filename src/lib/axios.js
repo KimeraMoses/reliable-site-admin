@@ -1,15 +1,15 @@
-import axiosMain from 'axios';
+import axiosMain from "axios";
 
 export const axios = axiosMain.create({
   baseURL: process.env.REACT_APP_BASEURL,
 });
 
 function setCurrentTokenState(tokenState) {
-  localStorage.setItem('AuthToken', JSON.stringify(tokenState));
+  localStorage.setItem("AuthToken", JSON.stringify(tokenState));
 }
 
 function getCurrentTokenState() {
-  const AuthToken = localStorage.getItem('AuthToken');
+  const AuthToken = localStorage.getItem("AuthToken");
   const tokenObj = JSON.parse(AuthToken);
   return tokenObj;
 }
@@ -24,9 +24,9 @@ function refreshToken() {
     },
     {
       headers: {
-        'Content-type': 'application/json',
-        'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
-        tenant: 'admin',
+        "Content-type": "application/json",
+        "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
+        tenant: "admin",
       },
     }
   );
@@ -34,14 +34,14 @@ function refreshToken() {
 
 axios.interceptors.request.use(
   function (config) {
-    const AuthToken = localStorage.getItem('AuthToken');
+    const AuthToken = localStorage.getItem("AuthToken");
     const tokenObj = JSON.parse(AuthToken);
     const token = tokenObj?.token;
     config.headers = {
       ...config.headers,
-      'Content-type': 'application/json',
-      'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
-      tenant: 'admin',
+      "Content-type": "application/json",
+      "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
+      tenant: "admin",
       Authorization: `Bearer ${token}`,
     };
     return config;
