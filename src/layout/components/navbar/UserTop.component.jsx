@@ -53,15 +53,14 @@ function UserTop({ toggleNotification }) {
 
   useEffect(() => {
     if (connection) {
-      connection
-        .start()
-        .then(() => {
-          console.log("Connected!", connection);
-          connection.on("ReceiveMessage", (message) => {
-            console.log("Message", message);
-          });
-        })
-        .catch((error) => console.log("Connection Failed!", error));
+      connection.start();
+      // .then(() => {
+      //   console.log("Connected!", connection);
+      //   connection.on("ReceiveMessage", (message) => {
+      //     console.log("Message", message);
+      //   });
+      // })
+      // .catch((error) => console.log("Connection Failed!", error));
     }
   }, [connection]);
 

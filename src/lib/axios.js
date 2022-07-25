@@ -5,7 +5,6 @@ export const axios = axiosMain.create({
 });
 
 function setCurrentTokenState(tokenState) {
-  console.log("tobe Saved", tokenState);
   localStorage.setItem("AuthToken", JSON.stringify(tokenState));
 }
 
@@ -17,7 +16,6 @@ function getCurrentTokenState() {
 
 function refreshToken() {
   const current = getCurrentTokenState();
-  console.log("Current Token", current);
   return axiosMain.post(
     `${process.env.REACT_APP_BASEURL}/api/tokens/refresh`,
     {
@@ -65,7 +63,6 @@ axios.interceptors.response.use(
       try {
         refreshing_token = refreshing_token ? refreshing_token : refreshToken();
         let res = await refreshing_token;
-        console.log("Refresh token res", res, res?.data?.data);
         refreshing_token = null;
         if (res.data?.data?.token) {
           setCurrentTokenState(res?.data?.data);
