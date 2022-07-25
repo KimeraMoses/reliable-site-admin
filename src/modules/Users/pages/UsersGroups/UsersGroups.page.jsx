@@ -14,6 +14,7 @@ import {
   EditPermissions,
 } from './sections';
 import { deleteGroup } from 'store';
+import moment from 'moment';
 
 export const UsersGroups = () => {
   const [showAdd, setShowAdd] = useState(false);
@@ -59,7 +60,9 @@ export const UsersGroups = () => {
           numberOfUsers: group?.numberOfUsers
             ? Number(group?.numberOfUsers)
             : 0,
-          createdAt: group?.createdAt ? group?.createdAt : 'N/A',
+          createdAt: group?.createdOn
+            ? moment(group?.createdOn)?.format('MM-DD-YYYY')
+            : 'N/A',
         });
       });
       setDataSource(dataArr);

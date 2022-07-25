@@ -47,7 +47,9 @@ export const Details = () => {
 
   useEffect(() => {
     (async () => {
-      await dispatch(getUsersByDepartmentID({ id: ticket?.departmentId }));
+      if (ticket?.departmentId) {
+        await dispatch(getUsersByDepartmentID({ id: ticket?.departmentId }));
+      }
     })();
   }, [ticket]);
 
