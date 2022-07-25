@@ -1,13 +1,8 @@
 // import { Switch } from 'antd';
 // import { Input } from 'components';
 // import { Formik } from 'formik';
-import {
-  HubConnection,
-  HubConnectionBuilder,
-  HttpTransportType,
-} from "@microsoft/signalr";
+import { HubConnectionBuilder, HttpTransportType } from "@microsoft/signalr";
 import { useOutside } from "hooks";
-import { Right } from "icons";
 import React, { useRef, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useMediaQuery } from "react-responsive";
@@ -19,24 +14,8 @@ import { getNotificationss, notificationsRead } from "store";
 
 import "./UserTop.css";
 
-const isAppOnline = async () => {
-  if (!window.navigator.onLine) return false;
-
-  const url = new URL(window.location.origin);
-  url.searchParams.set("q", new Date().toString());
-
-  try {
-    const response = await fetch(url.toString(), { method: "HEAD" });
-
-    return response.ok;
-  } catch {
-    return false;
-  }
-};
-
 function UserTop({ toggleNotification }) {
   const [connection, setConnection] = useState(null);
-  const [online, setOnline] = useState(window.navigator.onLine);
   const AuthToken = useSelector((state) => state.auth.token);
   const [dropdown, setDropdown] = useState(false);
   const [showDepartments, setShowDepartments] = useState(false);
@@ -49,49 +28,42 @@ function UserTop({ toggleNotification }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const headers = {
-    "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
-    tenant: "admin",
-    Authorization: `Bearer ${AuthToken}`,
-  };
+  const isOnline = window.navigator.onLine;
 
-  // console.log("headers", headers);
+  // ONLINE STATUS
 
-  // console.log("IsOnline", online);
+  useEffect(() => {
+    const connect = new HubConnectionBuilder()
+      .withUrl(`${process.env.REACT_APP_BASEURL}/api/ws/signalRHub`, {
+        accessTokenFactory: () => {
+          return AuthToken;
+        },
+        withCredentials: false,
+        transport: HttpTransportType.LongPolling,
+        headers: {
+          "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
+          tenant: "admin",
+          Authorization: `Bearer ${AuthToken}`,
+        },
+      })
+      .withAutomaticReconnect()
+      .build();
+    setConnection(connect);
+  }, [AuthToken]);
 
-  //ONLINE STATUS
-  // useEffect(() => {
-  //   const connect = new HubConnectionBuilder()
-  //     .withUrl(`${process.env.REACT_APP_BASEURL}/signalRHub`, {
-  //       skipNegotiation: true,
-  //       transport: HttpTransportType.WebSockets,
-  //     })
-  //     .withAutomaticReconnect()
-  //     .build();
-  //   console.log(connect);
-  //   setConnection(connect);
-  // }, []);
-
-  // useEffect(() => {
-  //   if (connection) {
-  //     connection
-  //       .start()
-  //       .then((result) => {
-  //         console.log("Connected!", result);
-  //         connection.on("ReceiveMessage", (message) => {
-  //           console.log("Message", message);
-  //         });
-  //       })
-  //       .catch((error) =>
-  //         console.log("Connection Failed!", error, error.status)
-  //       );
-  //   }
-  // }, [connection]);
-
-  // const sendMessage = async () => {
-  //   if (connection) await connection.send("SendMessage", inputText);
-  //   setInputText("");
-  // };
+  useEffect(() => {
+    if (connection) {
+      connection
+        .start()
+        .then(() => {
+          console.log("Connected!", connection);
+          connection.on("ReceiveMessage", (message) => {
+            console.log("Message", message);
+          });
+        })
+        .catch((error) => console.log("Connection Failed!", error));
+    }
+  }, [connection]);
 
   // const [notifications, setNotifications] = useState(false);
   const links = [
@@ -168,7 +140,11 @@ function UserTop({ toggleNotification }) {
         visible={notifications}
         onClose={() => setNotifications(false)}
       /> */}
-      <div className="h-12 w-12 rounded-lg border-2 border-[#3699FF] p-1 userName">
+      <div
+        className={`h-12 w-12 rounded-lg border-2 border-[#3699FF] p-1 userName ${
+          isOnline ? "isOnline" : "isOffline"
+        }`}
+      >
         {user?.base64Image ? (
           <img
             src={user?.base64Image}
