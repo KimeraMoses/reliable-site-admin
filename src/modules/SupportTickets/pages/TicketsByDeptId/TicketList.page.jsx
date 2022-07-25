@@ -55,7 +55,7 @@ export const TicketsByDeptId = () => {
     if (tickets.length) {
       const dataToSet = tickets
         ?.filter(function (el) {
-          return el.ticketStatus === v;
+          return el.ticketStatus === v && el?.assignedTo === user?.id;
         })
         .map((b) => {
           return {
@@ -121,12 +121,13 @@ export const TicketsByDeptId = () => {
 
   // Setting data properly
   const [data, setData] = useState([]);
+  const { user } = useSelector((state) => state?.auth);
   useEffect(() => {
     setData([]);
     if (tickets.length) {
       const dataToSet = tickets
         ?.filter(function (el) {
-          return el.ticketStatus === 0;
+          return el.ticketStatus === 0 && el?.assignedTo === user?.id;
         })
         .map((b) => {
           return {

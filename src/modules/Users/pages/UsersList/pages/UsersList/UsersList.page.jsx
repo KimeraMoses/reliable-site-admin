@@ -11,6 +11,7 @@ import { checkModule } from 'lib/checkModule';
 import { EditUser } from '../sections';
 import { getUserGroups } from 'store';
 import { addUser } from 'store';
+import moment from 'moment';
 
 const initialAddValues = {
   userName: '',
@@ -120,8 +121,10 @@ export const UsersList = () => {
     },
     {
       title: t('createDate'),
-      key: 'createdAt',
-      dataIndex: 'createdAt',
+      key: 'createdOn',
+      dataIndex: 'createdOn',
+      render: (text) =>
+        moment(text)?.isValid() ? moment(text)?.format('MM-DD-YYYY') : 'N/A',
     },
   ];
 
