@@ -6,7 +6,7 @@ import { Info } from 'icons';
 import QRCode from 'react-qr-code';
 import { axios, getError, validateMFAConfig } from 'lib';
 import { logout } from 'store/Slices/authSlice';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 
 const initialValues = {
@@ -19,9 +19,16 @@ const validationSchema = Yup.object().shape({
 
 export const AuthApps = ({ show, setShow }) => {
   const [loading, setLoading] = useState(false);
-  const { authUri, user } = useSelector((state) => state.auth);
-  let url = new URL(authUri);
-  let params = new URLSearchParams(url.search);
+  const [params, setParams] = useState(null);
+  const { authUri, user } = useSelector((state) => state?.auth);
+
+  useEffect(() => {
+    if (authUri) {
+      const url = new URL(authUri);
+      const params = new URLSearchParams(url?.search);
+      setParams(params);
+    }
+  }, [authUri]);
 
   const dispatch = useDispatch();
 
@@ -69,7 +76,7 @@ export const AuthApps = ({ show, setShow }) => {
           {/* QR Image */}
           <div className="mb-[32px] flex items-center justify-center">
             <QRCode
-              value={params.get('secret')}
+              value={params?.get('secret')}
               title="Scan QR Code to Enable MFA"
               width={200}
               height={200}
@@ -88,7 +95,7 @@ export const AuthApps = ({ show, setShow }) => {
               your app, and enter your username and the code:
             </p>
             <p className="text-white text-[16px] text-center font-medium">
-              {params.get('secret')}
+              {params?.get('secret')}
             </p>
             {/* Input */}
           </div>

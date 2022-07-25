@@ -4,12 +4,12 @@ import { updateAPIKeyPermissions } from 'store';
 
 export const EditPermissions = ({ show, setShow }) => {
   const dispatch = useDispatch();
-  const { appModules } = useSelector((state) => state?.modules);
+  const { userModules } = useSelector((state) => state?.modules);
   const { loading, apiKey } = useSelector((state) => state?.apiKeys);
 
   const getInitialModules = () => {
     if (apiKey?.userApiKeyModules) {
-      const filtered = appModules.filter((module) => {
+      const filtered = userModules.filter((module) => {
         return !apiKey?.userApiKeyModules?.some(
           (permission) => permission.name === module.name
         );
@@ -26,7 +26,7 @@ export const EditPermissions = ({ show, setShow }) => {
       final.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
       return final;
     } else {
-      return appModules;
+      return userModules;
     }
   };
 
@@ -42,7 +42,7 @@ export const EditPermissions = ({ show, setShow }) => {
       loading={loading}
       handleSubmit={async (values) => {
         const newValues = values?.filter((value) => {
-          return !appModules?.includes(value);
+          return !userModules?.includes(value);
         });
         const valuesToPost = newValues.map(
           ({ isActive, name, permissionDetail, tenant }) => {

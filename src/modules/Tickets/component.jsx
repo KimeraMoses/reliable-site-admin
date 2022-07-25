@@ -81,7 +81,9 @@ export function Tickets() {
                       style={{ color: idx % 2 === 0 ? '#0BB783' : '#3699FF' }}
                       onClick={() => {
                         navigate(
-                          '/admin/dashboard/support/tickets/by-departments',
+                          `/admin/dashboard/support/tickets/by-departments/${
+                            departments?.find((dept) => dept?.name === name)?.id
+                          }`,
                           {
                             state: {
                               activeDepartment: name,

@@ -40,16 +40,16 @@ export const EditGroup = ({ editModal, setEditModal, t, loading }) => {
       name: 'status',
       title: t('status'),
     },
-    {
-      type: 'switch',
-      name: 'isDefault',
-      title: t('makeDefault'),
-    },
-    {
-      type: 'switch',
-      name: 'isSuperAdmin',
-      title: 'Make Super Admin',
-    },
+    // {
+    //   type: 'switch',
+    //   name: 'isDefault',
+    //   title: t('makeDefault'),
+    // },
+    // {
+    //   type: 'switch',
+    //   name: 'isSuperAdmin',
+    //   title: 'Make Super Admin',
+    // },
   ];
   const dispatch = useDispatch();
 

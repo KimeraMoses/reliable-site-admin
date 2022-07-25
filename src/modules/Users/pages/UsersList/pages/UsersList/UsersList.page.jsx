@@ -11,6 +11,7 @@ import { checkModule } from 'lib/checkModule';
 import { EditUser } from '../sections';
 import { getUserGroups } from 'store';
 import { addUser } from 'store';
+import moment from 'moment';
 
 const initialAddValues = {
   userName: '',
@@ -118,15 +119,12 @@ export const UsersList = () => {
       dataIndex: 'email',
       key: 'email',
     },
-    // {
-    //   title: t('companyName'),
-    //   dataIndex: 'companyName',
-    //   key: 'companyName',
-    // },
     {
       title: t('createDate'),
-      key: 'createdAt',
-      dataIndex: 'createdAt',
+      key: 'createdOn',
+      dataIndex: 'createdOn',
+      render: (text) =>
+        moment(text)?.isValid() ? moment(text)?.format('MM-DD-YYYY') : 'N/A',
     },
   ];
 
@@ -223,7 +221,6 @@ export const UsersList = () => {
             editAction={(record) => (
               <Button
                 onClick={() => {
-                  console.log(record);
                   setEditUser(record);
                   setEditModal(true);
                 }}

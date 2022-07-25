@@ -40,16 +40,16 @@ export const AddGroup = ({
       name: 'status',
       title: t('status'),
     },
-    {
-      type: 'switch',
-      name: 'isDefault',
-      title: t('makeDefault'),
-    },
-    {
-      type: 'switch',
-      name: 'isSuperAdmin',
-      title: 'Make Super Admin',
-    },
+    // {
+    //   type: 'switch',
+    //   name: 'isDefault',
+    //   title: t('makeDefault'),
+    // },
+    // {
+    //   type: 'switch',
+    //   name: 'isSuperAdmin',
+    //   title: 'Make Super Admin',
+    // },
   ];
   return (
     <Modal

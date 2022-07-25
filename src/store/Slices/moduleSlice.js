@@ -6,7 +6,7 @@ const initialState = {
   loading: false,
 };
 const settingSlice = createSlice({
-  name: 'moduleManagement',
+  name: 'modules',
   initialState,
   reducers: {
     getAppLevelModules: (state, { payload }) => {
