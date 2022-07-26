@@ -47,6 +47,8 @@ function App() {
   const { maintenance, maintenanceDetails, suspended } = useSelector(
     (state) => state.settings
   );
+
+  //Set Timeout in seconds here
   const Timeout = 1000 * 900;
   const idleTimer = useRef(null);
 
