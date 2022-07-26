@@ -1,8 +1,8 @@
 // import { Switch } from 'antd';
 // import { Input } from 'components';
 // import { Formik } from 'formik';
-import { HubConnectionBuilder, HttpTransportType } from "@microsoft/signalr";
 import { useOutside } from "hooks";
+import { HubConnectionBuilder, HttpTransportType } from "@microsoft/signalr";
 import React, { useRef, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useMediaQuery } from "react-responsive";
@@ -163,7 +163,8 @@ function UserTop({ toggleNotification }) {
           style={{
             position: "absolute",
             top: "58px",
-            right: 0,
+            left: "62px",
+            // right: 0,
             boxShadow: "0px 0px 40px #00000066",
             zIndex: 2,
           }}
@@ -213,6 +214,7 @@ function UserTop({ toggleNotification }) {
           </div>
         </div>
       </div>
+
       {!lessThanDesktop && (
         <>
           <div
