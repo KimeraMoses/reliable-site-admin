@@ -89,12 +89,12 @@ export const AddClientUser = ({ show, setShow }) => {
       name: "status",
       title: t("status"),
     },
-    {
-      type: "input",
-      name: "ipAddress",
-      placeholder: "253.205.121.39",
-      title: t("ipAddress"),
-    },
+    // {
+    //   type: "input",
+    //   name: "ipAddress",
+    //   placeholder: "253.205.121.39",
+    //   title: t("ipAddress"),
+    // },
     {
       type: "input",
       name: "address1",
