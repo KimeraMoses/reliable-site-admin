@@ -9,18 +9,20 @@ import { useNavigate, useParams } from 'react-router-dom';
 // Custom Modules
 import { ConfigurationEditor, EmailBodyInput, Button } from 'components';
 import './Edit.styles.scss';
-import { createServerImage } from 'lib';
+import { convertHTMLToDraftState, createServerImage } from 'lib';
 import { getArticleByID, updateArticle, getAllArticleCategories } from 'store';
-import { getBrands } from 'store';
+// import { getBrands } from 'store';
 
 export const Edit = () => {
   const dispatch = useDispatch();
 
   const { id } = useParams();
   useEffect(() => {
-    dispatch(getAllArticleCategories());
-    dispatch(getBrands());
-    dispatch(getArticleByID({ id }));
+    (async () => {
+      await dispatch(getAllArticleCategories());
+      // await dispatch(getBrands());
+      await dispatch(getArticleByID({ id }));
+    })();
   }, []);
 
   const { loading, articleCategories } = useSelector(
@@ -28,7 +30,7 @@ export const Edit = () => {
   );
   const articleLoading = useSelector((state) => state?.articles?.loading);
   const { article } = useSelector((state) => state?.articles);
-  const brands = useSelector((state) => state?.brands);
+  // const brands = useSelector((state) => state?.brands);
 
   const [subCategories, setSubCategories] = useState([]);
 
@@ -48,7 +50,8 @@ export const Edit = () => {
     visibility: article?.visibility,
     articleStatus: article?.articleStatus,
     bodyText: article?.bodyText,
-    bodyHolder: EditorState.createEmpty(),
+    bodyHolder: convertHTMLToDraftState(article?.bodyText),
+    preview: article?.base64Image,
   };
 
   const fields = [

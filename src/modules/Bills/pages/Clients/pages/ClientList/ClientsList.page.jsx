@@ -7,10 +7,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getClients, getUsers, getBrands } from 'store';
 import { checkModule } from 'lib/checkModule';
 import { Table } from 'components';
-import { AddClientUser } from './sections';
+import { AddClientUser, EditClientUser } from './sections';
 
 export const ClientList = () => {
   const [showAdd, setShowAdd] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
+  const [clientDetails, setClientDetails] = useState(null);
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -58,6 +60,11 @@ export const ClientList = () => {
   return (
     <div className="p-[40px]">
       <AddClientUser show={showAdd} setShow={setShowAdd} />
+      <EditClientUser
+        show={showEdit}
+        setShow={setShowEdit}
+        client={clientDetails}
+      />
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
         <Table
           columns={columns}
@@ -70,18 +77,28 @@ export const ClientList = () => {
             onClick: () => setShowAdd(true),
             customClass: 'px-[82px]',
           }}
+          viewAction={(record) => (
+            <Button
+              onClick={() => {
+                navigate(
+                  `/admin/dashboard/billing/clients/list/details/${record?.id}`
+                );
+              }}
+            >
+              View
+            </Button>
+          )}
           editAction={(record) => (
             <>
               <Button
                 onClick={() => {
-                  navigate(
-                    `/admin/dashboard/billing/clients/list/details/${record?.id}`
-                  );
+                  setShowEdit(true);
+                  setClientDetails(record);
                 }}
               >
-                View
+                Edit
               </Button>
-              <Button onClick={() => {}}>Login As Client</Button>
+              {/* <Button onClick={() => {}}>Login As Client</Button> */}
             </>
           )}
           permissions={permissions}

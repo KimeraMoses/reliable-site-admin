@@ -66,8 +66,6 @@ const store = configureStore({
     webhooks: webHooks,
   },
 });
-
-export default store;
 export const messageNotifications = {
   position: 'top-center',
   autoClose: 5000,
@@ -79,3 +77,5 @@ export const messageNotifications = {
 };
 export * from './Actions';
 export * from './Slices';
+
+export default store;

@@ -1,18 +1,18 @@
 // import { Switch } from 'antd';
 // import { Input } from 'components';
 // import { Formik } from 'formik';
-import { useOutside } from "hooks";
-import { HubConnectionBuilder, HttpTransportType } from "@microsoft/signalr";
-import React, { useRef, useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useMediaQuery } from "react-responsive";
-import { useNavigate } from "react-router-dom";
-import { logout } from "store/Slices/authSlice";
-import { Departments } from "./Departments.component";
-import UserName from "./UserProfileCard/UserName";
-import { getNotificationss, notificationsRead } from "store";
+import { useOutside } from 'hooks';
+import { HubConnectionBuilder, HttpTransportType } from '@microsoft/signalr';
+import React, { useRef, useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { useMediaQuery } from 'react-responsive';
+import { useNavigate } from 'react-router-dom';
+import { logout } from 'store/Slices/authSlice';
+import { Departments } from './Departments.component';
+import UserName from './UserProfileCard/UserName';
+import { getNotificationss, notificationsRead } from 'store';
 
-import "./UserTop.css";
+import './UserTop.css';
 
 function UserTop({ toggleNotification }) {
   const [connection, setConnection] = useState(null);
@@ -23,7 +23,7 @@ function UserTop({ toggleNotification }) {
   const { notifications } = useSelector((state) => state?.notifications);
   const [imgError, setImgError] = useState(false);
   const lessThanDesktop = useMediaQuery({
-    query: "(max-width: 900px)",
+    query: '(max-width: 900px)',
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -41,8 +41,8 @@ function UserTop({ toggleNotification }) {
         withCredentials: false,
         transport: HttpTransportType.LongPolling,
         headers: {
-          "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
-          tenant: "admin",
+          'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
+          tenant: 'admin',
           Authorization: `Bearer ${AuthToken}`,
         },
       })
@@ -75,24 +75,24 @@ function UserTop({ toggleNotification }) {
     //   active: showDepartments,
     // },
     {
-      name: "Account Settings",
+      name: 'Account Settings',
       onClick: () => {
         setDropdown((dropdownValue) => !dropdownValue);
-        navigate("/admin/dashboard/account-settings/general");
+        navigate('/admin/dashboard/account-settings/general');
       },
     },
     {
-      name: "Notifications",
+      name: 'Notifications',
       onClick: () => {
         setDropdown((dropdownValue) => !dropdownValue);
         handleNotification();
       },
     },
     {
-      name: "Sign Out",
+      name: 'Sign Out',
       onClick: () => {
         dispatch(logout());
-        navigate("/admin/sign-in");
+        navigate('/admin/sign-in');
       },
     },
   ];
@@ -141,13 +141,13 @@ function UserTop({ toggleNotification }) {
       /> */}
       <div
         className={`w-[278px] bg-[#1E1E2D] ${
-          dropdown ? "" : "hidden"
+          dropdown ? '' : 'hidden'
         } rounded-lg text-gray-300`}
         style={{
-          position: "absolute",
-          top: "58px",
+          position: 'absolute',
+          top: '58px',
           right: 0,
-          boxShadow: "0px 0px 40px #00000066",
+          boxShadow: '0px 0px 40px #00000066',
           zIndex: 2,
         }}
       >
@@ -175,14 +175,16 @@ function UserTop({ toggleNotification }) {
           <div className="mt-[20px]">
             {/* onClick={() => dispatch(logout())} */}
             <h3 className="text-white text-[14px] mb-0">{user?.fullName}</h3>
-            <h3 className="text-[#92928F] text-[14px] mb-0">{user?.email}</h3>
+            <h3 className="text-[#92928F] text-[14px] mb-0">
+              {user?.userName}
+            </h3>
           </div>
         </div>
         <div>
           {links?.map(({ onClick, name, Icon, active }, index) => (
             <p
               className={`pt-[20px] px-[20px] ${
-                active ? "text-[#3699FF]" : "text-[#92928F]"
+                active ? 'text-[#3699FF]' : 'text-[#92928F]'
               } flex items-center justify-between hover:text-[#3699FF] transition-all text-[14px] last:pb-[20px]`}
               onClick={onClick}
               key={name}
@@ -195,7 +197,7 @@ function UserTop({ toggleNotification }) {
       </div>
       <div
         className={`h-12 w-12 rounded-lg border-2 border-[#3699FF] p-1 userName ${
-          isOnline ? "isOnline" : "isOffline"
+          isOnline ? 'isOnline' : 'isOffline'
         }`}
       >
         {user?.base64Image ? (

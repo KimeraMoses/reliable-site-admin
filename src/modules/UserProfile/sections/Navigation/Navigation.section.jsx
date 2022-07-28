@@ -50,7 +50,7 @@ export const Navigation = ({ items, active }) => {
                     {user?.fullName}
                   </div>
                   <div className="text-[#474761] text-[14px] mb-[20px]">
-                    {user.email}
+                    {user.userName}
                   </div>
                   <div
                     className={`${

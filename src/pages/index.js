@@ -27,7 +27,7 @@ export const dashboardPages = [
     Component: lazy(() => import('./Dashboard/Editor/Editor.page')),
   },
   {
-    path: '/users/*',
+    path: '/settings/users/*',
     Component: lazy(() => import('./Dashboard/Users/Users.page')),
   },
   {
