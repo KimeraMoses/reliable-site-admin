@@ -38,7 +38,7 @@ const addValidationSchema = Yup.object().shape({
     .oneOf([Yup.ref('password'), null], 'Passwords must match')
     .required('Confirm Password is required'),
   status: Yup.bool().required('Status is required'),
-  ipAddress: Yup.string().required('IP Address is required'),
+  // ipAddress: Yup.string().required('IP Address is required'),
   adminGroupId: Yup.string().required('Group is required'),
 });
 
