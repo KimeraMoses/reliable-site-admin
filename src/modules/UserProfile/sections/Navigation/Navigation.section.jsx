@@ -1,7 +1,6 @@
-import { Button } from 'components';
-import UserName from 'layout/components/navbar/UserProfileCard/UserName';
+import UserName from "layout/components/navbar/UserProfileCard/UserName";
 // import { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector } from "react-redux";
 
 // const user = {
 //   imageUrl: 'https://i.pravatar.cc/900',
@@ -27,8 +26,8 @@ export const Navigation = ({ items, active }) => {
                 <div
                   className={`w-[130px] h-[130px] flex items-center justify-center text-[#fff] text-[40px] ${
                     user?.base64Image
-                      ? ''
-                      : 'border-[#3699FF] border-[2px] rounded-[8px]'
+                      ? ""
+                      : "border-[#3699FF] border-[2px] rounded-[8px]"
                   }`}
                 >
                   {user?.base64Image ? (
@@ -55,11 +54,11 @@ export const Navigation = ({ items, active }) => {
                   <div
                     className={`${
                       user.isActive
-                        ? 'bg-[#1C3238] text-[#0BB783]'
-                        : 'bg-[#3A2434] text-[#F64E60]'
+                        ? "bg-[#1C3238] text-[#0BB783]"
+                        : "bg-[#3A2434] text-[#F64E60]"
                     } px-[8px] py-[4px] w-[fit-content] rounded-[4px]`}
                   >
-                    {user.isActive ? 'Active' : 'Inactive'}
+                    {user.isActive ? "Active" : "Inactive"}
                   </div>
                 </div>
               </div>
@@ -98,7 +97,7 @@ export const Navigation = ({ items, active }) => {
                 <div
                   key={name}
                   className={`text-[14px] uppercase hover:text-[#3699FF] cursor-pointer transition-all ${
-                    active === name ? 'text-[#3699FF]' : 'text-[#6D6D80]'
+                    active === name ? "text-[#3699FF]" : "text-[#6D6D80]"
                   }`}
                   onClick={onClick}
                 >

@@ -103,14 +103,12 @@ export const updateUserProfile = (id, profile) => {
         profileConfig?.url,
         profileConfig?.config
       );
-      console.log(profileRes);
       dispatch(
         authenticationSuccess({
           user: profileRes?.data?.data,
         })
       );
     } catch (e) {
-      console.log(e);
       toast.error(getError(e));
     }
   };

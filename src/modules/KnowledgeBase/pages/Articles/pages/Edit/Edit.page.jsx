@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react';
-import { EditorState, convertToRaw } from 'draft-js';
-import { convertToHTML } from 'draft-convert';
-import { Formik, Form } from 'formik';
-import { useDispatch, useSelector } from 'react-redux';
-import { Spin } from 'antd';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { convertToRaw } from "draft-js";
+import { convertToHTML } from "draft-convert";
+import { Formik, Form } from "formik";
+import { useDispatch, useSelector } from "react-redux";
+import { Spin } from "antd";
+import { useNavigate, useParams } from "react-router-dom";
 
 // Custom Modules
-import { ConfigurationEditor, EmailBodyInput, Button } from 'components';
-import './Edit.styles.scss';
-import { convertHTMLToDraftState, createServerImage } from 'lib';
-import { getArticleByID, updateArticle, getAllArticleCategories } from 'store';
+import { ConfigurationEditor, EmailBodyInput, Button } from "components";
+import "./Edit.styles.scss";
+import { convertHTMLToDraftState, createServerImage } from "lib";
+import { getArticleByID, updateArticle, getAllArticleCategories } from "store";
 // import { getBrands } from 'store';
 
 export const Edit = () => {
@@ -37,7 +37,7 @@ export const Edit = () => {
   useEffect(() => {
     if (articleCategories.length) {
       const newCat = articleCategories?.filter(
-        (c) => c.parentCategoryId !== '00000000-0000-0000-0000-000000000000'
+        (c) => c.parentCategoryId !== "00000000-0000-0000-0000-000000000000"
       );
       setSubCategories(newCat);
     }
@@ -56,20 +56,20 @@ export const Edit = () => {
 
   const fields = [
     {
-      name: 'title',
-      type: 'text',
-      label: 'Article Ttitle',
-      placeholder: 'Enter Article Title Here',
+      name: "title",
+      type: "text",
+      label: "Article Ttitle",
+      placeholder: "Enter Article Title Here",
     },
     {
-      name: 'categories',
-      type: 'multiselect',
-      placeholder: 'Select Categories',
+      name: "categories",
+      type: "multiselect",
+      placeholder: "Select Categories",
       options: subCategories?.map((category) => ({
         label: category.name,
         value: category.id,
       })),
-      label: 'Categories',
+      label: "Categories",
     },
     // {
     //   name: 'brandIds',
@@ -82,27 +82,27 @@ export const Edit = () => {
     //   })),
     // },
     {
-      name: 'visibility',
-      type: 'select',
-      label: 'Visibility',
+      name: "visibility",
+      type: "select",
+      label: "Visibility",
       options: [
-        { label: 'Public', value: true },
-        { label: 'Private', value: false },
+        { label: "Public", value: true },
+        { label: "Private", value: false },
       ],
     },
     {
-      name: 'articleStatus',
-      type: 'select',
-      label: 'Status',
+      name: "articleStatus",
+      type: "select",
+      label: "Status",
       options: [
-        { label: 'Draft', value: 'draft' },
-        { label: 'Publish', value: 'publish' },
+        { label: "Draft", value: "draft" },
+        { label: "Publish", value: "publish" },
       ],
     },
     {
-      name: 'image',
-      type: 'image',
-      label: 'Select Image',
+      name: "image",
+      type: "image",
+      label: "Select Image",
     },
   ];
 
@@ -114,7 +114,7 @@ export const Edit = () => {
       enableReinitialize
       onSubmit={async (values) => {
         const serverImage = await createServerImage(values?.image);
-        const finalVisibility = values?.visibility === 'false' ? false : true;
+        const finalVisibility = values?.visibility === "false" ? false : true;
         const finalValues = {
           visibility: finalVisibility,
           image: serverImage,
@@ -125,7 +125,7 @@ export const Edit = () => {
           brandIds: values?.brandIds,
         };
         await dispatch(updateArticle({ id: article?.id, data: finalValues }));
-        navigate('/admin/dashboard/knowledge-base/articles');
+        navigate("/admin/dashboard/knowledge-base/articles");
       }}
     >
       {({ values, errors, touched, setFieldValue, setFieldTouched }) => {
@@ -157,9 +157,9 @@ export const Edit = () => {
                     </div>
                     <ConfigurationEditor
                       editorState={values.bodyHolder}
-                      onBlur={() => setFieldTouched('bodyText', true)}
+                      onBlur={() => setFieldTouched("bodyText", true)}
                       onEditorStateChange={(state) => {
-                        setFieldValue('bodyHolder', state);
+                        setFieldValue("bodyHolder", state);
                         const currentContentAsHTML = convertToHTML(
                           state.getCurrentContent()
                         );
@@ -167,17 +167,17 @@ export const Edit = () => {
                           convertToRaw(state.getCurrentContent()).blocks
                             .length === 1 &&
                           convertToRaw(state.getCurrentContent()).blocks[0]
-                            .text === ''
+                            .text === ""
                         ) {
-                          setFieldValue('bodyText', '');
+                          setFieldValue("bodyText", "");
                         } else {
-                          setFieldValue('bodyText', currentContentAsHTML);
+                          setFieldValue("bodyText", currentContentAsHTML);
                         }
                       }}
                     />
-                    {touched['bodyText'] && errors['bodyText'] && (
+                    {touched["bodyText"] && errors["bodyText"] && (
                       <div className="error whitespace-nowrap ml-[32px] mb-[16px] w-[20%]">
-                        {errors['bodyText']}
+                        {errors["bodyText"]}
                       </div>
                     )}
                     <div className="p-[32px] pt-[10px]">
