@@ -1,43 +1,43 @@
-import React, { Suspense, useEffect, useRef } from "react";
-import IdleTimer from "react-idle-timer";
+import React, { Suspense, useEffect, useRef } from 'react';
+import IdleTimer from 'react-idle-timer';
 import {
   BrowserRouter as Router,
   Navigate,
   Route,
   Routes,
-} from "react-router-dom";
-import moment from "moment";
-import { Error404, dashboardPages } from "pages";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "react-toastify/dist/ReactToastify.css";
+} from 'react-router-dom';
+import moment from 'moment';
+import { Error404, dashboardPages } from 'pages';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.css';
 
-import "./App.scss";
-import { useDispatch, useSelector } from "react-redux";
-import { AutoAuthenticate, maintenanceStatus } from "store/Actions/AuthActions";
-import { getAppModules, getUserModules } from "store/Actions/moduleActions";
-import { initiateLockScreen } from "store/Slices/settingSlice";
-import { ChangeMfaStatus } from "store/Slices/authSlice";
-import { toast } from "react-toastify";
-import { axios, getCurrentMFAStatus, getError } from "lib";
-import { getDepartmentsByUserId } from "store";
-import { getAppSettingsByTenant } from "store";
-import { updateMaintenanceSettings } from "store";
-import { ProtectedRoute } from "components/ProtectedRoute.component";
-import { Spin } from "antd";
+import './App.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { AutoAuthenticate, maintenanceStatus } from 'store/Actions/AuthActions';
+import { getAppModules, getUserModules } from 'store/Actions/moduleActions';
+import { initiateLockScreen } from 'store/Slices/settingSlice';
+import { ChangeMfaStatus } from 'store/Slices/authSlice';
+import { toast } from 'react-toastify';
+import { axios, getCurrentMFAStatus, getError } from 'lib';
+import { getDepartmentsByUserId } from 'store';
+import { getAppSettingsByTenant } from 'store';
+import { updateMaintenanceSettings } from 'store';
+import { ProtectedRoute } from 'components/ProtectedRoute.component';
+import { Spin } from 'antd';
 
-const SignIn = React.lazy(() => import("pages/sign-in/SignIn.page"));
-const SignUp = React.lazy(() => import("pages/sign-up/SignUp.page"));
+const SignIn = React.lazy(() => import('pages/sign-in/SignIn.page'));
+const SignUp = React.lazy(() => import('pages/sign-up/SignUp.page'));
 const ResetPassword = React.lazy(() =>
-  import("pages/reset-password/ResetPassword.page")
+  import('pages/reset-password/ResetPassword.page')
 );
 const ForgotPassword = React.lazy(() =>
-  import("pages/forgot-password/ForgotPassword.page")
+  import('pages/forgot-password/ForgotPassword.page')
 );
 const EmailVerification = React.lazy(() =>
-  import("pages/email-verification/EmailVerification.page")
+  import('pages/email-verification/EmailVerification.page')
 );
 const ConfirmOtp = React.lazy(() =>
-  import("pages/one-time-password/OneTimePassword.page")
+  import('pages/one-time-password/OneTimePassword.page')
 );
 
 function App() {
@@ -58,16 +58,18 @@ function App() {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    AutoAuthenticate(dispatch);
-    dispatch(maintenanceStatus());
-    dispatch(getAppSettingsByTenant({ isAdmin: true }));
+    (async () => {
+      await AutoAuthenticate(dispatch);
+      await dispatch(getAppModules());
+      await dispatch(maintenanceStatus());
+      await dispatch(getAppSettingsByTenant({ isAdmin: true }));
+    })();
   }, [dispatch]);
 
   useEffect(() => {
     if (user?.id && token) {
       (async () => {
         await dispatch(getDepartmentsByUserId({ id: user?.id }));
-        await dispatch(getAppModules());
         await dispatch(getUserModules({ id: user?.id }));
       })();
     }
@@ -212,7 +214,7 @@ function App() {
                       <Route
                         key={path}
                         path={`${path}`}
-                        index={path === "/"}
+                        index={path === '/'}
                         element={<Component />}
                       />
                     ))}

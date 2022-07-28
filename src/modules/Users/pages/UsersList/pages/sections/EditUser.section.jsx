@@ -52,7 +52,7 @@ export const EditUser = ({ t, show, setShow, user }) => {
     <Modal
       show={show}
       setShow={setShow}
-      heading={t('editUser')}
+      heading={`Edit User ${user?.userName}`}
       submitText={t('editUser')}
       initialValues={initialValues}
       validationSchema={validationSchema}

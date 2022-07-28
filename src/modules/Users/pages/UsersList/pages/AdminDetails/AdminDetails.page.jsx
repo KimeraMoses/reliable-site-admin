@@ -22,6 +22,7 @@ import { Spin } from 'antd';
 import { useParams } from 'react-router-dom';
 import { getUserById } from 'store';
 import { getUserModulesById } from 'store';
+import { getAppModules } from 'store/Actions/moduleActions';
 
 export const AdminDetails = () => {
   const { t } = useTranslation('/Users/ns');
@@ -40,18 +41,20 @@ export const AdminDetails = () => {
   ];
 
   const { loading, user } = useSelector((state) => state?.users);
+  const moduleLoading = useSelector((state) => state?.modules?.loading);
 
   const { id } = useParams();
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getUserById(id));
     dispatch(getUserModulesById(id));
+    dispatch(getAppModules());
   }, []);
 
   return (
     <div className="users">
       <div className="admin-details min-w-[60vh]">
-        {loading || user === null ? (
+        {loading || moduleLoading || user === null ? (
           <Spin
             size="large"
             style={{ gridColumn: '1/3', alignSelf: 'center' }}
