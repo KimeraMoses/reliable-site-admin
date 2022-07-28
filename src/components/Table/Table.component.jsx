@@ -54,12 +54,15 @@ export const Table = ({
   const [search, setSearch] = useState('');
   useEffect(() => {
     if (fieldToFilter !== null && fieldToFilter !== undefined) {
-      const filteredData = data.filter((item) => {
-        if (item[fieldToFilter] !== null && item[fieldToFilter] !== undefined) {
-          return item[fieldToFilter]
-            .toString()
-            .toLowerCase()
-            .includes(search.toLowerCase());
+      const filteredData = data?.filter((item) => {
+        if (
+          item?.[fieldToFilter] !== null &&
+          item?.[fieldToFilter] !== undefined
+        ) {
+          return item?.[fieldToFilter]
+            ?.toString()
+            ?.toLowerCase()
+            ?.includes(search?.toLowerCase());
         }
         return false;
       });
@@ -75,7 +78,7 @@ export const Table = ({
   useEffect(() => {
     let dataViewer = [];
     if (permissions !== undefined && permissions !== null && permissions.View) {
-      dataViewer = filtered.length ? filtered : data;
+      dataViewer = filtered?.length ? filtered : data;
     }
     setDataSource(dataViewer);
   }, [data, filtered, permissions]);
@@ -142,7 +145,7 @@ export const Table = ({
             <div>
               {
                 <>
-                  {permissions?.Search ? (
+                  {permissions?.View ? (
                     <>
                       {customFilterSort ? (
                         customFilterSort
@@ -155,7 +158,7 @@ export const Table = ({
                               placeholder={'Search Here'}
                               prefix={<Search />}
                               className="custom-table__input"
-                              onChange={(e) => setSearch(e.target.value)}
+                              onChange={(e) => setSearch(e?.target?.value)}
                             />
                           )}
                         </>
@@ -183,15 +186,15 @@ export const Table = ({
               )}
               {statusFilter?.length ? (
                 <select
-                  onChange={(e) => handleStatus(e.target.value)}
+                  onChange={(e) => handleStatus(e?.target?.value)}
                   className="custom-select form-select appearance-none block w-full px-[16px] h-[52px] text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0"
                 >
                   <option value="">
                     {statusFilterPlaceholder || 'Status'}
                   </option>
-                  {statusFilter.map((data, i) => (
+                  {statusFilter?.map((data, i) => (
                     <option value={data?.value || i} key={'status-' + i}>
-                      {data.name}
+                      {data?.name}
                     </option>
                   ))}
                 </select>
@@ -207,7 +210,7 @@ export const Table = ({
                       className={`px-[32px] border-none rounded-[8px] h-[52px] bg-[#212E48] hover:bg-[#212E48] active:bg-[#212E48] focus:bg-[#212E48] text-[#3699FF] hover:text-[#3699FF] active:text-[#3699FF] focus:text-[#3699FF] ${btn?.customClass}`}
                       onClick={btn?.onClick}
                     >
-                      {btn.text}
+                      {btn?.text}
                     </Button>
                   );
                 })
@@ -223,7 +226,7 @@ export const Table = ({
                   className={`custom-table__btn px-[32px] ${btnData?.customClass}`}
                   onClick={btnData?.onClick}
                 >
-                  {btnData.text}
+                  {btnData?.text}
                 </Button>
               ) : (
                 <></>
