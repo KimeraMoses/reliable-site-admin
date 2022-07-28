@@ -5,6 +5,9 @@ import { Provider } from 'react-redux';
 import App from './App';
 import store from './store/index';
 import './lang/i18n';
+import setUpInterceptor from 'lib/axios-interceptors';
+
+setUpInterceptor(store);
 
 ReactDOM.render(
   <Provider store={store}>

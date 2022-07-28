@@ -5,13 +5,13 @@ import {
   getUserModulesConfig,
   // getProfile,
 } from 'lib';
+import axiosMain from 'axios';
 import { toast } from 'react-toastify';
 import {
   getAppLevelModules,
   getUserLevelModules,
   setModuleLoading,
 } from 'store/Slices/moduleSlice';
-
 let token = '';
 const AuthToken = localStorage.getItem('AuthToken');
 if (AuthToken) {
@@ -24,7 +24,17 @@ export const getAppModules = () => {
     if (token) {
       try {
         const { url } = getAppModulesConfig();
-        const res = await axios.get(url);
+        const res = await axiosMain.get(
+          `${process.env.REACT_APP_BASEURL}${url}`,
+          {
+            headers: {
+              'Content-type': 'application/json',
+              'admin-api-key': process.env.REACT_APP_ADMIN_APIKEY,
+              tenant: 'admin',
+            },
+          }
+        );
+        // const res = await axios.get(url);
         dispatch(getAppLevelModules(res?.data?.data));
         setModuleLoading(false);
       } catch (e) {
