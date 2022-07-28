@@ -120,6 +120,11 @@ export const UsersList = () => {
       key: 'email',
     },
     {
+      title: 'Username',
+      dataIndex: 'userName',
+      key: 'userName',
+    },
+    {
       title: t('createDate'),
       key: 'createdOn',
       dataIndex: 'createdOn',
