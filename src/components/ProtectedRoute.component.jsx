@@ -1,7 +1,7 @@
 // ProtectedRoute.js
 import { lazy } from 'react';
 import { useSelector } from 'react-redux';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 const UnderMaintenance = lazy(() =>
   import('pages/under-maintenance/UnderMaintenance.page')
 );

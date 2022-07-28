@@ -5,7 +5,7 @@ import {
   Reports,
   Settings,
   Support,
-  Users,
+  // Users,
 } from 'icons';
 import { useSelector } from 'react-redux';
 
