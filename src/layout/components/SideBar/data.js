@@ -584,25 +584,7 @@ export const sidebarData = [
       },
     ],
   },
-  {
-    name: "Admin Users",
-    module: "Users",
-    path: "/admin/dashboard/users",
-    icon: (fill) => <Users fill={fill} />,
-    subLinks: [
-      {
-        name: "Admin Users List",
-        path: "/admin/dashboard/users/list",
-        subLinks: [
-          {
-            name: "Admin Details",
-            path: "/admin/dashboard/users/list/admin-details/:id",
-          },
-        ],
-      },
-      { name: "Admin Users Groups", path: "/admin/dashboard/users/groups" },
-    ],
-  },
+
   {
     name: "Settings",
     module: "Settings",
@@ -673,6 +655,25 @@ export const sidebarData = [
       //   name: 'Portal',
       //   path: '/admin/dashboard/settings/portal',
       // },
+    ],
+  },
+  {
+    name: "Admin Users",
+    module: "Users",
+    path: "/admin/dashboard/users",
+    icon: (fill) => <Users fill={fill} />,
+    subLinks: [
+      {
+        name: "Admin Users List",
+        path: "/admin/dashboard/users/list",
+        subLinks: [
+          {
+            name: "Admin Details",
+            path: "/admin/dashboard/users/list/admin-details/:id",
+          },
+        ],
+      },
+      { name: "Admin Users Groups", path: "/admin/dashboard/users/groups" },
     ],
   },
   {

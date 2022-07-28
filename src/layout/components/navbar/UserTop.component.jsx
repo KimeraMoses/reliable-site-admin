@@ -1,8 +1,8 @@
 // import { Switch } from 'antd';
 // import { Input } from 'components';
 // import { Formik } from 'formik';
-import { HubConnectionBuilder, HttpTransportType } from "@microsoft/signalr";
 import { useOutside } from "hooks";
+import { HubConnectionBuilder, HttpTransportType } from "@microsoft/signalr";
 import React, { useRef, useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useMediaQuery } from "react-responsive";
@@ -140,6 +140,60 @@ function UserTop({ toggleNotification }) {
         onClose={() => setNotifications(false)}
       /> */}
       <div
+        className={`w-[278px] bg-[#1E1E2D] ${
+          dropdown ? "" : "hidden"
+        } rounded-lg text-gray-300`}
+        style={{
+          position: "absolute",
+          top: "58px",
+          right: 0,
+          boxShadow: "0px 0px 40px #00000066",
+          zIndex: 2,
+        }}
+      >
+        {/* Name and Email Box */}
+        <div className="p-[20px] border-b-[1px] border-b-[#323248] cursor-auto">
+          <div className="flex items-start justify-between">
+            {/* Image + Status */}
+            <div className="h-12 w-12 rounded-lg border-2 border-[#3699FF] p-1 userName">
+              {user && user.base64Image && !imgError ? (
+                // !showName
+                <img
+                  src={user?.base64Image}
+                  alt={user.userName}
+                  onError={() => setImgError(true)}
+                  className="h-full w-full"
+                />
+              ) : (
+                <>{user && <UserName isLoggedIn={isLoggedIn} user={user} />}</>
+              )}
+            </div>
+            <div className="bg-[#1C3238] px-[8px] py-[4px] rounded-[4px] ">
+              <p className="text-[#0BB783] text-[14px]">Active</p>
+            </div>
+          </div>
+          <div className="mt-[20px]">
+            {/* onClick={() => dispatch(logout())} */}
+            <h3 className="text-white text-[14px] mb-0">{user?.fullName}</h3>
+            <h3 className="text-[#92928F] text-[14px] mb-0">{user?.email}</h3>
+          </div>
+        </div>
+        <div>
+          {links?.map(({ onClick, name, Icon, active }, index) => (
+            <p
+              className={`pt-[20px] px-[20px] ${
+                active ? "text-[#3699FF]" : "text-[#92928F]"
+              } flex items-center justify-between hover:text-[#3699FF] transition-all text-[14px] last:pb-[20px]`}
+              onClick={onClick}
+              key={name}
+            >
+              <span>{name}</span>
+              {Icon}
+            </p>
+          ))}
+        </div>
+      </div>
+      <div
         className={`h-12 w-12 rounded-lg border-2 border-[#3699FF] p-1 userName ${
           isOnline ? "isOnline" : "isOffline"
         }`}
@@ -156,63 +210,8 @@ function UserTop({ toggleNotification }) {
         {/* Departments Dropdown */}
         <Departments showDepartments={showDepartments} />
         {/* Dropdown */}
-        <div
-          className={`w-[278px] bg-[#1E1E2D] ${
-            dropdown ? "" : "hidden"
-          } rounded-lg text-gray-300`}
-          style={{
-            position: "absolute",
-            top: "58px",
-            right: 0,
-            boxShadow: "0px 0px 40px #00000066",
-            zIndex: 2,
-          }}
-        >
-          {/* Name and Email Box */}
-          <div className="p-[20px] border-b-[1px] border-b-[#323248] cursor-auto">
-            <div className="flex items-start justify-between">
-              {/* Image + Status */}
-              <div className="h-12 w-12 rounded-lg border-2 border-[#3699FF] p-1 userName">
-                {user && user.base64Image && !imgError ? (
-                  // !showName
-                  <img
-                    src={user?.base64Image}
-                    alt={user.userName}
-                    onError={() => setImgError(true)}
-                    className="h-full w-full"
-                  />
-                ) : (
-                  <>
-                    {user && <UserName isLoggedIn={isLoggedIn} user={user} />}
-                  </>
-                )}
-              </div>
-              <div className="bg-[#1C3238] px-[8px] py-[4px] rounded-[4px] ">
-                <p className="text-[#0BB783] text-[14px]">Active</p>
-              </div>
-            </div>
-            <div className="mt-[20px]">
-              {/* onClick={() => dispatch(logout())} */}
-              <h3 className="text-white text-[14px] mb-0">{user?.fullName}</h3>
-              <h3 className="text-[#92928F] text-[14px] mb-0">{user?.email}</h3>
-            </div>
-          </div>
-          <div>
-            {links?.map(({ onClick, name, Icon, active }, index) => (
-              <p
-                className={`pt-[20px] px-[20px] ${
-                  active ? "text-[#3699FF]" : "text-[#92928F]"
-                } flex items-center justify-between hover:text-[#3699FF] transition-all text-[14px] last:pb-[20px]`}
-                onClick={onClick}
-                key={name}
-              >
-                <span>{name}</span>
-                {Icon}
-              </p>
-            ))}
-          </div>
-        </div>
       </div>
+
       {!lessThanDesktop && (
         <>
           <div
