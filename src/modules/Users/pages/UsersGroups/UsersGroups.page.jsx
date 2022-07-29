@@ -33,7 +33,7 @@ export const UsersGroups = () => {
   // Getting User Level and App Level Modules and Checking If user has permissions for group management
   const { userModules, appModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Users',
+    module: 'AdminGroups',
     modules: userModules,
   });
   // Setting Module Fields Dynamically

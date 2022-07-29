@@ -25,7 +25,7 @@ export const InvoiceList = () => {
   const { userModules } = useSelector((state) => state?.modules);
 
   const { permissions } = checkModule({
-    module: 'Users',
+    module: 'Invoices',
     modules: userModules,
   });
 
@@ -117,7 +117,7 @@ export const InvoiceList = () => {
   const [endDate, setEndDate] = useState('');
   useEffect(() => {
     setData([]);
-    if (invoices.length) {
+    if (invoices?.length) {
       const dataToSet = invoices.map((b) => {
         return {
           ...b,

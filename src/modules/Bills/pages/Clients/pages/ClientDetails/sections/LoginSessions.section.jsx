@@ -14,7 +14,7 @@ export const LoginSessions = () => {
 
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Users',
+    module: 'Clients',
     modules: userModules,
   });
 

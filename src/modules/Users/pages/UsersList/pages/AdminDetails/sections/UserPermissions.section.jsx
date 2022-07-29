@@ -184,9 +184,10 @@ export const UserPermissions = () => {
                     uid: user?.id,
                   })
                 );
-                console.log(newValues);
               });
+              console.log('Here After Update');
               await dispatch(getUserModulesById(user?.id));
+              console.log('Fetched After Update');
               setLocalLoading(false);
               toast.success('User Permissions Updated Successfully!');
             } else {

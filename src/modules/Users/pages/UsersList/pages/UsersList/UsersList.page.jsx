@@ -110,6 +110,11 @@ export const UsersList = () => {
 
   const columns = [
     {
+      title: 'Username',
+      dataIndex: 'userName',
+      key: 'userName',
+    },
+    {
       title: t('adminName'),
       dataIndex: 'name',
       key: 'name',
@@ -118,11 +123,6 @@ export const UsersList = () => {
       title: t('email'),
       dataIndex: 'email',
       key: 'email',
-    },
-    {
-      title: 'Username',
-      dataIndex: 'userName',
-      key: 'userName',
     },
     {
       title: t('createDate'),
@@ -137,7 +137,7 @@ export const UsersList = () => {
   const { loading, users } = useSelector((state) => state?.users);
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Users',
+    module: 'AdminUsers',
     modules: userModules,
   });
   const [tableUsers, setTableUsers] = useState([]);
@@ -156,7 +156,7 @@ export const UsersList = () => {
         usersData.push({
           key: user?.id,
           id: user?.id,
-          name: user?.userName,
+          name: user?.fullName,
           email: user?.email,
           ...user,
           // TODO: Check with back-end dev for these two fields

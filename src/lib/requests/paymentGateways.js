@@ -1,7 +1,7 @@
 import { getConfig } from 'lib';
 
 // PaymentGateway End-Points
-const PaymentGateway = 'Users';
+const PaymentGateway = 'PaymentGateways';
 // Get List of All Payment Gateways
 export const getPaymentGatewaysConfig = () => ({
   url: `/api/paymentgateways/search`,

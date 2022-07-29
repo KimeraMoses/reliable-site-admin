@@ -97,7 +97,7 @@ const Brands = () => {
   // Check for permissions Start
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Settings',
+    module: 'Departments',
     modules: userModules,
   });
   // Check for permissions End

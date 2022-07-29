@@ -1,7 +1,7 @@
 import { getConfig } from './getConfig';
 
 // const Products = 'Products';
-const categoriesConfig = (action) => getConfig({ module: 'Users', action });
+const categoriesConfig = (action) => getConfig({ module: 'Orders', action });
 const prefix = '/api/v1/admin/categories';
 
 // Get All Categories

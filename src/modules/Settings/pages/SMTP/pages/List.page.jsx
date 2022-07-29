@@ -41,7 +41,7 @@ export const List = () => {
   // Check for permissions Start
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Settings',
+    module: 'SMTP',
     modules: userModules,
   });
   // Check for permissions End

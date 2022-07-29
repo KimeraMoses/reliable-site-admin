@@ -1,7 +1,7 @@
 import { getConfig } from 'lib';
 
 // SMTP End-Points
-const Transactions = 'Users';
+const Transactions = 'Invoices';
 const prefix = '/api/v1/admin/transactions';
 // Get Transactions
 export const getTransactionsConfig = () => ({

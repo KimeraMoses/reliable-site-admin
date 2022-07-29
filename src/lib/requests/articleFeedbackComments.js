@@ -1,6 +1,6 @@
 import { getConfig } from 'lib';
 
-const ArticleFeedbackComments = 'Users';
+const ArticleFeedbackComments = 'KnowledgeBase';
 
 const prefix = '/api/articlefeedbackcomments';
 const articleFeedbackCommentsConfig = (action) =>

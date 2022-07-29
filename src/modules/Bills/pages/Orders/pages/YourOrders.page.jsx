@@ -1,6 +1,5 @@
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
-import { Checkbox } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Table } from 'components';
 import { statusList } from 'lib';
@@ -23,9 +22,6 @@ export const YourOrders = () => {
   const { user } = useSelector((state) => state?.auth);
 
   useEffect(() => {
-    // let details = {
-    //   userId: user?.id,
-    // };
     (async () => {
       await dispatch(getOrders());
       await dispatch(getOrderTemplates());
@@ -41,14 +37,14 @@ export const YourOrders = () => {
   const [endDate, setEndDate] = useState('');
 
   const { permissions } = checkModule({
-    module: 'Users',
+    module: 'Orders',
     modules: userModules,
   });
 
   useEffect(() => {
     setData([]);
-    if (orders.length) {
-      const dataToSet = orders.map((b) => {
+    if (orders?.length) {
+      const dataToSet = orders?.map((b) => {
         return {
           ...b,
           key: b?.id,
@@ -59,14 +55,6 @@ export const YourOrders = () => {
   }, [orders]);
 
   const columns = [
-    // {
-    //   title: '',
-    //   dataIndex: 'id',
-    //   key: 'id',
-    //   render: (id) => {
-    //     return <Checkbox></Checkbox>;
-    //   },
-    // },
     {
       title: t('orderId'),
       dataIndex: 'orderNo',
@@ -78,13 +66,13 @@ export const YourOrders = () => {
       key: 'fullName',
       render: (fullName, record) => {
         let name = '';
-        let userN = fullName.split(' ');
-        if (userN.length < 2) {
-          name = userN[0].charAt(0);
+        let userN = fullName?.split(' ');
+        if (userN?.length < 2) {
+          name = userN?.[0]?.charAt(0);
         } else {
-          name = userN[0].charAt(0) + userN[1].charAt(0);
+          name = userN?.[0]?.charAt(0) + userN?.[1]?.charAt(0);
         }
-        const statusValue = statusList(record.status);
+        const statusValue = statusList(record?.status);
         return (
           <div className="flex items-center gap-[12px]">
             {record?.issueByImage ? (
@@ -97,7 +85,7 @@ export const YourOrders = () => {
               <div
                 className={`bg-[${statusValue.bg}] px-[8px] py-[4px]  text-[${statusValue.text}] uppercase w-[40px] h-[40px] rounded-[4px] flex justify-center items-center`}
               >
-                {name}
+                {isNaN(name) ? 'N/A' : name}
               </div>
             )}
             <p className="text-white">{fullName}</p>

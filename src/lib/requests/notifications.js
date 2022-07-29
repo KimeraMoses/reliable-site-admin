@@ -1,6 +1,6 @@
-import { getConfig } from 'lib';
+// import { getConfig } from 'lib';
 
-const notificationsConfig = (action) => getConfig({ module: 'Users', action });
+// const notificationsConfig = (action) => getConfig({ module: 'Users', action });
 
 const prefix = `/api/v1/admin/notifications`;
 
@@ -16,10 +16,10 @@ export const getNotificationsConfig = () => ({
     pageSize: 0,
     orderBy: [''],
   },
-  config: notificationsConfig('View'),
+  // config: notificationsConfig('View'),
 });
 
 export const notificationsReadConfig = () => ({
   url: `${prefix}/read`,
-  config: notificationsConfig('View'),
+  // config: notificationsConfig('View'),
 });

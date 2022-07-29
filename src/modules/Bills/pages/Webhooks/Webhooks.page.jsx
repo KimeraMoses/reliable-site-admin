@@ -52,7 +52,7 @@ const WebHooks = () => {
   // Check for permissions Start
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Users',
+    module: 'Webhooks',
     modules: userModules,
   });
   // Check for permissions End
