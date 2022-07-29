@@ -137,7 +137,7 @@ export const UsersList = () => {
   const { loading, users } = useSelector((state) => state?.users);
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Users',
+    module: 'AdminUsers',
     modules: userModules,
   });
   const [tableUsers, setTableUsers] = useState([]);

@@ -1,11 +1,6 @@
 import React, { Suspense, useEffect, useRef } from 'react';
 import IdleTimer from 'react-idle-timer';
-import {
-  BrowserRouter as Router,
-  Navigate,
-  Route,
-  Routes,
-} from 'react-router-dom';
+import { Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import { Error404, dashboardPages } from 'pages';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -25,6 +20,8 @@ import { updateMaintenanceSettings } from 'store';
 import { ProtectedRoute } from 'components/ProtectedRoute.component';
 import { Spin } from 'antd';
 import { getDataCounts } from 'store/Actions/count';
+import setUpInterceptor from 'lib/axios-interceptors';
+import store from 'store';
 
 const SignIn = React.lazy(() => import('pages/sign-in/SignIn.page'));
 const SignUp = React.lazy(() => import('pages/sign-up/SignUp.page'));
@@ -118,6 +115,10 @@ function App() {
     }
   }, [maintenanceDetails]);
 
+  const navigate = useNavigate();
+
+  setUpInterceptor({ store, navigate });
+
   return (
     <div className="App bg-custom-main flex items-center content-center">
       <IdleTimer ref={idleTimer} onIdle={OnIdle} timeout={Timeout} />
@@ -128,105 +129,103 @@ function App() {
           </div>
         }
       >
-        <Router>
-          <Routes>
-            <Route path="/" element={<Navigate to="/admin/sign-in" />} />
+        <Routes>
+          <Route path="/" element={<Navigate to="/admin/sign-in" />} />
+          <Route
+            path="/admin"
+            element={
+              isLoggedIn ? (
+                <Navigate to="/admin/dashboard" />
+              ) : (
+                <Navigate to="/admin/sign-in" />
+              )
+            }
+          />
+          <Route
+            path="/admin/sign-up"
+            element={
+              isLoggedIn ? <Navigate to="/admin/dashboard" /> : <SignUp />
+            }
+          />
+          <Route
+            path="/admin/verify-email/:userId"
+            element={
+              suspended ? (
+                <Navigate to="/admin/account-suspended" />
+              ) : isLoggedIn ? (
+                <Navigate to="/admin/dashboard" />
+              ) : (
+                <EmailVerification />
+              )
+            }
+          />
+          <Route
+            path="/admin/reset-password"
+            element={
+              suspended ? (
+                <Navigate to="/admin/account-suspended" />
+              ) : isLoggedIn ? (
+                <Navigate to="/admin/dashboard" />
+              ) : (
+                <ResetPassword />
+              )
+            }
+          />
+          <Route
+            path="/admin/forgot-password"
+            element={
+              suspended ? (
+                <Navigate to="/admin/account-suspended" />
+              ) : isLoggedIn ? (
+                <Navigate to="/admin/dashboard" />
+              ) : (
+                <ForgotPassword />
+              )
+            }
+          />
+          <Route
+            path="/admin/one-time-password"
+            element={
+              suspended ? (
+                <Navigate to="/admin/account-suspended" />
+              ) : isLoggedIn ? (
+                <Navigate to="/admin/dashboard" />
+              ) : (
+                <ConfirmOtp />
+              )
+            }
+          />
+          <Route
+            path="/admin/sign-in"
+            element={
+              maintenance ? (
+                <Navigate to="/admin/under-maintenance" />
+              ) : isLoggedIn ? (
+                <Navigate to="/admin/dashboard" />
+              ) : (
+                <SignIn />
+              )
+            }
+          />
+          <Route element={<ProtectedRoute />}>
             <Route
-              path="/admin"
+              path="/admin/dashboard/*"
               element={
-                isLoggedIn ? (
-                  <Navigate to="/admin/dashboard" />
-                ) : (
-                  <Navigate to="/admin/sign-in" />
-                )
+                <Routes>
+                  {dashboardPages.map(({ path, Component }) => (
+                    <Route
+                      key={path}
+                      path={`${path}`}
+                      index={path === '/'}
+                      element={<Component />}
+                    />
+                  ))}
+                </Routes>
               }
             />
-            <Route
-              path="/admin/sign-up"
-              element={
-                isLoggedIn ? <Navigate to="/admin/dashboard" /> : <SignUp />
-              }
-            />
-            <Route
-              path="/admin/verify-email/:userId"
-              element={
-                suspended ? (
-                  <Navigate to="/admin/account-suspended" />
-                ) : isLoggedIn ? (
-                  <Navigate to="/admin/dashboard" />
-                ) : (
-                  <EmailVerification />
-                )
-              }
-            />
-            <Route
-              path="/admin/reset-password"
-              element={
-                suspended ? (
-                  <Navigate to="/admin/account-suspended" />
-                ) : isLoggedIn ? (
-                  <Navigate to="/admin/dashboard" />
-                ) : (
-                  <ResetPassword />
-                )
-              }
-            />
-            <Route
-              path="/admin/forgot-password"
-              element={
-                suspended ? (
-                  <Navigate to="/admin/account-suspended" />
-                ) : isLoggedIn ? (
-                  <Navigate to="/admin/dashboard" />
-                ) : (
-                  <ForgotPassword />
-                )
-              }
-            />
-            <Route
-              path="/admin/one-time-password"
-              element={
-                suspended ? (
-                  <Navigate to="/admin/account-suspended" />
-                ) : isLoggedIn ? (
-                  <Navigate to="/admin/dashboard" />
-                ) : (
-                  <ConfirmOtp />
-                )
-              }
-            />
-            <Route
-              path="/admin/sign-in"
-              element={
-                maintenance ? (
-                  <Navigate to="/admin/under-maintenance" />
-                ) : isLoggedIn ? (
-                  <Navigate to="/admin/dashboard" />
-                ) : (
-                  <SignIn />
-                )
-              }
-            />
-            <Route element={<ProtectedRoute />}>
-              <Route
-                path="/admin/dashboard/*"
-                element={
-                  <Routes>
-                    {dashboardPages.map(({ path, Component }) => (
-                      <Route
-                        key={path}
-                        path={`${path}`}
-                        index={path === '/'}
-                        element={<Component />}
-                      />
-                    ))}
-                  </Routes>
-                }
-              />
-            </Route>
-            <Route path="*" element={<Error404 />} />
-          </Routes>
-        </Router>
+          </Route>
+          <Route path="*" element={<Error404 />} />
+        </Routes>
       </Suspense>
     </div>
   );

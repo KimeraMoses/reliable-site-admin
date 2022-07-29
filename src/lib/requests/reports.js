@@ -1,7 +1,7 @@
 import { getConfig } from 'lib';
 
 // Reports End-Points
-const Reports = 'Users';
+const Reports = 'Reports';
 const prefix = `api/v1/admin/reports/tickets`;
 
 // Retrieve annual income agains a year

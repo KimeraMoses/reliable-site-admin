@@ -37,7 +37,7 @@ export const YourOrders = () => {
   const [endDate, setEndDate] = useState('');
 
   const { permissions } = checkModule({
-    module: 'Users',
+    module: 'Orders',
     modules: userModules,
   });
 

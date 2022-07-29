@@ -1,7 +1,7 @@
 import { getConfig } from 'lib';
 
 // WebHooks End-Points
-const PaymentGateway = 'Users';
+const WebHooks = 'Webhooks';
 const prefix = '/api/v1/admin/webhooks';
 // Get List of All Web Hooks
 export const getAllWebHooksConfig = () => ({
@@ -16,20 +16,20 @@ export const getAllWebHooksConfig = () => ({
     pageSize: 0,
     orderBy: [''],
   },
-  config: getConfig({ module: PaymentGateway, action: 'View' }),
+  config: getConfig({ module: WebHooks, action: 'View' }),
 });
 // Add WebHook
 export const addWebHookConfig = () => ({
   url: `${prefix}`,
-  config: getConfig({ module: PaymentGateway, action: 'Create' }),
+  config: getConfig({ module: WebHooks, action: 'Create' }),
 });
 // Edit WebHook
 export const editWebHookConfig = ({ id }) => ({
   url: `${prefix}/${id}`,
-  config: getConfig({ module: PaymentGateway, action: 'Update' }),
+  config: getConfig({ module: WebHooks, action: 'Update' }),
 });
 // Delete WebHook
 export const deleteWebHookConfig = ({ id }) => ({
   url: `${prefix}/${id}`,
-  config: getConfig({ module: PaymentGateway, action: 'Remove' }),
+  config: getConfig({ module: WebHooks, action: 'Remove' }),
 });

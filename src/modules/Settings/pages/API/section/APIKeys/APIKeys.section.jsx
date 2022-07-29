@@ -28,7 +28,7 @@ export const APIKeysList = () => {
   const { users } = useSelector((state) => state?.users);
   const userLoading = useSelector((state) => state?.users?.loading);
   const { permissions } = checkModule({
-    module: 'Settings',
+    module: 'SettingAPIKeys',
     modules: userModules,
   });
 

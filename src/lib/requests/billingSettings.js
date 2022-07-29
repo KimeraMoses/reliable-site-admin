@@ -1,7 +1,7 @@
 import { getConfig } from './getConfig';
 
 const getBillingSettingsConfig = (action) =>
-  getConfig({ module: 'Settings', action });
+  getConfig({ module: 'BillingSettings', action });
 
 // Get Billing Settings By Tenant
 export const getBillingSettingsByTenantConfig = () => ({

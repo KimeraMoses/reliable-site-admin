@@ -1,4 +1,4 @@
-import { getConfig } from 'lib';
+// import { getConfig } from 'lib';
 
 // ModuleManagement End-Points
 export const getAppModulesConfig = () => ({
@@ -6,7 +6,7 @@ export const getAppModulesConfig = () => ({
 });
 
 // UserModuleManagement End-Points
-const UserModuleManagement = 'Users';
+// const UserModuleManagement = 'Users';
 // Get User Modules
 export const getUserModulesConfig = (userId) => ({
   url: `/api/usermodulemanagement/getmodulebyuser/${userId}`,
@@ -14,10 +14,10 @@ export const getUserModulesConfig = (userId) => ({
 // Add User Module
 export const addUserModule = () => ({
   url: `/api/usermodulemanagement`,
-  config: getConfig({ module: UserModuleManagement, action: 'Create' }),
+  // config: getConfig({ module: UserModuleManagement, action: 'Create' }),
 });
 // Update User Module (mid = Module ID)
 export const updateUserModule = (mid) => ({
   url: `/api/usermodulemanagement/${mid}`,
-  config: getConfig({ module: UserModuleManagement, action: 'Update' }),
+  // config: getConfig({ module: UserModuleManagement, action: 'Update' }),
 });

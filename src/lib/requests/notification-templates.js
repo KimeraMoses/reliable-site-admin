@@ -1,7 +1,7 @@
 import { getConfig } from 'lib';
 
 // NotificationTemplate End-Points
-const NotificationTemplate = 'Users';
+const NotificationTemplate = 'Clients';
 const prefix = '/api/v1/admin/notificationstemplate';
 // Get List of All Notification Templates
 export const getNotificationTemplatesConfig = () => ({

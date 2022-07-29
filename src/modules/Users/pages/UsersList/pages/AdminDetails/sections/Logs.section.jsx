@@ -16,7 +16,7 @@ export const Logs = () => {
   const { logs, loading } = useSelector((state) => state?.logs);
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Users',
+    module: 'AdminUsers',
     modules: userModules,
   });
 

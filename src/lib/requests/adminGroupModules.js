@@ -1,7 +1,7 @@
 import { getConfig } from 'lib';
 
 // Admin Group Module Management
-const AdminGroupModuleManagement = 'ModuleManagement';
+const AdminGroupModuleManagement = 'AdminGroups';
 const adminGMMC = (action) =>
   getConfig({ module: AdminGroupModuleManagement, action });
 // Get Admin Group Permissions

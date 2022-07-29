@@ -50,7 +50,7 @@ const PaymentGateways = () => {
   // Check for permissions Start
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Settings',
+    module: 'PaymentGateways',
     modules: userModules,
   });
   // Check for permissions End

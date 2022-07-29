@@ -1,7 +1,6 @@
 import {
   getError,
   axios,
-  updateUserProfileConfig,
   getProfile,
   changePasswordConfig,
   updateEmailConfig,
@@ -58,13 +57,10 @@ export const SaveTokenInLocalStorage = (dispatch, userDetails) => {
 export const updateEmail = (data) => async (dispatch) => {
   dispatch(initAuthenticationPending());
   try {
-    const { url, config } = updateEmailConfig();
-    await axios.put(url, data, config);
+    const { url } = updateEmailConfig();
+    await axios.put(url, data);
     const profileConfig = getProfile();
-    const profileRes = await axios.get(
-      profileConfig?.url,
-      profileConfig?.config
-    );
+    const profileRes = await axios.get(profileConfig?.url);
     dispatch(
       authenticationSuccess({
         user: profileRes?.data?.data,
@@ -97,14 +93,10 @@ export const updateUserProfile = (id, profile) => {
   return async function (dispatch) {
     dispatch(initAuthenticationPending());
     try {
-      const { url, config } = updateUserProfileByIDConfig(id);
-      await axios.put(url, profile, config);
+      const { url } = updateUserProfileByIDConfig(id);
+      await axios.put(url, profile);
       const profileConfig = getUserProfileByIDConfig(id);
-      const profileRes = await axios.get(
-        profileConfig?.url,
-        profileConfig?.config
-      );
-      console.log(profileRes);
+      const profileRes = await axios.get(profileConfig?.url);
       dispatch(
         authenticationSuccess({
           user: profileRes?.data?.data,

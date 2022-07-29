@@ -1,7 +1,7 @@
 import { getConfig } from 'lib';
 
 // SMTP End-Points
-const SmtpConfigurations = 'Settings';
+const SmtpConfigurations = 'SMTP';
 const prefix = '/api/v1/admin/smtpconfigurations';
 // Get List of All SMTP Configurations
 export const getAllSMTPsConfig = () => ({

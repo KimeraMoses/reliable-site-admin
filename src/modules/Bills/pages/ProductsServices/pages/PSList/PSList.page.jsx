@@ -26,7 +26,7 @@ export const PSList = () => {
   const { t } = useTranslation('/Bills/ns');
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Users',
+    module: 'Products',
     modules: userModules,
   });
   const columns = [

@@ -1,20 +1,23 @@
 import { getConfig } from 'lib';
 
+const AdminUsers = 'AdminUsers';
+const Clients = 'Clients';
+const adminConfig = (action) => getConfig({ module: AdminUsers, action });
+const clientConfig = (action) => getConfig({ module: Clients, action });
 // Users
 const Users = 'Users';
 export const getUsersConfig = () => ({
   url: `/api/users/getallusersbyrolename/admin`,
-  config: getConfig({ module: Users, action: 'View' }),
+  config: adminConfig('View'),
 });
-export const getUserConfig = (id) => ({
-  url: `/api/users/${id}`,
-  config: getConfig({ module: Users, action: 'View' }),
+export const getUserConfig = (id, isClient) => ({
+  url: `/api/identity/profile/${id}`,
+  config: isClient ? clientConfig('View') : adminConfig('View'),
 });
 export const getClientsConfig = () => ({
   url: `/api/users/getallusersbyrolename/client`,
-  config: getConfig({ module: Users, action: 'View' }),
+  config: clientConfig('View'),
 });
 export const getSpecificConfig = () => ({
   url: `/api/users/find/specific`,
-  config: getConfig({ module: Users, action: 'View' }),
 });
