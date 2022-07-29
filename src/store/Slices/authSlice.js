@@ -1,22 +1,22 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   user: {},
   token: null,
   rToken: null,
   isLoggedIn: false,
-  status: '',
+  status: "",
   message: null,
-  updateStatus: '',
+  updateStatus: "",
   isLoading: false,
-  authUri: '',
+  authUri: "",
   hasMFA: false,
   hasOTP: false,
 };
 
 export const authSlice = createSlice({
   initialState,
-  name: 'authSlice',
+  name: "authSlice",
   reducers: {
     autoAuthenticationSuccess(state, { payload }) {
       state.user = payload.user;
@@ -59,8 +59,8 @@ export const authSlice = createSlice({
     },
     verificationFail(state, { payload }) {
       state.isLoading = false;
-      state.message = payload.message;
-      state.status = payload.status;
+      state.message = payload?.message;
+      state.status = payload?.status;
     },
     forgotPasswordPending(state) {
       state.isLoading = true;
@@ -81,8 +81,8 @@ export const authSlice = createSlice({
     },
     forgotPasswordFail(state, { payload }) {
       state.isLoading = false;
-      state.message = payload.message;
-      state.status = payload.status;
+      state.message = payload?.message;
+      state.status = payload?.status;
     },
     resetPasswordPending(state) {
       state.isLoading = true;
@@ -115,8 +115,8 @@ export const authSlice = createSlice({
       state.token = null;
       state.isLoggedIn = false;
       state.isLoading = false;
-      localStorage.removeItem('AuthToken');
-      localStorage.removeItem('CurrentUser');
+      localStorage.removeItem("AuthToken");
+      localStorage.removeItem("CurrentUser");
       state.hasMFA = false;
     },
   },

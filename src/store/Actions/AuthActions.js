@@ -103,7 +103,6 @@ export const updateUserProfile = (id, profile) => {
         })
       );
     } catch (e) {
-      console.log(e);
       toast.error(getError(e));
     }
   };
@@ -242,27 +241,32 @@ export const passwordReset = (email, password, confirmPassword, token) => {
   };
 };
 
-export const validateEmailToken = (userId, code) => {
+export const validateEmailToken = (userId, code, navigate) => {
   return async (dispatch) => {
     dispatch(verificationPending());
-    const response = await fetch(
-      `${
-        process.env.REACT_APP_BASEURL
-      }/api/identity/confirm-email?userId=${userId}&code=${code.trim()}&tenant=admin`,
-      {
-        method: 'GET',
-        headers: new Headers({
-          'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
-          tenant: 'admin',
-        }),
+    try {
+      const res = await axios(
+        `${
+          process.env.REACT_APP_BASEURL
+        }/api/identity/confirm-email?userId=${userId}&code=${code.trim()}&tenant=admin`,
+        {
+          method: 'GET',
+          headers: new Headers({
+            'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
+            tenant: 'admin',
+          }),
+        }
+      );
+      if (res.status === 200) {
+        dispatch(verificationSuccess(res.data));
+        navigate('/admin/sign-in');
+        toast.success('Email Verified Successfuly');
       }
-    );
-    if (!response.ok) {
-      const error = await response.json();
-      dispatch(verificationFail(error));
+    } catch (error) {
+      toast.error('Failed to verify email');
+      navigate('/admin/sign-in');
+      dispatch(verificationFail(error.data));
     }
-    const data = await response.json();
-    dispatch(verificationSuccess(data));
   };
 };
 
