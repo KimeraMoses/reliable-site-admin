@@ -36,7 +36,7 @@ export function Tickets() {
 
   const totalTickets = finalTickets?.length;
   const counts = {};
-  finalTickets.forEach(function (x) {
+  finalTickets?.forEach(function (x) {
     counts[x?.departmentName] = (counts[x?.departmentName] || 0) + 1;
   });
 

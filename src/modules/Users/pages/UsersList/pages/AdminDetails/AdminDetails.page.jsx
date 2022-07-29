@@ -2,11 +2,9 @@ import './AdminDetails.styles.scss';
 import { useEffect, useState } from 'react';
 import {
   UserProfileCard,
-  SubUsers,
   Navigation,
   // Overview
   AssignedTickets,
-  PastEmails,
   // User Permissions
   UserPermissions,
   // API Keys

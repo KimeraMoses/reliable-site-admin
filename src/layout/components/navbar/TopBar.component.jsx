@@ -65,10 +65,30 @@ export function TopBar({
                     ))}
                   </div>
                 );
-                return (
-                  <Fragment key={link?.path}>
-                    {innerSubLinks?.length && pathname.includes(link?.path) ? (
-                      <Dropdown overlay={innerLinks}>
+                if (!link?.show) {
+                  return <></>;
+                } else {
+                  return (
+                    <Fragment key={link?.path}>
+                      {innerSubLinks?.length &&
+                      pathname.includes(link?.path) ? (
+                        <Dropdown overlay={innerLinks}>
+                          <Link
+                            to={link?.path}
+                            key={link?.path}
+                            className={`${
+                              pathname.includes(link?.path)
+                                ? 'bg-[#1b1b2b] text-[#3699FF]'
+                                : 'text-[#92928F]'
+                            } rounded-lg py-2 px-4 hover:bg-[#1b1b2b] hover:text-[#3699FF] flex items-center gap-[12px]`}
+                          >
+                            <span>{link?.name}</span>
+                            <Badge pill bg="primary">
+                              {link?.count}
+                            </Badge>
+                          </Link>
+                        </Dropdown>
+                      ) : (
                         <Link
                           to={link?.path}
                           key={link?.path}
@@ -83,25 +103,10 @@ export function TopBar({
                             {link?.count}
                           </Badge>
                         </Link>
-                      </Dropdown>
-                    ) : (
-                      <Link
-                        to={link?.path}
-                        key={link?.path}
-                        className={`${
-                          pathname.includes(link?.path)
-                            ? 'bg-[#1b1b2b] text-[#3699FF]'
-                            : 'text-[#92928F]'
-                        } rounded-lg py-2 px-4 hover:bg-[#1b1b2b] hover:text-[#3699FF] flex items-center gap-[12px]`}
-                      >
-                        <span>{link?.name}</span>
-                        <Badge pill bg="primary">
-                          {link?.count}
-                        </Badge>
-                      </Link>
-                    )}
-                  </Fragment>
-                );
+                      )}
+                    </Fragment>
+                  );
+                }
               })}
             </div>
           ) : (

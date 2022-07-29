@@ -7,6 +7,7 @@ import {
   Support,
   // Users,
 } from 'icons';
+import { checkModule } from 'lib/checkModule';
 import { useSelector } from 'react-redux';
 
 export const useSidebarData = () => {
@@ -14,6 +15,7 @@ export const useSidebarData = () => {
   const { departments } = useSelector((state) => state?.departments);
   const { tickets } = useSelector((state) => state?.tickets);
   const { data } = useSelector((state) => state?.count);
+  const { userModules } = useSelector((state) => state?.modules);
   const departmentsLoading = useSelector(
     (state) => state?.departments?.loading
   );
@@ -46,18 +48,24 @@ export const useSidebarData = () => {
     ],
   }));
 
+  const findModule = (moduleName) =>
+    checkModule({ modules: userModules, module: moduleName })?.permissions
+      ?.View;
+
   // Side Bar Data
   const sidebarData = [
     {
       name: 'Dashboard',
       module: 'Dashboard',
       path: '/admin/dashboard',
+      show: findModule('Dashboard'),
       icon: (fill) => <Dashboard fill={fill} />,
     },
     {
       name: 'Billing',
       module: 'Billing',
       path: '/admin/dashboard/billing',
+      show: findModule('Orders'),
       count: data?.billCount,
       icon: (fill) => <Billing fill={fill} />,
       subLinks: [
@@ -65,6 +73,7 @@ export const useSidebarData = () => {
           name: 'Orders',
           path: '/admin/dashboard/billing/orders',
           count: data?.ordersCount,
+          show: findModule('Orders'),
           showDropdown: true,
           subLinks: [
             {
@@ -81,6 +90,7 @@ export const useSidebarData = () => {
           name: 'Clients',
           count: data?.clientsCount,
           path: '/admin/dashboard/billing/clients',
+          show: findModule('Clients'),
           showDropdown: true,
           subLinks: [
             {
@@ -115,6 +125,7 @@ export const useSidebarData = () => {
         },
         {
           name: 'Products & Services',
+          show: findModule('Products'),
           count: data?.productsCount,
           path: '/admin/dashboard/billing/products-services',
           showDropdown: true,
@@ -137,6 +148,7 @@ export const useSidebarData = () => {
         },
         {
           name: 'Invoices',
+          show: findModule('Invoices'),
           path: '/admin/dashboard/billing/invoices',
           showDropdown: true,
           subLinks: [
@@ -159,11 +171,13 @@ export const useSidebarData = () => {
         },
         {
           name: 'WHMCS Import Tool',
+          show: findModule('WHMCS'),
           path: '/admin/dashboard/billing/WHMCS-import',
         },
         {
           name: 'Logs',
           path: '/admin/dashboard/billing/logs',
+          show: findModule('Logs'),
           showDropdown: true,
           subLinks: [
             { name: 'Logs', path: '/admin/dashboard/billing/logs' },
@@ -173,6 +187,7 @@ export const useSidebarData = () => {
         {
           name: 'WebHooks',
           count: data?.webHooksCount,
+          show: findModule('WebHooks'),
           path: '/admin/dashboard/billing/webhooks',
         },
       ],
@@ -180,6 +195,7 @@ export const useSidebarData = () => {
     {
       name: 'Support',
       module: 'Support',
+      show: findModule('Support'),
       count: data?.ticketCount,
       path: '/admin/dashboard/support',
       icon: (fill) => <Support fill={fill} />,
@@ -197,6 +213,7 @@ export const useSidebarData = () => {
         ...links,
         {
           name: 'Tickets List',
+          show: findModule('TicketList'),
           path: '/admin/dashboard/support/tickets/show-all/list',
           subLinks: [
             {
@@ -210,6 +227,7 @@ export const useSidebarData = () => {
     {
       name: 'Knowledge Base',
       module: 'KnowledgeBase',
+      show: findModule('KnowledgeBase'),
       count: data?.articlesCount,
       path: '/admin/dashboard/knowledge-base',
       icon: (fill) => <Knowledge fill={fill} />,
@@ -252,6 +270,7 @@ export const useSidebarData = () => {
     {
       name: 'Reports',
       module: 'Reports',
+      show: findModule('Reports'),
       path: '/admin/dashboard/reports',
       icon: (fill) => <Reports fill={fill} />,
       subLinks: [
@@ -275,6 +294,7 @@ export const useSidebarData = () => {
     },
     {
       name: 'Settings',
+      show: findModule('Settings'),
       module: 'Settings',
       path: '/admin/dashboard/settings',
       icon: (fill) => <Settings fill={fill} />,
@@ -290,10 +310,12 @@ export const useSidebarData = () => {
         {
           name: 'Billing',
           path: '/admin/dashboard/settings/billing',
+          show: findModule('BillingSettings'),
         },
         {
           name: 'Payment Gateways',
           path: '/admin/dashboard/settings/payment-gateways',
+          show: findModule('PaymentGateways'),
         },
         {
           name: 'Support',
@@ -302,14 +324,17 @@ export const useSidebarData = () => {
         {
           name: 'Departments',
           path: '/admin/dashboard/settings/departments',
+          show: findModule('Departments'),
         },
         {
           name: 'Brands',
           path: '/admin/dashboard/settings/brands',
+          show: findModule('Brands'),
         },
         {
           name: 'SMTP',
           path: '/admin/dashboard/settings/smtp',
+          show: findModule('SMTP'),
           subLinks: [
             {
               name: 'Add New Configuration',
@@ -324,6 +349,7 @@ export const useSidebarData = () => {
         {
           name: 'Email Templates',
           path: '/admin/dashboard/settings/email-templates',
+          show: findModule('EmailTemplates'),
           subLinks: [
             {
               name: 'Add New Template',
@@ -337,6 +363,7 @@ export const useSidebarData = () => {
         },
         {
           name: 'Admin Users',
+          show: findModule('AdminUsers'),
           count: data?.adminsCount,
           path: '/admin/dashboard/settings/users/list',
           subLinks: [
@@ -348,6 +375,7 @@ export const useSidebarData = () => {
         },
         {
           name: 'Admin Groups',
+          show: findModule('AdminGroups'),
           count: data?.adminGroupCount,
           path: '/admin/dashboard/settings/users/groups',
         },
@@ -358,11 +386,12 @@ export const useSidebarData = () => {
         {
           name: 'API',
           path: '/admin/dashboard/settings/api',
+          show: findModule('SettingAPIKeys'),
         },
-        {
-          name: 'Portal',
-          path: '/admin/dashboard/settings/portal',
-        },
+        // {
+        //   name: 'Portal',
+        //   path: '/admin/dashboard/settings/portal',
+        // },
       ],
     },
     {

@@ -1,13 +1,13 @@
 import React, { Fragment } from 'react';
 import SideLinks from './SideLinks.component';
 import './SideBar.styles.scss';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
 import { useSidebarData } from './data';
-import { checkModule } from 'lib/checkModule';
+// import { checkModule } from 'lib/checkModule';
 import { Spin } from 'antd';
 
 export function SideBar({ hideSide }) {
-  const userLevelModules = useSelector((state) => state?.modules?.userModules);
+  // const userLevelModules = useSelector((state) => state?.modules?.userModules);
 
   const sidebarData = useSidebarData();
 
@@ -20,15 +20,11 @@ export function SideBar({ hideSide }) {
       >
         <ul className="p-0">
           {sidebarData.map(
-            ({ name, module, path, hideInSide, icon, count }) => {
-              const isModulePresent = checkModule({
-                modules: userLevelModules,
-                module,
-              });
+            ({ name, module, path, hideInSide, icon, count, show }) => {
               return (
                 <Fragment key={path}>
                   {/* TODO: Remove or operator and module variable once all modules are included */}
-                  {isModulePresent || module ? (
+                  {show ? (
                     <SideLinks
                       name={name}
                       path={path}
