@@ -3,7 +3,7 @@ export const checkModule = ({ modules, module }) => {
   if (module !== undefined && module !== null && filtered.length) {
     return {
       name: filtered[0]?.name,
-      permissions: JSON.parse(filtered[0]?.permissionDetail),
+      permissions: JSON.parse(filtered && filtered[0]?.permissionDetail),
       userId: filtered[0]?.userId,
     };
   } else {

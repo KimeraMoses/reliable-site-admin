@@ -1,10 +1,10 @@
-import { useFormikContext } from 'formik';
+import { useFormikContext } from "formik";
 
-import { EmailBodyInput, Button } from 'components';
-import { axios, getError } from 'lib';
-import { toast } from 'react-toastify';
-import { useEffect, useRef, useState } from 'react';
-import EmailEditor from 'react-email-editor';
+import { EmailBodyInput, Button } from "components";
+import { axios, getError } from "lib";
+import { toast } from "react-toastify";
+import { useEffect, useRef, useState } from "react";
+import EmailEditor from "react-email-editor";
 
 export function Right() {
   const [loading, setLoading] = useState(false);
@@ -14,7 +14,7 @@ export function Right() {
   const emailEditorRef = useRef(null);
 
   const onReady = () => {
-    console.log('onReady');
+    console.log("onReady");
   };
   // Email Editor Settings End
 
@@ -24,7 +24,9 @@ export function Right() {
       values?.emailTemplateContent?.id &&
       values?.emailTemplateContent?.jsonBody
     ) {
-      const templateJson = JSON.parse(values?.emailTemplateContent?.jsonBody);
+      const templateJson = JSON.parse(
+        values && values?.emailTemplateContent?.jsonBody
+      );
       if (emailEditorRef?.current) {
         emailEditorRef.current.editor.loadDesign(templateJson);
       }
@@ -58,7 +60,7 @@ export function Right() {
 
         <div className="bg-[#1E1E2D] p-[32px] rounded-[8px] mt-[20px]">
           <EmailEditor
-            appearance={{ theme: 'dark' }}
+            appearance={{ theme: "dark" }}
             ref={emailEditorRef}
             onReady={onReady}
             minHeight={600}
@@ -84,11 +86,11 @@ export function Right() {
                   cssStyle: values?.cssStyle,
                 };
                 try {
-                  await axios.post('/api/v1/admin/massemails', finalValues, {
-                    modulename: 'Users',
-                    moduleactionname: 'Create',
+                  await axios.post("/api/v1/admin/massemails", finalValues, {
+                    modulename: "Users",
+                    moduleactionname: "Create",
                   });
-                  toast.success('Email Sent Successfully!');
+                  toast.success("Email Sent Successfully!");
                 } catch (e) {
                   toast.error(getError(e));
                 }

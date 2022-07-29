@@ -1,6 +1,6 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { PermissionsModal } from 'components';
-import { updateAPIKeyPermissions } from 'store';
+import { useSelector, useDispatch } from "react-redux";
+import { PermissionsModal } from "components";
+import { updateAPIKeyPermissions } from "store";
 
 export const EditPermissions = ({ show, setShow }) => {
   const dispatch = useDispatch();
@@ -18,7 +18,7 @@ export const EditPermissions = ({ show, setShow }) => {
         return {
           isActive: true,
           name: module.name,
-          permissionDetail: JSON.parse(module.permissionDetail),
+          permissionDetail: JSON.parse(module && module.permissionDetail),
         };
       });
       console.log([...filtered, ...currentModules]);
