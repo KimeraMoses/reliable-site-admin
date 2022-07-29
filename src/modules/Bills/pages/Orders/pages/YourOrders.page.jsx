@@ -85,7 +85,7 @@ export const YourOrders = () => {
               <div
                 className={`bg-[${statusValue.bg}] px-[8px] py-[4px]  text-[${statusValue.text}] uppercase w-[40px] h-[40px] rounded-[4px] flex justify-center items-center`}
               >
-                {name}
+                {isNaN(name) ? 'N/A' : name}
               </div>
             )}
             <p className="text-white">{fullName}</p>

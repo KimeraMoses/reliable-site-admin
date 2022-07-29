@@ -24,6 +24,7 @@ import { getAppSettingsByTenant } from 'store';
 import { updateMaintenanceSettings } from 'store';
 import { ProtectedRoute } from 'components/ProtectedRoute.component';
 import { Spin } from 'antd';
+import { getDataCounts } from 'store/Actions/count';
 
 const SignIn = React.lazy(() => import('pages/sign-in/SignIn.page'));
 const SignUp = React.lazy(() => import('pages/sign-up/SignUp.page'));
@@ -71,6 +72,7 @@ function App() {
       (async () => {
         await dispatch(getDepartmentsByUserId({ id: user?.id }));
         await dispatch(getUserModules({ id: user?.id }));
+        await dispatch(getDataCounts());
       })();
     }
   }, [user, token]);
