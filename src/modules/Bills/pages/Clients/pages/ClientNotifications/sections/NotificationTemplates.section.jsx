@@ -23,7 +23,7 @@ export const NotificationTemplates = () => {
   const { t } = useTranslation('/Bills/ns');
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Users',
+    module: 'Clients',
     modules: userModules,
   });
   const columns = [

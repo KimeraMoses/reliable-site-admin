@@ -30,6 +30,7 @@ import ticketsReducer from './Slices/ticketsSlice';
 import ticketCommentsReducer from './Slices/ticketCommentsSlice';
 import ticketRepliesReducer from './Slices/ticketRepliesSlice';
 import webHooks from './Slices/webhooks';
+import countSlice from './Slices/dataCount';
 
 const store = configureStore({
   reducer: {
@@ -64,6 +65,7 @@ const store = configureStore({
     ticketComments: ticketCommentsReducer,
     ticketReplies: ticketRepliesReducer,
     webhooks: webHooks,
+    count: countSlice,
   },
 });
 export const messageNotifications = {

@@ -71,7 +71,7 @@ export const EditClientUser = ({ show, setShow, client }) => {
       initialValues={initialValues}
       validationSchema={validationSchema}
       handleSubmit={async (values) => {
-        await dispatch(updateUser(client?.id, values));
+        await dispatch(updateUser(client?.id, values, true));
         setShow(false);
       }}
     />

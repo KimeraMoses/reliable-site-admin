@@ -31,7 +31,7 @@ export const TicketsByDepartment = () => {
   }, [dispatch]);
 
   const { permissions } = checkModule({
-    module: 'Users',
+    module: 'Support',
     modules: userModules,
   });
 

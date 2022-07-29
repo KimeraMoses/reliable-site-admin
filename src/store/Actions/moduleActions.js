@@ -3,7 +3,6 @@ import {
   axios,
   getAppModulesConfig,
   getUserModulesConfig,
-  // getProfile,
 } from 'lib';
 import axiosMain from 'axios';
 import { toast } from 'react-toastify';

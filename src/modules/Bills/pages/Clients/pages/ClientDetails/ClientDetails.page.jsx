@@ -46,7 +46,7 @@ export const ClientDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getUserById(id));
+    dispatch(getUserById(id, true));
     dispatch(getUserModulesById(id));
   }, []);
 

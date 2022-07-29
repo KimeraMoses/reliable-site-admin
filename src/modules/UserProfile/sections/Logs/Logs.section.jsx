@@ -4,7 +4,7 @@ import './styles.scss';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { checkModule } from 'lib/checkModule';
+// import { checkModule } from 'lib/checkModule';
 import { getLogsByUserID } from 'store';
 import { exportToExcel } from 'lib';
 
@@ -14,11 +14,11 @@ export const Logs = () => {
   const { t } = useTranslation('/Users/ns');
 
   const { logs, loading } = useSelector((state) => state?.logs);
-  const { userModules } = useSelector((state) => state?.modules);
-  const { permissions } = checkModule({
-    module: 'Users',
-    modules: userModules,
-  });
+  // const { userModules } = useSelector((state) => state?.modules);
+  // const { permissions } = checkModule({
+  //   module: 'Logs',
+  //   modules: userModules,
+  // });
 
   const { user } = useSelector((state) => state?.auth);
   const dispatch = useDispatch();
@@ -90,7 +90,7 @@ export const Logs = () => {
           }}
           hideActions
           hideHeaders
-          permissions={permissions}
+          permissions={{ View: true, Update: true, Remove: true }}
           loading={loading}
         />
       </div>

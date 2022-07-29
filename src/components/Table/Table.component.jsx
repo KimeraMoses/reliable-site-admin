@@ -77,7 +77,11 @@ export const Table = ({
   // Only Set Data if there are view permissions
   useEffect(() => {
     let dataViewer = [];
-    if (permissions !== undefined && permissions !== null && permissions.View) {
+    if (
+      permissions !== undefined &&
+      permissions !== null &&
+      permissions?.View
+    ) {
       dataViewer = filtered?.length ? filtered : data;
     }
     setDataSource(dataViewer);

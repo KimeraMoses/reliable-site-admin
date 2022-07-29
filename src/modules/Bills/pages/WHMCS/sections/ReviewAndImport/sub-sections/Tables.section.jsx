@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 export const Tables = () => {
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Settings',
+    module: 'WHMCS',
     modules: userModules,
   });
 
