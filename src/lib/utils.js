@@ -1,9 +1,9 @@
-import axios from 'axios';
-import { EditorState, ContentState, convertFromHTML } from 'draft-js';
-import { browserName, browserVersion } from 'react-device-detect';
-import moment from 'moment';
-import * as XLSX from 'xlsx';
-import * as FileSaver from 'file-saver';
+import axios from "axios";
+import { EditorState, ContentState, convertFromHTML } from "draft-js";
+import { browserName, browserVersion } from "react-device-detect";
+import moment from "moment";
+import * as XLSX from "xlsx";
+import * as FileSaver from "file-saver";
 
 export const getGroupModules = ({ appModules = [], groupModules = [] }) => {
   const groupNames = groupModules?.map((el) => el?.name);
@@ -25,7 +25,7 @@ export const getGroupModules = ({ appModules = [], groupModules = [] }) => {
   const parsedGroupPermissions = groupModules.map((module) => {
     return {
       ...module,
-      permissionDetail: JSON.parse(module?.permissionDetail),
+      permissionDetail: JSON.parse(module && module?.permissionDetail),
     };
   });
   const newArray = [...filteredModulesFalse, ...parsedGroupPermissions];
@@ -63,7 +63,7 @@ export const getUserModules = ({ appModules = [], userModules = [] }) => {
   const parsedUserModules = userModules.map((module) => {
     return {
       ...module,
-      permissionDetail: JSON.parse(module?.permissionDetail),
+      permissionDetail: JSON.parse(module && module?.permissionDetail),
     };
   });
   const newArray = [...filteredModulesFalse, ...parsedUserModules];
@@ -108,9 +108,9 @@ export const createServerImage = async (file) => {
   const fileName = file?.name;
   const imgData = {};
   if (fileName) {
-    const ext = fileName.substr(fileName.lastIndexOf('.'));
-    const finalName = fileName.substr(0, fileName.indexOf('.'));
-    let base64image = '';
+    const ext = fileName.substr(fileName.lastIndexOf("."));
+    const finalName = fileName.substr(0, fileName.indexOf("."));
+    let base64image = "";
     try {
       base64image = await convertBase64(file);
       imgData.name = finalName;
@@ -125,16 +125,16 @@ export const createServerImage = async (file) => {
 
 // Add Server URL Properly
 export const addServerUrl = (
-  url = '{server_url}/Files/Images/ApplicationUser/Usama.jpeg.jpeg'
+  url = "{server_url}/Files/Images/ApplicationUser/Usama.jpeg.jpeg"
 ) => {
-  const truncated = url.substring(url.indexOf('/'), url.length);
+  const truncated = url.substring(url.indexOf("/"), url.length);
   const finalURL = `${process.env.REACT_APP_BASEURL}${truncated}`;
   return finalURL;
 };
 
 // Convert URL to File
 export const convertUrlToFile = async (imgUrl, fileName) => {
-  const imgExt = imgUrl.split(/[#?]/)[0].split('.').pop().trim();
+  const imgExt = imgUrl.split(/[#?]/)[0].split(".").pop().trim();
   try {
     const response = await fetch(imgUrl);
     const blob = await response.blob();
@@ -160,51 +160,51 @@ export const getDifference = (date) => {
   const diffInYears = Math.round(diffInDays / 365);
   console.log(date);
   if (diffInMinutes < 1) {
-    return 'Just Now';
+    return "Just Now";
   }
   if (diffInMinutes < 2) {
-    return '1 Minute Ago';
+    return "1 Minute Ago";
   }
   if (diffInMinutes < 60) {
     return `${diffInMinutes} Minutes Ago`;
   }
   if (diffInHours < 2) {
-    return '1 Hour Ago';
+    return "1 Hour Ago";
   }
   if (diffInHours < 24) {
     return `${diffInHours} Hours Ago`;
   }
   if (diffInDays < 2) {
-    return '1 Day Ago';
+    return "1 Day Ago";
   }
   if (diffInDays < 7) {
     return `${diffInDays} Days Ago`;
   }
   if (diffInWeeks < 2) {
-    return '1 Week Ago';
+    return "1 Week Ago";
   }
   if (diffInWeeks < 4) {
     return `${diffInWeeks} Weeks Ago`;
   }
   if (diffInMonths < 2) {
-    return '1 Month Ago';
+    return "1 Month Ago";
   }
   if (diffInMonths < 12) {
     return `${diffInMonths} Months Ago`;
   }
   if (diffInYears < 2) {
-    return '1 Year Ago';
+    return "1 Year Ago";
   }
   return `${diffInYears} Years Ago`;
 };
 
 // Get IP Address Info
 export const getIPData = async () => {
-  const res = await axios.get('https://geolocation-db.com/json/');
+  const res = await axios.get("https://geolocation-db.com/json/");
   const { city, state, country_name } = res.data;
-  const cityString = city ? `${city}, ` : '';
-  const stateString = state ? `${state}, ` : '';
-  const countryString = country_name ? `${country_name}` : '';
+  const cityString = city ? `${city}, ` : "";
+  const stateString = state ? `${state}, ` : "";
+  const countryString = country_name ? `${country_name}` : "";
   return {
     ip: res.data.IPv4,
     location: `${cityString}${stateString}${countryString}`,
@@ -218,7 +218,7 @@ export const getDeviceName = () => {
 
 // Convert camelCase to Title Case
 export const convertCamelToTitle = (str) => {
-  const result = str.replace(/([A-Z])/g, ' $1');
+  const result = str.replace(/([A-Z])/g, " $1");
   const finalResult = result.charAt(0).toUpperCase() + result.slice(1);
   return finalResult;
 };
@@ -237,115 +237,115 @@ export const convertHTMLToDraftState = (html) => {
   }
 };
 
-export const statusList = (i = '') => {
+export const statusList = (i = "") => {
   let v = [
     {
-      name: 'Pending',
-      bg: '#392F28',
-      text: '#FFA800',
+      name: "Pending",
+      bg: "#392F28",
+      text: "#FFA800",
     },
     {
-      name: 'Confirmed',
-      bg: '#1C3238',
-      text: '#0BB783',
+      name: "Confirmed",
+      bg: "#1C3238",
+      text: "#0BB783",
     },
     {
-      name: 'Paid',
-      bg: '#1C3238',
-      text: '#0BB783',
+      name: "Paid",
+      bg: "#1C3238",
+      text: "#0BB783",
     },
     {
-      name: 'Completed',
-      bg: '#1C3238',
-      text: '#0BB783',
+      name: "Completed",
+      bg: "#1C3238",
+      text: "#0BB783",
     },
     {
-      name: 'Cancelled',
-      bg: '#3A2434',
-      text: '#F64E60',
+      name: "Cancelled",
+      bg: "#3A2434",
+      text: "#F64E60",
     },
   ];
-  return i !== '' ? v[i] : v;
+  return i !== "" ? v[i] : v;
 };
 
 export const getNotificationType = ({ type }) => {
   switch (type) {
     case 0:
-      return 'New User Registered';
+      return "New User Registered";
     case 1:
-      return 'New Ticket Created';
+      return "New Ticket Created";
     case 2:
-      return 'Ticket Updated';
+      return "Ticket Updated";
     case 3:
-      return 'New Order Created';
+      return "New Order Created";
     case 4:
-      return 'Order Updated';
+      return "Order Updated";
     case 5:
-      return 'New Comment Added on Ticket';
+      return "New Comment Added on Ticket";
     case 6:
-      return 'New Reply Added on Ticket Comment';
+      return "New Reply Added on Ticket Comment";
     case 7:
-      return 'Category Generated';
+      return "Category Generated";
     case 8:
-      return 'Bills';
+      return "Bills";
     default:
-      return '';
+      return "";
   }
 };
 
 export const getNotificationLink = ({ type }) => {
   switch (type) {
     case 0:
-      return '/admin/dashboard/billing/clients/list/show';
+      return "/admin/dashboard/billing/clients/list/show";
     case 1:
-      return '/admin/dashboard/support/tickets/list';
+      return "/admin/dashboard/support/tickets/list";
     case 2:
-      return '/admin/dashboard/support/tickets/list';
+      return "/admin/dashboard/support/tickets/list";
     case 3:
-      return '/admin/dashboard/support/tickets/list';
+      return "/admin/dashboard/support/tickets/list";
     case 4:
-      return '/admin/dashboard/billing/orders/your-orders/list';
+      return "/admin/dashboard/billing/orders/your-orders/list";
     case 5:
-      return '/admin/dashboard/billing/orders/your-orders/list';
+      return "/admin/dashboard/billing/orders/your-orders/list";
     case 6:
-      return '/admin/dashboard/billing/orders/your-orders/list';
+      return "/admin/dashboard/billing/orders/your-orders/list";
     case 7:
-      return '/admin/dashboard/support/tickets/list';
+      return "/admin/dashboard/support/tickets/list";
     case 8:
-      return '/admin/dashboard/support/tickets/list';
+      return "/admin/dashboard/support/tickets/list";
     case 9:
-      return '#';
+      return "#";
     case 10:
-      return '#';
+      return "#";
     case 11:
-      return '/admin/dashboard/billing/invoices/list/show';
+      return "/admin/dashboard/billing/invoices/list/show";
     case 12:
-      return '/admin/dashboard/billing/invoices/list/show';
+      return "/admin/dashboard/billing/invoices/list/show";
     case 13:
-      return '#';
+      return "#";
     case 14:
-      return '#';
+      return "#";
     case 15:
-      return '/admin/dashboard/knowledge-base/feedback';
+      return "/admin/dashboard/knowledge-base/feedback";
     case 16:
-      return '/admin/dashboard/knowledge-base/feedback';
+      return "/admin/dashboard/knowledge-base/feedback";
     case 17:
-      return '/admin/dashboard/knowledge-base/feedback';
+      return "/admin/dashboard/knowledge-base/feedback";
     case 18:
-      return '/admin/dashboard/billing/products-services/list/show';
+      return "/admin/dashboard/billing/products-services/list/show";
     default:
-      return '#';
+      return "#";
   }
 };
 
 export const getNotificationTarget = ({ target }) => {
   switch (target) {
     case 0:
-      return 'Clients';
+      return "Clients";
     case 1:
-      return 'Admins';
+      return "Admins";
     default:
-      return '';
+      return "";
   }
 };
 
@@ -364,9 +364,9 @@ export const groupBy = (objectArray, property) => {
 };
 
 export const genrateFirstLetterName = (value) => {
-  let name = '';
+  let name = "";
   if (value) {
-    let userN = value.split(' ');
+    let userN = value.split(" ");
     if (userN.length < 2) {
       name = userN[0].charAt(0);
     } else {
@@ -377,8 +377,8 @@ export const genrateFirstLetterName = (value) => {
 };
 
 export const exportToExcel = (object) => {
-  const fileType = 'text/csv;charset=utf-8';
-  const fileExtension = '.csv';
+  const fileType = "text/csv;charset=utf-8";
+  const fileExtension = ".csv";
 
   // const json = JSON.stringify(object);
   const ws = XLSX.utils.json_to_sheet(object);
@@ -388,11 +388,11 @@ export const exportToExcel = (object) => {
     SheetNames: [`data`],
   };
 
-  const excelBuffer = XLSX.write(wb, { bookType: 'csv', type: 'array' });
+  const excelBuffer = XLSX.write(wb, { bookType: "csv", type: "array" });
   const data = new Blob([excelBuffer], { type: fileType });
   FileSaver.saveAs(
     data,
-    `Report-${moment().format('MM-DD-YYYY [at] HH:mm A')}` + fileExtension
+    `Report-${moment().format("MM-DD-YYYY [at] HH:mm A")}` + fileExtension
   );
 };
 
@@ -400,18 +400,18 @@ export const exportToExcel = (object) => {
 export const getTemplateVariables = (templateType) => {
   const variables = {
     EmailConfirmation:
-      '[fullName], [company], [address],[userName],[email],[emailVerificationUri]',
-    EmailOTP: '[fullName], [company], [address],[otpcode],[userName]',
-    General: '[userName],[email],[company],[address],[fullname]',
-    Invoice: '[fullName], [company], [address],[invoicelink]',
-    Orders: '[fullName], [company], [address],[orderlink]',
-    ProductCancellation: '[fullName], [company], [address],[productlink]',
-    ProductStatusUpdated: '[fullName], [company], [address],[productlink]',
+      "[fullName], [company], [address],[userName],[email],[emailVerificationUri]",
+    EmailOTP: "[fullName], [company], [address],[otpcode],[userName]",
+    General: "[userName],[email],[company],[address],[fullname]",
+    Invoice: "[fullName], [company], [address],[invoicelink]",
+    Orders: "[fullName], [company], [address],[orderlink]",
+    ProductCancellation: "[fullName], [company], [address],[productlink]",
+    ProductStatusUpdated: "[fullName], [company], [address],[productlink]",
     ResetPassword:
-      '[fullName], [company], [address],[userName],[resetPasswordUri]',
-    TicketAssignment: '[fullName], [company], [address],[ticketlink]',
-    TicketCreated: '[fullName], [company], [address],[ticketlink]',
-    TicketUpdated: '[fullName], [company], [address],[ticketlink]',
+      "[fullName], [company], [address],[userName],[resetPasswordUri]",
+    TicketAssignment: "[fullName], [company], [address],[ticketlink]",
+    TicketCreated: "[fullName], [company], [address],[ticketlink]",
+    TicketUpdated: "[fullName], [company], [address],[ticketlink]",
   };
   switch (templateType) {
     case 0:

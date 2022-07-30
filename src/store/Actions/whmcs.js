@@ -1,5 +1,5 @@
-import { axios } from 'lib';
-import { importDataConfig, validateDataConfig } from 'lib/requests/whmcs';
+import { axios } from "lib";
+import { importDataConfig, validateDataConfig } from "lib/requests/whmcs";
 import {
   getValidateData,
   setWHMCSError,
@@ -9,7 +9,7 @@ import {
   setImportProgres,
   setWHMCSFile,
   setImportError,
-} from 'store/Slices';
+} from "store/Slices";
 
 export const clearWHMCSState = () => {
   return async (dispatch) => {
@@ -29,7 +29,9 @@ export const validateWHMCSData = ({ data }) => {
       dispatch(setWHMCSFile(data?.jsonFile));
       const response = await axios.post(url, data, config);
       if (response?.data?.content) {
-        dispatch(getValidateData(JSON.parse(response?.data?.content)));
+        dispatch(
+          getValidateData(JSON.parse(response && response?.data?.content))
+        );
         dispatch(setWHMCSError(false));
       }
       if (response?.data?.rowValidationErrors?.length) {
