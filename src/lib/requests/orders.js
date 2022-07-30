@@ -1,6 +1,6 @@
 import { getConfig } from 'lib';
 
-const ordersConfig = (action) => getConfig({ module: 'Users', action });
+const ordersConfig = (action) => getConfig({ module: 'Orders', action });
 
 const prefix = `/api/v1/admin/orders`;
 const otprefix = '/api/v1/admin/ordertemplates';

@@ -1,5 +1,6 @@
 import { getConfig } from 'lib';
-const departmentsConfig = (action) => getConfig({ module: 'Settings', action });
+const departmentsConfig = (action) =>
+  getConfig({ module: 'Departments', action });
 
 const prefix = `/api/departments`;
 

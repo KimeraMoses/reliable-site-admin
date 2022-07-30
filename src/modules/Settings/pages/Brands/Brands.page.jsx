@@ -4,13 +4,8 @@ import { checkModule } from 'lib/checkModule';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getBrands, getClients } from 'store';
-import { useTranslation } from "react-i18next";
-import {
-  AddBrand,
-  DeleteBrand,
-  EditBrand,
-  ClientsAssigned,
-} from './sections';
+import { useTranslation } from 'react-i18next';
+import { AddBrand, DeleteBrand, EditBrand, ClientsAssigned } from './sections';
 import { NavLink } from 'react-router-dom';
 
 const Brands = () => {
@@ -33,23 +28,23 @@ const Brands = () => {
   const { brands, loading } = useSelector((state) => state.brands);
   const { clients } = useSelector((state) => state?.users);
 
-  const { t } = useTranslation("/Settings/ns");
+  const { t } = useTranslation('/Settings/ns');
 
   const columns = [
     {
       title: t('name'),
-      dataIndex: "name",
-      key: "name",
+      dataIndex: 'name',
+      key: 'name',
     },
     {
       title: t('companyName'),
-      dataIndex: "companyName",
-      key: "companyName",
+      dataIndex: 'companyName',
+      key: 'companyName',
     },
     {
       title: t('logo'),
-      dataIndex: "logo",
-      key: "logo",
+      dataIndex: 'logo',
+      key: 'logo',
       render: (logoUrl, record) => {
         let name = '';
         let userN = record.name.split(' ');
@@ -58,58 +53,58 @@ const Brands = () => {
         } else {
           name = userN[0].charAt(0) + userN[1].charAt(0);
         }
-        return (
-          record.base64Logo ? (
-            <img
-              src={record.base64Logo}
-              alt={record.name}
-              className="h-full w-[40px] rounded-[5px] object-cover text-[8px]"
-            />
-          ) : (
-            <div className="bg-[#1C3238] px-[8px] py-[4px] uppercase w-[40px] h-[40px] rounded-[4px] flex justify-center items-center">
-              {name}
-            </div>
-          )
-        )
-      }
+        return record.base64Logo ? (
+          <img
+            src={record.base64Logo}
+            alt={record.name}
+            className="h-full w-[40px] rounded-[5px] object-cover text-[8px]"
+          />
+        ) : (
+          <div className="bg-[#1C3238] px-[8px] py-[4px] uppercase w-[40px] h-[40px] rounded-[4px] flex justify-center items-center">
+            {name}
+          </div>
+        );
+      },
     },
     {
       title: t('clientAssignedTable'),
-      key: "clientAssigned",
-      dataIndex: "clientAssigned",
+      key: 'clientAssigned',
+      dataIndex: 'clientAssigned',
       render: (clientAssigned, record) => {
         return (
-          <NavLink to={"#"} onClick={() => {
-            setEditValue(record);
-            setClientsModalShow(true);
-          }}>
-            {`${clientAssigned?.split(",")?.length} Clients Assigned`}
+          <NavLink
+            to={'#'}
+            onClick={() => {
+              setEditValue(record);
+              setClientsModalShow(true);
+            }}
+          >
+            {`${clientAssigned?.split(',')?.length} Clients Assigned`}
           </NavLink>
-        )
-      }
+        );
+      },
     },
     {
       title: t('status'),
-      key: "status",
-      dataIndex: "status",
+      key: 'status',
+      dataIndex: 'status',
       render: (status) =>
         status ? (
           <div className="bg-[#1C3238] px-[8px] py-[4px] text-[#0BB783] w-[fit-content] rounded-[4px]">
-            {"ENABLED"}
+            {'ENABLED'}
           </div>
         ) : (
           <div className="bg-[#3A2434] px-[8px] py-[4px] text-[#F64E60] w-[fit-content] rounded-[4px]">
-            {"DISABLED"}
+            {'DISABLED'}
           </div>
         ),
     },
   ];
 
-
   // Check for permissions Start
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Settings',
+    module: 'Brands',
     modules: userModules,
   });
   // Check for permissions End
@@ -121,7 +116,7 @@ const Brands = () => {
       const dataToSet = brands.map((b) => {
         return {
           ...b,
-          key: b?.id
+          key: b?.id,
         };
       });
       setData(dataToSet);

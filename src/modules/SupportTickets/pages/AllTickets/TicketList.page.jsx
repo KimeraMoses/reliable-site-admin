@@ -68,7 +68,7 @@ export const AllTickets = () => {
   };
 
   const { permissions } = checkModule({
-    module: 'Users',
+    module: 'Support',
     modules: userModules,
   });
 

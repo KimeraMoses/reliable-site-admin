@@ -12,10 +12,10 @@ export const Notifications = () => {
 
   const { t } = useTranslation('/Bills/ns');
   const { userModules } = useSelector((state) => state?.modules);
-  const { permissions } = checkModule({
-    module: 'Users',
-    modules: userModules,
-  });
+  // const { permissions } = checkModule({
+  //   module: 'Users',
+  //   modules: userModules,
+  // });
   const columns = [
     {
       title: 'ID',
@@ -97,7 +97,11 @@ export const Notifications = () => {
           customClass: 'w-[fit_content]',
         }}
         hideActions
-        permissions={permissions}
+        permissions={{
+          View: true,
+          Update: true,
+          Remove: true,
+        }}
         t={t}
       />
     </div>

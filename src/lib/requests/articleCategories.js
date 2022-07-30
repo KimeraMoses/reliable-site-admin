@@ -1,6 +1,6 @@
 import { getConfig } from 'lib';
 
-const Articles = 'Users';
+const Articles = 'KnowledgeBase';
 const prefix = 'api/v1/admin/categories';
 const articlesConfig = (action) => getConfig({ module: Articles, action });
 

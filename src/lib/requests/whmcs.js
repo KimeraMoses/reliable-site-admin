@@ -1,7 +1,7 @@
 import { getConfig } from 'lib';
 
 // Users
-const WHMCS = 'Users';
+const WHMCS = 'WHMCS';
 export const validateDataConfig = () => ({
   url: `/api/whmcsimport/validatethedata`,
   config: getConfig({ module: WHMCS, action: 'View' }),

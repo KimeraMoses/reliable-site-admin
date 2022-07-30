@@ -42,7 +42,7 @@ const columns = [
 export const TicketHistory = () => {
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Users',
+    module: 'Support',
     modules: userModules,
   });
 

@@ -1,7 +1,7 @@
 import { getConfig } from 'lib';
 
 const maintenanceSettingsConfig = (action) =>
-  getConfig({ module: 'Settings', action });
+  getConfig({ module: 'MaintenanceSettings', action });
 
 // Get Maintenance Settings
 export const getMaintenanceSettingsConfig = () => ({

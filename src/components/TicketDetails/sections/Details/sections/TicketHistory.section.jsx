@@ -13,7 +13,7 @@ export const TicketHistory = () => {
   const [data, setData] = useState(false);
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Users',
+    module: 'Support',
     modules: userModules,
   });
 

@@ -12,7 +12,7 @@ import './APIKeys.styles.scss';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Add, Delete, EditAPIKey, EditPermissions } from './sections';
-import { checkModule } from 'lib/checkModule';
+// import { checkModule } from 'lib/checkModule';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAPIKeysByUID } from 'store';
 import { getAPIKeyByID } from 'store';
@@ -29,13 +29,13 @@ export const APIKeys = () => {
   const [showDelete, setShowDelete] = useState(false);
   const [recordToDel, setRecordToDel] = useState(false);
 
-  const { userModules } = useSelector((state) => state?.modules);
+  // const { userModules } = useSelector((state) => state?.modules);
   const { apiKeys, loading } = useSelector((state) => state?.apiKeys);
   const { user } = useSelector((state) => state?.auth);
-  const { permissions } = checkModule({
-    module: 'Users',
-    modules: userModules,
-  });
+  // const { permissions } = checkModule({
+  //   module: 'Users',
+  //   modules: userModules,
+  // });
 
   const { t } = useTranslation('/Users/ns');
 
@@ -180,7 +180,7 @@ export const APIKeys = () => {
               </Button>
             );
           }}
-          permissions={permissions}
+          permissions={{ View: true, Update: true, Remove: true }}
           t={t}
         />
       </div>

@@ -1,5 +1,5 @@
 import { getConfig } from 'lib';
-const ticketsConfig = (action) => getConfig({ module: 'Users', action });
+const ticketsConfig = (action) => getConfig({ module: 'Support', action });
 
 const prefix = `/api/tickets`;
 

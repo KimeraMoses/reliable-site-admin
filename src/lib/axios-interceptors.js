@@ -30,7 +30,7 @@ function refreshToken() {
   );
 }
 
-const setUpInterceptor = (store) => {
+const setUpInterceptor = ({ store, navigate }) => {
   const handleError = async (error) => {
     return Promise.reject(error);
   };
@@ -69,10 +69,9 @@ const setUpInterceptor = (store) => {
           return axios(config);
         } catch (err) {
           store.dispatch(logout());
-          return Promise.reject(err);
+          navigate('/admin/sign-in');
         }
       }
-      return Promise.reject(error);
     }
   );
 };

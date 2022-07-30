@@ -1,7 +1,7 @@
 import { getConfig } from './getConfig';
 
 const emailTemplatesConfig = (action) =>
-  getConfig({ module: 'Settings', action });
+  getConfig({ module: 'EmailTemplates', action });
 const prefix = `/api/v1/admin/emailtemplates`;
 
 // Add Email Template Config
