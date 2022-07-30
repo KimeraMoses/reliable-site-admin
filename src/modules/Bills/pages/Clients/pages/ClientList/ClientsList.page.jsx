@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
-import { Button } from 'antd';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useState } from "react";
+import { Button } from "antd";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
 
-import { getClients, getUsers, getBrands } from 'store';
-import { checkModule } from 'lib/checkModule';
-import { Table } from 'components';
-import { AddClientUser, EditClientUser } from './sections';
+import { getClients, getUsers, getBrands } from "store";
+import { checkModule } from "lib/checkModule";
+import { Table } from "components";
+import { AddClientUser, EditClientUser } from "./sections";
 
 export const ClientList = () => {
   const [showAdd, setShowAdd] = useState(false);
@@ -27,35 +27,41 @@ export const ClientList = () => {
   const { clients, loading } = useSelector((state) => state?.users);
   const brandsLoading = useSelector((state) => state?.brands?.loading);
 
-  const { t } = useTranslation('/Bills/ns');
+  const { t } = useTranslation("/Bills/ns");
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Clients',
+    module: "Clients",
     modules: userModules,
   });
   const columns = [
     {
-      title: 'Client Name',
-      dataIndex: 'fullName',
-      key: 'fullName',
+      title: "Client Name",
+      dataIndex: "fullName",
+      key: "fullName",
     },
     {
-      title: 'Email Address',
-      dataIndex: 'email',
-      key: 'email',
+      title: "Email Address",
+      dataIndex: "email",
+      key: "email",
     },
     {
-      title: 'Company Name',
-      dataIndex: 'companyName',
-      key: 'companyName',
+      title: "Company Name",
+      dataIndex: "companyName",
+      key: "companyName",
     },
     {
-      title: 'Created Date',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      render: (text) => (text ? text : 'N/A'),
+      title: "Created Date",
+      dataIndex: "createdOn",
+      key: "createdOn",
+      render: (date) => getFullDate(date),
     },
   ];
+
+  const getFullDate = (date) => {
+    const dateAndTime = date.split("T");
+
+    return dateAndTime[0].split("-").reverse().join("-");
+  };
 
   return (
     <div className="p-[40px]">
@@ -73,9 +79,9 @@ export const ClientList = () => {
           loading={loading || brandsLoading}
           fieldToFilter="fullName"
           btnData={{
-            text: 'Add Client',
+            text: "Add Client",
             onClick: () => setShowAdd(true),
-            customClass: 'px-[82px]',
+            customClass: "px-[82px]",
           }}
           viewAction={(record) => (
             <Button
