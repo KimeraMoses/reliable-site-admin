@@ -1,24 +1,24 @@
-import { NavLink, useParams } from 'react-router-dom';
+import { NavLink, useParams } from "react-router-dom";
 // import { Ticket as TicketIcon } from 'icons';
-import { Reply as ReplyIcon } from 'icons';
-import { Formik, Form, Field } from 'formik';
-import { useDispatch, useSelector } from 'react-redux';
-import { Dropdown, List, Button, Popconfirm } from 'antd';
-import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import * as Yup from 'yup';
-
+import { Reply as ReplyIcon } from "icons";
+import { Formik, Form, Field } from "formik";
+import { useDispatch, useSelector } from "react-redux";
+import { Dropdown, List, Button, Popconfirm } from "antd";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import * as Yup from "yup";
+import moment from "moment";
 import {
   getTicketById,
   addTicketReplies,
   addTicketComments,
   editTicket,
-} from 'store';
-import { Button as CustomButton, Input, FollowUp } from 'components';
-import { genrateFirstLetterName } from 'lib';
-import { deleteComment } from 'store';
-import { setTicketCommentLoading } from 'store';
-import { updateTicketComments } from 'store';
+} from "store";
+import { Button as CustomButton, Input, FollowUp } from "components";
+import { genrateFirstLetterName } from "lib";
+import { deleteComment } from "store";
+import { setTicketCommentLoading } from "store";
+import { updateTicketComments } from "store";
 
 const CustomSelectUpdate = ({
   label,
@@ -54,23 +54,23 @@ const CustomSelectUpdate = ({
 };
 
 const initialValues = {
-  commentText: '',
+  commentText: "",
 };
 
 const initialRepliesValues = {
-  commentText: '',
+  commentText: "",
 };
 
 const validationSchema = Yup.object().shape({
-  commentText: Yup.string().required('Comment text is required'),
+  commentText: Yup.string().required("Comment text is required"),
 });
 
 const validationSchemaReplies = Yup.object().shape({
-  commentText: Yup.string().required('Comment text is required'),
+  commentText: Yup.string().required("Comment text is required"),
 });
 
 export const Communication = () => {
-  const { t } = useTranslation('/Tickets/ns');
+  const { t } = useTranslation("/Tickets/ns");
   const [selected, setSelected] = useState([]);
 
   const { commentLoading } = useSelector((state) => state?.ticketComments);
@@ -79,8 +79,11 @@ export const Communication = () => {
   const { departmentUsers } = useSelector((state) => state?.departments);
   const { id } = useParams();
   const dispatch = useDispatch();
+  // console.log(departmentUsers);
 
   const { ticket } = useSelector((state) => state?.tickets);
+
+  console.log("ticket", ticket);
 
   const commentSource = ticket?.ticketComments?.filter(
     (comment) => comment?.ticketCommentType === 0 && !comment?.isDraft
@@ -91,12 +94,12 @@ export const Communication = () => {
 
   const fields = [
     {
-      name: 'assignedTo',
-      label: t('assignTo'),
-      type: 'select',
+      name: "assignedTo",
+      label: t("assignTo"),
+      type: "select",
       value: ticket?.assignedTo,
       options: () => {
-        let usersData = [{ value: '', label: 'Select' }];
+        let usersData = [{ value: "", label: "Select" }];
         departmentUsers?.forEach((user) => {
           usersData.push({
             value: user?.id,
@@ -107,12 +110,12 @@ export const Communication = () => {
       },
     },
     {
-      name: 'ticketStatus',
-      label: t('status'),
-      type: 'select',
+      name: "ticketStatus",
+      label: t("status"),
+      type: "select",
       value: ticket?.ticketStatus,
       options: () =>
-        ['Active', 'Waiting', 'Closed', 'Closed and Locked']?.map(
+        ["Active", "Waiting", "Closed", "Closed and Locked"]?.map(
           (el, idx) => ({
             label: el,
             value: idx,
@@ -120,12 +123,12 @@ export const Communication = () => {
         ),
     },
     {
-      name: 'ticketPriority',
-      label: t('priority'),
-      type: 'select',
+      name: "ticketPriority",
+      label: t("priority"),
+      type: "select",
       value: ticket?.ticketPriority,
       options: () =>
-        ['Low', 'Normal', 'High'].map((el, idx) => ({
+        ["Low", "Normal", "High"].map((el, idx) => ({
           label: el,
           value: idx,
         })),
@@ -134,27 +137,37 @@ export const Communication = () => {
 
   // Ticket Data
   const ticketData = [
-    { title: 'Ticket #', value: ticket?.ticketNumber },
+    { title: "Ticket #", value: ticket?.ticketNumber },
     {
-      title: 'Client Email',
+      title: "Client Email",
       value: ticket?.clientEmail,
     },
     {
-      title: 'Client Full Name',
+      title: "Client Full Name",
       value: ticket?.clientFullName,
     },
-    { title: 'Product / Service', value: ticket?.product },
-    { title: 'Brand', value: ticket?.brand?.name },
-    { title: 'Department', value: ticket?.department?.name },
-    { title: 'Idle', value: ticket?.idleTime },
-    { title: 'Duration', value: ticket?.duration },
+    { title: "Product / Service", value: ticket?.product },
+    { title: "Brand", value: ticket?.brand?.name },
+    { title: "Department", value: ticket?.department?.name },
+    // { title: "Idle", value: ticket?.idleTime },
+    // { title: "Duration", value: ticket?.duration },
     {
-      title: 'Assigned To',
+      title: "Idle",
+      value: `${moment(ticket?.lastModifiedOn).format(
+        "HH:mm:ss"
+      )} since modified`,
+    },
+    {
+      title: "Duration",
+      value: `${moment(ticket?.createdOn).format("HH:mm:ss")} since created`,
+    },
+    {
+      title: "Assigned To",
       value: ticket?.assignedToFullName,
     },
     {
-      title: 'Number of Messages',
-      value: ticket?.ticketComments?.length || '0',
+      title: "Number of Messages",
+      value: ticket?.ticketComments?.length || "0",
     },
   ];
   // Ticket Data
@@ -178,13 +191,13 @@ export const Communication = () => {
   };
 
   const handleUpdateTicket = (e) => {
-    if (e.target.value !== '') {
+    if (e.target.value !== "") {
       const newValues = {
         ...ticket,
       };
-      if (e.target.name === 'assignedTo') {
+      if (e.target.name === "assignedTo") {
         newValues[e.target.name] = e.target.value;
-      } else if (e.target.name === 'ticketStatus') {
+      } else if (e.target.name === "ticketStatus") {
         newValues[e.target.name] = parseInt(e.target.value);
       } else {
         newValues[e.target.name] = parseInt(e.target.value);
@@ -206,17 +219,17 @@ export const Communication = () => {
           return (
             <div className="flex items-center gap-[12px]">
               <div className="text-[16px] text-[#474761]">{data?.title}:</div>
-              <div className={'text-[14px]'}>
-                {data?.value ? data?.value : 'N/A'}
+              <div className={"text-[14px]"}>
+                {data?.value ? data?.value : "N/A"}
               </div>
             </div>
           );
         })}
       </div>
-      <div className={'text-[14px] mt-[40px] mb-[40px]'}>
+      <div className={"text-[14px] mt-[40px] mb-[40px]"}>
         <div className="flex items-center gap-[12px]">
           <div className="text-[16px] text-[#474761]">Description:</div>
-          <div className={'text-[14px]'}>{ticket?.description}</div>
+          <div className={"text-[14px]"}>{ticket?.description}</div>
         </div>
       </div>
       <div className={`form ticket-form `}>
@@ -230,7 +243,7 @@ export const Communication = () => {
                 placeholder={field.placeholder}
                 type={field.type}
                 options={field.options()}
-                className={'custom-select'}
+                className={"custom-select"}
                 value={field.value}
                 onChange={(e) => handleUpdateTicket(e)}
               />
@@ -247,26 +260,26 @@ export const Communication = () => {
             <Form>
               <div
                 className={`relative mb-[32px] items-end ${
-                  ticket?.ticketStatus > 0 && 'pointer-events-none opacity-30'
+                  ticket?.ticketStatus > 0 && "pointer-events-none opacity-30"
                 }`}
               >
                 <Input
-                  key={'commentText'}
-                  name={'commentText'}
-                  label={''}
-                  placeholder={'Share Your Comments'}
-                  type={'textarea'}
-                  rows={'7'}
+                  key={"commentText"}
+                  name={"commentText"}
+                  label={""}
+                  placeholder={"Share Your Comments"}
+                  type={"textarea"}
+                  rows={"7"}
                 />
                 <div className="absolute bottom-5 right-5 flex items-center gap-[12px]">
                   <Dropdown
                     overlay={
                       <>
                         {[
-                          'Send and Mark Active',
-                          'Send and Mark Waiting',
-                          'Send and Mark Closed',
-                          'Send and Mark Closed & Locked',
+                          "Send and Mark Active",
+                          "Send and Mark Waiting",
+                          "Send and Mark Closed",
+                          "Send and Mark Closed & Locked",
                         ].map((el, idx) => {
                           return (
                             <Button
@@ -301,7 +314,7 @@ export const Communication = () => {
                     className="custom-table__table-dropdown"
                     destroyPopupOnHide
                     placement="bottomRight"
-                    trigger={['click', 'contextMenu']}
+                    trigger={["click", "contextMenu"]}
                   >
                     <CustomButton
                       loading={commentLoading}
@@ -335,7 +348,7 @@ export const Communication = () => {
           )}
         </Formik>
       </div>
-      <div className={'ticket-list-wrap custom-table__table'}>
+      <div className={"ticket-list-wrap custom-table__table"}>
         <List
           itemLayout="vertical"
           size="large"
@@ -343,14 +356,14 @@ export const Communication = () => {
             pageSize: 20,
           }}
           dataSource={finalComments}
-          footer={''}
+          footer={""}
           renderItem={(item) => (
-            <List.Item key={item.id} actions={''} extra={''}>
+            <List.Item key={item.id} actions={""} extra={""}>
               <div
                 id={item.id}
                 className="p-[20px] border-[1px] rounded-[8px] border-[#323248]"
               >
-                <div className={'w-full relative'}>
+                <div className={"w-full relative"}>
                   <div className="flex">
                     <div className="image w-[47px] rounded-[5px] overflow-hidden">
                       {item?.userImagePath ? (
@@ -383,13 +396,13 @@ export const Communication = () => {
                       <NavLink
                         to="#"
                         onClick={() => handleReplyInput(item.id)}
-                        className={'text-[#474761]'}
+                        className={"text-[#474761]"}
                       >
                         Reply
                       </NavLink>
                       <Popconfirm
                         okButtonProps={{
-                          className: 'bg-[#40a9ff]',
+                          className: "bg-[#40a9ff]",
                         }}
                         title="Are you sure you want to delete this comment?"
                         onConfirm={async () => {
@@ -401,7 +414,7 @@ export const Communication = () => {
                       >
                         <div
                           className={
-                            'text-[#474761] cursor-pointer hover:text-[#40a9ff]'
+                            "text-[#474761] cursor-pointer hover:text-[#40a9ff]"
                           }
                         >
                           Delete
@@ -423,10 +436,10 @@ export const Communication = () => {
                           dispatch(setTicketCommentLoading(false));
                         }}
                         className={
-                          item?.isSticky ? 'text-[#40a9ff]' : 'text-[#474761]'
+                          item?.isSticky ? "text-[#40a9ff]" : "text-[#474761]"
                         }
                       >
-                        {item?.isSticky ? 'Unpin' : 'Pin'}
+                        {item?.isSticky ? "Unpin" : "Pin"}
                       </NavLink>
                     </div>
                   )}
@@ -435,7 +448,7 @@ export const Communication = () => {
                   {item?.commentText}
                 </div>
                 {isSelected(item.id) && (
-                  <div className={'reply-box mt-[20px] relative'}>
+                  <div className={"reply-box mt-[20px] relative"}>
                     <Formik
                       initialValues={initialRepliesValues}
                       validationSchema={validationSchemaReplies}
@@ -455,7 +468,7 @@ export const Communication = () => {
                       {({ errors, touched, values }) => {
                         return (
                           <Form>
-                            <div className={'relative'}>
+                            <div className={"relative"}>
                               <Field
                                 className="modal__form-el-field"
                                 key="commentText"
@@ -471,10 +484,10 @@ export const Communication = () => {
                                 <ReplyIcon />
                               </Button>
                             </div>
-                            {touched['commentText'] &&
-                              errors['commentText'] && (
+                            {touched["commentText"] &&
+                              errors["commentText"] && (
                                 <div className="error mt-[8px]">
-                                  {errors['commentText']}
+                                  {errors["commentText"]}
                                 </div>
                               )}
                           </Form>
@@ -491,7 +504,7 @@ export const Communication = () => {
                     id={data?.id}
                     className="p-[20px] border-[1px] rounded-[8px] mt-[20px] border-[#323248]"
                   >
-                    <div className={'w-full relative'}>
+                    <div className={"w-full relative"}>
                       <div className="flex">
                         <div className="image w-[47px] rounded-[5px] overflow-hidden">
                           {data?.userImagePath ? (
@@ -524,7 +537,7 @@ export const Communication = () => {
                           to="#"
                           onClick={() => handleReplyInput(item.id)}
                           className={
-                            'text-[#474761] text-[16px] absolute right-5 top-1'
+                            "text-[#474761] text-[16px] absolute right-5 top-1"
                           }
                         >
                           Reply
@@ -535,7 +548,7 @@ export const Communication = () => {
                       {data?.commentText}
                     </div>
                     {isSelected(data.id) && (
-                      <div className={'reply-box mt-[20px] relative'}>
+                      <div className={"reply-box mt-[20px] relative"}>
                         <Formik
                           initialValues={initialRepliesValues}
                           validationSchema={validationSchemaReplies}
@@ -563,10 +576,10 @@ export const Communication = () => {
                                   name="commentText"
                                   placeholder="Write Something"
                                 />
-                                {touched['commentText'] &&
-                                  errors['commentText'] && (
+                                {touched["commentText"] &&
+                                  errors["commentText"] && (
                                     <div className="error mt-[8px]">
-                                      {errors['commentText']}
+                                      {errors["commentText"]}
                                     </div>
                                   )}
                                 <Button

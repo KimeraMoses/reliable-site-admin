@@ -8,8 +8,8 @@ import {
   getDeviceName,
   updateUserProfileByIDConfig,
   getUserProfileByIDConfig,
-} from 'lib';
-import { toast } from 'react-toastify';
+} from "lib";
+import { toast } from "react-toastify";
 import {
   authenticationFail,
   authenticationPending,
@@ -34,7 +34,7 @@ import {
   verificationFail,
   verificationPending,
   verificationSuccess,
-} from 'store/Slices/authSlice';
+} from "store/Slices/authSlice";
 import {
   checkMaintenanceFail,
   checkMaintenancePending,
@@ -42,15 +42,15 @@ import {
   fetchSettingsFail,
   fetchSettingsPending,
   fetchSettingsSuccess,
-} from 'store/Slices/settingSlice';
+} from "store/Slices/settingSlice";
 import {
   UserRegistrationFail,
   UserRegistrationPending,
   UserRegistrationSuccess,
-} from 'store/Slices/userRegistrationSlice';
+} from "store/Slices/userRegistrationSlice";
 
 export const SaveTokenInLocalStorage = (dispatch, userDetails) => {
-  localStorage.setItem('CurrentUser', JSON.stringify(userDetails));
+  localStorage.setItem("CurrentUser", JSON.stringify(userDetails));
 };
 
 // Update Email
@@ -66,9 +66,9 @@ export const updateEmail = (data) => async (dispatch) => {
         user: profileRes?.data?.data,
       })
     );
-    toast.success('Email updated successfully');
+    toast.success("Email updated successfully");
   } catch (error) {
-    toast.error('Email update failed');
+    toast.error("Email update failed");
   }
 };
 // Change Password
@@ -80,7 +80,7 @@ export const changePassword = (values) => {
       await axios.post(url, values);
       dispatch(logout());
       toast.success(
-        'Password changed successfully, Please login again using new password'
+        "Password changed successfully, Please login again using new password"
       );
     } catch (e) {
       toast.error(getError(e));
@@ -114,12 +114,12 @@ export const getUserProfile = (token) => {
     const response = await fetch(
       `${process.env.REACT_APP_BASEURL}/api/identity/profile`,
       {
-        method: 'GET',
+        method: "GET",
         headers: new Headers({
-          'Content-type': 'application/json',
-          'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
-          'admin-api-key': process.env.REACT_APP_ADMIN_APIKEY,
-          tenant: 'admin',
+          "Content-type": "application/json",
+          "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
+          "admin-api-key": process.env.REACT_APP_ADMIN_APIKEY,
+          tenant: "admin",
           Authorization: `Bearer ${token}`,
         }),
       }
@@ -152,7 +152,7 @@ export const signup = (
     const response = await fetch(
       `${process.env.REACT_APP_BASEURL}/api/identity/register-admin`,
       {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({
           userName,
           password,
@@ -163,21 +163,21 @@ export const signup = (
           IpAddress,
         }),
         headers: new Headers({
-          'Content-type': 'application/json',
-          'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
-          tenant: 'admin',
+          "Content-type": "application/json",
+          "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
+          tenant: "admin",
         }),
       }
     );
 
     if (!response.ok) {
       const error = await response.json();
-      let message = '';
-      if (error.message === 'Email already in use') {
-        message = 'Account with the same email already exits';
+      let message = "";
+      if (error.message === "Email already in use") {
+        message = "Account with the same email already exits";
       } else {
         message =
-          'Failed to create account, Please check your connection and try again';
+          "Failed to create account, Please check your connection and try again";
       }
       dispatch(UserRegistrationFail(message));
     }
@@ -192,14 +192,14 @@ export const forgotPassword = (email) => {
     const response = await fetch(
       `${process.env.REACT_APP_BASEURL}/api/identity/forgot-password`,
       {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({
           email,
         }),
         headers: new Headers({
-          'Content-type': 'application/json',
-          'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
-          tenant: 'admin',
+          "Content-type": "application/json",
+          "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
+          tenant: "admin",
         }),
       }
     );
@@ -218,7 +218,7 @@ export const passwordReset = (email, password, confirmPassword, token) => {
     const response = await fetch(
       `${process.env.REACT_APP_BASEURL}/api/identity/reset-password`,
       {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({
           email,
           password,
@@ -226,9 +226,9 @@ export const passwordReset = (email, password, confirmPassword, token) => {
           token,
         }),
         headers: new Headers({
-          'Content-type': 'application/json',
-          tenant: 'admin',
-          'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
+          "Content-type": "application/json",
+          tenant: "admin",
+          "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
         }),
       }
     );
@@ -250,40 +250,42 @@ export const validateEmailToken = (userId, code, navigate) => {
           process.env.REACT_APP_BASEURL
         }/api/identity/confirm-email?userId=${userId}&code=${code.trim()}&tenant=admin`,
         {
-          method: 'GET',
+          method: "GET",
           headers: new Headers({
-            'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
-            tenant: 'admin',
+            "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
+            tenant: "admin",
           }),
         }
       );
       if (res.status === 200) {
         dispatch(verificationSuccess(res.data));
-        navigate('/admin/sign-in');
-        toast.success('Email Verified Successfuly');
+        navigate("/admin/sign-in");
+        toast.success("Email Verified Successfuly");
       }
     } catch (error) {
-      toast.error('Failed to verify email');
-      navigate('/admin/sign-in');
+      toast.error("Failed to verify email");
+      navigate("/admin/sign-in");
       dispatch(verificationFail(error.data));
     }
   };
 };
 
 export const AutoAuthenticate = (dispatch) => {
-  const AuthToken = localStorage.getItem('AuthToken');
-  const CurrentUser = localStorage.getItem('CurrentUser');
+  const AuthToken = localStorage.getItem("AuthToken");
+  const CurrentUser = localStorage.getItem("CurrentUser");
   // const suspended = localStorage.getItem("Account-Suspended");
 
   // if (suspended) {
   //   dispatch(accountSuspended());
   // }
-  let UserToken = '';
+  let UserToken = "";
   if (!AuthToken) {
     dispatch(logout());
     return;
   }
-  UserToken = JSON.parse(AuthToken);
+  if (typeof AuthToken !== "undefined") {
+    UserToken = JSON.parse(AuthToken && AuthToken);
+  }
   const expireDate = new Date(UserToken.refreshTokenExpiryTime);
   const todaysDate = new Date();
   if (todaysDate > expireDate) {
@@ -291,7 +293,7 @@ export const AutoAuthenticate = (dispatch) => {
   }
   const data = {
     token: UserToken.token,
-    user: JSON.parse(CurrentUser),
+    user: typeof CurrentUser !== "undefined" ? JSON.parse(CurrentUser) : null,
   };
   dispatch(autoAuthenticationSuccess(data));
 };
@@ -302,10 +304,10 @@ export const maintenanceStatus = (token) => {
     const response = await fetch(
       `${process.env.REACT_APP_BASEURL}/api/maintenance/maintenancemode/admin`,
       {
-        method: 'GET',
+        method: "GET",
         headers: new Headers({
-          'admin-api-key': process.env.REACT_APP_ADMIN_APIKEY,
-          tenant: 'admin',
+          "admin-api-key": process.env.REACT_APP_ADMIN_APIKEY,
+          tenant: "admin",
         }),
       }
     );
@@ -324,10 +326,10 @@ export const trustedDays = () => {
     const response = await fetch(
       `https://myreliablesite.m2mbeta.com/admin/api/v1/admin/settings/getsettingswithtenant/admin`,
       {
-        method: 'GET',
+        method: "GET",
         headers: new Headers({
-          'admin-api-key': process.env.REACT_APP_ADMIN_APIKEY,
-          tenant: 'admin',
+          "admin-api-key": process.env.REACT_APP_ADMIN_APIKEY,
+          tenant: "admin",
         }),
       }
     );
@@ -347,16 +349,16 @@ export const loginbyOtp = (userName, otpCode) => {
     const response = await fetch(
       `${process.env.REACT_APP_BASEURL}/api/tokens/gettokenbyotp`,
       {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({
           userName,
           otpCode,
         }),
         headers: new Headers({
-          'Content-type': 'application/json',
-          'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
-          tenant: 'admin',
-          'X-Forwarded-For': ip,
+          "Content-type": "application/json",
+          "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
+          tenant: "admin",
+          "X-Forwarded-For": ip,
           location,
           devicename: getDeviceName(),
         }),
@@ -369,7 +371,7 @@ export const loginbyOtp = (userName, otpCode) => {
     const res = await response.json();
     dispatch(initAuthenticationSuccess(res.data));
     dispatch(getUserProfile(res.data.token));
-    localStorage.setItem('AuthToken', JSON.stringify(res.data));
+    localStorage.setItem("AuthToken", JSON.stringify(res.data));
   };
 };
 
@@ -379,15 +381,15 @@ export const confirmOtp = (userId, otp) => {
     const response = await fetch(
       `${process.env.REACT_APP_BASEURL}/api/mfauthenticator/validate-mfa`,
       {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({
           userId,
           otp,
         }),
         headers: new Headers({
-          'Content-type': 'application/json',
-          'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
-          tenant: 'admin',
+          "Content-type": "application/json",
+          "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
+          tenant: "admin",
         }),
       }
     );
@@ -397,7 +399,7 @@ export const confirmOtp = (userId, otp) => {
     }
     const res = await response.json();
     dispatch(confirmOtpSuccess(res));
-    const username = localStorage.getItem('userName');
+    const username = localStorage.getItem("userName");
     dispatch(loginbyOtp(username, otp));
   };
 };
@@ -408,16 +410,16 @@ export const validateMFA = (userId, code, isRemember) => {
     const response = await fetch(
       `${process.env.REACT_APP_BASEURL}/api/mfauthenticator/validate-mfa`,
       {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({
           userId,
           code,
           isRemember,
         }),
         headers: new Headers({
-          'Content-type': 'application/json',
-          'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
-          tenant: 'admin',
+          "Content-type": "application/json",
+          "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
+          tenant: "admin",
         }),
       }
     );
@@ -428,7 +430,7 @@ export const validateMFA = (userId, code, isRemember) => {
     const res = await response.json();
     dispatch(initAuthenticationSuccess(res.tokenResponse));
     dispatch(getUserProfile(res.tokenResponse.token));
-    localStorage.setItem('AuthToken', JSON.stringify(res.tokenResponse));
+    localStorage.setItem("AuthToken", JSON.stringify(res.tokenResponse));
   };
 };
 
@@ -438,16 +440,16 @@ export const disableConfirmOtp = (userId, otp, isRemember) => {
     const response = await fetch(
       `${process.env.REACT_APP_BASEURL}/api/mfauthenticator/removetwofactorauthentication`,
       {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({
           userId,
           otp,
           isRemember,
         }),
         headers: new Headers({
-          'Content-type': 'application/json',
-          'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
-          tenant: 'admin',
+          "Content-type": "application/json",
+          "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
+          tenant: "admin",
         }),
       }
     );
@@ -457,7 +459,7 @@ export const disableConfirmOtp = (userId, otp, isRemember) => {
     }
     const res = await response.json();
     dispatch(confirmOtpSuccess(res));
-    const username = localStorage.getItem('userName');
+    const username = localStorage.getItem("userName");
     dispatch(loginbyOtp(username, otp));
   };
 };
@@ -468,14 +470,14 @@ export const GetMFAUri = (userId) => {
     const response = await fetch(
       `${process.env.REACT_APP_BASEURL}/api/mfauthenticator/get-mfa-key`,
       {
-        method: 'POST',
+        method: "POST",
         body: JSON.stringify({
           userId,
         }),
         headers: new Headers({
-          'Content-type': 'application/json',
-          'gen-api-key': process.env.REACT_APP_GEN_APIKEY,
-          tenant: 'admin',
+          "Content-type": "application/json",
+          "gen-api-key": process.env.REACT_APP_GEN_APIKEY,
+          tenant: "admin",
         }),
       }
     );

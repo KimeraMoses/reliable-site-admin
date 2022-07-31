@@ -2,6 +2,7 @@ import { Modal } from "components";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { addClientUser } from "store";
+import { useCountries } from "use-react-countries";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
@@ -19,12 +20,10 @@ const validationSchema = Yup.object().shape({
   status: Yup.bool().required("Status is required"),
   companyName: Yup.string().required("Company Name is required"),
   address1: Yup.string().required("Address 1 is required"),
-  address2: Yup.string().required("Address 2 is required"),
   city: Yup.string().required("City is required"),
   state_region: Yup.string().required("State/Region is required"),
   zipCode: Yup.string().required("ZIP Code is required"),
   country: Yup.string().required("Country is required"),
-  ipAddress: Yup.string().required("IP Address is required"),
   brandId: Yup.string().required("Brand is required"),
 });
 
@@ -32,7 +31,7 @@ export const AddClientUser = ({ show, setShow }) => {
   const { t } = useTranslation("/Users/ns");
   const dispatch = useDispatch();
   const { loading, clients } = useSelector((state) => state?.users);
-  // const allUsers = [...users, ...clients];
+  const { countries } = useCountries();
   const { brands } = useSelector((state) => state?.brands);
   const brandsLoading = useSelector((state) => state?.brands?.loading);
   const initialValues = {
@@ -126,10 +125,14 @@ export const AddClientUser = ({ show, setShow }) => {
       placeholder: "38000",
     },
     {
-      type: "input",
+      type: "select",
       name: "country",
       title: "Country",
       placeholder: "USA",
+      options: countries.map((country) => ({
+        label: country?.name,
+        value: country?.name,
+      })),
     },
     {
       type: "select",
