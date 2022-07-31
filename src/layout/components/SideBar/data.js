@@ -18,7 +18,6 @@ export const useSidebarData = () => {
   const isSuperAdmin = useSelector(
     (state) => state?.auth?.user?.userRolesResponse?.userRoles
   )[1]?.enabled;
-  console.log(isSuperAdmin);
   const { userModules } = useSelector((state) => state?.modules);
   const departmentsLoading = useSelector(
     (state) => state?.departments?.loading
@@ -36,7 +35,7 @@ export const useSidebarData = () => {
   const finalTickets = ticketsWithDepartmentName?.filter(
     (ticket) => ticket?.departmentName !== undefined
   );
-  console.log(data);
+  // console.log(data);
   function getUniqueListBy(arr, key) {
     return [...new Map(arr?.map((item) => [item?.[key], item]))?.values()];
   }
@@ -70,15 +69,15 @@ export const useSidebarData = () => {
       module: "Billing",
       path: "/admin/dashboard/billing",
       show: findModule("Orders"),
-      count: data?.billCount,
+      count: data?.billCount > 0 ? data?.billCount : null,
       icon: (fill) => <Billing fill={fill} />,
       subLinks: [
         {
           name: "Orders",
           path: "/admin/dashboard/billing/orders",
           count:
-            isSuperAdmin && data?.orders?.all > 0
-              ? data?.orders?.all
+            isSuperAdmin && data?.orders?.All > 0
+              ? data?.orders?.All
               : data?.orders?.NotCompleted > 0
               ? data?.orders?.NotCompleted
               : 2,
@@ -97,7 +96,7 @@ export const useSidebarData = () => {
         },
         {
           name: "Clients",
-          count: data?.clientsCount,
+          count: data?.clientsCount > 0 ? data?.clientsCount : null,
           path: "/admin/dashboard/billing/clients",
           show: findModule("Clients"),
           showDropdown: true,
@@ -135,7 +134,7 @@ export const useSidebarData = () => {
         {
           name: "Products & Services",
           show: findModule("Products"),
-          count: data?.products?.all,
+          count: data?.products?.All > 0 ? data?.products?.All : null,
           path: "/admin/dashboard/billing/products-services",
           showDropdown: true,
           subLinks: [
@@ -173,7 +172,8 @@ export const useSidebarData = () => {
             },
             {
               name: "Transactions",
-              count: data?.transactionsCount,
+              count:
+                data?.transactionsCount > 0 ? data?.transactionsCount : null,
               path: "/admin/dashboard/billing/invoices/transactions",
             },
           ],
@@ -195,7 +195,7 @@ export const useSidebarData = () => {
         },
         {
           name: "WebHooks",
-          count: data?.webHooksCount,
+          count: data?.webHooksCount > 0 ? data?.webHooksCount : null,
           show: findModule("WebHooks"),
           path: "/admin/dashboard/billing/webhooks",
         },
@@ -206,10 +206,8 @@ export const useSidebarData = () => {
       module: "Support",
       show: findModule("Support"),
       count:
-        isSuperAdmin &&
-        data?.tickets?.AssignedToMe + data?.tickets?.DeptGroupCount[0].count > 0
-          ? data?.tickets?.AssignedToMe +
-            data?.tickets?.DeptGroupCount[0]?.count
+        isSuperAdmin && data?.tickets?.All > 0
+          ? data?.tickets?.All
           : data?.tickets?.AssignedToMe > 0
           ? data?.tickets?.AssignedToMe
           : null,
@@ -219,12 +217,8 @@ export const useSidebarData = () => {
         {
           name: "My Tickets",
           count:
-            isSuperAdmin &&
-            data?.tickets?.AssignedToMe +
-              data?.tickets?.DeptGroupCount[0].count >
-              0
-              ? data?.tickets?.AssignedToMe +
-                data?.tickets?.DeptGroupCount[0].count
+            isSuperAdmin && data?.tickets?.All > 0
+              ? data?.tickets?.All
               : data?.tickets?.AssignedToMe > 0
               ? data?.tickets?.AssignedToMe
               : null,
@@ -240,12 +234,8 @@ export const useSidebarData = () => {
         {
           name: "Tickets List",
           count:
-            isSuperAdmin &&
-            data?.tickets?.AssignedToMe +
-              data?.tickets?.DeptGroupCount[0].count >
-              0
-              ? data?.tickets?.AssignedToMe +
-                data?.tickets?.DeptGroupCount[0].count
+            isSuperAdmin && data?.tickets?.All > 0
+              ? data?.tickets?.All
               : data?.tickets?.AssignedToMe > 0
               ? data?.tickets?.AssignedToMe
               : null,
@@ -264,13 +254,16 @@ export const useSidebarData = () => {
       name: "Knowledge Base",
       module: "KnowledgeBase",
       show: findModule("KnowledgeBase"),
-      count: data?.articlesCount,
+      count:
+        data?.knowledgeBase?.ReviewedCount > 0
+          ? data?.knowledgeBase?.ReviewedCount
+          : null,
       path: "/admin/dashboard/knowledge-base",
       icon: (fill) => <Knowledge fill={fill} />,
       subLinks: [
         {
           name: "Articles",
-          count: data?.articlesCount,
+          count: data?.articlesCount > 0 ? data?.articlesCount : null,
           path: "/admin/dashboard/knowledge-base/articles",
           subLinks: [
             {
@@ -400,7 +393,7 @@ export const useSidebarData = () => {
         {
           name: "Admin Users",
           show: findModule("AdminUsers"),
-          count: data?.adminsCount,
+          count: data?.adminsCount > 0 ? data?.adminsCount : null,
           path: "/admin/dashboard/settings/users/list",
           subLinks: [
             {
@@ -412,7 +405,7 @@ export const useSidebarData = () => {
         {
           name: "Admin Groups",
           show: findModule("AdminGroups"),
-          count: data?.adminGroupCount,
+          count: data?.adminGroupCount > 0 ? data?.adminGroupCount : null,
           path: "/admin/dashboard/settings/users/groups",
         },
         {

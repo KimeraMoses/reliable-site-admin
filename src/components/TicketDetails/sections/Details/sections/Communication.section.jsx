@@ -79,7 +79,7 @@ export const Communication = () => {
   const { departmentUsers } = useSelector((state) => state?.departments);
   const { id } = useParams();
   const dispatch = useDispatch();
-  console.log(departmentUsers);
+  // console.log(departmentUsers);
 
   const { ticket } = useSelector((state) => state?.tickets);
 
@@ -147,8 +147,8 @@ export const Communication = () => {
       value: ticket?.clientFullName,
     },
     { title: "Product / Service", value: ticket?.product },
-    { title: "Brand", value: ticket?.brandId },
-    { title: "Department", value: ticket?.Department },
+    { title: "Brand", value: ticket?.brand?.name },
+    { title: "Department", value: ticket?.department?.name },
     // { title: "Idle", value: ticket?.idleTime },
     // { title: "Duration", value: ticket?.duration },
     {
