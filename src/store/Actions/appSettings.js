@@ -9,17 +9,18 @@ import {
   updateBillingSettingsConfig,
   updateSettingsConfig,
   updateSupportSettingsConfig,
-} from 'lib';
-import { toast } from 'react-toastify';
+} from "lib";
+import { checkModule } from "lib/checkModule";
+import { toast } from "react-toastify";
 import {
   getAppSettings,
   getBillingSettings,
   getMaintenanceSettings,
   getSupportSettings,
   setAppSettingsLoading,
-} from 'store/Slices';
-import { logout } from 'store/Slices/authSlice';
-import { maintenanceStatus } from './AuthActions';
+} from "store/Slices";
+import { logout } from "store/Slices/authSlice";
+import { maintenanceStatus } from "./AuthActions";
 
 // Get Settings By Tenant
 export const getAppSettingsByTenant = (values) => {
@@ -29,12 +30,12 @@ export const getAppSettingsByTenant = (values) => {
       if (values?.isAdmin) {
         // process.env.REACT_APP_BASEURL
         const response = await axios.get(
-          '/api/v1/admin/settings/getsettingswithtenant/admin',
+          "/api/v1/admin/settings/getsettingswithtenant/admin",
           {
             headers: {
-              'Content-type': 'application/json',
-              'admin-api-key': process.env.REACT_APP_ADMIN_APIKEY,
-              tenant: 'admin',
+              "Content-type": "application/json",
+              "admin-api-key": process.env.REACT_APP_ADMIN_APIKEY,
+              tenant: "admin",
             },
           }
         );
@@ -63,7 +64,7 @@ export const updateAppSettings = ({ id, data }) => {
         const { url, config } = getSettingsByTenant();
         const response = await axios.get(url, config);
         dispatch(getAppSettings(response.data.data));
-        toast.success('Settings updated successfully');
+        toast.success("Settings updated successfully");
       }
     } catch (error) {
       toast.error(getError(error));
@@ -74,17 +75,22 @@ export const updateAppSettings = ({ id, data }) => {
 };
 
 // Get Billing Settings
-export const getBillingSettingsByTenant = () => {
+export const getBillingSettingsByTenant = (userModules) => {
   return async (dispatch) => {
     dispatch(setAppSettingsLoading(true));
-    try {
-      const { url, config } = getBillingSettingsByTenantConfig();
-      const response = await axios.get(url, config);
-      dispatch(getBillingSettings(response.data.data));
-    } catch (error) {
-      toast.error(getError(error));
-    } finally {
-      dispatch(setAppSettingsLoading(false));
+    if (
+      checkModule({ modules: userModules, module: "BillingSettings" })
+        ?.permissions?.View
+    ) {
+      try {
+        const { url, config } = getBillingSettingsByTenantConfig();
+        const response = await axios.get(url, config);
+        dispatch(getBillingSettings(response.data.data));
+      } catch (error) {
+        toast.error(getError(error));
+      } finally {
+        dispatch(setAppSettingsLoading(false));
+      }
     }
   };
 };
@@ -100,7 +106,7 @@ export const updateBillingSettings = ({ id, data }) => {
         const { url, config } = getBillingSettingsByTenantConfig();
         const response = await axios.get(url, config);
         dispatch(getBillingSettings(response.data.data));
-        toast.success('Settings updated successfully');
+        toast.success("Settings updated successfully");
       }
     } catch (error) {
       toast.error(getError(error));
@@ -133,13 +139,13 @@ export const updateMaintenanceSettings = ({ data, isAdmin }) => {
     try {
       if (isAdmin) {
         const response = await axios.post(
-          '/api/maintenance/togglemaintenancemode',
+          "/api/maintenance/togglemaintenancemode",
           data,
           {
             headers: {
-              'Content-type': 'application/json',
-              'admin-api-key': process.env.REACT_APP_ADMIN_APIKEY,
-              tenant: 'admin',
+              "Content-type": "application/json",
+              "admin-api-key": process.env.REACT_APP_ADMIN_APIKEY,
+              tenant: "admin",
             },
           }
         );
@@ -151,7 +157,7 @@ export const updateMaintenanceSettings = ({ data, isAdmin }) => {
           const { url, config } = getMaintenanceSettingsConfig();
           const response = await axios.get(url, config);
           dispatch(getMaintenanceSettings(response?.data));
-          toast.success('Settings updated successfully');
+          toast.success("Settings updated successfully");
         }
       }
     } catch (error) {
@@ -189,7 +195,7 @@ export const updateSupportSettings = ({ id, data }) => {
         const { url, config } = getSupportSettingsByTenant();
         const response = await axios.get(url, config);
         dispatch(getSupportSettings(response?.data));
-        toast.success('Settings updated successfully');
+        toast.success("Settings updated successfully");
       }
     } catch (error) {
       toast.error(getError(error));

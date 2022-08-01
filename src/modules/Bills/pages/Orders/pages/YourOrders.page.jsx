@@ -54,8 +54,6 @@ export const YourOrders = () => {
     }
   }, [orders]);
 
-  console.log("order", orders);
-
   const columns = [
     {
       title: t("orderId"),

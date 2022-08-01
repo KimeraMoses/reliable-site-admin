@@ -22,11 +22,6 @@ export const useSidebarData = () => {
   const departmentsLoading = useSelector(
     (state) => state?.departments?.loading
   );
-  // console.log('User modules', userModules);
-  // console.log(
-  //   'User',
-  //   useSelector((state) => state.auth?.user)
-  // );
   const ticketsLoading = useSelector((state) => state?.tickets?.loading);
   const dataLoading = useSelector((state) => state?.count?.loading);
   const { user } = useSelector((state) => state?.auth);
