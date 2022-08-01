@@ -100,7 +100,7 @@ export const useSidebarData = () => {
               ? data?.orders?.All
               : data?.orders?.NotCompleted > 0
               ? data?.orders?.NotCompleted
-              : 2,
+              : null,
           show: findModule('Orders'),
           showDropdown: true,
           subLinks: [
@@ -216,7 +216,7 @@ export const useSidebarData = () => {
         },
         {
           name: 'WebHooks',
-          count: data?.webHooksCount > 0 ? data?.webHooksCount : '0',
+          count: data?.webHooksCount > 0 ? data?.webHooksCount : null,
           show: findModule('WebHooks'),
           path: '/admin/dashboard/billing/webhooks',
         },
@@ -231,7 +231,7 @@ export const useSidebarData = () => {
           ? data?.tickets?.All
           : data?.tickets?.AssignedToMe > 0
           ? data?.tickets?.AssignedToMe
-          : '0',
+          : null,
       path: '/admin/dashboard/support',
       icon: (fill) => <Support fill={fill} />,
       subLinks: [
@@ -242,7 +242,7 @@ export const useSidebarData = () => {
               ? data?.tickets?.All
               : data?.tickets?.AssignedToMe > 0
               ? data?.tickets?.AssignedToMe
-              : '0',
+              : null,
           show: true,
           path: '/admin/dashboard/support/tickets/list',
           subLinks: [
@@ -260,7 +260,7 @@ export const useSidebarData = () => {
               ? data?.tickets?.All
               : data?.tickets?.AssignedToMe > 0
               ? data?.tickets?.AssignedToMe
-              : '0',
+              : null,
           show: findModule('TicketList'),
           path: '/admin/dashboard/support/tickets/show-all/list',
           subLinks: [
