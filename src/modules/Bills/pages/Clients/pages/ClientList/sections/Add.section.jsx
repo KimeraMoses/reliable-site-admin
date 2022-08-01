@@ -128,11 +128,16 @@ export const AddClientUser = ({ show, setShow }) => {
       type: "select",
       name: "country",
       title: "Country",
-      placeholder: "USA",
-      options: countries.map((country) => ({
-        label: country?.name,
-        value: country?.name,
-      })),
+      placeholder: "select country",
+      options: countries
+        ?.sort()
+        .sort((a, b) =>
+          a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+        )
+        .map((country) => ({
+          label: country?.name,
+          value: country?.name,
+        })),
     },
     {
       type: "select",

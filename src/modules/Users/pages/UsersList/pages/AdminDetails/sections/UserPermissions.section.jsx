@@ -1,11 +1,11 @@
-import { Button, Checkbox } from 'antd';
-import { asyncForEach, getUserModules } from 'lib';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import { getUserModulesById } from 'store';
-import { editUserPermissions } from 'store';
+import { Button, Checkbox } from "antd";
+import { asyncForEach, getUserModules } from "lib";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { getUserModulesById } from "store";
+import { editUserPermissions } from "store";
 
 export const UserPermissions = () => {
   const { appModules, loading } = useSelector((state) => state?.modules);
@@ -15,6 +15,8 @@ export const UserPermissions = () => {
   const [localLoading, setLocalLoading] = useState(false);
   const [modules, setModules] = useState([]);
   const [moduleForCompare, setModuleForCompare] = useState([]);
+  console.log("App modules", appModules);
+  console.log("modules", modules);
 
   const getPermissions = () => {
     setLocalLoading(true);
@@ -30,10 +32,10 @@ export const UserPermissions = () => {
     getPermissions();
   }, [userModules]);
 
-  const { t } = useTranslation('Users/ns');
+  const { t } = useTranslation("Users/ns");
   return (
     <div className="mt-[20px] p-[32px] bg-[#1E1E2D] rounded-[8px]">
-      <h6 className="text-white text-[16px]">{t('userPermissions')}</h6>
+      <h6 className="text-white text-[16px]">{t("userPermissions")}</h6>
       <div className="border-dashed border-t-[1px] h-[0px] border-[#323248] mt-[32px] mb-[32px]" />
       {modules?.map(
         (
@@ -65,7 +67,7 @@ export const UserPermissions = () => {
                       setModules(newPermissions);
                     }}
                   >
-                    <p className="mb-0 text-[#92928F]">{t('all')}</p>
+                    <p className="mb-0 text-[#92928F]">{t("all")}</p>
                   </Checkbox>
                   <Checkbox
                     disabled={loading || localLoading}
@@ -166,7 +168,7 @@ export const UserPermissions = () => {
           }}
           className="bg-[#323248] text-white rounded-[8px] py-[12px] px-[24px]"
         >
-          {t('discard')}
+          {t("discard")}
         </button>
         <Button
           htmlType="button"
@@ -185,11 +187,11 @@ export const UserPermissions = () => {
                   })
                 );
               });
-              console.log('Here After Update');
+              console.log("Here After Update");
               await dispatch(getUserModulesById(user?.id));
-              console.log('Fetched After Update');
+              console.log("Fetched After Update");
               setLocalLoading(false);
-              toast.success('User Permissions Updated Successfully!');
+              toast.success("User Permissions Updated Successfully!");
             } else {
               toast.warning(`You didn't change anything.`);
             }
@@ -197,7 +199,7 @@ export const UserPermissions = () => {
           disabled={!user}
           className="bg-[#3699FF] text-white rounded-[8px] py-[12px] px-[24px] h-[45px] border-none hover:bg-[#369bffba] hover:text-white active:bg-[#369bffba] active:text-white focus:bg-[#369bffba] focus:text-white"
         >
-          {t('saveChanges')}
+          {t("saveChanges")}
         </Button>
       </div>
     </div>
