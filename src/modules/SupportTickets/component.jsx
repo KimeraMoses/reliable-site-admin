@@ -1,9 +1,16 @@
 import { DashboardLayout } from 'layout';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { getDepartments } from 'store';
 import { TicketsByDeptId, AllTickets, TicketDetails, MyTickets } from './pages';
 import './style.scss';
 
 export const SupportTickets = () => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getDepartments());
+  }, []);
   return (
     <DashboardLayout>
       <Routes>

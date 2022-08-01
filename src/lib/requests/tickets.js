@@ -16,27 +16,27 @@ export const getTicketsConfig = () => ({
     orderBy: ['ticketPriority'],
     ticketPriority: 0,
   },
-  config: ticketsConfig('View'),
+  // config: ticketsConfig('View'),
 });
 
 export const getTicketConfig = (id) => ({
   url: `${prefix}/${id}`,
-  config: ticketsConfig('View'),
+  // config: ticketsConfig('View'),
 });
 
 export const createTicketConfig = () => ({
   url: `${prefix}`,
-  config: ticketsConfig('Create'),
+  // config: ticketsConfig('Create'),
 });
 
 export const editTicketConfig = ({ id }) => ({
   url: `${prefix}/${id}`,
-  config: ticketsConfig('Update'),
+  // config: ticketsConfig('Update'),
 });
 
 export const getTicketsByClintIDConfig = ({ id }) => ({
   url: `${prefix}/getticketsbyclientid/${id}`,
-  config: ticketsConfig('View'),
+  // config: ticketsConfig('View'),
 });
 
 export const getAssignedTicketsByIDConfig = ({ id }) => ({
@@ -54,12 +54,12 @@ export const getAssignedTicketsByIDConfig = ({ id }) => ({
     // ticketPriority: '0 = Urgent',
     // ticketRelatedTo: '0 = KnowledgeBase',
   },
-  config: ticketsConfig('View'),
+  // config: ticketsConfig('View'),
 });
 
 export const getTicketHistoryByIDConfig = ({ id }) => ({
   url: `${prefix}/gettickethistory/${id}`,
-  config: ticketsConfig('View'),
+  // config: ticketsConfig('View'),
 });
 
 export const getTicketsByDepartmentIdConfig = ({ id }) => ({
@@ -77,5 +77,5 @@ export const getTicketsByDepartmentIdConfig = ({ id }) => ({
     // ticketPriority: '0 = Urgent',
     // ticketRelatedTo: '0 = KnowledgeBase',
   },
-  config: ticketsConfig('View'),
+  // config: ticketsConfig('View'),
 });

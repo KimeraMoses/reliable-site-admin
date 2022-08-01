@@ -15,21 +15,21 @@ export const getBrandsConfig = () => ({
     pageSize: 0,
     orderBy: [''],
   },
-  config: brandsConfig('View'),
+  // config: brandsConfig('View'),
 });
 
 export const addBrandConfig = () => ({
   url: `${prefix}`,
-  config: brandsConfig('Create'),
+  // config: brandsConfig('Create'),
 });
 
 // Edit Brand
 export const editBrandConfig = ({ id }) => ({
   url: `${prefix}/${id}`,
-  config: brandsConfig('Update'),
+  // config: brandsConfig('Update'),
 });
 // Delete Brand
 export const deleteBrandConfig = ({ id }) => ({
   url: `${prefix}/${id}`,
-  config: brandsConfig('Remove'),
+  // config: brandsConfig('Remove'),
 });

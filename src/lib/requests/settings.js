@@ -5,9 +5,9 @@ import { getConfig } from 'lib';
 const settingsConfig = (action) => getConfig({ module: 'Settings', action });
 export const getSettingsByTenant = () => ({
   url: `/api/v1/admin/settings/getsettingswithtenant/admin`,
-  config: settingsConfig('View'),
+  // config: settingsConfig('View'),
 });
 export const updateSettingsConfig = (id) => ({
   url: `/api/v1/admin/settings/${id}`,
-  config: settingsConfig('Update'),
+  // config: settingsConfig('Update'),
 });

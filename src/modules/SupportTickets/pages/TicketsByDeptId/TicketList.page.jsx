@@ -19,6 +19,7 @@ export const TicketsByDeptId = () => {
   const { userModules } = useSelector((state) => state?.modules);
 
   let activeTicket = tickets ? groupBy(tickets, 'ticketStatus') : {};
+
   useEffect(() => {
     (async () => {
       await dispatch(getTicketsByDepartmentId({ id }));
@@ -125,16 +126,9 @@ export const TicketsByDeptId = () => {
   useEffect(() => {
     setData([]);
     if (tickets.length) {
-      const dataToSet = tickets
-        ?.filter(function (el) {
-          return el.ticketStatus === 0 && el?.assignedTo === user?.id;
-        })
-        .map((b) => {
-          return {
-            ...b,
-            key: b?.id,
-          };
-        });
+      const dataToSet = tickets?.filter(function (el) {
+        return el.ticketStatus === 0 && el?.assignedTo === user?.id;
+      });
       setData(dataToSet);
     }
   }, [tickets]);

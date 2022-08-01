@@ -16,7 +16,7 @@ export const getNotificationTemplatesConfig = () => ({
     pageSize: 0,
     orderBy: [''],
   },
-  config: getConfig({ module: NotificationTemplate, action: 'View' }),
+  // config: getConfig({ module: NotificationTemplate, action: 'View' }),
 });
 
 // // Get List of All Notifications
@@ -34,35 +34,35 @@ export const getNotificationTemplatesConfig = () => ({
 //     // startDate: '',
 //     // endDate: '',
 //   },
-//   config: getConfig({ module: NotificationTemplate, action: 'View' }),
+//   // config: getConfig({ module: NotificationTemplate, action: 'View' }),
 // });
 
 // Add Notification Template
 export const addNotificationTemplateConfig = () => ({
   url: `${prefix}`,
-  config: getConfig({ module: NotificationTemplate, action: 'Create' }),
+  // config: getConfig({ module: NotificationTemplate, action: 'Create' }),
 });
 
 // Edit Notification Template
 export const editNotificationTemplateConfig = ({ id }) => ({
   url: `${prefix}/${id}`,
-  config: getConfig({ module: NotificationTemplate, action: 'Update' }),
+  // config: getConfig({ module: NotificationTemplate, action: 'Update' }),
 });
 
 // Get Notification Template By ID
 export const getNotificationTemplateByIDConfig = ({ id }) => ({
   url: `${prefix}/${id}`,
-  config: getConfig({ module: NotificationTemplate, action: 'View' }),
+  // config: getConfig({ module: NotificationTemplate, action: 'View' }),
 });
 
 // Delete Notification Template
 export const deleteNotificationTemplateConfig = ({ id }) => ({
   url: `${prefix}/${id}`,
-  config: getConfig({ module: NotificationTemplate, action: 'Remove' }),
+  // config: getConfig({ module: NotificationTemplate, action: 'Remove' }),
 });
 
 // Send Notification
 export const sendNotificatoinConfig = () => ({
   url: `/api/v1/admin/notifications/send`,
-  config: getConfig({ module: NotificationTemplate, action: 'Create' }),
+  // config: getConfig({ module: NotificationTemplate, action: 'Create' }),
 });

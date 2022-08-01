@@ -16,10 +16,10 @@ export const getNotificationsConfig = () => ({
     pageSize: 0,
     orderBy: [''],
   },
-  // config: notificationsConfig('View'),
+  // // config: notificationsConfig('View'),
 });
 
 export const notificationsReadConfig = () => ({
   url: `${prefix}/read`,
-  // config: notificationsConfig('View'),
+  // // config: notificationsConfig('View'),
 });

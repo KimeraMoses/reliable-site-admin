@@ -19,17 +19,17 @@ export const updateEmailConfig = () => ({
 });
 export const registerAdminConfig = () => ({
   url: '/api/identity/register-admin',
-  config: identityConfig('Create'),
+  // config: identityConfig('Create'),
 });
 export const registerClientConfig = () => ({
   url: '/api/identity/register-client-user',
-  config: clientConfig('Create'),
+  // config: clientConfig('Create'),
 });
 export const updateUserProfileByIDConfig = (id, isClient) => ({
   url: `/api/identity/profile/${id}`,
-  config: isClient ? clientConfig('Update') : identityConfig('Update'),
+  // config: isClient ? clientConfig('Update') : identityConfig('Update'),
 });
 export const getUserProfileByIDConfig = (id, isClient) => ({
   url: `/api/identity/profile/${id}`,
-  config: isClient ? clientConfig('View') : identityConfig('View'),
+  // config: isClient ? clientConfig('View') : identityConfig('View'),
 });

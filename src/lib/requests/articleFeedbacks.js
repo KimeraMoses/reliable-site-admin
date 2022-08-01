@@ -19,35 +19,35 @@ export const getArticleFeedbackConfig = () => ({
     pageSize: 0,
     orderBy: [''],
   },
-  config: articleFeedbackConfig('View'),
+  // config: articleFeedbackConfig('View'),
 });
 
 // Get Article Feedbacks By Article ID
 export const getArticleFeedbacksByArticleIDConfig = ({ id }) => ({
   url: `${prefix}/getarticlefeedbackagainstarticle/${id}`,
-  config: articleFeedbackConfig('View'),
+  // config: articleFeedbackConfig('View'),
 });
 
 // Create Article Feedback
 export const createArticleFeedbackConfig = () => ({
   url: prefix,
-  config: articleFeedbackConfig('Create'),
+  // config: articleFeedbackConfig('Create'),
 });
 
 // Delete Article Feedback
 export const deleteArticleFeedbackConfig = (id) => ({
   url: `${prefix}/${id}`,
-  config: articleFeedbackConfig('Remove'),
+  // config: articleFeedbackConfig('Remove'),
 });
 
 // Update Article Feedback
 export const updateArticleFeedbackConfig = (id) => ({
   url: `${prefix}/${id}`,
-  config: articleFeedbackConfig('Update'),
+  // config: articleFeedbackConfig('Update'),
 });
 
 // Get Article Feedback By ID
 export const getArticleFeedbackByIDConfig = (id) => ({
   url: `${prefix}/${id}`,
-  config: articleFeedbackConfig('View'),
+  // config: articleFeedbackConfig('View'),
 });

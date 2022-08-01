@@ -15,8 +15,6 @@ export const UserPermissions = () => {
   const [localLoading, setLocalLoading] = useState(false);
   const [modules, setModules] = useState([]);
   const [moduleForCompare, setModuleForCompare] = useState([]);
-  console.log("App modules", appModules);
-  console.log("modules", modules);
 
   const getPermissions = () => {
     setLocalLoading(true);

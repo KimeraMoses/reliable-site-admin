@@ -16,21 +16,21 @@ export const getTransactionsConfig = () => ({
     pageSize: 0,
     orderBy: [''],
   },
-  config: getConfig({ module: Transactions, action: 'View' }),
+  // config: getConfig({ module: Transactions, action: 'View' }),
 });
 
 // // Add SMTP Configuration
 // export const addSMTPConfig = () => ({
 //   url: `${prefix}`,
-//   config: getConfig({ module: Transactions, action: 'Create' }),
+//   // config: getConfig({ module: Transactions, action: 'Create' }),
 // });
 // // Edit SMTP Configuration
 // export const editSMTPConfig = ({ id }) => ({
 //   url: `${prefix}/${id}`,
-//   config: getConfig({ module: Transactions, action: 'Update' }),
+//   // config: getConfig({ module: Transactions, action: 'Update' }),
 // });
 // // Delete SMTP Configuration
 // export const deleteSMTPConfig = ({ id }) => ({
 //   url: `${prefix}/${id}`,
-//   config: getConfig({ module: Transactions, action: 'Remove' }),
+//   // config: getConfig({ module: Transactions, action: 'Remove' }),
 // });

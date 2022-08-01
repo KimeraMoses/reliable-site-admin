@@ -16,20 +16,20 @@ export const getAllWebHooksConfig = () => ({
     pageSize: 0,
     orderBy: [''],
   },
-  config: getConfig({ module: WebHooks, action: 'View' }),
+  // config: getConfig({ module: WebHooks, action: 'View' }),
 });
 // Add WebHook
 export const addWebHookConfig = () => ({
   url: `${prefix}`,
-  config: getConfig({ module: WebHooks, action: 'Create' }),
+  // config: getConfig({ module: WebHooks, action: 'Create' }),
 });
 // Edit WebHook
 export const editWebHookConfig = ({ id }) => ({
   url: `${prefix}/${id}`,
-  config: getConfig({ module: WebHooks, action: 'Update' }),
+  // config: getConfig({ module: WebHooks, action: 'Update' }),
 });
 // Delete WebHook
 export const deleteWebHookConfig = ({ id }) => ({
   url: `${prefix}/${id}`,
-  config: getConfig({ module: WebHooks, action: 'Remove' }),
+  // config: getConfig({ module: WebHooks, action: 'Remove' }),
 });

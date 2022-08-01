@@ -18,11 +18,11 @@ export const getCategoriesConfig = () => ({
     orderBy: [''],
     categoryType: 0,
   },
-  config: categoriesConfig('View'),
+  // config: categoriesConfig('View'),
 });
 
 // Add Category
 export const addCategoryConfig = () => ({
   url: `${prefix}`,
-  config: categoriesConfig('Create'),
+  // config: categoriesConfig('Create'),
 });

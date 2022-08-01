@@ -1,11 +1,11 @@
-import React, { Fragment, useEffect, useState } from 'react';
-import UserTop from './UserTop.component';
-import Logo from './Logo.component';
+import React, { Fragment, useEffect, useState } from "react";
+import UserTop from "./UserTop.component";
+import Logo from "./Logo.component";
 // import { sidebarData } from '../SideBar/data';
-import { Link, useLocation } from 'react-router-dom';
-import { Dropdown, Spin } from 'antd';
-import { useSidebarData } from '../SideBar/data';
-import { Badge } from 'react-bootstrap';
+import { Link, useLocation } from "react-router-dom";
+import { Dropdown, Spin } from "antd";
+import { useSidebarData } from "../SideBar/data";
+import { Badge } from "react-bootstrap";
 
 export function TopBar({
   hide = false,
@@ -22,7 +22,7 @@ export function TopBar({
   if (sidebarData?.length > 0) {
     active = sidebarData?.find((sideItem) => {
       const { name, path } = sideItem;
-      if (name === 'Dashboard') {
+      if (name === "Dashboard") {
         return path === pathname;
       } else {
         return pathname.includes(path);
@@ -35,16 +35,16 @@ export function TopBar({
         <Logo hide={hide} hideSide={hideSide} toggleSide={toggleSide} />
         <div
           className={`flex items-center ${
-            active?.subLinks?.length ? 'justify-between' : 'justify-end'
+            active?.subLinks?.length ? "justify-between" : "justify-end"
           }`}
           style={{
-            width: hideSide ? 'calc(100% - 84px)' : 'calc(100% - 300px)',
+            width: hideSide ? "calc(100% - 84px)" : "calc(100% - 300px)",
           }}
         >
           {active?.subLinks?.length ? (
             <div
               className={`flex items-center gap-[12px] ml-[40px] ${
-                active?.subLinks?.length > 5 ? 'overflow-x-auto' : ''
+                active?.subLinks?.length > 5 ? "overflow-x-auto" : ""
               }`}
             >
               {active?.subLinks.map((link) => {
@@ -56,8 +56,8 @@ export function TopBar({
                         key={link?.path}
                         className={`${
                           pathname.includes(link?.path)
-                            ? 'bg-[#1b1b2b] text-[#3699FF]'
-                            : 'text-[#92928F]'
+                            ? "bg-[#1b1b2b] text-[#3699FF]"
+                            : "text-[#92928F]"
                         } py-2 mb-1 px-4 hover:bg-[#1b1b2b] hover:text-[#3699FF]`}
                       >
                         {link?.name}
@@ -78,8 +78,8 @@ export function TopBar({
                             key={link?.path}
                             className={`${
                               pathname.includes(link?.path)
-                                ? 'bg-[#1b1b2b] text-[#3699FF]'
-                                : 'text-[#92928F]'
+                                ? "bg-[#1b1b2b] text-[#3699FF]"
+                                : "text-[#92928F]"
                             } rounded-lg py-2 px-4 hover:bg-[#1b1b2b] hover:text-[#3699FF] flex items-center gap-[12px]`}
                           >
                             <span>{link?.name}</span>
@@ -94,8 +94,8 @@ export function TopBar({
                           key={link?.path}
                           className={`${
                             pathname.includes(link?.path)
-                              ? 'bg-[#1b1b2b] text-[#3699FF]'
-                              : 'text-[#92928F]'
+                              ? "bg-[#1b1b2b] text-[#3699FF]"
+                              : "text-[#92928F]"
                           } rounded-lg py-2 px-4 hover:bg-[#1b1b2b] hover:text-[#3699FF] flex items-center gap-[12px]`}
                         >
                           <span>{link?.name}</span>

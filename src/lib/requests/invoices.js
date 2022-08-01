@@ -15,10 +15,10 @@ export const getInvoicesConfig = () => ({
     pageSize: 0,
     orderBy: [''],
   },
-  config: invoicesConfig('View'),
+  // config: invoicesConfig('View'),
 });
 
 export const getInvoiceConfig = (id) => ({
   url: `${prefix}/${id}`,
-  config: invoicesConfig('View'),
+  // config: invoicesConfig('View'),
 });
