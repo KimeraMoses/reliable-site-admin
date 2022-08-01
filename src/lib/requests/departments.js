@@ -16,41 +16,41 @@ export const getDepartmentsConfig = () => ({
     pageSize: 0,
     orderBy: [''],
   },
-  config: departmentsConfig('View'),
+  // config: departmentsConfig('View'),
 });
 
 export const getDepartmentsByUserIdConfig = ({ id }) => ({
   url: `/api/departments/getuserdepartments/${id}`,
-  config: departmentsConfig('View'),
+  // config: departmentsConfig('View'),
 });
 
 export const getUsersByDepartmentIdConfig = ({ id }) => ({
   url: `/api/departments/getdepartmentusers/${id}`,
-  config: departmentsConfig('View'),
+  // config: departmentsConfig('View'),
 });
 
 export const addDepartmentConfig = () => ({
   url: `${prefix}`,
-  config: departmentsConfig('Create'),
+  // config: departmentsConfig('Create'),
 });
 
 export const assignDepartmentConfig = () => ({
   url: `${prefix}/assigndepartmentasync`,
-  config: departmentsConfig('Create'),
+  // config: departmentsConfig('Create'),
 });
 
 export const unAssignDepartmentConfig = () => ({
   url: `${prefix}/unassigndepartmentasync`,
-  config: departmentsConfig('Create'),
+  // config: departmentsConfig('Create'),
 });
 
 // Edit Departemnt
 export const editDepartmentConfig = ({ id }) => ({
   url: `${prefix}/${id}`,
-  config: departmentsConfig('Update'),
+  // config: departmentsConfig('Update'),
 });
 // Delete Departemnt
 export const deleteDepartmentConfig = ({ id }) => ({
   url: `${prefix}/${id}`,
-  config: departmentsConfig('Remove'),
+  // config: departmentsConfig('Remove'),
 });

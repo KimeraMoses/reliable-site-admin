@@ -18,29 +18,29 @@ export const getArticleCategoriesConfig = () => ({
     orderBy: [''],
     categoryType: 1,
   },
-  config: articlesConfig('View'),
+  // config: articlesConfig('View'),
 });
 
 // Create Article Category
 export const createArticleCategoryConfig = () => ({
   url: prefix,
-  config: articlesConfig('Create'),
+  // config: articlesConfig('Create'),
 });
 
 // Delete Article Category
 export const deleteArticleCategoryConfig = (id) => ({
   url: `${prefix}/${id}`,
-  config: articlesConfig('Remove'),
+  // config: articlesConfig('Remove'),
 });
 
 // Update Article Category
 export const updateArticleCategoryConfig = (id) => ({
   url: `${prefix}/${id}`,
-  config: articlesConfig('Update'),
+  // config: articlesConfig('Update'),
 });
 
 // Get Article Category By ID
 export const getArticleCategoryByIDConfig = (id) => ({
   url: `${prefix}/${id}`,
-  config: articlesConfig('View'),
+  // config: articlesConfig('View'),
 });

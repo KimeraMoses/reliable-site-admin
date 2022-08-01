@@ -19,29 +19,29 @@ export const getArticleFeedbackCommentsConfig = () => ({
     pageSize: 0,
     orderBy: '',
   },
-  config: articleFeedbackCommentsConfig('View'),
+  // config: articleFeedbackCommentsConfig('View'),
 });
 
 // Create Article Feedback Comments
 export const createarticleFeedbackCommentsConfig = () => ({
   url: prefix,
-  config: articleFeedbackCommentsConfig('Create'),
+  // config: articleFeedbackCommentsConfig('Create'),
 });
 
 // Delete Article Feedback Comments
 export const deletearticleFeedbackCommentsConfig = (id) => ({
   url: `${prefix}/${id}`,
-  config: articleFeedbackCommentsConfig('Remove'),
+  // config: articleFeedbackCommentsConfig('Remove'),
 });
 
 // Update Article Feedback Comments
 export const updateArticleFeedbackCommentsConfig = (id) => ({
   url: `${prefix}/${id}`,
-  config: articleFeedbackCommentsConfig('Update'),
+  // config: articleFeedbackCommentsConfig('Update'),
 });
 
 // Get Article Feedback Comments By ID
 export const getArticleFeedbackCommentsByIDConfig = (id) => ({
   url: `${prefix}/${id}`,
-  config: articleFeedbackCommentsConfig('View'),
+  // config: articleFeedbackCommentsConfig('View'),
 });

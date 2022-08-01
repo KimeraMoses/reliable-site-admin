@@ -7,15 +7,15 @@ const adminGMMC = (action) =>
 // Get Admin Group Permissions
 export const getAdminGroupPermissions = (groupId) => ({
   url: `/api/admingroupmodulemanagement/getmodulebyadmingroup/${groupId}`,
-  config: adminGMMC('View'),
+  // config: adminGMMC('View'),
 });
 // Create Admin Group Permission
 export const createAdminGroupPermission = () => ({
   url: `/api/admingroupmodulemanagement`,
-  config: adminGMMC('Create'),
+  // config: adminGMMC('Create'),
 });
 // Update Admin Group Permission
 export const updateAdminGroupPermission = (permissionId) => ({
   url: `/api/admingroupmodulemanagement/${permissionId}`,
-  config: adminGMMC('Update'),
+  // config: adminGMMC('Update'),
 });

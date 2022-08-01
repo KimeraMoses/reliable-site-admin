@@ -103,14 +103,19 @@ export const getTicketsByAdminID = ({ id }) => {
 };
 // getTicketsByDepartmentId
 export const getTicketsByDepartmentId = ({ id }) => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     dispatch(setTicketLoading(true));
     try {
       const { url, defaultData, config } = getTicketsByDepartmentIdConfig({
         id,
       });
       const res = await axios.post(url, defaultData, config);
-      dispatch(getDepartmentTickets(res?.data?.data));
+      const tickets = res?.data?.data;
+      const usersTickets = tickets?.filter(
+        (ticket) => ticket?.assignedTo === getState()?.auth?.user?.id
+      );
+      console.log(getState()?.auth);
+      dispatch(getDepartmentTickets(usersTickets));
     } catch (e) {
       toast.error(getError(e));
       dispatch(getDepartmentTickets([]));

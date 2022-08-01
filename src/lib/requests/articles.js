@@ -22,7 +22,7 @@ export const getArticlesConfig = () => ({
     startDate: null,
     endDate: null,
   },
-  config: articlesConfig('View'),
+  // config: articlesConfig('View'),
 });
 
 // Get Public Articles
@@ -43,7 +43,7 @@ export const getPublicArticlesConfig = () => ({
     startDate: null,
     endDate: null,
   },
-  config: articlesConfig('View'),
+  // config: articlesConfig('View'),
 });
 
 // Get Private Articles
@@ -64,7 +64,7 @@ export const getPrivateArticlesConfig = () => ({
     startDate: null,
     endDate: null,
   },
-  config: articlesConfig('View'),
+  // config: articlesConfig('View'),
 });
 
 // Get Draft Articles
@@ -83,7 +83,7 @@ export const getDraftArticlesConfig = () => ({
     minimumRate: 0,
     maximumRate: 0,
   },
-  config: articlesConfig('View'),
+  // config: articlesConfig('View'),
 });
 
 // Get Recent Articles
@@ -102,29 +102,29 @@ export const getRecentArticlesConfig = () => ({
     minimumRate: 0,
     maximumRate: 0,
   },
-  config: articlesConfig('View'),
+  // config: articlesConfig('View'),
 });
 
 // Create Article
 export const createArticleConfig = () => ({
   url: prefix,
-  config: articlesConfig('Create'),
+  // config: articlesConfig('Create'),
 });
 
 // Delete Article
 export const deleteArticleConfig = (id) => ({
   url: `${prefix}/${id}`,
-  config: articlesConfig('Remove'),
+  // config: articlesConfig('Remove'),
 });
 
 // Update Article
 export const updateArticleConfig = (id) => ({
   url: `${prefix}/${id}`,
-  config: articlesConfig('Update'),
+  // config: articlesConfig('Update'),
 });
 
 // Get Article By ID
 export const getArticleByIDConfig = (id) => ({
   url: `${prefix}/${id}`,
-  config: articlesConfig('View'),
+  // config: articlesConfig('View'),
 });

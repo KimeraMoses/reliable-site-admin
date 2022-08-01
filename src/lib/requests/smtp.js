@@ -16,20 +16,20 @@ export const getAllSMTPsConfig = () => ({
     pageSize: 0,
     orderBy: [''],
   },
-  config: getConfig({ module: SmtpConfigurations, action: 'View' }),
+  // config: getConfig({ module: SmtpConfigurations, action: 'View' }),
 });
 // Add SMTP Configuration
 export const addSMTPConfig = () => ({
   url: `${prefix}`,
-  config: getConfig({ module: SmtpConfigurations, action: 'Create' }),
+  // config: getConfig({ module: SmtpConfigurations, action: 'Create' }),
 });
 // Edit SMTP Configuration
 export const editSMTPConfig = ({ id }) => ({
   url: `${prefix}/${id}`,
-  config: getConfig({ module: SmtpConfigurations, action: 'Update' }),
+  // config: getConfig({ module: SmtpConfigurations, action: 'Update' }),
 });
 // Delete SMTP Configuration
 export const deleteSMTPConfig = ({ id }) => ({
   url: `${prefix}/${id}`,
-  config: getConfig({ module: SmtpConfigurations, action: 'Remove' }),
+  // config: getConfig({ module: SmtpConfigurations, action: 'Remove' }),
 });

@@ -16,10 +16,10 @@ export const getTicketCommentsConfig = () => ({
     pageSize: 0,
     orderBy: [''],
   },
-  config: ticketCommentsConfig('View'),
+  // config: ticketCommentsConfig('View'),
 });
 
 export const addTicketCommentConfig = () => ({
   url: `${prefix}`,
-  config: ticketCommentsConfig('Create'),
+  // config: ticketCommentsConfig('Create'),
 });

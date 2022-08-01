@@ -6,5 +6,5 @@ const prefix = `/api/ticketcommentreplies`;
 
 export const addTicketRepliesConfig = () => ({
   url: `${prefix}`,
-  config: ticketCommentRepliesConfig('Create'),
+  // config: ticketCommentRepliesConfig('Create'),
 });

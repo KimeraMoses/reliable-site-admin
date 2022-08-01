@@ -23,8 +23,17 @@ export const getUserGroups = () => {
   return async (dispatch) => {
     dispatch(setUserGroupsLoading(true));
     try {
-      const { url, config } = getAdminGroupsConfig();
-      const groupsRes = await axios.post(url, config);
+      const { url } = getAdminGroupsConfig();
+      const groupsRes = await axios.post(url, {
+        advancedSearch: {
+          fields: [''],
+          keyword: '',
+        },
+        keyword: '',
+        pageNumber: 0,
+        pageSize: 0,
+        orderBy: [''],
+      });
       const groupsData = groupsRes?.data?.data;
       dispatch(getUserGroupsDispatch(groupsData));
       dispatch(setUserGroupsLoading(false));

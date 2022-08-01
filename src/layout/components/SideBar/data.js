@@ -6,9 +6,9 @@ import {
   Settings,
   Support,
   // Users,
-} from "icons";
-import { checkModule } from "lib/checkModule";
-import { useSelector } from "react-redux";
+} from 'icons';
+import { checkModule } from 'lib/checkModule';
+import { useSelector } from 'react-redux';
 
 export const useSidebarData = () => {
   // Ticket Departments Dynamically Being Done Below
@@ -22,35 +22,55 @@ export const useSidebarData = () => {
   const departmentsLoading = useSelector(
     (state) => state?.departments?.loading
   );
-  console.log("User modules", userModules);
-  console.log(
-    "User",
-    useSelector((state) => state.auth?.user)
-  );
+  // console.log('User modules', userModules);
+  // console.log(
+  //   'User',
+  //   useSelector((state) => state.auth?.user)
+  // );
   const ticketsLoading = useSelector((state) => state?.tickets?.loading);
   const dataLoading = useSelector((state) => state?.count?.loading);
+  const { user } = useSelector((state) => state?.auth);
+
+  // My Tickets
+  const myTickets = tickets?.filter(
+    (ticket) => ticket?.assignedTo === user?.id
+  );
   // Setting Departments
-  const ticketsWithDepartmentName = tickets?.map((ticket) => ({
+  const ticketsWithDepartmentName = myTickets?.map((ticket) => ({
     ...ticket,
     departmentName: departments?.filter(
       (dept) => dept?.id === ticket?.departmentId
     )[0]?.name,
   }));
 
+  // console.log(ticketsWithDepartmentName);
+
   const finalTickets = ticketsWithDepartmentName?.filter(
     (ticket) => ticket?.departmentName !== undefined
   );
+  const counts = {};
+
+  const activeTickets = finalTickets?.filter(
+    (ticket) => ticket?.ticketStatus === 0
+  );
+  activeTickets?.forEach(function (x) {
+    counts[x?.departmentName] = (counts[x?.departmentName] || 0) + 1;
+  });
+
   // console.log(data);
   function getUniqueListBy(arr, key) {
     return [...new Map(arr?.map((item) => [item?.[key], item]))?.values()];
   }
-  const uniqueDeptTickets = getUniqueListBy(finalTickets, "departmentId");
+  const uniqueDeptTickets = getUniqueListBy(finalTickets, 'departmentId');
+
   const links = uniqueDeptTickets?.map((el) => ({
     name: el?.departmentName,
     path: `/admin/dashboard/support/tickets/by-departments/${el?.departmentId}`,
+    count: counts[el?.departmentName],
+    show: true,
     subLinks: [
       {
-        name: "Ticket Details",
+        name: 'Ticket Details',
         path: `/admin/dashboard/support/tickets/by-departments/${el?.departmentId}/details/${el?.id}`,
       },
     ],
@@ -63,364 +83,377 @@ export const useSidebarData = () => {
   // Side Bar Data
   const sidebarData = [
     {
-      name: "Dashboard",
-      module: "Dashboard",
-      path: "/admin/dashboard",
-      show: findModule("Dashboard"),
+      name: 'Dashboard',
+      module: 'Dashboard',
+      path: '/admin/dashboard',
+      show: findModule('Dashboard'),
       icon: (fill) => <Dashboard fill={fill} />,
     },
     {
-      name: "Billing",
-      module: "Billing",
-      path: "/admin/dashboard/billing",
-      show: findModule("Orders"),
+      name: 'Billing',
+      module: 'Billing',
+      path: '/admin/dashboard/billing',
+      show: findModule('Orders'),
       count: data?.billCount > 0 ? data?.billCount : null,
       icon: (fill) => <Billing fill={fill} />,
       subLinks: [
         {
-          name: "Orders",
-          path: "/admin/dashboard/billing/orders",
+          name: 'Orders',
+          path: '/admin/dashboard/billing/orders',
           count:
             isSuperAdmin && data?.orders?.All > 0
               ? data?.orders?.All
               : data?.orders?.NotCompleted > 0
               ? data?.orders?.NotCompleted
               : 2,
-          show: findModule("Orders"),
+          show: findModule('Orders'),
           showDropdown: true,
           subLinks: [
             {
-              name: "Your Orders",
-              path: "/admin/dashboard/billing/orders/your-orders/list",
+              name: 'Your Orders',
+              path: '/admin/dashboard/billing/orders/your-orders/list',
             },
             {
-              name: "Order Templates",
-              path: "/admin/dashboard/billing/orders/all-orders/list",
+              name: 'Order Templates',
+              path: '/admin/dashboard/billing/orders/all-orders/list',
             },
           ],
         },
         {
-          name: "Clients",
+          name: 'Clients',
           count: data?.clientsCount > 0 ? data?.clientsCount : null,
-          path: "/admin/dashboard/billing/clients",
-          show: findModule("Clients"),
+          path: '/admin/dashboard/billing/clients',
+          show: findModule('Clients'),
           showDropdown: true,
           subLinks: [
             {
-              name: "Clients List",
-              path: "/admin/dashboard/billing/clients/list/show",
+              name: 'Clients List',
+              path: '/admin/dashboard/billing/clients/list/show',
               subLinks: [
                 {
-                  name: "Client Details",
-                  path: "/admin/dashboard/billing/clients/list/details/:id",
+                  name: 'Client Details',
+                  path: '/admin/dashboard/billing/clients/list/details/:id',
                 },
               ],
             },
             {
-              name: "Mass Email Clients",
-              path: "/admin/dashboard/billing/clients/send-email/mass-email-clients",
+              name: 'Mass Email Clients',
+              path: '/admin/dashboard/billing/clients/send-email/mass-email-clients',
             },
             {
-              name: "Client Notification",
-              path: "/admin/dashboard/billing/clients/show-notifications/client-notifications",
+              name: 'Client Notification',
+              path: '/admin/dashboard/billing/clients/show-notifications/client-notifications',
               subLinks: [
                 {
-                  name: "Add New",
-                  path: "/admin/dashboard/billing/clients/show-notifications/client-notifications/add/new",
+                  name: 'Add New',
+                  path: '/admin/dashboard/billing/clients/show-notifications/client-notifications/add/new',
                 },
                 {
-                  name: "Edit",
-                  path: "/admin/dashboard/billing/clients/show-notifications/client-notifications/edit/:id",
+                  name: 'Edit',
+                  path: '/admin/dashboard/billing/clients/show-notifications/client-notifications/edit/:id',
                 },
               ],
             },
           ],
         },
         {
-          name: "Products & Services",
-          show: findModule("Products"),
+          name: 'Products & Services',
+          show: findModule('Products'),
           count: data?.products?.All > 0 ? data?.products?.All : null,
-          path: "/admin/dashboard/billing/products-services",
+          path: '/admin/dashboard/billing/products-services',
           showDropdown: true,
           subLinks: [
             {
-              name: "Products & Services List",
-              path: "/admin/dashboard/billing/products-services/list/show",
+              name: 'Products & Services List',
+              path: '/admin/dashboard/billing/products-services/list/show',
+              show: true,
               subLinks: [
                 {
-                  name: "Product & Service Details",
-                  path: "/admin/dashboard/billing/products-services/list/details/:id",
+                  name: 'Product & Service Details',
+                  path: '/admin/dashboard/billing/products-services/list/details/:id',
                 },
               ],
             },
             {
-              name: "Cancellation Requests",
-              path: "/admin/dashboard/billing/products-services/cancellation/requests",
+              name: 'Cancellation Requests',
+              path: '/admin/dashboard/billing/products-services/cancellation/requests',
             },
           ],
         },
         {
-          name: "Invoices",
-          show: findModule("Invoices"),
-          path: "/admin/dashboard/billing/invoices",
+          name: 'Invoices',
+          show: findModule('Invoices'),
+          path: '/admin/dashboard/billing/invoices',
           showDropdown: true,
           subLinks: [
             {
-              name: "Invoice List",
-              path: "/admin/dashboard/billing/invoices/list/show",
+              name: 'Invoice List',
+              path: '/admin/dashboard/billing/invoices/list/show',
               subLinks: [
                 {
-                  name: "Invoice Details",
-                  path: "/admin/dashboard/billing/invoices/list/details/:id",
+                  name: 'Invoice Details',
+                  path: '/admin/dashboard/billing/invoices/list/details/:id',
                 },
               ],
             },
             {
-              name: "Transactions",
+              name: 'Transactions',
               count:
                 data?.transactionsCount > 0 ? data?.transactionsCount : null,
-              path: "/admin/dashboard/billing/invoices/transactions",
+              path: '/admin/dashboard/billing/invoices/transactions',
             },
           ],
         },
         {
-          name: "WHMCS Import Tool",
-          show: findModule("WHMCS"),
-          path: "/admin/dashboard/billing/WHMCS-import",
+          name: 'WHMCS Import Tool',
+          show: findModule('WHMCS'),
+          path: '/admin/dashboard/billing/WHMCS-import',
         },
         {
-          name: "Logs",
-          path: "/admin/dashboard/billing/logs",
-          show: findModule("Logs"),
+          name: 'Logs',
+          path: '/admin/dashboard/billing/logs',
+          show: findModule('Logs'),
           showDropdown: true,
           subLinks: [
-            { name: "Logs", path: "/admin/dashboard/billing/logs" },
-            { name: "Gateway Logs", path: "#" },
+            { name: 'Logs', path: '/admin/dashboard/billing/logs' },
+            { name: 'Gateway Logs', path: '#' },
           ],
         },
         {
-          name: "WebHooks",
-          count: data?.webHooksCount > 0 ? data?.webHooksCount : null,
-          show: findModule("WebHooks"),
-          path: "/admin/dashboard/billing/webhooks",
+          name: 'WebHooks',
+          count: data?.webHooksCount > 0 ? data?.webHooksCount : '0',
+          show: findModule('WebHooks'),
+          path: '/admin/dashboard/billing/webhooks',
         },
       ],
     },
     {
-      name: "Support",
-      module: "Support",
-      show: findModule("Support"),
+      name: 'Support',
+      module: 'Support',
+      show: findModule('Support'),
       count:
         isSuperAdmin && data?.tickets?.All > 0
           ? data?.tickets?.All
           : data?.tickets?.AssignedToMe > 0
           ? data?.tickets?.AssignedToMe
-          : null,
-      path: "/admin/dashboard/support",
+          : '0',
+      path: '/admin/dashboard/support',
       icon: (fill) => <Support fill={fill} />,
       subLinks: [
         {
-          name: "My Tickets",
+          name: 'My Tickets',
           count:
             isSuperAdmin && data?.tickets?.All > 0
               ? data?.tickets?.All
               : data?.tickets?.AssignedToMe > 0
               ? data?.tickets?.AssignedToMe
-              : null,
-          path: "/admin/dashboard/support/tickets/list",
+              : '0',
+          show: true,
+          path: '/admin/dashboard/support/tickets/list',
           subLinks: [
             {
-              name: "Tickets Details",
-              path: "/admin/dashboard/support/tickets/list/details/:id",
+              name: 'Tickets Details',
+              path: '/admin/dashboard/support/tickets/list/details/:id',
             },
           ],
         },
         ...links,
         {
-          name: "Tickets List",
+          name: 'Tickets List',
           count:
             isSuperAdmin && data?.tickets?.All > 0
               ? data?.tickets?.All
               : data?.tickets?.AssignedToMe > 0
               ? data?.tickets?.AssignedToMe
-              : null,
-          show: findModule("TicketList"),
-          path: "/admin/dashboard/support/tickets/show-all/list",
+              : '0',
+          show: findModule('TicketList'),
+          path: '/admin/dashboard/support/tickets/show-all/list',
           subLinks: [
             {
-              name: "Ticket Details",
-              path: "/admin/dashboard/support/tickets/show-all/list/details/:id",
+              name: 'Ticket Details',
+              path: '/admin/dashboard/support/tickets/show-all/list/details/:id',
             },
           ],
         },
       ],
     },
     {
-      name: "Knowledge Base",
-      module: "KnowledgeBase",
-      show: findModule("KnowledgeBase"),
+      name: 'Knowledge Base',
+      module: 'KnowledgeBase',
+      show: findModule('KnowledgeBase'),
       count:
         data?.knowledgeBase?.ReviewedCount > 0
           ? data?.knowledgeBase?.ReviewedCount
           : null,
-      path: "/admin/dashboard/knowledge-base",
+      path: '/admin/dashboard/knowledge-base',
       icon: (fill) => <Knowledge fill={fill} />,
       subLinks: [
         {
-          name: "Articles",
+          name: 'Articles',
           count: data?.articlesCount > 0 ? data?.articlesCount : null,
-          path: "/admin/dashboard/knowledge-base/articles",
+          path: '/admin/dashboard/knowledge-base/articles',
+          show: true,
           subLinks: [
             {
-              name: "Article Detail",
-              path: "/admin/dashboard/knowledge-base/articles/view/:id",
+              name: 'Article Detail',
+              path: '/admin/dashboard/knowledge-base/articles/view/:id',
             },
             {
-              name: "Add New Article",
-              path: "/admin/dashboard/knowledge-base/articles/add/new",
+              name: 'Add New Article',
+              path: '/admin/dashboard/knowledge-base/articles/add/new',
             },
             {
-              name: "Edit Article",
-              path: "/admin/dashboard/knowledge-base/articles/edit/:id",
+              name: 'Edit Article',
+              path: '/admin/dashboard/knowledge-base/articles/edit/:id',
             },
           ],
         },
         {
-          name: "Feedback",
-          path: "/admin/dashboard/knowledge-base/feedback",
+          name: 'Feedback',
+          path: '/admin/dashboard/knowledge-base/feedback',
+          show: true,
           subLinks: [
             {
-              name: "Feedback Details",
-              path: "/admin/dashboard/knowledge-base/feedback/view/:id",
+              name: 'Feedback Details',
+              path: '/admin/dashboard/knowledge-base/feedback/view/:id',
             },
           ],
         },
         {
-          name: "Categories",
-          path: "/admin/dashboard/knowledge-base/categories",
+          name: 'Categories',
+          show: true,
+          path: '/admin/dashboard/knowledge-base/categories',
         },
       ],
     },
     {
-      name: "Reports",
-      module: "Reports",
-      show: findModule("Reports"),
-      path: "/admin/dashboard/reports",
+      name: 'Reports',
+      module: 'Reports',
+      show: findModule('Reports'),
+      path: '/admin/dashboard/reports',
       icon: (fill) => <Reports fill={fill} />,
       subLinks: [
         {
-          name: "Annual Income Report",
-          path: "/admin/dashboard/reports/anuual/income",
+          name: 'Annual Income Report',
+          show: true,
+          path: '/admin/dashboard/reports/anuual/income',
         },
         {
-          name: "Support Response Time",
-          path: "/admin/dashboard/reports/support-response/time",
+          name: 'Support Response Time',
+          show: true,
+          path: '/admin/dashboard/reports/support-response/time',
         },
         {
-          name: "Support Ticket Reply Count",
-          path: "/admin/dashboard/reports/support-ticket-reply/count",
+          name: 'Support Ticket Reply Count',
+          show: true,
+          path: '/admin/dashboard/reports/support-ticket-reply/count',
         },
         {
-          name: "Reports By Filters",
-          path: "/admin/dashboard/reports/tickets-by/filters",
+          name: 'Reports By Filters',
+          show: true,
+          path: '/admin/dashboard/reports/tickets-by/filters',
         },
       ],
     },
     {
-      name: "Settings",
-      show: findModule("Settings"),
-      module: "Settings",
-      path: "/admin/dashboard/settings",
+      name: 'Settings',
+      show: findModule('Settings'),
+      module: 'Settings',
+      path: '/admin/dashboard/settings',
       icon: (fill) => <Settings fill={fill} />,
       subLinks: [
         {
-          name: "General",
-          path: "/admin/dashboard/settings/general",
+          name: 'General',
+          path: '/admin/dashboard/settings/general',
+          show: true,
         },
         {
-          name: "Tickets",
-          path: "/admin/dashboard/settings/tickets",
+          name: 'Tickets',
+          path: '/admin/dashboard/settings/tickets',
+          show: true,
         },
         {
-          name: "Billing",
-          path: "/admin/dashboard/settings/billing",
-          show: findModule("BillingSettings"),
+          name: 'Billing',
+          path: '/admin/dashboard/settings/billing',
+          show: findModule('BillingSettings'),
         },
         {
-          name: "Payment Gateways",
-          path: "/admin/dashboard/settings/payment-gateways",
-          show: findModule("PaymentGateways"),
+          name: 'Payment Gateways',
+          path: '/admin/dashboard/settings/payment-gateways',
+          show: findModule('PaymentGateways'),
         },
         {
-          name: "Support",
-          path: "/admin/dashboard/settings/support",
+          name: 'Support',
+          show: true,
+          path: '/admin/dashboard/settings/support',
         },
         {
-          name: "Departments",
-          path: "/admin/dashboard/settings/departments",
-          show: findModule("Departments"),
+          name: 'Departments',
+          path: '/admin/dashboard/settings/departments',
+          show: findModule('Departments'),
         },
         {
-          name: "Brands",
-          path: "/admin/dashboard/settings/brands",
-          show: findModule("Brands"),
+          name: 'Brands',
+          path: '/admin/dashboard/settings/brands',
+          show: findModule('Brands'),
         },
         {
-          name: "SMTP",
-          path: "/admin/dashboard/settings/smtp",
-          show: findModule("SMTP"),
+          name: 'SMTP',
+          path: '/admin/dashboard/settings/smtp',
+          show: findModule('SMTP'),
           subLinks: [
             {
-              name: "Add New Configuration",
-              path: "/admin/dashboard/settings/smtp/configuration/add",
+              name: 'Add New Configuration',
+              path: '/admin/dashboard/settings/smtp/configuration/add',
             },
             {
-              name: "Edit Configuration",
-              path: "/admin/dashboard/settings/smtp/edit/:id",
+              name: 'Edit Configuration',
+              path: '/admin/dashboard/settings/smtp/edit/:id',
             },
           ],
         },
         {
-          name: "Email Templates",
-          path: "/admin/dashboard/settings/email-templates",
-          show: findModule("EmailTemplates"),
+          name: 'Email Templates',
+          path: '/admin/dashboard/settings/email-templates',
+          show: findModule('EmailTemplates'),
           subLinks: [
             {
-              name: "Add New Template",
-              path: "/admin/dashboard/settings/email-templates/template/add",
+              name: 'Add New Template',
+              path: '/admin/dashboard/settings/email-templates/template/add',
             },
             {
-              name: "Edit Template",
-              path: "/admin/dashboard/settings/email-templates/edit/:id",
+              name: 'Edit Template',
+              path: '/admin/dashboard/settings/email-templates/edit/:id',
             },
           ],
         },
         {
-          name: "Admin Users",
-          show: findModule("AdminUsers") && findModule("AdminGroups"),
+          name: 'Admin Users',
+          show: findModule('AdminUsers') && findModule('AdminGroups'),
           count: data?.adminsCount > 0 ? data?.adminsCount : null,
-          path: "/admin/dashboard/settings/users/list",
+          path: '/admin/dashboard/settings/users/list',
           subLinks: [
             {
-              name: "Admin Details",
-              path: "/admin/dashboard/settings/users/list/admin-details/:id",
+              name: 'Admin Details',
+              path: '/admin/dashboard/settings/users/list/admin-details/:id',
             },
           ],
         },
         {
-          name: "Admin Groups",
-          show: findModule("AdminUsers") && findModule("AdminGroups"),
+          name: 'Admin Groups',
+          show: findModule('AdminUsers') && findModule('AdminGroups'),
           count: data?.adminGroupCount > 0 ? data?.adminGroupCount : null,
-          path: "/admin/dashboard/settings/users/groups",
+          path: '/admin/dashboard/settings/users/groups',
         },
         {
-          name: "Maintenance",
-          path: "/admin/dashboard/settings/maintenance",
+          name: 'Maintenance',
+          show: true,
+          path: '/admin/dashboard/settings/maintenance',
         },
         {
-          name: "API",
-          path: "/admin/dashboard/settings/api",
-          show: findModule("SettingAPIKeys"),
+          name: 'API',
+          path: '/admin/dashboard/settings/api',
+          show: findModule('SettingAPIKeys'),
         },
         // {
         //   name: 'Portal',
@@ -429,16 +462,18 @@ export const useSidebarData = () => {
       ],
     },
     {
-      name: "Account Settings",
+      name: 'Account Settings',
       hideInSide: true,
       hideBread: true,
-      module: "AccountSettings",
-      path: "/admin/dashboard/account-settings",
+      module: 'AccountSettings',
+      show: true,
+      path: '/admin/dashboard/account-settings',
       icon: () => <></>,
       subLinks: [
         {
-          name: "General",
-          path: "/admin/dashboard/account-settings/general",
+          name: 'General',
+          show: true,
+          path: '/admin/dashboard/account-settings/general',
         },
       ],
     },

@@ -8,15 +8,15 @@ const clientConfig = (action) => getConfig({ module: Clients, action });
 const Users = 'Users';
 export const getUsersConfig = () => ({
   url: `/api/users/getallusersbyrolename/admin`,
-  config: adminConfig('View'),
+  // config: adminConfig('View'),
 });
 export const getUserConfig = (id, isClient) => ({
   url: `/api/identity/profile/${id}`,
-  config: isClient ? clientConfig('View') : adminConfig('View'),
+  // config: isClient ? clientConfig('View') : adminConfig('View'),
 });
 export const getClientsConfig = () => ({
   url: `/api/users/getallusersbyrolename/client`,
-  config: clientConfig('View'),
+  // config: clientConfig('View'),
 });
 export const getSpecificConfig = () => ({
   url: `/api/users/find/specific`,

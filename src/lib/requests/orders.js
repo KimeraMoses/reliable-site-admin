@@ -17,12 +17,12 @@ export const getOrdersConfig = () => ({
     pageSize: 0,
     orderBy: [''],
   },
-  config: ordersConfig('View'),
+  // config: ordersConfig('View'),
 });
 
 export const createOrderConfig = () => ({
   url: `${prefix}`,
-  config: ordersConfig('Create'),
+  // config: ordersConfig('Create'),
 });
 
 export const getOrderTemplatesConfig = () => ({
@@ -37,15 +37,15 @@ export const getOrderTemplatesConfig = () => ({
     pageSize: 0,
     orderBy: [''],
   },
-  config: ordersConfig('View'),
+  // config: ordersConfig('View'),
 });
 
 export const createOrderTemplateConfig = () => ({
   url: `${otprefix}`,
-  config: ordersConfig('Create'),
+  // config: ordersConfig('Create'),
 });
 
 export const editOrderTemplateConfig = ({ id }) => ({
   url: `${otprefix}/${id}`,
-  config: ordersConfig('Update'),
+  // config: ordersConfig('Update'),
 });

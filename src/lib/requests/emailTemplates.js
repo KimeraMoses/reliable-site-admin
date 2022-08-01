@@ -7,22 +7,22 @@ const prefix = `/api/v1/admin/emailtemplates`;
 // Add Email Template Config
 export const addEmailTemplateConfig = () => ({
   url: `${prefix}`,
-  config: emailTemplatesConfig('Create'),
+  // config: emailTemplatesConfig('Create'),
 });
 // Edit Email Template Config
 export const editEmailTemplateConfig = ({ id }) => ({
   url: `${prefix}/${id}`,
-  config: emailTemplatesConfig('Update'),
+  // config: emailTemplatesConfig('Update'),
 });
 // Delete Email Template Config
 export const deleteEmailTemplateConfig = ({ id }) => ({
   url: `${prefix}/${id}`,
-  config: emailTemplatesConfig('Remove'),
+  // config: emailTemplatesConfig('Remove'),
 });
 // Get Email Template By ID Config
 export const getEmailTemplateByIdConfig = ({ id }) => ({
   url: `${prefix}/${id}`,
-  config: emailTemplatesConfig('View'),
+  // config: emailTemplatesConfig('View'),
 });
 // Get All Email Templates
 export const getAllEmailTemplatesConfig = () => ({
@@ -37,5 +37,5 @@ export const getAllEmailTemplatesConfig = () => ({
     pageSize: 0,
     orderBy: [''],
   },
-  config: emailTemplatesConfig('View'),
+  // config: emailTemplatesConfig('View'),
 });

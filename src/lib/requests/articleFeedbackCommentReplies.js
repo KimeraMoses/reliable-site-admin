@@ -9,23 +9,23 @@ const articleFeedbackCRC = (action) =>
 // Create Article Feedback Comments Replies
 export const createarticleFCReplyConfig = () => ({
   url: prefix,
-  config: articleFeedbackCRC('Create'),
+  // config: articleFeedbackCRC('Create'),
 });
 
 // Delete Article Feedback Comments Replies
 export const deletearticleFCReplyConfig = (id) => ({
   url: `${prefix}/${id}`,
-  config: articleFeedbackCRC('Remove'),
+  // config: articleFeedbackCRC('Remove'),
 });
 
 // Update Article Feedback Comments Replies
 export const updateArticleFCReplyConfig = (id) => ({
   url: `${prefix}/${id}`,
-  config: articleFeedbackCRC('Update'),
+  // config: articleFeedbackCRC('Update'),
 });
 
 // Get Article Feedback Comments Replies By ID
 export const getArticleFCReplyByIDConfig = (id) => ({
   url: `${prefix}/${id}`,
-  config: articleFeedbackCRC('View'),
+  // config: articleFeedbackCRC('View'),
 });
