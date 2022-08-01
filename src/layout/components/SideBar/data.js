@@ -22,6 +22,11 @@ export const useSidebarData = () => {
   const departmentsLoading = useSelector(
     (state) => state?.departments?.loading
   );
+  console.log("User modules", userModules);
+  console.log(
+    "User",
+    useSelector((state) => state.auth?.user)
+  );
   const ticketsLoading = useSelector((state) => state?.tickets?.loading);
   const dataLoading = useSelector((state) => state?.count?.loading);
   // Setting Departments
@@ -392,7 +397,7 @@ export const useSidebarData = () => {
         },
         {
           name: "Admin Users",
-          show: findModule("AdminUsers"),
+          show: findModule("AdminUsers") && findModule("AdminGroups"),
           count: data?.adminsCount > 0 ? data?.adminsCount : null,
           path: "/admin/dashboard/settings/users/list",
           subLinks: [
@@ -404,7 +409,7 @@ export const useSidebarData = () => {
         },
         {
           name: "Admin Groups",
-          show: findModule("AdminGroups"),
+          show: findModule("AdminUsers") && findModule("AdminGroups"),
           count: data?.adminGroupCount > 0 ? data?.adminGroupCount : null,
           path: "/admin/dashboard/settings/users/groups",
         },
