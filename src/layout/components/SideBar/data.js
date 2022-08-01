@@ -22,11 +22,7 @@ export const useSidebarData = () => {
   const departmentsLoading = useSelector(
     (state) => state?.departments?.loading
   );
-  console.log("User modules", userModules);
-  console.log(
-    "User",
-    useSelector((state) => state.auth?.user)
-  );
+
   const ticketsLoading = useSelector((state) => state?.tickets?.loading);
   const dataLoading = useSelector((state) => state?.count?.loading);
   // Setting Departments
@@ -221,12 +217,12 @@ export const useSidebarData = () => {
       subLinks: [
         {
           name: "My Tickets",
-          count:
-            isSuperAdmin && data?.tickets?.All > 0
-              ? data?.tickets?.All
-              : data?.tickets?.AssignedToMe > 0
-              ? data?.tickets?.AssignedToMe
-              : null,
+          count: 3,
+          // isSuperAdmin && data?.tickets?.All > 0
+          //   ? data?.tickets?.All
+          //   : data?.tickets?.AssignedToMe > 0
+          //   ? data?.tickets?.AssignedToMe
+          //   : null,
           path: "/admin/dashboard/support/tickets/list",
           subLinks: [
             {
