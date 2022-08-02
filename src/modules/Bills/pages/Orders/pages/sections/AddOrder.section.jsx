@@ -134,6 +134,7 @@ export const AddOrder = ({ show, setShow }) => {
           createOrder({
             data: {
               ...values,
+              orderStatus: Number(values?.orderStatus),
               tenant: "Admin",
             },
           })
