@@ -1,18 +1,18 @@
-import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Table } from 'components';
-import { checkModule } from 'lib/checkModule';
-import { NavLink } from 'react-router-dom';
-import { ViewNotes } from './sections';
-import { getOrderTemplates } from 'store';
-import moment from 'moment';
-import { OrderTemplate } from './sections/OrderTemplate.section';
-import { EditOrderTemplate } from './sections/EditTemplate.section';
-import { Button } from 'antd';
+import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Table } from "components";
+import { checkModule } from "lib/checkModule";
+import { NavLink } from "react-router-dom";
+import { ViewNotes } from "./sections";
+import { getOrderTemplates } from "store";
+import moment from "moment";
+import { OrderTemplate } from "./sections/OrderTemplate.section";
+import { EditOrderTemplate } from "./sections/EditTemplate.section";
+import { Button } from "antd";
 
 export const AllOrders = () => {
-  const { t } = useTranslation('/Bills/ns');
+  const { t } = useTranslation("/Bills/ns");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export const AllOrders = () => {
 
   // Setting data properly
   const [data, setData] = useState([]);
-  const [notes, setNotes] = useState('');
+  const [notes, setNotes] = useState("");
   const [noteModalShow, setNoteModalShow] = useState(false);
   const [showAdd, setShowAdd] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
@@ -33,7 +33,7 @@ export const AllOrders = () => {
   const { userModules } = useSelector((state) => state?.modules);
 
   const { permissions } = checkModule({
-    module: 'Orders',
+    module: "Orders",
     modules: userModules,
   });
 
@@ -50,28 +50,30 @@ export const AllOrders = () => {
     }
   }, [orderTemplates]);
 
+
+
   const columns = [
     {
-      title: 'Template Name',
-      dataIndex: 'templateName',
-      key: 'templateName',
+      title: "Template Name",
+      dataIndex: "templateName",
+      key: "templateName",
     },
     {
-      title: 'Created On',
-      dataIndex: 'createdOn',
-      key: 'createdOn',
-      render: (text) => moment(text).format('MM/DD/YYYY'),
+      title: "Created On",
+      dataIndex: "createdOn",
+      key: "createdOn",
+      render: (text) => moment(text).format("MM/DD/YYYY"),
     },
     {
-      title: 'Last Modified On',
-      dataIndex: 'lastModifiedOn',
-      key: 'lastModifiedOn',
-      render: (text) => moment(text).format('MM/DD/YYYY'),
+      title: "Last Modified On",
+      dataIndex: "lastModifiedOn",
+      key: "lastModifiedOn",
+      render: (text) => moment(text).format("MM/DD/YYYY"),
     },
     {
-      title: t('orderNotes'),
-      dataIndex: 'notes',
-      key: 'notes',
+      title: t("orderNotes"),
+      dataIndex: "notes",
+      key: "notes",
       render: (notes, record) => {
         return (
           <NavLink
@@ -82,7 +84,7 @@ export const AllOrders = () => {
             }}
             className="text-uppercase"
           >
-            {t('viewNotes')}
+            {t("viewNotes")}
           </NavLink>
         );
       },
@@ -123,7 +125,7 @@ export const AllOrders = () => {
             );
           }}
           btnData={{
-            text: 'Add Template',
+            text: "Add Template",
             onClick: () => {
               setShowAdd(true);
             },

@@ -244,11 +244,11 @@ export const statusList = (i = "") => {
       bg: "#392F28",
       text: "#FFA800",
     },
-    {
-      name: "Confirmed",
-      bg: "#1C3238",
-      text: "#0BB783",
-    },
+    // {
+    //   name: "Confirmed",
+    //   bg: "#1C3238",
+    //   text: "#0BB783",
+    // },
     {
       name: "Paid",
       bg: "#1C3238",

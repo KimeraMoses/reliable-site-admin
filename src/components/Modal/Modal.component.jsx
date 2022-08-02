@@ -1,12 +1,12 @@
-import { Modal as BSModal } from 'react-bootstrap';
-import { Formik, Form, Field } from 'formik';
-import { object } from 'yup';
-import { passwordStrength } from 'check-password-strength';
-import './Modal.styles.scss';
-import { DatePicker } from 'components';
-import { Switch, Button, Checkbox } from 'antd';
-import { Fragment } from 'react';
-import { Input, MultiSelect } from 'components/formFields';
+import { Modal as BSModal } from "react-bootstrap";
+import { Formik, Form, Field } from "formik";
+import { object } from "yup";
+import { passwordStrength } from "check-password-strength";
+import { DatePicker } from "components";
+import { Switch, Button, Checkbox } from "antd";
+import { Fragment } from "react";
+import { Input, MultiSelect } from "components/formFields";
+import "./Modal.styles.scss";
 
 const demoFields = [];
 
@@ -21,8 +21,8 @@ export function Modal({
   fields = demoFields,
   validationSchema = vSchema,
   initialValues = iValues,
-  submitText = 'Add',
-  cancelButtonText = 'Cancel',
+  submitText = "Add",
+  cancelButtonText = "Cancel",
   handleCancel,
   customBody,
   additionalBody,
@@ -34,6 +34,9 @@ export function Modal({
   const handleClose = () => {
     setShow(false);
   };
+
+
+
   return (
     <BSModal
       show={show}
@@ -81,19 +84,19 @@ export function Modal({
                         ) => {
                           const strength = values?.password
                             ? passwordStrength(values?.password)?.value
-                            : 'Password Not Entered Yet!';
+                            : "Password Not Entered Yet!";
                           return (
                             <Fragment key={name}>
                               <div className="modal__form-el" key={name}>
                                 <p className="modal__form-el-label">{title}</p>
                                 {/* Switch */}
-                                {type === 'date' ? (
+                                {type === "date" ? (
                                   <DatePicker
                                     name={name}
                                     disableDate={disableDate}
                                     disableTime={disableTime}
                                   />
-                                ) : type === 'switch' ? (
+                                ) : type === "switch" ? (
                                   <Field name={name}>
                                     {({
                                       field,
@@ -105,8 +108,8 @@ export function Modal({
                                           <div className="modal__form-el-switch-container">
                                             <p className="modal__form-el-switch-container-label">
                                               {field?.value
-                                                ? 'Enabled'
-                                                : 'Disabled'}
+                                                ? "Enabled"
+                                                : "Disabled"}
                                             </p>
                                             <div>
                                               <Switch
@@ -126,7 +129,7 @@ export function Modal({
                                       );
                                     }}
                                   </Field>
-                                ) : name === 'password' ? (
+                                ) : name === "password" ? (
                                   <div className="modal__form-el-password">
                                     <Field
                                       type="password"
@@ -138,42 +141,42 @@ export function Modal({
                                     <div className="modal__form-el-password-strength">
                                       <div
                                         className={`modal__form-el-password-strength-box transition-all ${
-                                          strength === 'Too weak'
-                                            ? 'bg-red-600'
-                                            : strength === 'Weak'
-                                            ? 'bg-yellow-600'
-                                            : strength === 'Medium'
-                                            ? 'bg-blue-600'
-                                            : strength === 'Strong'
-                                            ? 'bg-green-600'
-                                            : 'bg-[#323248]'
+                                          strength === "Too weak"
+                                            ? "bg-red-600"
+                                            : strength === "Weak"
+                                            ? "bg-yellow-600"
+                                            : strength === "Medium"
+                                            ? "bg-blue-600"
+                                            : strength === "Strong"
+                                            ? "bg-green-600"
+                                            : "bg-[#323248]"
                                         }`}
                                       />
                                       <div
                                         className={`modal__form-el-password-strength-box transition-all ${
-                                          strength === 'Weak'
-                                            ? 'bg-yellow-600'
-                                            : strength === 'Medium'
-                                            ? 'bg-blue-600'
-                                            : strength === 'Strong'
-                                            ? 'bg-green-600'
-                                            : 'bg-[#323248]'
+                                          strength === "Weak"
+                                            ? "bg-yellow-600"
+                                            : strength === "Medium"
+                                            ? "bg-blue-600"
+                                            : strength === "Strong"
+                                            ? "bg-green-600"
+                                            : "bg-[#323248]"
                                         }`}
                                       />
                                       <div
                                         className={`modal__form-el-password-strength-box transition-all ${
-                                          strength === 'Medium'
-                                            ? 'bg-blue-600'
-                                            : strength === 'Strong'
-                                            ? 'bg-green-600'
-                                            : 'bg-[#323248]'
+                                          strength === "Medium"
+                                            ? "bg-blue-600"
+                                            : strength === "Strong"
+                                            ? "bg-green-600"
+                                            : "bg-[#323248]"
                                         }`}
                                       />
                                       <div
                                         className={`modal__form-el-password-strength-box transition-all ${
-                                          strength === 'Strong'
-                                            ? 'bg-green-600'
-                                            : 'bg-[#323248]'
+                                          strength === "Strong"
+                                            ? "bg-green-600"
+                                            : "bg-[#323248]"
                                         }`}
                                       />
                                     </div>
@@ -188,7 +191,7 @@ export function Modal({
                                     )}
                                   </div>
                                 ) : // Select
-                                type === 'select' ? (
+                                type === "select" ? (
                                   <Field name={name}>
                                     {({
                                       field,
@@ -197,7 +200,7 @@ export function Modal({
                                     }) => {
                                       const finalOptions = [
                                         ...options,
-                                        { label: placeholder, value: '' },
+                                        { label: placeholder, value: "" },
                                       ];
                                       return (
                                         <div className="w-full">
@@ -231,7 +234,88 @@ export function Modal({
                                       );
                                     }}
                                   </Field>
-                                ) : type === 'file' ? ( // sorry, I wrote my own JSX for input type file because ImageUpload component doesn't look like on the Adobe design
+                                ) : type === "searchable" ? (
+                                  <Field name={name}>
+                                    {({
+                                      field,
+                                      meta,
+                                      form: { setFieldValue, values },
+                                    }) => {
+                                      return (
+                                        <div className="w-full">
+                                          <>
+                                            <Field
+                                              placeholder={placeholder}
+                                              type="search"
+                                              name="orderForClientId"
+                                              className="modal__form-el-field"
+                                              value={
+                                                options?.isSelected
+                                                  ? options?.clients.filter(
+                                                      (client) =>
+                                                        client.id ===
+                                                        values[name]
+                                                    )[0]?.fullName
+                                                  : options?.searchTerm
+                                              }
+                                              onChange={options?.keyWordHandler}
+                                            />
+
+                                            {options?.searchTerm.length > 1 && (
+                                              <div className="relative w-full text-left">
+                                                {options?.searchResults.length > 0 ? (
+                                                  <ul className="absolute top-0 right-0 left-0 border-0 margin-0 bg-[#171723] pl-0 rounded shadow-md list-none max-h-48 overflow-y-auto z-50">
+                                                    {options?.searchTerm &&
+                                                      options?.searchResults.map(
+                                                        (result) => {
+                                                          return (
+                                                            <li
+                                                              onClick={() => {
+                                                                options?.setIsSelected(
+                                                                  true
+                                                                );
+                                                                setFieldValue(
+                                                                  name,
+                                                                  result.id
+                                                                );
+                                                                options?.setSearchTerm(
+                                                                  ""
+                                                                );
+                                                                options?.setSearchResults(
+                                                                  []
+                                                                );
+                                                              }}
+                                                              key={result.id}
+                                                              className="px-2 py-1.5 cursor-pointer capitalize border-t border-[#323248] hover:bg-[#323248] text-[#92928f]"
+                                                            >
+                                                              {result.fullName}
+                                                            </li>
+                                                          );
+                                                        }
+                                                      )}
+                                                  </ul>
+                                                ) : (
+                                                  <div className="overflow-hidden absolute top-0 right-0 left-0 m-0 border-1 border-[#323248] bg-[#171723] z-50 rounded-md pt-2 px-2.5 pb-3 shadow-md">
+                                                    Ooops, No Client match for{" "}
+                                                    <strong className="text-primary">
+                                                      {options?.searchTerm}
+                                                    </strong>{" "}
+                                                    found!
+                                                  </div>
+                                                )}
+                                              </div>
+                                            )}
+                                          </>
+                                          {meta.touched && meta.error && (
+                                            <div className="error mt-[8px]">
+                                              {meta.error}
+                                            </div>
+                                          )}
+                                        </div>
+                                      );
+                                    }}
+                                  </Field>
+                                ) : type === "file" ? ( // sorry, I wrote my own JSX for input type file because ImageUpload component doesn't look like on the Adobe design
                                   <Field name={name}>
                                     {({
                                       field,
@@ -242,10 +326,10 @@ export function Modal({
                                         <div className="modal__form-el-password">
                                           <label
                                             style={{
-                                              display: 'flex',
-                                              alignItems: 'center',
-                                              flexDirection: 'row-reverse',
-                                              justifyContent: 'space-between',
+                                              display: "flex",
+                                              alignItems: "center",
+                                              flexDirection: "row-reverse",
+                                              justifyContent: "space-between",
                                             }}
                                             key={name}
                                             htmlFor="typeFile"
@@ -253,8 +337,8 @@ export function Modal({
                                           >
                                             <div
                                               style={{
-                                                color: '#3699FF',
-                                                fontSize: '10px',
+                                                color: "#3699FF",
+                                                fontSize: "10px",
                                               }}
                                             >
                                               {subText}
@@ -265,13 +349,13 @@ export function Modal({
                                                 alt=""
                                                 id="img"
                                                 style={{
-                                                  border: 'none',
-                                                  outline: 'none',
+                                                  border: "none",
+                                                  outline: "none",
                                                   width: `${
-                                                    values[name] && '50px'
+                                                    values[name] && "50px"
                                                   }`,
                                                   height: `${
-                                                    values[name] && '35px'
+                                                    values[name] && "35px"
                                                   }`,
                                                 }}
                                               />
@@ -280,7 +364,7 @@ export function Modal({
                                               type="file"
                                               id="typeFile"
                                               name={name}
-                                              style={{ display: 'none' }}
+                                              style={{ display: "none" }}
                                               onChange={(event) => {
                                                 const [file] =
                                                   event.target.files;
@@ -290,18 +374,18 @@ export function Modal({
                                                   URL.createObjectURL(logo);
                                                 let img =
                                                   document.getElementById(
-                                                    'img'
+                                                    "img"
                                                   );
                                                 if (file) {
                                                   setFieldValue(name, url);
                                                   setFieldValue(
-                                                    'image',
+                                                    "image",
                                                     event.target.files[0]
                                                   );
                                                 }
                                                 img.src = url;
-                                                img.style.width = '50px';
-                                                img.style.height = '35px';
+                                                img.style.width = "50px";
+                                                img.style.height = "35px";
                                               }}
                                             />
                                           </label>
@@ -309,7 +393,7 @@ export function Modal({
                                       );
                                     }}
                                   </Field>
-                                ) : type === 'userList' ? (
+                                ) : type === "userList" ? (
                                   <Field name={name}>
                                     {({
                                       field,
@@ -344,7 +428,7 @@ export function Modal({
                                                           ) : (
                                                             <img
                                                               src={
-                                                                'https://via.placeholder.com/200'
+                                                                "https://via.placeholder.com/200"
                                                               }
                                                             />
                                                           )}
@@ -367,14 +451,14 @@ export function Modal({
                                       );
                                     }}
                                   </Field>
-                                ) : type === 'multiselect' ? (
+                                ) : type === "multiselect" ? (
                                   <MultiSelect
                                     name={name}
                                     options={options}
                                     placeholder={placeholder}
                                     mode={mode}
                                   />
-                                ) : type === 'textarea' ? (
+                                ) : type === "textarea" ? (
                                   <Input
                                     name={name}
                                     type="textarea"
@@ -407,7 +491,7 @@ export function Modal({
                   {additionalBody ? additionalBody : <></>}
                   <div
                     className={`modal__buttons grid ${
-                      submitText ? 'grid-cols-2' : 'grid-cols-1'
+                      submitText ? "grid-cols-2" : "grid-cols-1"
                     }`}
                   >
                     <button
