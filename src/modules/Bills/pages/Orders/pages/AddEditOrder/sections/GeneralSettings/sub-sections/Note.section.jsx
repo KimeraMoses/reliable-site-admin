@@ -26,7 +26,6 @@ export const Note = () => {
         }}
         handleSubmit={(values) => {
           setFieldValue('notes', values?.notes);
-          setFieldValue('orderNotes', values?.notes);
           setShow(false);
         }}
       />

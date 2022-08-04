@@ -139,48 +139,51 @@ export const YourOrders = () => {
           columns={columns}
           data={data}
           loading={loading}
-          dateRageFilter={true}
-          statusFilter={statusList()}
+          // dateRageFilter={true}
+          // statusFilter={statusList()}
           hideActions
           fieldToFilter="orderNo"
           btnData={{
             text: 'Add Order',
-            onClick: () => setShowAdd(true),
+            onClick: () =>
+              navigate(
+                '/admin/dashboard/billing/orders/your-orders/list/add/new'
+              ),
           }}
-          handleStatus={async (values) => {
-            setStatus(values);
-            let details = {
-              status: values,
-              userId: user?.id,
-            };
+          // handleStatus={async (values) => {
+          //   setStatus(values);
+          //   let details = {
+          //     status: values,
+          //     userId: user?.id,
+          //   };
 
-            if (startDate && endDate) {
-              details['startDate'] = startDate;
-              details['endDate'] = endDate;
-            }
-            await dispatch(getOrders(details));
-          }}
-          handleDateRange={async (date, dateString, id) => {
-            let startDate = '';
-            let endDate = '';
-            let details = {
-              userId: user?.id,
-            };
-            if (date) {
-              startDate = date[0]._d;
-              endDate = date[1]._d;
-              details['startDate'] = startDate;
-              details['endDate'] = endDate;
-            }
+          //   if (startDate && endDate) {
+          //     details['startDate'] = startDate;
+          //     details['endDate'] = endDate;
+          //   }
+          //   await dispatch(getOrders(details));
+          // }}
+          // handleDateRange={async (date, dateString, id) => {
+          //   let startDate = '';
+          //   let endDate = '';
+          //   let details = {
+          //     userId: user?.id,
+          //   };
+          //   if (date) {
+          //     startDate = date[0]._d;
+          //     endDate = date[1]._d;
+          //     details['startDate'] = startDate;
+          //     details['endDate'] = endDate;
+          //   }
 
-            if (status) {
-              details['status'] = status;
-            }
+          //   if (status) {
+          //     details['status'] = status;
+          //   }
 
-            setStartDate(startDate);
-            setEndDate(endDate);
-            await dispatch(getOrders(details));
-          }}
+          //   setStartDate(startDate);
+          //   setEndDate(endDate);
+          //   await dispatch(getOrders(details));
+          // }}
           permissions={permissions}
           t={t}
         />

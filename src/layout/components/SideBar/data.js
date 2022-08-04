@@ -110,6 +110,18 @@ export const useSidebarData = () => {
               name: 'Your Orders',
               path: '/admin/dashboard/billing/orders/your-orders/list',
               show: true,
+              subLinks: [
+                {
+                  name: 'Edit Order',
+                  path: '/admin/dashboard/billing/orders/your-orders/list/edit/:id',
+                  show: true,
+                },
+                {
+                  name: 'Add Order',
+                  path: '/admin/dashboard/billing/orders/your-orders/list/add/new',
+                  show: true,
+                },
+              ],
             },
             {
               name: 'All Orders',
@@ -123,7 +135,7 @@ export const useSidebarData = () => {
               subLinks: [
                 {
                   name: 'Edit Order Template',
-                  path: '/admin/dashboard/billing/orders/order-templates/list/details/:id',
+                  path: '/admin/dashboard/billing/orders/order-templates/list/edit/:id',
                   show: true,
                 },
                 {

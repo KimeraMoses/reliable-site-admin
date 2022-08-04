@@ -85,6 +85,7 @@ export const OTDetails = () => {
     tags: orderTemplate ? orderTemplate?.tags?.split(',') : [],
     paymentType: orderTemplate ? orderTemplate?.paymentType : 0,
     billingCycle: orderTemplate ? orderTemplate?.billingCycle : 0,
+    notes: orderTemplate ? orderTemplate?.notes : '',
     tenant: 'admin',
     // registrationDate: moment(orderTemplate?.registrationDate),
     // nextDueDate: moment(orderTemplate?.nextDueDate),
@@ -158,6 +159,7 @@ export const OTDetails = () => {
             }
           }),
           tags: `${values?.tags}`,
+          notes: `${values?.notes}`,
           paymentType: Number(values.paymentType),
           billingCycle: Number(values.billingCycle),
           tenant: values?.tenant,
