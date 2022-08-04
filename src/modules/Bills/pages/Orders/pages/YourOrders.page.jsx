@@ -1,25 +1,25 @@
-import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, Table } from 'components';
-import { statusList } from 'lib';
-import { checkModule } from 'lib/checkModule';
-import { getOrders } from 'store';
-import moment from 'moment';
-import { useNavigate } from 'react-router-dom';
-import { AddOrder } from './sections/AddOrder.section';
-import { getClients } from 'store';
-import { getProducts } from 'store';
-import { getOrderTemplates } from 'store';
+import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Button, Table } from "components";
+import { statusList } from "lib";
+import { checkModule } from "lib/checkModule";
+import { getOrders } from "store";
+import moment from "moment";
+import { useNavigate } from "react-router-dom";
+import { AddOrder } from "./sections/AddOrder.section";
+import { getClients } from "store";
+import { getProducts } from "store";
+import { getOrderTemplates } from "store";
 
 export const YourOrders = () => {
   const navigate = useNavigate();
   const [showAdd, setShowAdd] = useState(false);
-  const { t } = useTranslation('/Bills/ns');
+  const { t } = useTranslation("/Bills/ns");
   const dispatch = useDispatch();
   const { orders, loading } = useSelector((state) => state?.orders);
   const { userModules } = useSelector((state) => state?.modules);
-  const { user } = useSelector((state) => state?.auth);
+  // const { user } = useSelector((state) => state?.auth);
 
   useEffect(() => {
     (async () => {
@@ -32,12 +32,12 @@ export const YourOrders = () => {
 
   // Setting data properly
   const [data, setData] = useState([]);
-  const [status, setStatus] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  // const [status, setStatus] = useState("");
+  // const [startDate, setStartDate] = useState("");
+  // const [endDate, setEndDate] = useState("");
 
   const { permissions } = checkModule({
-    module: 'Orders',
+    module: "Orders",
     modules: userModules,
   });
 
@@ -56,14 +56,14 @@ export const YourOrders = () => {
 
   const columns = [
     {
-      title: t('orderId'),
-      dataIndex: 'orderNo',
-      key: 'orderNo',
+      title: t("orderId"),
+      dataIndex: "orderNo",
+      key: "orderNo",
     },
     {
-      title: t('client'),
-      dataIndex: 'fullName',
-      key: 'fullName',
+      title: t("client"),
+      dataIndex: "fullName",
+      key: "fullName",
       render: (fullName) => {
         // let name = "";
         // let userN = fullName?.split(" ");
@@ -89,15 +89,15 @@ export const YourOrders = () => {
                 {name}
               </div>
             )} */}
-            <p className="text-white">{fullName ? fullName : 'N/A'}</p>
+            <p className="text-white">{fullName ? fullName : "N/A"}</p>
           </div>
         );
       },
     },
     {
-      title: t('status'),
-      dataIndex: 'status',
-      key: 'status',
+      title: t("status"),
+      dataIndex: "status",
+      key: "status",
       render: (status) => {
         const statusValue = statusList(status);
         return (
@@ -110,24 +110,24 @@ export const YourOrders = () => {
       },
     },
     {
-      title: t('total'),
-      dataIndex: 'totalPrice',
-      key: 'totalPrice',
+      title: t("total"),
+      dataIndex: "totalPrice",
+      key: "totalPrice",
       render: (totalPrice) => {
         return <>{`${totalPrice} USD`}</>;
       },
     },
     {
-      title: t('dateAdded'),
-      dataIndex: 'createdOn',
-      key: 'createdOn',
-      render: (createdOn) => moment(createdOn).format('DD-MM-YYYY'),
+      title: t("dateAdded"),
+      dataIndex: "createdOn",
+      key: "createdOn",
+      render: (createdOn) => moment(createdOn).format("DD-MM-YYYY"),
     },
     {
-      title: t('dateModified'),
-      dataIndex: 'lastModifiedOn',
-      key: 'lastModifiedOn',
-      render: (lastModifiedOn) => moment(lastModifiedOn).format('DD-MM-YYYY'),
+      title: t("dateModified"),
+      dataIndex: "lastModifiedOn",
+      key: "lastModifiedOn",
+      render: (lastModifiedOn) => moment(lastModifiedOn).format("DD-MM-YYYY"),
     },
   ];
 
@@ -144,10 +144,10 @@ export const YourOrders = () => {
           hideActions
           fieldToFilter="orderNo"
           btnData={{
-            text: 'Add Order',
+            text: "Add Order",
             onClick: () =>
               navigate(
-                '/admin/dashboard/billing/orders/your-orders/list/add/new'
+                "/admin/dashboard/billing/orders/your-orders/list/add/new"
               ),
           }}
           // handleStatus={async (values) => {

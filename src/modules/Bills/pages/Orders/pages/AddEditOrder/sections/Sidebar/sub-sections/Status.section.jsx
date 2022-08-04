@@ -1,8 +1,8 @@
-import { Input } from 'components';
-// import { useSelector } from 'react-redux';
+import { Input } from "components";
+import { useSelector } from "react-redux";
 
 export const Status = () => {
-  // const { clients } = useSelector((state) => state?.users);
+  const { clients } = useSelector((state) => state?.users);
 
   return (
     <div className="p-[32px] bg-[#1E1E2D] rounded-[8px] mt-[20px]">
@@ -13,7 +13,7 @@ export const Status = () => {
       <p className="text-[#474761] text-[14x] mt-[8px] mb-[32px]">
         Set The Product Status
       </p>
-      {/* <Input
+      <Input
         name="assignedToClientId"
         placeholder="Client"
         type="select"
@@ -23,7 +23,7 @@ export const Status = () => {
           label: client?.fullName ? client?.fullName : client?.email,
           value: client?.id,
         }))}
-      /> */}
+      />
       <Input
         name="status"
         placeholder="Status"
@@ -31,10 +31,8 @@ export const Status = () => {
         label="Status"
         className="mb-[20px]"
         options={[
-          { label: 'Pending', value: 0 },
-          { label: 'Active', value: 1 },
-          { label: 'Cancelled', value: 2 },
-          { label: 'Suspended', value: 3 },
+          { label: "Draft", value: 0 },
+          { label: "Pending", value: 1 },
         ]}
       />
       <Input
@@ -44,8 +42,8 @@ export const Status = () => {
         label="Payment Type"
         className="mb-[20px]"
         options={[
-          { label: 'One Time', value: 0 },
-          { label: 'Monthly', value: 1 },
+          { label: "One Time", value: 0 },
+          { label: "Monthly", value: 1 },
         ]}
       />
       <Input
@@ -54,13 +52,13 @@ export const Status = () => {
         type="select"
         label="Billing Cycle"
         options={[
-          { label: 'Hourly', value: 0 },
-          { label: 'Monthly', value: 1 },
-          { label: 'Quarterly', value: 2 },
-          { label: 'SemiAnnually', value: 3 },
-          { label: 'Annually', value: 4 },
-          { label: 'Biennially', value: 5 },
-          { label: 'Triennially', value: 6 },
+          { label: "Hourly", value: 0 },
+          { label: "Monthly", value: 1 },
+          { label: "Quarterly", value: 2 },
+          { label: "SemiAnnually", value: 3 },
+          { label: "Annually", value: 4 },
+          { label: "Biennially", value: 5 },
+          { label: "Triennially", value: 6 },
         ]}
       />
     </div>

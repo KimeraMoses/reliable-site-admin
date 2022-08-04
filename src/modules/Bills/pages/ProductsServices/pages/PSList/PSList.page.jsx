@@ -1,13 +1,13 @@
-import { Button } from 'antd';
-import { useNavigate } from 'react-router-dom';
-import { Input, Table } from 'components';
+import { Button } from "antd";
+import { useNavigate } from "react-router-dom";
+import { Input, Table } from "components";
 // import { useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { checkModule } from 'lib/checkModule';
-import { useEffect, useState } from 'react';
-import { getProducts } from 'store';
-import { Form, Formik } from 'formik';
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { checkModule } from "lib/checkModule";
+import { useEffect, useState } from "react";
+import { getProducts } from "store";
+import { Form, Formik } from "formik";
 import {
   Add,
   Cancel,
@@ -16,35 +16,35 @@ import {
   Suspend,
   Terminate,
   Unsuspend,
-} from './sections';
-import { getCategories } from 'store';
+} from "./sections";
+import { getCategories } from "store";
 
 export const PSList = () => {
   // const [showAdd, setShowAdd] = useState(false);
   const navigate = useNavigate();
 
-  const { t } = useTranslation('/Bills/ns');
+  const { t } = useTranslation("/Bills/ns");
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Products',
+    module: "Products",
     modules: userModules,
   });
   const columns = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
       render: (text) => <>{text.substr(text.length - 5)}</>,
     },
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
     },
     {
-      title: 'Summary',
-      dataIndex: 'summary',
-      key: 'summary',
+      title: "Summary",
+      dataIndex: "summary",
+      key: "summary",
       render: (text, record) => {
         return (
           <div className="flex items-center gap-[16px]">
@@ -59,12 +59,12 @@ export const PSList = () => {
           </div>
         );
       },
-      width: '50%',
+      width: "50%",
     },
     {
-      title: 'Items',
-      dataIndex: 'productLineItems',
-      key: 'productLineItems',
+      title: "Items",
+      dataIndex: "productLineItems",
+      key: "productLineItems",
       render: (lineItems) => {
         return (
           <div className="flex flex-col gap-[16px]">
@@ -87,12 +87,12 @@ export const PSList = () => {
           </div>
         );
       },
-      width: '20%',
+      width: "20%",
     },
     {
-      title: 'Total',
-      dataIndex: 'total',
-      key: 'total',
+      title: "Total",
+      dataIndex: "total",
+      key: "total",
       render: (text, record) => {
         let sum = 0;
         record?.productLineItems?.forEach((item) => {
@@ -104,40 +104,56 @@ export const PSList = () => {
       },
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
       render: (status) => {
-        let color = '';
-        let text = '';
+        let color = "";
+        let text = "";
         switch (status) {
           case 0:
-            color = 'bg-[#392F28] text-[#FFA800]';
-            text = 'PENDING';
+            color = "bg-[#392F28] text-[#FFA800]";
+            text = "DRAFT";
             break;
           case 1:
-            color = 'bg-[#1C3238] text-[#0BB783]';
-            text = 'CONFIRMED';
+            color = "bg-[#392F28] text-[#FFA800]";
+            text = "PENDING";
             break;
           case 2:
-            color = 'bg-[#3A2434] text-[#F64E60]';
-            text = 'CANCELLED';
+            color = "bg-[#1C3238] text-[#0BB783]";
+            text = "PAID";
             break;
           case 3:
-            color = 'bg-[#1C3238] text-[#0BB783]';
-            text = 'RENEWED';
+            color = "bg-[#1C3238] text-[#0BB783]";
+            text = "PROCESSING";
             break;
           case 4:
-            color = 'bg-[#3A2434] text-[#F64E60]';
-            text = 'SUSPENDED';
+            color = "bg-[#1C3238] text-[#0BB783]";
+            text = "COMPLETED";
             break;
           case 5:
-            color = 'bg-[#3A2434] text-[#F64E60]';
-            text = 'TERMINATED';
+            color = "bg-[#1C3238] text-[#0BB783]";
+            text = "ACCEPTED";
             break;
+          case 2:
+            color = "bg-[#3A2434] text-[#F64E60]";
+            text = "CANCELLED";
+            break;
+          // case 3:
+          //   color = "bg-[#1C3238] text-[#0BB783]";
+          //   text = "RENEWED";
+          //   break;
+          // case 4:
+          //   color = "bg-[#3A2434] text-[#F64E60]";
+          //   text = "SUSPENDED";
+          //   break;
+          // case 5:
+          //   color = "bg-[#3A2434] text-[#F64E60]";
+          //   text = "TERMINATED";
+          //   break;
           default:
-            color = '';
-            text = 'UNKNOWN';
+            color = "";
+            text = "UNKNOWN";
         }
         return (
           <div
@@ -161,7 +177,7 @@ export const PSList = () => {
   const { products, loading } = useSelector((state) => state?.products);
   const categoriesLoading = useSelector((state) => state?.categories?.loading);
 
-  const [showAdd, setShowAdd] = useState(false);
+  // const [showAdd, setShowAdd] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [showCancel, setShowCancel] = useState(false);
   const [showSuspend, setShowSuspend] = useState(false);
@@ -169,9 +185,10 @@ export const PSList = () => {
   const [showRenew, setShowRenew] = useState(false);
   const [showUnsuspend, setShowUnsuspend] = useState(false);
   const [record, setRecord] = useState(null);
+
   return (
     <div className="p-[40px]">
-      <Add show={showAdd} setShow={setShowAdd} />
+      {/* <Add show={showAdd} setShow={setShowAdd} /> */}
       <Delete show={showDelete} setShow={setShowDelete} record={record} />
       <Cancel show={showCancel} setShow={setShowCancel} record={record} />
       <Suspend show={showSuspend} setShow={setShowSuspend} record={record} />
@@ -187,7 +204,7 @@ export const PSList = () => {
         record={record}
       />
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
-        <Formik initialValues={{ selectFilter: 'name' }}>
+        <Formik initialValues={{ selectFilter: "name" }}>
           {({ values }) => (
             <Form>
               <Table
@@ -195,10 +212,10 @@ export const PSList = () => {
                 data={products}
                 loading={categoriesLoading || loading}
                 fieldToFilter={values?.selectFilter}
-                btnData={{
-                  onClick: () => setShowAdd(true),
-                  text: 'Add New Product',
-                }}
+                // btnData={{
+                //   onClick: () => setShowAdd(true),
+                //   text: "Add New Product",
+                // }}
                 editAction={(record) => (
                   <Button
                     onClick={() => {
@@ -230,7 +247,7 @@ export const PSList = () => {
                         }
                       }}
                     >
-                      {record?.status === 4 ? 'Un-Suspend' : 'Suspend'}
+                      {record?.status === 4 ? "Un-Suspend" : "Suspend"}
                     </Button>
                     <Button
                       onClick={() => {
@@ -269,9 +286,9 @@ export const PSList = () => {
                       name="selectFilter"
                       type="select"
                       options={[
-                        { value: 'name', label: 'Name' },
-                        { value: 'total', label: 'Total' },
-                        { value: 'status', label: 'Status' },
+                        { value: "name", label: "Name" },
+                        { value: "total", label: "Total" },
+                        { value: "status", label: "Status" },
                       ]}
                     />
                   </div>

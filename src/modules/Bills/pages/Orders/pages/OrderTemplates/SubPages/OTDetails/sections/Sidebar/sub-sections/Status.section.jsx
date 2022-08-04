@@ -1,4 +1,4 @@
-import { Input } from 'components';
+import { Input } from "components";
 // import { useSelector } from 'react-redux';
 
 export const Status = () => {
@@ -31,10 +31,10 @@ export const Status = () => {
         label="Status"
         className="mb-[20px]"
         options={[
-          { label: 'Pending', value: 0 },
-          { label: 'Active', value: 1 },
-          { label: 'Cancelled', value: 2 },
-          { label: 'Suspended', value: 3 },
+          { label: "Pending", value: 0 },
+          { label: "Active", value: 1 },
+          { label: "Cancelled", value: 2 },
+          { label: "Suspended", value: 3 },
         ]}
       />
       <Input
@@ -44,8 +44,8 @@ export const Status = () => {
         label="Payment Type"
         className="mb-[20px]"
         options={[
-          { label: 'One Time', value: 0 },
-          { label: 'Monthly', value: 1 },
+          { label: "One Time", value: 0 },
+          { label: "Monthly", value: 1 },
         ]}
       />
       <Input
@@ -54,13 +54,13 @@ export const Status = () => {
         type="select"
         label="Billing Cycle"
         options={[
-          { label: 'Hourly', value: 0 },
-          { label: 'Monthly', value: 1 },
-          { label: 'Quarterly', value: 2 },
-          { label: 'SemiAnnually', value: 3 },
-          { label: 'Annually', value: 4 },
-          { label: 'Biennially', value: 5 },
-          { label: 'Triennially', value: 6 },
+          { label: "Hourly", value: 0 },
+          { label: "Monthly", value: 1 },
+          { label: "Quarterly", value: 2 },
+          { label: "SemiAnnually", value: 3 },
+          { label: "Annually", value: 4 },
+          { label: "Biennially", value: 5 },
+          { label: "Triennially", value: 6 },
         ]}
       />
     </div>

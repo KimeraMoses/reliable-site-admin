@@ -1,21 +1,21 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
-import { Spin } from 'antd';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Form, Formik } from 'formik';
-import { Sidebar, GeneralSettings } from './sections';
-import './AddEditOrder.styles.scss';
-import { createServerImage } from 'lib';
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import moment from "moment";
+import { Spin } from "antd";
+import { useParams } from "react-router-dom";
+import { Form, Formik } from "formik";
+import { Sidebar, GeneralSettings } from "./sections";
+import "./AddEditOrder.styles.scss";
+import { createServerImage } from "lib";
 import {
   getCategories,
   createOrder,
-  editOrderTemplateByID,
+  // editOrderTemplateByID,
   getOrderTemplate,
   getOrderTemplates,
   getDepartments,
   getOrderTemplateByID,
-} from 'store';
+} from "store";
 
 export const AddEditOrder = () => {
   // const [active, setActive] = useState('GENERAL SETTINGS');
@@ -40,7 +40,7 @@ export const AddEditOrder = () => {
 
   useEffect(() => {
     (async () => {
-      console.log(id);
+      // console.log(id);
       await dispatch(getCategories());
       if (id) {
         dispatch(getOrderTemplateByID(id));
@@ -53,21 +53,19 @@ export const AddEditOrder = () => {
   }, []);
 
   const initVal = {
-    preview: order ? order?.products[0]?.base64Image : '',
+    preview: order ? order?.products[0]?.base64Image : "",
     isActive: true,
-    name: order ? order?.products[0]?.name : '',
-    description: order ? order?.products[0]?.description : '',
+    name: order ? order?.products[0]?.name : "",
+    description: order ? order?.products[0]?.description : "",
     // summary: order ? order?.products[0]?.summary : '',
-    thumbnail: order ? order?.products[0]?.thumbnail : '',
+    thumbnail: order ? order?.products[0]?.thumbnail : "",
     status: order ? order?.products[0]?.status : 0,
     productCategories: order
-      ? order?.products[0]?.productCategories?.map(
-          (category) => category?.categoryId
-        )
+      ? order?.products[0]?.productCategories?.map((category) => category?.id)
       : [],
     productDepartments: order
       ? order?.products[0]?.productDepartments?.map(
-          (department) => department?.departmentId
+          (department) => department?.id
         )
       : [],
     productLineItems: order
@@ -76,10 +74,10 @@ export const AddEditOrder = () => {
           isDeleted: item?.isDeleted || false,
         }))
       : [],
-    tags: order ? order?.products[0]?.tags?.split(',') : [],
+    tags: order ? order?.products[0]?.tags?.split(",") : [],
     paymentType: order ? order?.products[0]?.paymentType : 0,
     billingCycle: order ? order?.products[0]?.billingCycle : 0,
-    notes: order ? order?.products[0]?.notes : '',
+    notes: order ? order?.products[0]?.notes : "",
     registrationDate: order
       ? moment(order?.products[0]?.registrationDate)
       : moment(),
@@ -95,13 +93,12 @@ export const AddEditOrder = () => {
     overrideTerminationDate: order
       ? moment(order?.products[0]?.registrationDate)
       : moment(),
-    adminAssigned: order ? order?.adminAssigned : '',
-    orderForClientId: order ? order?.orderForClientId : '',
-    orderNotes: order ? order?.notes : '',
-    orderTenant: order ? order?.tenant : 'admin',
+    adminAssigned: order ? order?.adminAssigned : "",
+    orderForClientId: order ? order?.orderForClientId : "",
+    assignedToClientId: order ? order?.assignedToClientId : "",
+    orderNotes: order ? order?.notes : "",
+    orderTenant: order ? order?.tenant : "admin",
   };
-
-  // const navigate = useNavigate();
 
   const { user } = useSelector((state) => state?.auth);
 
@@ -117,16 +114,27 @@ export const AddEditOrder = () => {
               name: values.name,
               description: values.description,
               thumbnail: img,
-              productCategories: id
-                ? values?.productCategories?.map((category) => ({
-                    categoryId: category,
-                  }))
-                : values?.productCategories,
-              productDepartments: id
-                ? values?.productDepartments?.map((department) => ({
-                    departmentId: department,
-                  }))
-                : values?.productDepartments,
+              productCategories: values?.orderTemplateCategories,
+              // productCategories: values?.productCategories?.map(
+              //   (category) => category?.id
+              // ),
+              // productCategories: id
+              //   ? values?.productCategories?.map((category) => ({
+              //       // categoryId: category,
+              //       category,
+              //     }))
+              //   : values?.productCategories?.map((category) => category?.id),
+              // productDepartments: values?.productDepartments?.map(
+              //   (department) => department?.id
+              // ),
+              productDepartments: values?.orderTemplateDepartments,
+              // productDepartments: id
+              //   ? values?.productDepartments?.map((department) => ({
+              //       department,
+              //     }))
+              //   : values?.productDepartments?.map(
+              //       (department) => department?.id
+              //     ),
               productLineItems: values.productLineItems?.map((item) => {
                 if (id) {
                   if (item?.isNew) {
@@ -138,7 +146,7 @@ export const AddEditOrder = () => {
                     };
                   } else {
                     return {
-                      id: item?.isNew ? '' : item?.id,
+                      // id: item?.isNew ? "" : item?.id,
                       lineItem: item?.lineItem,
                       price: item?.price,
                       isDeleted: item?.isDeleted ? true : false,
@@ -155,7 +163,7 @@ export const AddEditOrder = () => {
                     };
                   } else {
                     return {
-                      id: item?.isNew ? '' : item?.id,
+                      id: item?.isNew ? "" : item?.id,
                       lineItem: item?.lineItem,
                       price: item?.price,
                       isDeleted: item?.isDeleted ? true : false,
@@ -181,10 +189,10 @@ export const AddEditOrder = () => {
             },
           ],
           adminAssigned: order ? order?.adminAssigned : user?.id,
-          orderForClientId: order ? order?.orderForClientId : '',
-          orderStatus: 0,
-          orderNotes: order ? order?.notes : '',
-          tenant: 'admin',
+          orderForClientId: values.assignedToClientId,
+          orderStatus: values?.status ? Number(values?.status) : 0,
+          orderNotes: order ? order?.notes : "",
+          tenant: "admin",
         };
         if (id) {
           // await dispatch(editOrderTemplateByID(id, newValues));
@@ -207,7 +215,7 @@ export const AddEditOrder = () => {
                 departmentsLoading ? (
                   <Spin
                     size="large"
-                    style={{ gridColumn: '1/3', alignSelf: 'center' }}
+                    style={{ gridColumn: "1/3", alignSelf: "center" }}
                   />
                 ) : (
                   <>

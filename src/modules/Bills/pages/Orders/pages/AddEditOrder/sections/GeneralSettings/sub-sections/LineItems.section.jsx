@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { Button } from 'components';
-import { AddLineItem, DeleteItem, EditLineItem } from './sections';
-import { useFormikContext } from 'formik';
-import { toast } from 'react-toastify';
+import { useEffect, useState } from "react";
+import { Button } from "components";
+import { AddLineItem, DeleteItem, EditLineItem } from "./sections";
+import { useFormikContext } from "formik";
+import { toast } from "react-toastify";
 
 const LineItem = ({ item, setDel, setId, setEdit, setEditData }) => {
   return (
@@ -57,7 +57,7 @@ export const LineItems = () => {
     const newLineItems = currentLineItems?.length
       ? [...currentLineItems, item]
       : [{ ...item }];
-    setFieldValue('productLineItems', newLineItems);
+    setFieldValue("productLineItems", newLineItems);
   };
   const editLineItem = (id, editItem) => {
     const newItems = values?.productLineItems?.map((item) => {
@@ -66,7 +66,7 @@ export const LineItems = () => {
       }
       return item;
     });
-    setFieldValue('productLineItems', newItems);
+    setFieldValue("productLineItems", newItems);
   };
 
   const deleteLineItem = (id) => {
@@ -88,12 +88,12 @@ export const LineItems = () => {
         isDeleted: true,
       };
     });
-    console.log('newItemsFinal', newItemsFinal);
-    console.log('deletedItemsFinal', deletedItemsFinal);
+    // console.log('newItemsFinal', newItemsFinal);
+    // console.log('deletedItemsFinal', deletedItemsFinal);
     if (newItems?.length < 1) {
-      toast.error('At least one item is required');
+      toast.error("At least one item is required");
     } else {
-      setFieldValue('productLineItems', [
+      setFieldValue("productLineItems", [
         ...newItemsFinal,
         ...deletedItemsFinal,
       ]);
@@ -136,7 +136,7 @@ export const LineItems = () => {
             Total - ${total.toFixed(2)}
           </div>
           <div className="text-[#3699FF] text-[14px]">
-            {values?.paymentType === 0 ? 'One Time Payment' : 'Monthly Payment'}
+            {values?.paymentType === 0 ? "One Time Payment" : "Monthly Payment"}
           </div>
         </div>
       </div>
