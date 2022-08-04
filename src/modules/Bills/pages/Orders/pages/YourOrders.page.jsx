@@ -1,21 +1,21 @@
-import { useTranslation } from "react-i18next";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Button, Table } from "components";
-import { statusList } from "lib";
-import { checkModule } from "lib/checkModule";
-import { getOrders } from "store";
-import moment from "moment";
-import { useNavigate } from "react-router-dom";
-import { AddOrder } from "./sections/AddOrder.section";
-import { getClients } from "store";
-import { getProducts } from "store";
-import { getOrderTemplates } from "store";
+import { useTranslation } from 'react-i18next';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Button, Table } from 'components';
+import { statusList } from 'lib';
+import { checkModule } from 'lib/checkModule';
+import { getOrders } from 'store';
+import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
+import { AddOrder } from './sections/AddOrder.section';
+import { getClients } from 'store';
+import { getProducts } from 'store';
+import { getOrderTemplates } from 'store';
 
 export const YourOrders = () => {
   const navigate = useNavigate();
   const [showAdd, setShowAdd] = useState(false);
-  const { t } = useTranslation("/Bills/ns");
+  const { t } = useTranslation('/Bills/ns');
   const dispatch = useDispatch();
   const { orders, loading } = useSelector((state) => state?.orders);
   const { userModules } = useSelector((state) => state?.modules);
@@ -32,12 +32,12 @@ export const YourOrders = () => {
 
   // Setting data properly
   const [data, setData] = useState([]);
-  const [status, setStatus] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [status, setStatus] = useState('');
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   const { permissions } = checkModule({
-    module: "Orders",
+    module: 'Orders',
     modules: userModules,
   });
 
@@ -56,14 +56,14 @@ export const YourOrders = () => {
 
   const columns = [
     {
-      title: t("orderId"),
-      dataIndex: "orderNo",
-      key: "orderNo",
+      title: t('orderId'),
+      dataIndex: 'orderNo',
+      key: 'orderNo',
     },
     {
-      title: t("client"),
-      dataIndex: "fullName",
-      key: "fullName",
+      title: t('client'),
+      dataIndex: 'fullName',
+      key: 'fullName',
       render: (fullName) => {
         // let name = "";
         // let userN = fullName?.split(" ");
@@ -89,15 +89,15 @@ export const YourOrders = () => {
                 {name}
               </div>
             )} */}
-            <p className="text-white">{fullName ? fullName : "N/A"}</p>
+            <p className="text-white">{fullName ? fullName : 'N/A'}</p>
           </div>
         );
       },
     },
     {
-      title: t("status"),
-      dataIndex: "status",
-      key: "status",
+      title: t('status'),
+      dataIndex: 'status',
+      key: 'status',
       render: (status) => {
         const statusValue = statusList(status);
         return (
@@ -110,24 +110,24 @@ export const YourOrders = () => {
       },
     },
     {
-      title: t("total"),
-      dataIndex: "totalPrice",
-      key: "totalPrice",
+      title: t('total'),
+      dataIndex: 'totalPrice',
+      key: 'totalPrice',
       render: (totalPrice) => {
         return <>{`${totalPrice} USD`}</>;
       },
     },
     {
-      title: t("dateAdded"),
-      dataIndex: "createdOn",
-      key: "createdOn",
-      render: (createdOn) => moment(createdOn).format("DD-MM-YYYY"),
+      title: t('dateAdded'),
+      dataIndex: 'createdOn',
+      key: 'createdOn',
+      render: (createdOn) => moment(createdOn).format('DD-MM-YYYY'),
     },
     {
-      title: t("dateModified"),
-      dataIndex: "lastModifiedOn",
-      key: "lastModifiedOn",
-      render: (lastModifiedOn) => moment(lastModifiedOn).format("DD-MM-YYYY"),
+      title: t('dateModified'),
+      dataIndex: 'lastModifiedOn',
+      key: 'lastModifiedOn',
+      render: (lastModifiedOn) => moment(lastModifiedOn).format('DD-MM-YYYY'),
     },
   ];
 
@@ -135,16 +135,6 @@ export const YourOrders = () => {
     <div className="p-[40px]">
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
         <AddOrder show={showAdd} setShow={setShowAdd} />
-        <div className="flex items-center gap-[12px]">
-          <Button
-            className="mb-[32px]"
-            onClick={() => {
-              navigate(`/admin/dashboard/billing/orders/all-orders/list`);
-            }}
-          >
-            Order Templates
-          </Button>
-        </div>
         <Table
           columns={columns}
           data={data}
@@ -154,7 +144,7 @@ export const YourOrders = () => {
           hideActions
           fieldToFilter="orderNo"
           btnData={{
-            text: "Add Order",
+            text: 'Add Order',
             onClick: () => setShowAdd(true),
           }}
           handleStatus={async (values) => {
@@ -165,26 +155,26 @@ export const YourOrders = () => {
             };
 
             if (startDate && endDate) {
-              details["startDate"] = startDate;
-              details["endDate"] = endDate;
+              details['startDate'] = startDate;
+              details['endDate'] = endDate;
             }
             await dispatch(getOrders(details));
           }}
           handleDateRange={async (date, dateString, id) => {
-            let startDate = "";
-            let endDate = "";
+            let startDate = '';
+            let endDate = '';
             let details = {
               userId: user?.id,
             };
             if (date) {
               startDate = date[0]._d;
               endDate = date[1]._d;
-              details["startDate"] = startDate;
-              details["endDate"] = endDate;
+              details['startDate'] = startDate;
+              details['endDate'] = endDate;
             }
 
             if (status) {
-              details["status"] = status;
+              details['status'] = status;
             }
 
             setStartDate(startDate);

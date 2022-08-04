@@ -40,11 +40,13 @@ export const Thumbnail = ({ name }) => {
               >
                 <img src="/img/edit.png" alt="edit-icon" />
               </div>
-              <img
-                src={values?.preview}
-                alt="preview"
-                className="w-full h-full object-cover rounded-[8px]"
-              />
+              {values?.preview ? (
+                <img
+                  src={values?.preview}
+                  alt="preview"
+                  className="w-full h-full object-cover rounded-[8px]"
+                />
+              ) : null}
             </div>
           </div>
           {meta.touched && meta.error && (
