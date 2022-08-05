@@ -1,5 +1,5 @@
-import { Button, MultiSelect } from 'components';
-import { useSelector } from 'react-redux';
+import { Button, MultiSelect } from "components";
+import { useSelector } from "react-redux";
 
 export const ProductDetails = () => {
   const { categories } = useSelector((state) => state?.categories);
@@ -12,6 +12,7 @@ export const ProductDetails = () => {
         Set Categories & Tags
       </p>
       <MultiSelect
+        disabled
         name="productCategories"
         placeholder="Select Categories"
         label="Cateogries"
@@ -20,10 +21,15 @@ export const ProductDetails = () => {
           value: category?.id,
         }))}
       />
-      <Button type="ghost" className="mt-[16px] mb-[32px] w-full h-[52px]">
+      {/* <Button
+        type="ghost"
+        className="mt-[16px] mb-[32px] w-full h-[52px]"
+        disabled={true}
+      >
         Add New Category
-      </Button>
+      </Button> */}
       <MultiSelect
+        disabled
         name="productDepartments"
         placeholder="Select Departments"
         label="Departments"
@@ -33,6 +39,7 @@ export const ProductDetails = () => {
         }))}
       />
       <MultiSelect
+        disabled
         name="tags"
         placeholder="Enter New Tag"
         label="Tags"

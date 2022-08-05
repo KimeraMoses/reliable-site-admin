@@ -1,19 +1,24 @@
-import { Button, DatePicker } from 'components';
+import { DatePicker } from "components";
 
 const fields = [
-  { label: 'Next Due Date', name: 'nextDueDate' },
-  { label: 'Termination Date', name: 'terminationDate' },
-  { label: 'Override Suspension Date', name: 'overrideSuspensionDate' },
-  { label: 'Override Termination Date', name: 'overrideTerminationDate' },
+  { label: "Next Due Date", name: "nextDueDate" },
+  { label: "Termination Date", name: "terminationDate" },
+  { label: "Override Suspension Date", name: "overrideSuspensionDate" },
+  { label: "Override Termination Date", name: "overrideTerminationDate" },
 ];
 
-const DateTitle = ({ title, name }) => {
+const DateTitle = ({ title, name, disabled }) => {
   return (
     <div>
       <label className="mb-[16px] text-white text-[14px] font-normal">
         {title}
       </label>
-      <DatePicker name={name} hideTime format="MM/DD/YYYY" />
+      <DatePicker
+        name={name}
+        hideTime
+        format="MM/DD/YYYY"
+        disabled={disabled}
+      />
     </div>
   );
 };
@@ -26,17 +31,31 @@ export const AdvancedSettings = () => {
       </h6>
       <div className="grid grid-cols-2 gap-[32px]">
         <div className="col-span-full">
-          <DateTitle name="registrationDate" title="Registration Date" />
+          <DateTitle
+            name="registrationDate"
+            title="Registration Date"
+            disabled
+          />
         </div>
         {fields?.map((field) => {
           return (
-            <DateTitle key={field.name} name={field.name} title={field.label} />
+            <DateTitle
+              key={field.name}
+              name={field.name}
+              title={field.label}
+              disabled
+            />
           );
         })}
       </div>
-      <Button type="ghost" htmlType="submit" className="mt-[32px] h-[52px]">
+      {/* <Button
+        type="ghost"
+        htmlType="submit"
+        className="mt-[32px] h-[52px]"
+        disabled
+      >
         Save Changes
-      </Button>
+      </Button> */}
     </div>
   );
 };

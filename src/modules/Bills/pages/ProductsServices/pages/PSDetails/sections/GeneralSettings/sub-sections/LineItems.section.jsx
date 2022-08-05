@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button } from "components";
+// import { Button } from "components";
 import { AddLineItem, DeleteItem, EditLineItem } from "./sections";
 import { useFormikContext } from "formik";
 import { toast } from "react-toastify";
@@ -113,7 +113,9 @@ export const LineItems = () => {
       <div className="bg-[#1E1E2D] p-[32px] rounded-[8px] mt-[20px]">
         <div className="flex items-center justify-between mb-[16px]">
           <h6 className="text-white text-[16px]">Line Items & Price</h6>
-          <Button onClick={() => setAdd(true)}>Add New Item</Button>
+          {/* <Button onClick={() => setAdd(true)} disabled>
+            Add New Item
+          </Button> */}
         </div>
         {values?.productLineItems?.map((item, idx) => {
           if (!item?.isDeleted) {
@@ -141,15 +143,15 @@ export const LineItems = () => {
         </div>
       </div>
 
-      <AddLineItem show={add} setShow={setAdd} handleAdd={addLineItem} />
+      <AddLineItem show={false} setShow={setAdd} handleAdd={addLineItem} />
       <EditLineItem
-        show={edit}
+        show={false}
         setShow={setEdit}
         handleEdit={editLineItem}
         editValue={editData}
       />
       <DeleteItem
-        show={del}
+        show={false}
         setShow={setDel}
         handleDelete={deleteLineItem}
         id={id}

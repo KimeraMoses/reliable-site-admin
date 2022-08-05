@@ -17,7 +17,7 @@ export const Status = () => {
       <SearchableField
         name="assignedToClientId"
         placeholder="Search client"
-        label="Assign To"
+        label="Client"
         data={clients}
       />
       <Input

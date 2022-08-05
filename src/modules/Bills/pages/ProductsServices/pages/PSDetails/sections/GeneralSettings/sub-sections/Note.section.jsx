@@ -1,6 +1,6 @@
-import { Button, Modal } from 'components';
-import { useFormikContext } from 'formik';
-import { useState } from 'react';
+import { Button, Modal } from "components";
+import { useFormikContext } from "formik";
+import { useState } from "react";
 
 export const Note = () => {
   const [show, setShow] = useState(false);
@@ -15,17 +15,17 @@ export const Note = () => {
         submitText="Edit Notes"
         fields={[
           {
-            label: 'Enter Notes Here',
-            name: 'notes',
-            type: 'input',
-            placeholder: 'Enter Notes',
+            label: "Enter Notes Here",
+            name: "notes",
+            type: "input",
+            placeholder: "Enter Notes",
           },
         ]}
         initialValues={{
           notes: values?.notes,
         }}
         handleSubmit={(values) => {
-          setFieldValue('notes', values?.notes);
+          setFieldValue("notes", values?.notes);
           setShow(false);
         }}
       />
@@ -33,13 +33,14 @@ export const Note = () => {
         Admin Notes
       </h6>
       <p className="text-[14px] text-[#474761] mb-[32px]">{values?.notes}</p>
-      <Button
+      {/* <Button
+        disabled
         type="ghost"
         className="h-[52px] px-[32px]"
         onClick={() => setShow(true)}
       >
         Edit Notes
-      </Button>
+      </Button> */}
     </div>
   );
 };

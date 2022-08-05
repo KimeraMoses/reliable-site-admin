@@ -17,9 +17,10 @@ export const Status = ({ defaulValue }) => {
       <SearchableField
         name="assignedToClientId"
         placeholder="Search client"
-        label="Assign To"
+        label="Client"
         data={clients}
         defaultValue={defaulValue}
+        disabled
       />
       {/* <Input
         name="assignedToClientId"
@@ -34,6 +35,7 @@ export const Status = ({ defaulValue }) => {
       /> */}
       <Input
         name="status"
+        disabled={true}
         placeholder="Status"
         type="select"
         label="Status"
@@ -50,6 +52,7 @@ export const Status = ({ defaulValue }) => {
       />
       <Input
         name="paymentType"
+        disabled={true}
         placeholder="Payment Type"
         type="select"
         label="Payment Type"
@@ -61,6 +64,7 @@ export const Status = ({ defaulValue }) => {
       />
       <Input
         name="billingCycle"
+        disabled={true}
         placeholder="Billing Cycle"
         type="select"
         label="Billing Cycle"

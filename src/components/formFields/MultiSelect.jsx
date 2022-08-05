@@ -5,6 +5,7 @@ import "./style.scss";
 export const MultiSelect = ({
   name,
   label,
+  disabled,
   placeholder,
   options,
   mode = "multiple",
@@ -20,12 +21,13 @@ export const MultiSelect = ({
             {label ? (
               <label
                 htmlFor={name}
-                className="mb-[16px] text-white text-[14px]"
+                className="mb-[16px] text-white text-[14px] mt-2"
               >
                 {label}
               </label>
             ) : null}
             <Select
+              disabled={disabled}
               mode={mode}
               style={{ width: "100%" }}
               placeholder={placeholder}
