@@ -1,5 +1,6 @@
 import { Input } from "components";
 import { useSelector } from "react-redux";
+import { SearchableField } from ".";
 
 export const Status = () => {
   const { clients } = useSelector((state) => state?.users);
@@ -13,16 +14,11 @@ export const Status = () => {
       <p className="text-[#474761] text-[14x] mt-[8px] mb-[32px]">
         Set The Product Status
       </p>
-      <Input
+      <SearchableField
         name="assignedToClientId"
-        placeholder="Client"
-        type="select"
+        placeholder="Search client"
         label="Assign To"
-        className="mb-[20px]"
-        options={clients?.map((client) => ({
-          label: client?.fullName ? client?.fullName : client?.email,
-          value: client?.id,
-        }))}
+        data={clients}
       />
       <Input
         name="status"

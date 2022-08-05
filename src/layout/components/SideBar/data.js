@@ -121,11 +121,11 @@ export const useSidebarData = () => {
                 },
               ],
             },
-            {
-              name: "All Orders",
-              path: "/admin/dashboard/billing/orders/all-orders/list",
-              show: true,
-            },
+            // {
+            //   name: "All Orders",
+            //   path: "/admin/dashboard/billing/orders/all-orders/list",
+            //   show: true,
+            // },
             {
               name: "Order Templates",
               path: "/admin/dashboard/billing/orders/order-templates/list",

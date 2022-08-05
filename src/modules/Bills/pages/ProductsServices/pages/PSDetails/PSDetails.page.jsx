@@ -1,32 +1,32 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import moment from 'moment';
-import { Spin } from 'antd';
-import { useParams } from 'react-router-dom';
-import { Form, Formik } from 'formik';
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import moment from "moment";
+import { Spin } from "antd";
+import { useParams } from "react-router-dom";
+import { Form, Formik } from "formik";
 
-import { getProductByID } from 'store';
+import { getProductByID } from "store";
 import {
   Navigation,
   Sidebar,
   GeneralSettings,
   AdvancedSettings,
-} from './sections';
-import './PSDetails.styles.scss';
-import { createServerImage } from 'lib';
-import { getCategories } from 'store';
-import { updateProductByID } from 'store';
-import { getClients } from 'store';
-import { getDepartments } from 'store';
+} from "./sections";
+import "./PSDetails.styles.scss";
+import { createServerImage } from "lib";
+import { getCategories } from "store";
+import { updateProductByID } from "store";
+import { getClients } from "store";
+import { getDepartments } from "store";
 
 export const PSDetails = () => {
-  const [active, setActive] = useState('GENERAL SETTINGS');
+  const [active, setActive] = useState("GENERAL SETTINGS");
 
   const links = [
-    { label: 'GENERAL SETTINGS', onClick: () => setActive('GENERAL SETTINGS') },
+    { label: "GENERAL SETTINGS", onClick: () => setActive("GENERAL SETTINGS") },
     {
-      label: 'ADVANCED SETTINGS',
-      onClick: () => setActive('ADVANCED SETTINGS'),
+      label: "ADVANCED SETTINGS",
+      onClick: () => setActive("ADVANCED SETTINGS"),
     },
   ];
 
@@ -37,6 +37,7 @@ export const PSDetails = () => {
   const departmentsLoading = useSelector(
     (state) => state?.departments?.loading
   );
+  // console.log(product);
 
   const { id } = useParams();
 
@@ -59,7 +60,7 @@ export const PSDetails = () => {
     productCategories: product?.productCategories?.map(
       (category) => category?.categoryId
     ),
-    tags: product?.tags?.split(','),
+    tags: product?.tags?.split(","),
     name: product?.name,
     description: product?.description,
     // descriptionHolder: convertHTMLToDraftState(product?.headerContent),
@@ -74,7 +75,7 @@ export const PSDetails = () => {
     terminationDate: moment(product?.terminationDate),
     overrideSuspensionDate: moment(product?.overrideSuspensionDate),
     overrideTerminationDate: moment(product?.overrideTerminationDate),
-    assignedToClientId: product?.assignedToClientId,
+    assignedToClientId: product?.userId,
     billingCycle: product?.billingCycle,
   };
 
@@ -118,7 +119,7 @@ export const PSDetails = () => {
       }}
     >
       {({ values }) => {
-        // console.log(values);
+        // console.log("Form values", values);
         return (
           <Form>
             <div className="users">
@@ -130,22 +131,22 @@ export const PSDetails = () => {
                 product === null ? (
                   <Spin
                     size="large"
-                    style={{ gridColumn: '1/3', alignSelf: 'center' }}
+                    style={{ gridColumn: "1/3", alignSelf: "center" }}
                   />
                 ) : (
                   <>
                     <div className="admin-details__left">
                       {/* THUMBNAIL + STATUS + PRODUCT DETAILS */}
-                      <Sidebar />
+                      <Sidebar defaulValue={initVal?.assignedToClientId} />
                     </div>
                     <div className="admin-details__right">
                       <Navigation active={active} links={links} />
-                      {active === 'GENERAL SETTINGS' ? (
+                      {active === "GENERAL SETTINGS" ? (
                         <GeneralSettings />
                       ) : (
                         <></>
                       )}
-                      {active === 'ADVANCED SETTINGS' ? (
+                      {active === "ADVANCED SETTINGS" ? (
                         <AdvancedSettings />
                       ) : (
                         <></>
