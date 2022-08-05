@@ -1,7 +1,7 @@
 import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Button, Table } from "components";
+import { Table } from "components";
 import { statusList } from "lib";
 import { checkModule } from "lib/checkModule";
 import { getOrders } from "store";

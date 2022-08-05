@@ -1,7 +1,8 @@
 import { Input } from "components";
+import { SearchableField } from "modules/Bills/pages/Orders/pages/AddEditOrder/sections/Sidebar/sub-sections";
 import { useSelector } from "react-redux";
 
-export const Status = () => {
+export const Status = ({ defaulValue }) => {
   const { clients } = useSelector((state) => state?.users);
 
   return (
@@ -13,7 +14,14 @@ export const Status = () => {
       <p className="text-[#474761] text-[14x] mt-[8px] mb-[32px]">
         Set The Product Status
       </p>
-      <Input
+      <SearchableField
+        name="assignedToClientId"
+        placeholder="Search client"
+        label="Assign To"
+        data={clients}
+        defaultValue={defaulValue}
+      />
+      {/* <Input
         name="assignedToClientId"
         placeholder="Client"
         type="select"
@@ -23,7 +31,7 @@ export const Status = () => {
           label: client?.fullName ? client?.fullName : client?.email,
           value: client?.id,
         }))}
-      />
+      /> */}
       <Input
         name="status"
         placeholder="Status"

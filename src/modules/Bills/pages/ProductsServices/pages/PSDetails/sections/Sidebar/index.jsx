@@ -1,10 +1,10 @@
-import { ProductDetails, Status, Thumbnail } from './sub-sections';
+import { ProductDetails, Status, Thumbnail } from "./sub-sections";
 
-export const Sidebar = () => {
+export const Sidebar = ({ defaulValue }) => {
   return (
     <div>
       <Thumbnail />
-      <Status />
+      <Status defaulValue={defaulValue} />
       <ProductDetails />
     </div>
   );

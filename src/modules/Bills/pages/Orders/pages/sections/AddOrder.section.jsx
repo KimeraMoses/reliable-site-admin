@@ -116,7 +116,7 @@ export const AddOrder = ({ show, setShow }) => {
     // customerIP: "",
     orderStatus: "Draft",
     notes: "",
-    orderTemplateId: orderTemplates[0]?.id,
+    orderTemplateId: orderTemplates && orderTemplates[0]?.id,
   };
 
   return (
