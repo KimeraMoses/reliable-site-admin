@@ -240,14 +240,14 @@ export const convertHTMLToDraftState = (html) => {
 export const statusList = (i = "") => {
   let v = [
     {
-      name: "Pending",
+      name: "Draft",
       bg: "#392F28",
       text: "#FFA800",
     },
     {
-      name: "Confirmed",
-      bg: "#1C3238",
-      text: "#0BB783",
+      name: "Pending",
+      bg: "#392F28",
+      text: "#FFA800",
     },
     {
       name: "Paid",
@@ -255,7 +255,17 @@ export const statusList = (i = "") => {
       text: "#0BB783",
     },
     {
+      name: "Processing",
+      bg: "#1C3238",
+      text: "#0BB783",
+    },
+    {
       name: "Completed",
+      bg: "#1C3238",
+      text: "#0BB783",
+    },
+    {
+      name: "Accepted",
       bg: "#1C3238",
       text: "#0BB783",
     },

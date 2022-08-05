@@ -4,7 +4,9 @@ const initialState = {
   allOrders: [],
   loading: false,
   orders: [],
+  order: null,
   orderTemplates: [],
+  orderTemplate: null,
 };
 
 const ordersSlice = createSlice({
@@ -23,11 +25,22 @@ const ordersSlice = createSlice({
     getAllOrders: (state, { payload }) => {
       state.allOrders = payload;
     },
+    getOrder: (state, { payload }) => {
+      state.order = payload;
+    },
+    getOrderTemplate: (state, { payload }) => {
+      state.orderTemplate = payload;
+    },
   },
 });
 
 const { reducer, actions } = ordersSlice;
-export const { getOrders, setOrderLoading, getOrderTemplates, getAllOrders } =
-  actions;
+export const {
+  getOrders,
+  setOrderLoading,
+  getOrderTemplate,
+  getOrderTemplates,
+  getAllOrders,
+} = actions;
 
 export default reducer;

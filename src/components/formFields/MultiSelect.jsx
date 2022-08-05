@@ -1,13 +1,13 @@
-import { Select } from 'antd';
-import { Field } from 'formik';
-import './style.scss';
+import { Select } from "antd";
+import { Field } from "formik";
+import "./style.scss";
 
 export const MultiSelect = ({
   name,
   label,
   placeholder,
   options,
-  mode = 'multiple',
+  mode = "multiple",
   onChange,
   className,
   dropdownClassName,
@@ -27,7 +27,7 @@ export const MultiSelect = ({
             ) : null}
             <Select
               mode={mode}
-              style={{ width: '100%' }}
+              style={{ width: "100%" }}
               placeholder={placeholder}
               className={`custom-select ${className}`}
               dropdownClassName={`custom-select__dropdown ${dropdownClassName}`}
@@ -37,7 +37,7 @@ export const MultiSelect = ({
               }}
               value={meta?.value}
               onChange={(value, option) => {
-                console.log(value, option);
+                // console.log(value, option);
                 setFieldValue(name, value);
                 if (onChange) {
                   onChange(value, option);

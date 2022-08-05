@@ -36,7 +36,9 @@ export {
   getOrders as getOrdersDispatch,
   getOrderTemplates as getOrderTemplatesDispatch,
   setOrderLoading,
-} from './ordersSlice';
+  getOrderTemplate,
+} from // getOrder,
+'./ordersSlice';
 
 export {
   getNotifications as getNotificationsDispatch,

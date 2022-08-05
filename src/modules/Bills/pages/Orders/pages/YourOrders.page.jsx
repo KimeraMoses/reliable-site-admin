@@ -19,7 +19,7 @@ export const YourOrders = () => {
   const dispatch = useDispatch();
   const { orders, loading } = useSelector((state) => state?.orders);
   const { userModules } = useSelector((state) => state?.modules);
-  const { user } = useSelector((state) => state?.auth);
+  // const { user } = useSelector((state) => state?.auth);
 
   useEffect(() => {
     (async () => {
@@ -32,9 +32,9 @@ export const YourOrders = () => {
 
   // Setting data properly
   const [data, setData] = useState([]);
-  const [status, setStatus] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  // const [status, setStatus] = useState("");
+  // const [startDate, setStartDate] = useState("");
+  // const [endDate, setEndDate] = useState("");
 
   const { permissions } = checkModule({
     module: "Orders",
@@ -135,62 +135,55 @@ export const YourOrders = () => {
     <div className="p-[40px]">
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
         <AddOrder show={showAdd} setShow={setShowAdd} />
-        <div className="flex items-center gap-[12px]">
-          <Button
-            className="mb-[32px]"
-            onClick={() => {
-              navigate(`/admin/dashboard/billing/orders/all-orders/list`);
-            }}
-          >
-            Order Templates
-          </Button>
-        </div>
         <Table
           columns={columns}
           data={data}
           loading={loading}
-          dateRageFilter={true}
-          statusFilter={statusList()}
+          // dateRageFilter={true}
+          // statusFilter={statusList()}
           hideActions
           fieldToFilter="orderNo"
           btnData={{
             text: "Add Order",
-            onClick: () => setShowAdd(true),
+            onClick: () =>
+              navigate(
+                "/admin/dashboard/billing/orders/your-orders/list/add/new"
+              ),
           }}
-          handleStatus={async (values) => {
-            setStatus(values);
-            let details = {
-              status: values,
-              userId: user?.id,
-            };
+          // handleStatus={async (values) => {
+          //   setStatus(values);
+          //   let details = {
+          //     status: values,
+          //     userId: user?.id,
+          //   };
 
-            if (startDate && endDate) {
-              details["startDate"] = startDate;
-              details["endDate"] = endDate;
-            }
-            await dispatch(getOrders(details));
-          }}
-          handleDateRange={async (date, dateString, id) => {
-            let startDate = "";
-            let endDate = "";
-            let details = {
-              userId: user?.id,
-            };
-            if (date) {
-              startDate = date[0]._d;
-              endDate = date[1]._d;
-              details["startDate"] = startDate;
-              details["endDate"] = endDate;
-            }
+          //   if (startDate && endDate) {
+          //     details['startDate'] = startDate;
+          //     details['endDate'] = endDate;
+          //   }
+          //   await dispatch(getOrders(details));
+          // }}
+          // handleDateRange={async (date, dateString, id) => {
+          //   let startDate = '';
+          //   let endDate = '';
+          //   let details = {
+          //     userId: user?.id,
+          //   };
+          //   if (date) {
+          //     startDate = date[0]._d;
+          //     endDate = date[1]._d;
+          //     details['startDate'] = startDate;
+          //     details['endDate'] = endDate;
+          //   }
 
-            if (status) {
-              details["status"] = status;
-            }
+          //   if (status) {
+          //     details['status'] = status;
+          //   }
 
-            setStartDate(startDate);
-            setEndDate(endDate);
-            await dispatch(getOrders(details));
-          }}
+          //   setStartDate(startDate);
+          //   setEndDate(endDate);
+          //   await dispatch(getOrders(details));
+          // }}
           permissions={permissions}
           t={t}
         />

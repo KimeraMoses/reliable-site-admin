@@ -26,7 +26,7 @@ const InputType = ({
         </div>
       );
     case 'select':
-      const finalOptions = [...options, { label: placeholder, value: '' }];
+      const finalOptions = [{ label: placeholder, value: '' }, ...options];
       return (
         <select
           disabled={disabled}

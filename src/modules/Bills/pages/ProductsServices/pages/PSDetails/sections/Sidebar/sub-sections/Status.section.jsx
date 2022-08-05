@@ -1,5 +1,5 @@
-import { Input } from 'components';
-import { useSelector } from 'react-redux';
+import { Input } from "components";
+import { useSelector } from "react-redux";
 
 export const Status = () => {
   const { clients } = useSelector((state) => state?.users);
@@ -31,12 +31,13 @@ export const Status = () => {
         label="Status"
         className="mb-[20px]"
         options={[
-          { label: 'Pending', value: 0 },
-          { label: 'Confirmed', value: 1 },
-          { label: 'Cancelled', value: 2 },
-          { label: 'Renewed', value: 3 },
-          { label: 'Suspended', value: 4 },
-          { label: 'Terminated', value: 5 },
+          { label: "Draft", value: 0 },
+          { label: "Pending", value: 1 },
+          { label: "Paid", value: 2 },
+          { label: "Processing", value: 3 },
+          { label: "Completed", value: 4 },
+          { label: "Accepted", value: 5 },
+          { label: "Canceled", value: 6 },
         ]}
       />
       <Input
@@ -46,8 +47,8 @@ export const Status = () => {
         label="Payment Type"
         className="mb-[20px]"
         options={[
-          { label: 'One Time', value: 0 },
-          { label: 'Monthly', value: 1 },
+          { label: "One Time", value: 0 },
+          { label: "Monthly", value: 1 },
         ]}
       />
       <Input
@@ -56,13 +57,13 @@ export const Status = () => {
         type="select"
         label="Billing Cycle"
         options={[
-          { label: 'Hourly', value: 0 },
-          { label: 'Monthly', value: 1 },
-          { label: 'Quarterly', value: 2 },
-          { label: 'SemiAnnually', value: 3 },
-          { label: 'Annually', value: 4 },
-          { label: 'Biennially', value: 5 },
-          { label: 'Triennially', value: 6 },
+          { label: "Hourly", value: 0 },
+          { label: "Monthly", value: 1 },
+          { label: "Quarterly", value: 2 },
+          { label: "SemiAnnually", value: 3 },
+          { label: "Annually", value: 4 },
+          { label: "Biennially", value: 5 },
+          { label: "Triennially", value: 6 },
         ]}
       />
     </div>
