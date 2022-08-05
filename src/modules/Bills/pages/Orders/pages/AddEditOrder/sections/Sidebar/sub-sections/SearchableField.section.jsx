@@ -56,8 +56,7 @@ export const SearchableField = ({
                     ? data.filter((client) => client.id === values[name])[0]
                         ?.fullName
                     : defaultValue
-                    ? data.filter((client) => client.id === defaultValue)[0]
-                        ?.fullName
+                    ? defaultValue
                     : searchTerm
                 }
                 onChange={keyWordHandler}
