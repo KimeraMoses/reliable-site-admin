@@ -1,6 +1,6 @@
-import { DatePicker as $DatePicker } from 'antd';
-import { Field } from 'formik';
-import './style.scss';
+import { DatePicker as $DatePicker } from "antd";
+import { Field } from "formik";
+import "./style.scss";
 
 export const DatePicker = ({
   name,
@@ -8,6 +8,7 @@ export const DatePicker = ({
   disableTime,
   hideTime,
   format,
+  disabled,
 }) => {
   return (
     <Field name={name}>
@@ -17,11 +18,12 @@ export const DatePicker = ({
             onChange={(date) => setFieldValue(name, date)}
             value={values[name]}
             dropdownClassName="custom-date-picker-dd"
-            showTime={hideTime ? false : { format: 'HH:mm A' }}
+            showTime={hideTime ? false : { format: "HH:mm A" }}
             disabledDate={disableDate}
             disabledTime={disableTime}
-            format={format || 'dddd, MMM Do, YYYY [at] h:mm A z'}
-            className="custom-date-picker w-full h-[52px] bg-[#171723] rounded-[8px] text-[#92928F] flex items-center justify-between px-[16px]"
+            disabled={disabled}
+            format={format || "dddd, MMM Do, YYYY [at] h:mm A z"}
+            className="custom-date-picker w-full h-[52px] bg-[#171723] rounded-[8px] text-[#92928F] flex items-center justify-between px-[16px] "
           />
           {meta.touched && meta.error && (
             <div className="error">{meta.error}</div>

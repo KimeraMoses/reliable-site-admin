@@ -7,6 +7,7 @@ export const SearchableField = ({
   label,
   data,
   defaultValue,
+  disabled,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [isSelected, setIsSelected] = useState(false);
@@ -47,6 +48,7 @@ export const SearchableField = ({
               <Field
                 placeholder={placeholder}
                 type="search"
+                disabled={disabled}
                 name={name}
                 className="modal__form-el-field"
                 value={

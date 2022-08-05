@@ -1,7 +1,7 @@
-import { Field } from 'formik';
-import { useRef } from 'react';
-import { toast } from 'react-toastify';
-import './style.scss';
+import { Field } from "formik";
+import { useRef } from "react";
+import { toast } from "react-toastify";
+import "./style.scss";
 
 export const Thumbnail = ({ name }) => {
   const inputRef = useRef(null);
@@ -11,6 +11,7 @@ export const Thumbnail = ({ name }) => {
         <>
           <input
             type="file"
+            disabled
             accept="image/*"
             id="imgInp"
             className="image-upload__el"
@@ -21,9 +22,9 @@ export const Thumbnail = ({ name }) => {
                 const fileSize = (file.size / 1024 / 1024).toFixed(4);
                 if (fileSize <= 2) {
                   setFieldValue(name, e.target.files[0]);
-                  setFieldValue('preview', URL.createObjectURL(file));
+                  setFieldValue("preview", URL.createObjectURL(file));
                 } else {
-                  toast.error('Please select image below 2MB.');
+                  toast.error("Please select image below 2MB.");
                 }
               }
             }}

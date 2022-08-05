@@ -1,5 +1,5 @@
-import { Field } from 'formik';
-import { Input as $Input, Switch } from 'antd';
+import { Field } from "formik";
+import { Input as $Input, Switch } from "antd";
 
 const InputType = ({
   field,
@@ -14,10 +14,10 @@ const InputType = ({
   customOnChange,
 }) => {
   switch (type) {
-    case 'switch':
+    case "switch":
       return (
         <div className="w-full h-[52px] bg-[#171723] rounded-[8px] text-[#92928F] flex items-center justify-between px-[16px]">
-          <>{values[name] ? 'Enabled' : 'Disabled'}</>
+          <>{values[name] ? "Enabled" : "Disabled"}</>
           <Switch
             disabled={disabled}
             checked={values[name]}
@@ -25,8 +25,8 @@ const InputType = ({
           />
         </div>
       );
-    case 'select':
-      const finalOptions = [{ label: placeholder, value: '' }, ...options];
+    case "select":
+      const finalOptions = [{ label: placeholder, value: "" }, ...options];
       return (
         <select
           disabled={disabled}
@@ -46,7 +46,7 @@ const InputType = ({
           ))}
         </select>
       );
-    case 'textarea':
+    case "textarea":
       return (
         <textarea
           disabled={disabled}
@@ -54,14 +54,14 @@ const InputType = ({
           value={values[name]}
           rows={rows}
           onChange={(e) => setFieldValue(name, e.target.value)}
-          className="appearance-none block w-full px-[16px] py-[16px] text-base font-normal text-[#92928f] placeholder:text-[#92928F] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0 focus:bg-[#171723] focus:border-none focus:outline-none"
+          className="appearance-none block w-full px-[16px] py-[16px] text-base font-normal text-[#92928f] placeholder:text-[#92928F]  bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0 focus:bg-[#171723] focus:border-none focus:outline-none disabled:bg-[#323248] disabled:text-[#92928F]"
         />
       );
     default:
       return (
         <$Input
           {...field}
-          className="w-full h-[52px] bg-[#171723] border-none rounded-[8px] placeholder:text-[#92928F] text-[#92928F] px-[16px] disabled:bg-[#323248]"
+          className="w-full h-[52px] bg-[#171723] border-none rounded-[8px] placeholder:text-[#92928F] text-[#92928F] px-[16px] disabled:bg-[#323248] disabled:text-[#92928F]"
           placeholder={placeholder}
           value={values[name]}
           type={type}

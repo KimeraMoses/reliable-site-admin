@@ -5,8 +5,8 @@ import {
   Button,
   Input,
   // SMTPEditor
-} from 'components';
-import './styles.scss';
+} from "components";
+import "./styles.scss";
 
 // const ConfigurationEditor = ({ editorState, onEditorStateChange, onBlur }) => {
 //   return (
@@ -36,6 +36,7 @@ export const GS = () => {
         placeholder="Product Name"
         label="Product Name"
         className="mb-[20px]"
+        disabled
       />
       <Input
         name="description"
@@ -43,6 +44,7 @@ export const GS = () => {
         label="Product Description"
         type="textarea"
         rows={8}
+        disabled
       />
       {/* <div className="bg-[#1E1E2D] rounded-[8px]">
         <ConfigurationEditor
@@ -70,9 +72,14 @@ export const GS = () => {
         )}
       </div> */}
 
-      <Button type="ghost" className="h-[52px] mt-[32px]" htmlType="submit">
+      {/* <Button
+        type="ghost"
+        className="h-[52px] mt-[32px]"
+        htmlType="submit"
+        disabled
+      >
         Save Changes
-      </Button>
+      </Button> */}
     </div>
   );
 };
