@@ -1,9 +1,9 @@
-import { Input, Button, Table as AntTable, Dropdown, DatePicker } from 'antd';
-import { Dropdown as DropdownIcon } from 'icons';
-import { Search } from 'icons';
-import { useEffect, useState } from 'react';
+import { Input, Button, Table as AntTable, Dropdown, DatePicker } from "antd";
+import { Dropdown as DropdownIcon } from "icons";
+import { Search } from "icons";
+import { useEffect, useState } from "react";
 
-import './Table.styles.scss';
+import "./Table.styles.scss";
 
 // Methods to Select Rows
 // const rowSelectionMethods = {
@@ -19,7 +19,7 @@ import './Table.styles.scss';
 export const Table = ({
   columns,
   data,
-  fieldToFilter = 'name',
+  fieldToFilter = "name",
   btnData,
   pagination,
   rowSelection,
@@ -51,7 +51,25 @@ export const Table = ({
   const [dataSource, setDataSource] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
   const [filtered, setFiltered] = useState([]);
-  const [search, setSearch] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [search, setSearch] = useState("");
+
+  const keyWordHandler = (e) => {
+    const { value } = e.target;
+    setSearch(value);
+
+    if (search !== "") {
+      const Results = data?.filter((Result) => {
+        return Object.values(Result)
+          .join(" ")
+          .replace(/-/g, " ")
+          .toLowerCase()
+          .includes(search.toLowerCase());
+      });
+      setSearchResults(Results);
+    }
+  };
+
   useEffect(() => {
     if (fieldToFilter !== null && fieldToFilter !== undefined) {
       const filteredData = data?.filter((item) => {
@@ -94,9 +112,9 @@ export const Table = ({
         permissions?.Remove ||
         permissions?.Update
           ? {
-              title: 'Actions',
-              key: 'actions',
-              align: 'right',
+              title: "Actions",
+              key: "actions",
+              align: "right",
               render: (text, record) => (
                 <div className="flex items-center justify-end">
                   <Dropdown
@@ -115,13 +133,13 @@ export const Table = ({
                           deleteAction(record)}
                       </>
                     }
-                    trigger={['click']}
+                    trigger={["click"]}
                   >
                     <Button
                       type="primary"
                       className="custom-table__table-dropdown-btn"
                     >
-                      <div>{'Actions'}</div>
+                      <div>{"Actions"}</div>
                       <div>
                         <DropdownIcon />
                       </div>
@@ -136,10 +154,11 @@ export const Table = ({
       setTableColumns(columns);
     }
   }, []);
+
   const { RangePicker } = DatePicker;
   return (
     <div
-      className={`custom-table ${theme === 'dark' ? 'custom-table-dark' : ''}`}
+      className={`custom-table ${theme === "dark" ? "custom-table-dark" : ""}`}
     >
       {/* Header */}
       {permissions !== undefined && permissions !== null ? (
@@ -159,10 +178,10 @@ export const Table = ({
                             <></>
                           ) : (
                             <Input
-                              placeholder={'Search Here'}
+                              placeholder={"Search Here"}
                               prefix={<Search />}
                               className="custom-table__input"
-                              onChange={(e) => setSearch(e?.target?.value)}
+                              onChange={keyWordHandler}
                             />
                           )}
                         </>
@@ -184,7 +203,7 @@ export const Table = ({
                   }
                   dropdownClassName="custom-date-picker-dd"
                   format="YYYY-MM-DD    "
-                  placeholder={['Date Range']}
+                  placeholder={["Date Range"]}
                   className="custom-date-picker w-full h-[52px] bg-[#171723] rounded-[8px] text-[#92928F] flex items-center justify-between px-[16px]"
                 />
               )}
@@ -194,10 +213,10 @@ export const Table = ({
                   className="custom-select form-select appearance-none block w-full px-[16px] h-[52px] text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0"
                 >
                   <option value="">
-                    {statusFilterPlaceholder || 'Status'}
+                    {statusFilterPlaceholder || "Status"}
                   </option>
                   {statusFilter?.map((data, i) => (
-                    <option value={data?.value || i} key={'status-' + i}>
+                    <option value={data?.value || i} key={"status-" + i}>
                       {data?.name}
                     </option>
                   ))}
@@ -238,7 +257,7 @@ export const Table = ({
             </div>
           </div>
           {headingTitle && (
-            <h3 className={'text-[#fff] text-[32px] mt-[40px]'}>
+            <h3 className={"text-[#fff] text-[32px] mt-[40px]"}>
               {headingTitle}
             </h3>
           )}
@@ -247,26 +266,30 @@ export const Table = ({
           {/* Table */}
           <div
             className={`custom-table__table ${
-              hideHeaders ? 'custom-table__table-hide-headers' : ''
+              hideHeaders ? "custom-table__table-hide-headers" : ""
             }`}
           >
             <AntTable
               columns={tableColumns}
               rowKey={rowKey}
               scroll={scroll}
-              dataSource={dataSource}
+              dataSource={
+                (search.length > 0 && searchResults.length) > 0
+                  ? searchResults
+                  : dataSource
+              }
               size={size}
               pagination={
                 pagination !== undefined && pagination !== null
                   ? pagination
-                  : { position: ['bottomLeft'], showSizeChanger: false }
+                  : { position: ["bottomLeft"], showSizeChanger: false }
               }
               rowSelection={rowSelection}
               loading={permissions?.View ? loading : false}
               locale={{
                 emptyText: permissions?.View
-                  ? emptyText || 'No Data'
-                  : 'You are not authorized to view this data.',
+                  ? emptyText || "No Data"
+                  : "You are not authorized to view this data.",
               }}
               onRow={onRow}
             />

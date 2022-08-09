@@ -1,5 +1,5 @@
-import { Thumbnail as ThumbnailComponent } from 'components';
+import { Thumbnail as ThumbnailComponent } from "components";
 
 export const Thumbnail = () => {
-  return <ThumbnailComponent name="thumbnail" />;
+  return <ThumbnailComponent name="thumbnail" disabled={true} />;
 };

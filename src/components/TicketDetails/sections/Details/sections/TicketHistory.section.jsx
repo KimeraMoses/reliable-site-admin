@@ -1,19 +1,19 @@
-import { Table } from 'components';
-import moment from 'moment';
-import { Spin } from 'antd';
-import { checkModule } from 'lib/checkModule';
-import { useDispatch, useSelector } from 'react-redux';
-import '../../styles.scss';
-import { useEffect, useState } from 'react';
-import { getTicketHistoryByID } from 'store';
-import { setTicketCommentLoading } from 'store';
-import { deepDiffMapper } from 'lib/deepDifference';
+import { Table } from "components";
+import moment from "moment";
+import { Spin } from "antd";
+import { checkModule } from "lib/checkModule";
+import { useDispatch, useSelector } from "react-redux";
+import "../../styles.scss";
+import { useEffect, useState } from "react";
+import { getTicketHistoryByID } from "store";
+import { setTicketCommentLoading } from "store";
+import { deepDiffMapper } from "lib/deepDifference";
 
 export const TicketHistory = () => {
   const [data, setData] = useState(false);
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Support',
+    module: "Support",
     modules: userModules,
   });
 
@@ -33,24 +33,24 @@ export const TicketHistory = () => {
 
   const columns = [
     {
-      title: 'Event Date',
-      dataIndex: 'createdOn',
-      key: 'createdOn',
-      render: (text) => moment(text).format('DD/MM/YYYY [at] HH:mm:ss A'),
+      title: "Event Date",
+      dataIndex: "createdOn",
+      key: "createdOn",
+      render: (text) => moment(text).format("DD/MM/YYYY [at] HH:mm:ss A"),
     },
     {
-      title: 'User',
-      dataIndex: 'actionByName',
-      key: 'actionByName',
+      title: "User",
+      dataIndex: "actionByName",
+      key: "actionByName",
     },
     {
-      title: 'Ticket Priority',
-      dataIndex: 'ticketPriority',
-      key: 'ticketPriority',
+      title: "Ticket Priority",
+      dataIndex: "ticketPriority",
+      key: "ticketPriority",
       render: (text) => {
         // [ 0 = Low, 1 = Normal, 2 = High ]
-        let priority = '';
-        ['Low', 'Normal', 'High']?.forEach((el, idx) => {
+        let priority = "";
+        ["Low", "Normal", "High"]?.forEach((el, idx) => {
           if (idx === text) {
             priority = el;
           }
@@ -59,19 +59,19 @@ export const TicketHistory = () => {
       },
     },
     {
-      title: 'Ticket Status',
-      dataIndex: 'ticketStatus',
-      key: 'ticketStatus',
+      title: "Ticket Status",
+      dataIndex: "ticketStatus",
+      key: "ticketStatus",
       render: (text) => {
         // [ 0 = Active, 1 = Waiting, 2 = Closed, 3 = ClosedAndLocked, 4 = Disabled, 5 = FollowUp ]
-        let status = '';
+        let status = "";
         [
-          'Active',
-          'Waiting',
-          'Closed',
-          'ClosedAndLocked',
-          'Disabled',
-          'FollowUp',
+          "Active",
+          "Waiting",
+          "Closed",
+          "ClosedAndLocked",
+          "Disabled",
+          "FollowUp",
         ]?.forEach((el, idx) => {
           if (idx === text) {
             status = el;
@@ -81,19 +81,20 @@ export const TicketHistory = () => {
       },
     },
     {
-      title: 'Assigned To',
-      dataIndex: 'assignedToFullName',
-      key: 'assignedToFullName',
+      title: "Assigned To",
+      dataIndex: "assignedToFullName",
+      key: "assignedToFullName",
     },
     {
-      title: 'Follow-Up',
-      dataIndex: 'followUpOn',
-      key: 'followUpOn',
+      title: "Follow-Up",
+      dataIndex: "followUpOn",
+      key: "followUpOn",
       render: (text) =>
-        text ? moment(text).format('DD/MM/YYYY [at] hh:mm:ss A') : 'N/A',
+        text ? moment(text).format("DD/MM/YYYY [at] hh:mm:ss A") : "N/A",
     },
   ];
 
+  console.log("ticket his", ticketHistory);
   return (
     <div className={`bg-[#1E1E2D] rounded-[8px] mt-[32px]`}>
       {commentLoading ? (

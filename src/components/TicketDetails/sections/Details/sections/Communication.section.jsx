@@ -83,12 +83,12 @@ export const Communication = () => {
 
   const { ticket } = useSelector((state) => state?.tickets);
 
-  console.log("ticket", ticket);
+  // console.log("ticket", ticket);
 
   const commentSource = ticket?.ticketComments?.filter(
     (comment) => comment?.ticketCommentType === 0 && !comment?.isDraft
   );
-  const finalComments = commentSource.sort(
+  const finalComments = commentSource?.sort(
     (a, b) => Number(b?.isSticky) - Number(a?.isSticky)
   );
 

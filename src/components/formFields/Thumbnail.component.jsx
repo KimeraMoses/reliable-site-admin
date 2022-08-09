@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { toast } from "react-toastify";
 import "./style.scss";
 
-export const Thumbnail = ({ name }) => {
+export const Thumbnail = ({ name, disabled }) => {
   const inputRef = useRef(null);
   return (
     <Field name={name} className="image-upload">
@@ -11,7 +11,7 @@ export const Thumbnail = ({ name }) => {
         <>
           <input
             type="file"
-            disabled
+            disabled={disabled}
             accept="image/*"
             id="imgInp"
             className="image-upload__el"

@@ -99,7 +99,7 @@ export const Input = ({
             setFieldValue={setFieldValue}
             placeholder={placeholder}
             options={options}
-            disabled={disabled}
+            // disabled={disabled}
             rows={rows}
             customOnChange={customOnChange}
           />
