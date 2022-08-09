@@ -16,6 +16,7 @@ import {
   getDepartments,
   getOrderTemplateByID,
 } from "store";
+import { getOrderDetails } from "store";
 
 export const AddEditOrder = () => {
   // const [active, setActive] = useState('GENERAL SETTINGS');
@@ -43,7 +44,7 @@ export const AddEditOrder = () => {
       // console.log(id);
       await dispatch(getCategories());
       if (id) {
-        dispatch(getOrderTemplateByID(id));
+        dispatch(getOrderDetails(id));
       } else if (!id) {
         dispatch(getOrderTemplate(null));
       }
