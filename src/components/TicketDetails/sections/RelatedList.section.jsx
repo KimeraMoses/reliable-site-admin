@@ -63,7 +63,7 @@ export const RelatedList = ({ queueList }) => {
   const [data, setData] = useState([]);
   useEffect(() => {
     setData([]);
-    if (tickets.length) {
+    if (tickets?.length) {
       const dataToSet = tickets?.map((b) => {
         return {
           ...b,
