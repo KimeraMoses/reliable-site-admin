@@ -30,7 +30,7 @@ export const PSList = () => {
     module: "Products",
     modules: userModules,
   });
-  console.log("clients", clients);
+  // console.log("clients", clients);
 
   const Options = [
     { label: "Hourly", value: 0 },
@@ -72,7 +72,7 @@ export const PSList = () => {
           </div>
         );
       },
-      width: "30%",
+      width: "20%",
     },
     // {
     //   title: "Items",
@@ -122,7 +122,6 @@ export const PSList = () => {
       key: "userId",
       render: (text) => {
         const client = clients?.find((client) => client?.id === text);
-        console.log("client", client, text);
         return client?.fullName ? client.fullName : "N/A";
       },
     },
@@ -166,6 +165,7 @@ export const PSList = () => {
       dataIndex: "nextDueDate",
       key: "nextDueDate",
       render: (nextDueDate) => moment(nextDueDate).format("DD-MM-YYYY"),
+      width: "70px",
     },
     {
       title: "Status",
@@ -237,8 +237,6 @@ export const PSList = () => {
   const [showRenew, setShowRenew] = useState(false);
   const [showUnsuspend, setShowUnsuspend] = useState(false);
   const [record, setRecord] = useState(null);
-
-  console.log("Products", products);
 
   return (
     <div className="p-[40px]">

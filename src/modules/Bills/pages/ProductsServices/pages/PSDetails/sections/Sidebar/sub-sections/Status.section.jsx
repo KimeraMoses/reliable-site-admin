@@ -22,17 +22,15 @@ export const Status = ({ defaulValue }) => {
         defaultValue={defaulValue}
         disabled
       />
-      {/* <Input
-        name="assignedToClientId"
-        placeholder="Client"
-        type="select"
-        label="Assign To"
+      <Input
+        name="IpAddress"
+        placeholder="154.227.25.101"
+        type="text"
+        label="Customer IP"
+        disabled={true}
         className="mb-[20px]"
-        options={clients?.map((client) => ({
-          label: client?.fullName ? client?.fullName : client?.email,
-          value: client?.id,
-        }))}
-      /> */}
+        value="154.227.25.101"
+      />
       <Input
         name="status"
         disabled={true}

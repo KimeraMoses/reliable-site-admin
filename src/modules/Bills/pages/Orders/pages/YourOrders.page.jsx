@@ -11,7 +11,6 @@ import { AddOrder } from "./sections/AddOrder.section";
 import { getClients } from "store";
 import { getProducts } from "store";
 import { getOrderTemplates } from "store";
-import { Button } from "antd";
 
 export const YourOrders = () => {
   const navigate = useNavigate();
@@ -142,7 +141,7 @@ export const YourOrders = () => {
           loading={loading}
           // dateRageFilter={true}
           // statusFilter={statusList()}
-          // hideActions
+          hideActions
           fieldToFilter="orderNo"
           btnData={{
             text: "Add Order",
@@ -196,17 +195,17 @@ export const YourOrders = () => {
           //     View
           //   </Button>
           // )}
-          viewAction={(record) => (
-            <Button
-              onClick={() => {
-                navigate(
-                  `/admin/dashboard/billing/orders/your-orders/list/edit/${record?.id}`
-                );
-              }}
-            >
-              View
-            </Button>
-          )}
+          // viewAction={(record) => (
+          //   <Button
+          //     onClick={() => {
+          //       navigate(
+          //         `/admin/dashboard/billing/orders/your-orders/list/edit/${record?.id}`
+          //       );
+          //     }}
+          //   >
+          //     View
+          //   </Button>
+          // )}
           permissions={permissions}
           t={t}
         />
