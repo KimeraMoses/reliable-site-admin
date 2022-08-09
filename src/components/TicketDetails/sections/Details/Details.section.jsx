@@ -32,7 +32,7 @@ export const Details = () => {
   let repliesId = params.get("id");
   const query = useQuery();
   const id = query.get("tid");
-  console.log("ticket details", ticket);
+  // console.log("ticket details", ticket);
 
   const createdByAdmin = users?.find((user) => user?.id === ticket?.createdBy);
   const createdByClient = clients?.find(

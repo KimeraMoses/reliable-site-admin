@@ -94,7 +94,7 @@ export const TicketHistory = () => {
     },
   ];
 
-  console.log("ticket his", ticketHistory);
+  // console.log("ticket his", ticketHistory);
   return (
     <div className={`bg-[#1E1E2D] rounded-[8px] mt-[32px]`}>
       {commentLoading ? (
