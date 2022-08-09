@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
-import { useFormikContext } from 'formik';
-import { Input } from 'components';
-import { useSelector } from 'react-redux';
+import { useState, useEffect } from "react";
+import { useFormikContext } from "formik";
+import { Input } from "components";
+import { useSelector } from "react-redux";
 
 // const initVal = {
 //   status: order ? order?.products[0]?.status : 0,
@@ -28,45 +28,45 @@ import { useSelector } from 'react-redux';
 // };
 
 export const ChooseTemplate = () => {
-  const [selected, setSelected] = useState('');
+  const [selected, setSelected] = useState("");
   const { orderTemplates } = useSelector((state) => state?.orders);
 
   const { values, setFieldValue } = useFormikContext();
 
-  console.log(values);
+  // console.log(values);
 
   useEffect(() => {
     if (selected) {
       const template = orderTemplates?.find(
         (template) => template?.id === selected
       );
-      console.log(template);
-      setFieldValue('preview', template?.base64Image);
-      setFieldValue('name', template?.productName);
-      setFieldValue('description', template?.productDescription);
-      setFieldValue('thumbnail', template?.thumbnail);
-      setFieldValue('status', template?.status);
-      setFieldValue('tags', template?.tags ? template?.tags?.split(',') : []);
+      // console.log(template);
+      setFieldValue("preview", template?.base64Image);
+      setFieldValue("name", template?.productName);
+      setFieldValue("description", template?.productDescription);
+      setFieldValue("thumbnail", template?.thumbnail);
+      setFieldValue("status", template?.status);
+      setFieldValue("tags", template?.tags ? template?.tags?.split(",") : []);
       setFieldValue(
-        'paymentType',
+        "paymentType",
         template?.paymentType ? template?.paymentType : 0
       );
-      setFieldValue('billingCycle', template?.billingCycle);
-      setFieldValue('productCategories', template?.orderTemplateCategories);
-      setFieldValue('productDepartments', template?.orderTemplateDepartments);
-      setFieldValue('productLineItems', template?.orderTemplateLineItems);
+      setFieldValue("billingCycle", template?.billingCycle);
+      setFieldValue("productCategories", template?.orderTemplateCategories);
+      setFieldValue("productDepartments", template?.orderTemplateDepartments);
+      setFieldValue("productLineItems", template?.orderTemplateLineItems);
     } else {
-      setFieldValue('preview', '');
-      setFieldValue('name', '');
-      setFieldValue('description', '');
-      setFieldValue('thumbnail', '');
-      setFieldValue('status', '');
-      setFieldValue('tags', '');
-      setFieldValue('paymentType', '');
-      setFieldValue('billingCycle', '');
-      setFieldValue('productCategories', '');
-      setFieldValue('productDepartments', '');
-      setFieldValue('productLineItems', '');
+      setFieldValue("preview", "");
+      setFieldValue("name", "");
+      setFieldValue("description", "");
+      setFieldValue("thumbnail", "");
+      setFieldValue("status", "");
+      setFieldValue("tags", "");
+      setFieldValue("paymentType", "");
+      setFieldValue("billingCycle", "");
+      setFieldValue("productCategories", "");
+      setFieldValue("productDepartments", "");
+      setFieldValue("productLineItems", "");
     }
   }, [selected]);
 

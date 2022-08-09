@@ -1,10 +1,11 @@
-import { DashboardLayout } from 'layout';
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { Navigate, Route, Routes } from 'react-router-dom';
-import { getDepartments } from 'store';
-import { TicketsByDeptId, AllTickets, TicketDetails, MyTickets } from './pages';
-import './style.scss';
+import { DashboardLayout } from "layout";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { getDepartments } from "store";
+import { TicketsByDeptId, AllTickets, TicketDetails, MyTickets } from "./pages";
+import { Queue } from "./pages/Queue/TicketDetails.page";
+import "./style.scss";
 
 export const SupportTickets = () => {
   const dispatch = useDispatch();
@@ -20,6 +21,7 @@ export const SupportTickets = () => {
           element={<Navigate to="/admin/dashboard/support/tickets/list" />}
         />
         <Route path="tickets/list" element={<MyTickets />} />
+        <Route path="tickets/queue" element={<Queue />} />
         {/* Admin's Ticket List */}
         {/* Department's Tickets' */}
         <Route

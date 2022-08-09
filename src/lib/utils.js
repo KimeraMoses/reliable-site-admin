@@ -158,7 +158,7 @@ export const getDifference = (date) => {
   const diffInWeeks = Math.round(diffInDays / 7);
   const diffInMonths = Math.round(diffInDays / 30);
   const diffInYears = Math.round(diffInDays / 365);
-  console.log(date);
+  // console.log(date);
   if (diffInMinutes < 1) {
     return "Just Now";
   }

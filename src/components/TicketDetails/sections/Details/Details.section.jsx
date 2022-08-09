@@ -22,7 +22,9 @@ function useQuery() {
 
 export const Details = () => {
   const dispatch = useDispatch();
-  const { detailsLoading, ticket } = useSelector((state) => state?.tickets);
+  const { detailsLoading, ticket, ticketHistory } = useSelector(
+    (state) => state?.tickets
+  );
   const { usersLoading } = useSelector((state) => state?.departments);
   const { users, clients } = useSelector((state) => state?.users);
   let search = window.location.search;
@@ -30,6 +32,7 @@ export const Details = () => {
   let repliesId = params.get("id");
   const query = useQuery();
   const id = query.get("tid");
+  // console.log("ticket details", ticket);
 
   const createdByAdmin = users?.find((user) => user?.id === ticket?.createdBy);
   const createdByClient = clients?.find(
@@ -73,19 +76,19 @@ export const Details = () => {
   const linksArr = [
     {
       label: "Communication",
-      count: communication?.length,
+      count: communication?.length > 0 ? communication?.length : 0,
     },
     {
       label: "Drafts",
-      count: drafts?.length,
+      count: drafts?.length > 0 ? drafts?.length : 0,
     },
     {
       label: "Comments",
-      count: comments?.length,
+      count: comments?.length > 0 ? comments?.length : 0,
     },
     {
       label: "History",
-      count: 1,
+      count: ticketHistory?.length > 0 ? ticketHistory?.length : 0,
     },
   ];
   // Handle Navigation
@@ -128,8 +131,8 @@ export const Details = () => {
                   By{" "}
                   {createdByAdmin?.fullName
                     ? createdByAdmin?.fullName
-                    : createdByClient?.fullName
-                    ? createdByClient?.fullName
+                    : ticket?.clientFullName
+                    ? ticket?.clientFullName
                     : "N/A"}
                 </p>{" "}
                 <p
@@ -141,15 +144,15 @@ export const Details = () => {
                 >
                   {createdByAdmin?.fullName
                     ? "Admin"
-                    : createdByClient?.fullName
+                    : ticket?.clientFullName
                     ? "Client"
                     : "N/A"}
                 </p>
               </div>
               <p className="text-[14px] mt-[12px] text-[#474761]">
                 {`Created ${getDifference(
-                  new Date(ticket.createdOn)
-                )} - ${moment(ticket?.createdOn).format(
+                  new Date(ticket?.lastModifiedOn)
+                )} - ${moment(ticket?.lastModifiedOn).format(
                   "MMMM Do, YYYY h:m A"
                 )}`}
               </p>

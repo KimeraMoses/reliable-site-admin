@@ -1,21 +1,21 @@
-import { NavLink } from 'react-router-dom';
-import { Formik, Form } from 'formik';
-import { useDispatch, useSelector } from 'react-redux';
-import { Dropdown, List, Button, Popconfirm } from 'antd';
-import * as Yup from 'yup';
-
-import { getTicketById, addTicketComments } from 'store';
-import { Button as CustomButton, Input } from 'components';
-import { genrateFirstLetterName } from 'lib';
-import { updateTicketComments } from 'store';
-import { setTicketCommentLoading } from 'store';
-import { deleteComment } from 'store';
+import { NavLink } from "react-router-dom";
+import { Formik, Form } from "formik";
+import { useDispatch, useSelector } from "react-redux";
+import { Dropdown, List, Button, Popconfirm } from "antd";
+import * as Yup from "yup";
+import moment from "moment";
+import { getTicketById, addTicketComments } from "store";
+import { Button as CustomButton, Input } from "components";
+import { genrateFirstLetterName, getDifference } from "lib";
+import { updateTicketComments } from "store";
+import { setTicketCommentLoading } from "store";
+import { deleteComment } from "store";
 
 const initialValues = {
-  commentText: '',
+  commentText: "",
 };
 const validationSchema = Yup.object().shape({
-  commentText: Yup.string().required('Comment text is required'),
+  commentText: Yup.string().required("Comment text is required"),
 });
 
 export const Comments = () => {
@@ -27,7 +27,7 @@ export const Comments = () => {
   const commentSource = ticket?.ticketComments?.filter(
     (comment) => comment?.ticketCommentType === 1 && !comment?.isDraft
   );
-  const finalComments = commentSource.sort(
+  const finalComments = commentSource?.sort(
     (a, b) => Number(b?.isSticky) - Number(a?.isSticky)
   );
 
@@ -44,16 +44,16 @@ export const Comments = () => {
             <Form>
               <div
                 className={`relative mb-[32px] items-end ${
-                  ticket?.ticketStatus > 0 && 'pointer-events-none opacity-30'
+                  ticket?.ticketStatus > 0 && "pointer-events-none opacity-30"
                 }`}
               >
                 <Input
-                  key={'commentText'}
-                  name={'commentText'}
-                  label={''}
-                  placeholder={'Share Your Comments'}
-                  type={'textarea'}
-                  rows={'7'}
+                  key={"commentText"}
+                  name={"commentText"}
+                  label={""}
+                  placeholder={"Share Your Comments"}
+                  type={"textarea"}
+                  rows={"7"}
                 />
                 <div className="absolute bottom-5 right-5 gap-[12px]">
                   <Dropdown
@@ -99,7 +99,7 @@ export const Comments = () => {
                     className="custom-table__table-dropdown"
                     destroyPopupOnHide
                     placement="bottomRight"
-                    trigger={['click', 'contextMenu']}
+                    trigger={["click", "contextMenu"]}
                   >
                     <CustomButton
                       loading={commentLoading}
@@ -114,7 +114,7 @@ export const Comments = () => {
           )}
         </Formik>
       </div>
-      <div className={'ticket-list-wrap custom-table__table'}>
+      <div className={"ticket-list-wrap custom-table__table"}>
         <List
           itemLayout="vertical"
           size="large"
@@ -122,14 +122,14 @@ export const Comments = () => {
             pageSize: 20,
           }}
           dataSource={finalComments}
-          footer={''}
+          footer={""}
           renderItem={(item) => (
-            <List.Item key={item.id} actions={''} extra={''}>
+            <List.Item key={item.id} actions={""} extra={""}>
               <div
                 id={item.id}
                 className="p-[20px] border-[1px] rounded-[8px] border-[#323248]"
               >
-                <div className={'w-full relative'}>
+                <div className={"w-full relative"}>
                   <div className="flex">
                     <div className="image w-[47px] rounded-[5px] overflow-hidden">
                       {item?.userImagePath ? (
@@ -149,14 +149,20 @@ export const Comments = () => {
                           {item?.userFullName}
                         </span>
                       </div>
-                      <div className="text-[#474761] text-[14px]">1 Hour</div>
+                      <div className="text-[#474761] text-[14px]">
+                        {`${getDifference(
+                          new Date(item?.lastModifiedOn)
+                        )} - ${moment(item?.lastModifiedOn).format(
+                          "MMMM Do, YYYY h:m A"
+                        )}`}
+                      </div>
                     </div>
                   </div>
                   {ticket?.ticketStatus === 0 && (
                     <div className="flex items-center gap-[12px] text-[16px] absolute right-5 top-1">
                       <Popconfirm
                         okButtonProps={{
-                          className: 'bg-[#40a9ff]',
+                          className: "bg-[#40a9ff]",
                         }}
                         title="Are you sure you want to delete this comment?"
                         onConfirm={async () => {
@@ -168,7 +174,7 @@ export const Comments = () => {
                       >
                         <div
                           className={
-                            'text-[#474761] cursor-pointer hover:text-[#40a9ff]'
+                            "text-[#474761] cursor-pointer hover:text-[#40a9ff]"
                           }
                         >
                           Delete
@@ -190,10 +196,10 @@ export const Comments = () => {
                           dispatch(setTicketCommentLoading(false));
                         }}
                         className={
-                          item?.isSticky ? 'text-[#40a9ff]' : 'text-[#474761]'
+                          item?.isSticky ? "text-[#40a9ff]" : "text-[#474761]"
                         }
                       >
-                        {item?.isSticky ? 'Unpin' : 'Pin'}
+                        {item?.isSticky ? "Unpin" : "Pin"}
                       </NavLink>
                     </div>
                   )}

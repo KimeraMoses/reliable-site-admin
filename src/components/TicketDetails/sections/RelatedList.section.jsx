@@ -1,62 +1,61 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import {
   FieldTimeOutlined,
   PushpinOutlined,
   RiseOutlined,
-} from '@ant-design/icons';
-import { Table, TicketMenu } from 'components';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { checkModule } from 'lib/checkModule';
-import './styles.scss';
+} from "@ant-design/icons";
+import { Table, TicketMenu } from "components";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { checkModule } from "lib/checkModule";
+import "./styles.scss";
 import {
   getTicketsByAdminID,
   getTickets,
   getTicketsByDepartmentId,
-} from 'store';
-import { getUsers } from 'store';
-import { getClients } from 'store';
-import { Button, message, Spin } from 'antd';
-import moment from 'moment';
+} from "store";
+import { getUsers } from "store";
+import { getClients } from "store";
+import { Button, message, Spin } from "antd";
+import moment from "moment";
 import {
   AssignTicket,
   FollowUp,
   Priority,
   Status,
-} from 'components/TicketModals';
-import { getTicketById } from 'store';
-import { editTicket } from 'store';
+} from "components/TicketModals";
+import { getTicketById } from "store";
+import { editTicket } from "store";
 
-export const RelatedList = () => {
+export const RelatedList = ({ queueList }) => {
   const location = useLocation();
   const { allTickets, departmentTickets, loading } = useSelector(
     (state) => state?.tickets
   );
   const userTickets = useSelector((state) => state?.tickets?.tickets);
-  const { clients, users } = useSelector((state) => state?.users);
+  const { users } = useSelector((state) => state?.users);
   const { departments } = useSelector((state) => state?.departments);
   const usersLoading = useSelector((state) => state?.users?.loading);
   const departmentsLoading = useSelector(
     (state) => state?.departments?.loading
   );
-
-  const tickets = location?.pathname?.includes('show-all')
+  const tickets = location?.pathname?.includes("show-all")
     ? allTickets
-    : location?.pathname.includes('by-department')
+    : location?.pathname.includes("by-department")
     ? departmentTickets
     : userTickets;
 
-  const currentRoute = ({ deptId = '', id = '' }) =>
-    location?.pathname?.includes('show-all')
+  const currentRoute = ({ deptId = "", id = "" }) =>
+    location?.pathname?.includes("show-all")
       ? `/admin/dashboard/support/tickets/show-all/list/details/${id}?tid=${id}`
-      : location?.pathname.includes('by-department')
+      : location?.pathname.includes("by-department")
       ? `/admin/dashboard/support/tickets/by-departments/${deptId}/details/${id}?tid=${id}`
       : `/admin/dashboard/support/tickets/list?tid=${id}`;
 
   const { userModules } = useSelector((state) => state?.modules);
 
   const { permissions } = checkModule({
-    module: 'Support',
+    module: "Support",
     modules: userModules,
   });
 
@@ -64,7 +63,7 @@ export const RelatedList = () => {
   const [data, setData] = useState([]);
   useEffect(() => {
     setData([]);
-    if (tickets.length) {
+    if (tickets?.length) {
       const dataToSet = tickets?.map((b) => {
         return {
           ...b,
@@ -82,17 +81,17 @@ export const RelatedList = () => {
 
   const columns = [
     {
-      title: 'Follow Up | High Priority | Pinned',
-      dataIndex: 'actions',
-      key: 'actions',
+      title: "Follow Up | High Priority | Pinned",
+      dataIndex: "actions",
+      key: "actions",
       render: (text, record) => {
         return (
           <div className="flex items-center gap-[12px]">
             <div
               className={
                 record?.followUpOn
-                  ? 'action-icon action-icon-active'
-                  : 'action-icon'
+                  ? "action-icon action-icon-active"
+                  : "action-icon"
               }
             >
               <FieldTimeOutlined />
@@ -100,8 +99,8 @@ export const RelatedList = () => {
             <div
               className={
                 record?.ticketPriority === 2
-                  ? 'action-icon action-icon-active'
-                  : 'action-icon'
+                  ? "action-icon action-icon-active"
+                  : "action-icon"
               }
             >
               <RiseOutlined />
@@ -109,8 +108,8 @@ export const RelatedList = () => {
             <div
               className={
                 record?.pinTicket
-                  ? 'action-icon action-icon-active'
-                  : 'action-icon'
+                  ? "action-icon action-icon-active"
+                  : "action-icon"
               }
             >
               <PushpinOutlined />
@@ -120,59 +119,59 @@ export const RelatedList = () => {
       },
     },
     {
-      title: 'Subject',
-      dataIndex: 'ticketTitle',
-      key: 'ticketTitle',
+      title: "Subject",
+      dataIndex: "ticketTitle",
+      key: "ticketTitle",
     },
     {
-      title: 'Created By',
-      dataIndex: 'createdBy',
-      key: 'createdBy',
-      render: (text) => {
-        const client = clients?.find((client) => client?.id === text);
-        const admin = users?.find((user) => user?.id === text);
-        return client?.fullName
-          ? client.fullName
-          : admin?.fullName
-          ? admin.fullName
-          : 'N/A';
-      },
+      title: "Created By",
+      dataIndex: "clientFullName",
+      key: "clientFullName",
+      // render: (text) => {
+      //   const client = clients?.find((client) => client?.id === text);
+      //   const admin = users?.find((user) => user?.id === text);
+      //   return client?.fullName
+      //     ? client.fullName
+      //     : admin?.fullName
+      //     ? admin.fullName
+      //     : "N/A";
+      // },
     },
     {
-      title: 'Department',
-      dataIndex: 'departmentId',
-      key: 'departmentId',
+      title: "Department",
+      dataIndex: "departmentId",
+      key: "departmentId",
       render: (text) => {
         const department = departments?.find((dept) => dept?.id === text);
-        return department?.name ? department?.name : 'N/A';
+        return department?.name ? department?.name : "N/A";
       },
     },
     {
-      title: 'Assigned To',
-      dataIndex: 'assignedTo',
-      key: 'assignedTo',
+      title: "Assigned To",
+      dataIndex: "assignedTo",
+      key: "assignedTo",
       render: (text) => {
         const admin = users?.find((user) => user?.id === text);
-        return admin?.fullName ? admin.fullName : 'N/A';
+        return admin?.fullName ? admin.fullName : "N/A";
       },
     },
     {
-      title: 'Follow-Up',
-      dataIndex: 'followUpOn',
-      key: 'followUpOn',
-      render: (text) => <>{text ? moment(text).format('MM/DD/YYYY') : 'N/A'}</>,
+      title: "Follow-Up",
+      dataIndex: "followUpOn",
+      key: "followUpOn",
+      render: (text) => <>{text ? moment(text).format("MM/DD/YYYY") : "N/A"}</>,
     },
     {
-      title: 'No. of Messages',
-      dataIndex: 'ticketComments',
-      key: 'ticketComments',
-      render: (text) => text?.length || '0',
+      title: "No. of Messages",
+      dataIndex: "ticketComments",
+      key: "ticketComments",
+      render: (text) => text?.length || "0",
     },
     {
-      title: 'Idle Time',
-      dataIndex: 'idleTime',
-      key: 'idleTime',
-      render: (text) => <>{text ? text : 'N/A'}</>,
+      title: "Idle Time",
+      dataIndex: "idleTime",
+      key: "idleTime",
+      render: (text) => <>{text ? text : "N/A"}</>,
     },
   ];
 
@@ -184,9 +183,9 @@ export const RelatedList = () => {
 
   useEffect(() => {
     (async () => {
-      if (location?.pathname.includes('show-all')) {
+      if (location?.pathname.includes("show-all")) {
         await dispatch(getTickets());
-      } else if (location?.pathname?.includes('by-department')) {
+      } else if (location?.pathname?.includes("by-department")) {
         getTicketsByDepartmentId({ id: location?.state?.departmentId });
       } else {
         await dispatch(getTicketsByAdminID({ id: user?.id }));
@@ -231,9 +230,9 @@ export const RelatedList = () => {
             additionalBtns={
               selectedRows?.length
                 ? [
-                    { text: 'Pin', onClick: () => {} },
-                    { text: 'Assign', onClick: () => {} },
-                    { text: 'Delete', onClick: () => {} },
+                    { text: "Pin", onClick: () => {} },
+                    { text: "Assign", onClick: () => {} },
+                    { text: "Delete", onClick: () => {} },
                   ]
                 : []
             }
@@ -271,10 +270,10 @@ export const RelatedList = () => {
                       await dispatch(
                         editTicket({ data: { ...record, pinTicket: true } })
                       );
-                      if (location?.pathname.includes('show-all')) {
+                      if (location?.pathname.includes("show-all")) {
                         await dispatch(getTickets());
                       } else if (
-                        location?.pathname?.includes('by-department')
+                        location?.pathname?.includes("by-department")
                       ) {
                         getTicketsByDepartmentId({
                           id: location?.state?.departmentId,
@@ -282,7 +281,7 @@ export const RelatedList = () => {
                       } else {
                         await dispatch(getTicketsByAdminID({ id: user?.id }));
                       }
-                      message.success('Ticket Pinned');
+                      message.success("Ticket Pinned");
                     }}
                   >
                     Pin
