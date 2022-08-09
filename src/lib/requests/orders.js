@@ -1,21 +1,21 @@
-import { getConfig } from 'lib';
+import { getConfig } from "lib";
 
-const ordersConfig = (action) => getConfig({ module: 'Orders', action });
+const ordersConfig = (action) => getConfig({ module: "Orders", action });
 
 const prefix = `/api/v1/admin/orders`;
-const otprefix = '/api/v1/admin/ordertemplates';
+const otprefix = "/api/v1/admin/ordertemplates";
 
 export const getOrdersConfig = () => ({
   url: `${prefix}/search`,
   defaultData: {
     advancedSearch: {
       fields: [],
-      keyword: '',
+      keyword: "",
     },
-    keyword: '',
+    keyword: "",
     pageNumber: 0,
     pageSize: 0,
-    orderBy: [''],
+    orderBy: [""],
   },
   // config: ordersConfig('View'),
 });
@@ -25,17 +25,22 @@ export const createOrderConfig = () => ({
   // config: ordersConfig('Create'),
 });
 
+export const getOrderConfig = (id) => ({
+  url: `${prefix}/${id}`,
+  // config: ordersConfig('Create'),
+});
+
 export const getOrderTemplatesConfig = () => ({
   url: `${otprefix}/search`,
   defaultData: {
     advancedSearch: {
       fields: [],
-      keyword: '',
+      keyword: "",
     },
-    keyword: '',
+    keyword: "",
     pageNumber: 0,
     pageSize: 0,
-    orderBy: [''],
+    orderBy: [""],
   },
   // config: ordersConfig('View'),
 });
