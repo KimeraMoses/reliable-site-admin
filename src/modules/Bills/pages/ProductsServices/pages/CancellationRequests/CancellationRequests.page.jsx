@@ -1,42 +1,53 @@
-import { Button } from 'antd';
-import { useNavigate } from 'react-router-dom';
-import { Input, Table } from 'components';
-import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { checkModule } from 'lib/checkModule';
-import { useEffect, useState } from 'react';
-import { getProducts } from 'store';
-import { Form, Formik } from 'formik';
+import { Button } from "antd";
+import { useNavigate } from "react-router-dom";
+import { Input, Table } from "components";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { checkModule } from "lib/checkModule";
+import { useEffect, useState } from "react";
+import { getProducts } from "store";
+import { Form, Formik } from "formik";
 // import { Add, Delete } from './sections';
-import { getCategories } from 'store';
-import { getCancelledProducts } from 'store';
-
+import { getCategories } from "store";
+import { getCancelledProducts } from "store";
+import moment from "moment";
 export const CancellationRequests = () => {
   // const [showAdd, setShowAdd] = useState(false);
   const navigate = useNavigate();
-
-  const { t } = useTranslation('/Bills/ns');
+  const { clients } = useSelector((state) => state?.users);
+  const { t } = useTranslation("/Bills/ns");
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Products',
+    module: "Products",
     modules: userModules,
   });
+
+  const Options = [
+    { label: "Hourly", value: 0 },
+    { label: "Monthly", value: 1 },
+    { label: "Quarterly", value: 2 },
+    { label: "SemiAnnually", value: 3 },
+    { label: "Annually", value: 4 },
+    { label: "Biennially", value: 5 },
+    { label: "Triennially", value: 6 },
+  ];
+
   const columns = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
       render: (text) => <>{text.substr(text.length - 5)}</>,
     },
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
     },
     {
-      title: 'Summary',
-      dataIndex: 'summary',
-      key: 'summary',
+      title: "Summary",
+      dataIndex: "summary",
+      key: "summary",
       render: (text, record) => {
         return (
           <div className="flex items-center gap-[16px]">
@@ -51,30 +62,30 @@ export const CancellationRequests = () => {
           </div>
         );
       },
-      width: '50%',
+      width: "50%",
     },
+    // {
+    //   title: "Items",
+    //   dataIndex: "productLineItems",
+    //   key: "productLineItems",
+    //   render: (lineItems) => {
+    //     return (
+    //       <div className="flex flex-col gap-[16px]">
+    //         {lineItems?.map((item) => (
+    //           <div className="flex flex-col gap-[4px]">
+    //             <div className="text-white text-[14px]">{item?.name}</div>
+    //             <div className="text-[#474761] text-[12px]">${item?.price}</div>
+    //           </div>
+    //         ))}
+    //       </div>
+    //     );
+    //   },
+    //   width: "20%",
+    // },
     {
-      title: 'Items',
-      dataIndex: 'productLineItems',
-      key: 'productLineItems',
-      render: (lineItems) => {
-        return (
-          <div className="flex flex-col gap-[16px]">
-            {lineItems?.map((item) => (
-              <div className="flex flex-col gap-[4px]">
-                <div className="text-white text-[14px]">{item?.name}</div>
-                <div className="text-[#474761] text-[12px]">${item?.price}</div>
-              </div>
-            ))}
-          </div>
-        );
-      },
-      width: '20%',
-    },
-    {
-      title: 'Total',
-      dataIndex: 'total',
-      key: 'total',
+      title: "Total",
+      dataIndex: "total",
+      key: "total",
       render: (text, record) => {
         let sum = 0;
         record?.productLineItems?.forEach((item) => {
@@ -86,20 +97,71 @@ export const CancellationRequests = () => {
       },
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
+      title: "Client Name",
+      dataIndex: "userId",
+      key: "userId",
+      render: (text) => {
+        const client = clients?.find((client) => client?.id === text);
+        console.log("client", client, text);
+        return client?.fullName ? client.fullName : "N/A";
+      },
+    },
+    {
+      title: "Billing Cycle",
+      dataIndex: "billingCycle",
+      key: "billingCycle",
+      render: (cycle) => {
+        let text = "";
+        switch (cycle) {
+          case 0:
+            text = Options[0]?.label;
+            break;
+          case 1:
+            text = Options[1]?.label;
+            break;
+          case 2:
+            text = Options[2]?.label;
+            break;
+          case 3:
+            text = Options[3]?.label;
+            break;
+          case 4:
+            text = Options[4]?.label;
+            break;
+          case 5:
+            text = Options[5]?.label;
+            break;
+          case 6:
+            text = Options[6]?.label;
+            break;
+
+          default:
+            text = "UNKNOWN";
+        }
+        return text;
+      },
+    },
+    {
+      title: "Next Due Date",
+      dataIndex: "nextDueDate",
+      key: "nextDueDate",
+      render: (nextDueDate) => moment(nextDueDate).format("DD-MM-YYYY"),
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
       render: (status) => (
         <div
           className={`${
             status === 0
-              ? 'bg-[#392F28] text-[#FFA800]'
+              ? "bg-[#392F28] text-[#FFA800]"
               : status === 1
-              ? 'bg-[#1C3238] text-[#0BB783]'
-              : 'bg-[#3A2434] text-[#F64E60]'
+              ? "bg-[#1C3238] text-[#0BB783]"
+              : "bg-[#3A2434] text-[#F64E60]"
           } px-[8px] py-[4px] w-[fit-content] rounded-[4px]`}
         >
-          {status === 0 ? 'PENDING' : status === 1 ? 'CONFIRMED' : 'CANCELLED'}
+          {status === 0 ? "PENDING" : status === 1 ? "CONFIRMED" : "CANCELLED"}
         </div>
       ),
     },
@@ -125,7 +187,7 @@ export const CancellationRequests = () => {
       {/* <Add show={showAdd} setShow={setShowAdd} />
       <Delete show={showDelete} setShow={setShowDelete} record={record} /> */}
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
-        <Formik initialValues={{ selectFilter: 'name' }}>
+        <Formik initialValues={{ selectFilter: "name" }}>
           {({ values }) => (
             <Form>
               <Table
@@ -133,10 +195,10 @@ export const CancellationRequests = () => {
                 data={products}
                 loading={categoriesLoading || loading}
                 fieldToFilter={values?.selectFilter}
-                btnData={{
-                  onClick: () => setShowAdd(true),
-                  text: 'Add New Product',
-                }}
+                // btnData={{
+                //   onClick: () => setShowAdd(true),
+                //   text: 'Add New Product',
+                // }}
                 editAction={(record) => (
                   <Button
                     onClick={() => {
@@ -168,9 +230,9 @@ export const CancellationRequests = () => {
                       name="selectFilter"
                       type="select"
                       options={[
-                        { value: 'name', label: 'Name' },
-                        { value: 'total', label: 'Total' },
-                        { value: 'status', label: 'Status' },
+                        { value: "name", label: "Name" },
+                        { value: "total", label: "Total" },
+                        { value: "status", label: "Status" },
                       ]}
                     />
                   </div>

@@ -6,6 +6,7 @@ import {
   getOrderTemplatesConfig,
   createOrderTemplateConfig,
   editOrderTemplateConfig,
+  getOrderConfig,
 } from "lib";
 import { toast } from "react-toastify";
 import {
@@ -51,6 +52,24 @@ export const getOrders = (params) => {
       dispatch(setOrderLoading(false));
     } catch (e) {
       toast.error(getError(e));
+      dispatch(setOrderLoading(false));
+    }
+  };
+};
+
+// Get All Admin Orders
+export const getOrderDetails = (params) => {
+  return async (dispatch) => {
+    dispatch(setOrderLoading(true));
+    try {
+      const { url } = getOrderConfig(params);
+      const res = await axios.get(url);
+      console.log("Order res", res);
+      // dispatch(getOrdersDispatch(res?.data?.data));
+      dispatch(setOrderLoading(false));
+    } catch (e) {
+      toast.error(getError(e));
+      console.log("Order err", e);
       dispatch(setOrderLoading(false));
     }
   };

@@ -2,6 +2,7 @@ import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { Input, Table } from "components";
 // import { useState } from 'react';
+import moment from "moment";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { checkModule } from "lib/checkModule";
@@ -22,13 +23,25 @@ import { getCategories } from "store";
 export const PSList = () => {
   // const [showAdd, setShowAdd] = useState(false);
   const navigate = useNavigate();
-
+  const { clients } = useSelector((state) => state?.users);
   const { t } = useTranslation("/Bills/ns");
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
     module: "Products",
     modules: userModules,
   });
+  // console.log("clients", clients);
+
+  const Options = [
+    { label: "Hourly", value: 0 },
+    { label: "Monthly", value: 1 },
+    { label: "Quarterly", value: 2 },
+    { label: "SemiAnnually", value: 3 },
+    { label: "Annually", value: 4 },
+    { label: "Biennially", value: 5 },
+    { label: "Triennially", value: 6 },
+  ];
+
   const columns = [
     {
       title: "ID",
@@ -59,36 +72,36 @@ export const PSList = () => {
           </div>
         );
       },
-      width: "50%",
-    },
-    {
-      title: "Items",
-      dataIndex: "productLineItems",
-      key: "productLineItems",
-      render: (lineItems) => {
-        return (
-          <div className="flex flex-col gap-[16px]">
-            {lineItems?.map((item, idx) => {
-              if (idx >= 3) {
-                return null;
-              } else {
-                return (
-                  <div className="flex flex-col gap-[4px]">
-                    <div className="text-white text-[14px]">
-                      {item?.lineItem}
-                    </div>
-                    <div className="text-[#474761] text-[12px]">
-                      ${item?.price}
-                    </div>
-                  </div>
-                );
-              }
-            })}
-          </div>
-        );
-      },
       width: "20%",
     },
+    // {
+    //   title: "Items",
+    //   dataIndex: "productLineItems",
+    //   key: "productLineItems",
+    //   render: (lineItems) => {
+    //     return (
+    //       <div className="flex flex-col gap-[16px]">
+    //         {lineItems?.map((item, idx) => {
+    //           if (idx >= 3) {
+    //             return null;
+    //           } else {
+    //             return (
+    //               <div className="flex flex-col gap-[4px]">
+    //                 <div className="text-white text-[14px]">
+    //                   {item?.lineItem}
+    //                 </div>
+    //                 <div className="text-[#474761] text-[12px]">
+    //                   ${item?.price}
+    //                 </div>
+    //               </div>
+    //             );
+    //           }
+    //         })}
+    //       </div>
+    //     );
+    //   },
+    //   width: "20%",
+    // },
     {
       title: "Total",
       dataIndex: "total",
@@ -102,6 +115,57 @@ export const PSList = () => {
         });
         return <>${sum}</>;
       },
+    },
+    {
+      title: "Client Name",
+      dataIndex: "userId",
+      key: "userId",
+      render: (text) => {
+        const client = clients?.find((client) => client?.id === text);
+        return client?.fullName ? client.fullName : "N/A";
+      },
+    },
+    {
+      title: "Billing Cycle",
+      dataIndex: "billingCycle",
+      key: "billingCycle",
+      render: (cycle) => {
+        let text = "";
+        switch (cycle) {
+          case 0:
+            text = Options[0]?.label;
+            break;
+          case 1:
+            text = Options[1]?.label;
+            break;
+          case 2:
+            text = Options[2]?.label;
+            break;
+          case 3:
+            text = Options[3]?.label;
+            break;
+          case 4:
+            text = Options[4]?.label;
+            break;
+          case 5:
+            text = Options[5]?.label;
+            break;
+          case 6:
+            text = Options[6]?.label;
+            break;
+
+          default:
+            text = "UNKNOWN";
+        }
+        return text;
+      },
+    },
+    {
+      title: "Next Due Date",
+      dataIndex: "nextDueDate",
+      key: "nextDueDate",
+      render: (nextDueDate) => moment(nextDueDate).format("DD-MM-YYYY"),
+      width: "70px",
     },
     {
       title: "Status",
@@ -139,18 +203,6 @@ export const PSList = () => {
             color = "bg-[#3A2434] text-[#F64E60]";
             text = "CANCELLED";
             break;
-          // case 3:
-          //   color = "bg-[#1C3238] text-[#0BB783]";
-          //   text = "RENEWED";
-          //   break;
-          // case 4:
-          //   color = "bg-[#3A2434] text-[#F64E60]";
-          //   text = "SUSPENDED";
-          //   break;
-          // case 5:
-          //   color = "bg-[#3A2434] text-[#F64E60]";
-          //   text = "TERMINATED";
-          //   break;
           default:
             color = "";
             text = "UNKNOWN";

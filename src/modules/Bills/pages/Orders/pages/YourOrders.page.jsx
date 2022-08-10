@@ -184,6 +184,28 @@ export const YourOrders = () => {
           //   setEndDate(endDate);
           //   await dispatch(getOrders(details));
           // }}
+          // editAction={(record) => (
+          //   <Button
+          //     onClick={() => {
+          //       navigate(
+          //         `/admin/dashboard/billing/products-services/list/details/${record?.id}`
+          //       );
+          //     }}
+          //   >
+          //     View
+          //   </Button>
+          // )}
+          // viewAction={(record) => (
+          //   <Button
+          //     onClick={() => {
+          //       navigate(
+          //         `/admin/dashboard/billing/orders/your-orders/list/edit/${record?.id}`
+          //       );
+          //     }}
+          //   >
+          //     View
+          //   </Button>
+          // )}
           permissions={permissions}
           t={t}
         />
