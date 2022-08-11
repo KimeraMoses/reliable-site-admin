@@ -14,7 +14,7 @@ import {
   getOrderTemplate,
   getOrderTemplates,
   getDepartments,
-  getOrderTemplateByID,
+  // getOrderTemplateByID,
 } from "store";
 import { getOrderDetails } from "store";
 
@@ -31,11 +31,11 @@ export const AddEditOrder = () => {
 
   const dispatch = useDispatch();
   const { loading, order } = useSelector((state) => state?.orders);
-  const categoriesLoading = useSelector((state) => state?.categories?.loading);
-  const usersLoading = useSelector((state) => state?.users?.loading);
-  const departmentsLoading = useSelector(
-    (state) => state?.departments?.loading
-  );
+  // const categoriesLoading = useSelector((state) => state?.categories?.loading);
+  // const usersLoading = useSelector((state) => state?.users?.loading);
+  // const departmentsLoading = useSelector(
+  //   (state) => state?.departments?.loading
+  // );
 
   const { id } = useParams();
 
@@ -70,7 +70,7 @@ export const AddEditOrder = () => {
         )
       : [],
     productLineItems: order
-      ? order?.product[0]?.productLineItems?.map((item) => ({
+      ? order?.orderProductLineItems?.map((item) => ({
           ...item,
           isDeleted: item?.isDeleted || false,
         }))
@@ -96,7 +96,7 @@ export const AddEditOrder = () => {
       : moment(),
     adminAssigned: order ? order?.adminAssigned : "",
     orderForClientId: order ? order?.orderForClientId : "",
-    assignedToClientId: order ? order?.assignedToClientId : "",
+    assignedToClientId: order ? order?.assignedClient : "",
     orderNotes: order ? order?.notes : "",
     orderTenant: order ? order?.tenant : "admin",
   };
@@ -115,27 +115,9 @@ export const AddEditOrder = () => {
               name: values.name,
               description: values.description,
               thumbnail: img,
+              assignedToClientId: values.assignedToClientId,
               productCategories: values?.orderTemplateCategories,
-              // productCategories: values?.productCategories?.map(
-              //   (category) => category?.id
-              // ),
-              // productCategories: id
-              //   ? values?.productCategories?.map((category) => ({
-              //       // categoryId: category,
-              //       category,
-              //     }))
-              //   : values?.productCategories?.map((category) => category?.id),
-              // productDepartments: values?.productDepartments?.map(
-              //   (department) => department?.id
-              // ),
               productDepartments: values?.orderTemplateDepartments,
-              // productDepartments: id
-              //   ? values?.productDepartments?.map((department) => ({
-              //       department,
-              //     }))
-              //   : values?.productDepartments?.map(
-              //       (department) => department?.id
-              //     ),
               productLineItems: values.productLineItems?.map((item) => {
                 if (id) {
                   if (item?.isNew) {
@@ -191,7 +173,7 @@ export const AddEditOrder = () => {
           ],
           adminAssigned: order ? order?.adminAssigned : user?.id,
           orderForClientId: values.assignedToClientId,
-          orderStatus: values?.status ? Number(values?.status) : 0,
+          orderStatus: 0,
           orderNotes: order ? order?.notes : "",
           tenant: "admin",
         };
@@ -210,10 +192,10 @@ export const AddEditOrder = () => {
           <Form>
             <div className="users">
               <div className="admin-details min-w-[60vh]">
-                {loading ||
-                categoriesLoading ||
-                usersLoading ||
-                departmentsLoading ? (
+                {loading ? (
+                  // categoriesLoading ||
+                  // usersLoading ||
+                  // departmentsLoading ? (
                   <Spin
                     size="large"
                     style={{ gridColumn: "1/3", alignSelf: "center" }}

@@ -42,7 +42,7 @@ const LineItem = ({ item, setDel, setId, setEdit, setEditData }) => {
   );
 };
 
-export const LineItems = () => {
+export const LineItems = ({ isView }) => {
   const [add, setAdd] = useState(false);
   const [del, setDel] = useState(false);
   const [id, setId] = useState(null);
@@ -99,12 +99,14 @@ export const LineItems = () => {
       ]);
     }
   };
+  console.log(values?.productLineItems);
 
   useEffect(() => {
     let sum = 0;
-    values?.productLineItems?.forEach((item) => {
-      sum += item?.price;
-    });
+    values?.productLineItems?.length > 0 &&
+      values?.productLineItems?.forEach((item) => {
+        sum += item?.price;
+      });
     setTotal(sum);
   }, [values?.productLineItems]);
 
@@ -112,25 +114,28 @@ export const LineItems = () => {
     <>
       <div className="bg-[#1E1E2D] p-[32px] rounded-[8px] mt-[20px]">
         <div className="flex items-center justify-between mb-[16px]">
-          <h6 className="text-white text-[16px]">Line Items & Price</h6>
-          <Button onClick={() => setAdd(true)}>Add New Item</Button>
+          <h6 className="text-white text-[16px]">Line Items and Price</h6>
+          {!isView && (
+            <Button onClick={() => setAdd(true)}>Add New Item</Button>
+          )}
         </div>
-        {values?.productLineItems?.map((item, idx) => {
-          if (!item?.isDeleted) {
-            return (
-              <LineItem
-                key={`item-${idx}`}
-                item={item}
-                setDel={setDel}
-                setId={setId}
-                setEdit={setEdit}
-                setEditData={setEditData}
-              />
-            );
-          } else {
-            return null;
-          }
-        })}
+        {values?.productLineItems?.length > 0 &&
+          values?.productLineItems?.map((item, idx) => {
+            if (!item?.isDeleted) {
+              return (
+                <LineItem
+                  key={`item-${idx}`}
+                  item={item}
+                  setDel={setDel}
+                  setId={setId}
+                  setEdit={setEdit}
+                  setEditData={setEditData}
+                />
+              );
+            } else {
+              return null;
+            }
+          })}
         <div className="mt-[32px] rounded-[8px] border-[#3699FF] border-[1px] border-dashed bg-[#212E48] flex items-center justify-between p-[32px]">
           <div className="text-white text-[20px] font-medium">
             Total - ${total.toFixed(2)}
@@ -143,13 +148,13 @@ export const LineItems = () => {
 
       <AddLineItem show={add} setShow={setAdd} handleAdd={addLineItem} />
       <EditLineItem
-        show={edit}
+        show={!isView && edit}
         setShow={setEdit}
         handleEdit={editLineItem}
         editValue={editData}
       />
       <DeleteItem
-        show={del}
+        show={!isView && del}
         setShow={setDel}
         handleDelete={deleteLineItem}
         id={id}

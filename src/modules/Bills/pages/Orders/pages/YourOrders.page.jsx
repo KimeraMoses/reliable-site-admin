@@ -7,19 +7,23 @@ import { checkModule } from "lib/checkModule";
 import { getOrders } from "store";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
-import { AddOrder } from "./sections/AddOrder.section";
+// import { AddOrder } from "./sections/AddOrder.section";
 import { getClients } from "store";
 import { getProducts } from "store";
 import { getOrderTemplates } from "store";
+import { Button } from "antd";
+import { Delete } from "modules/UserProfile/sections/APIKeys/sections";
 
-export const YourOrders = () => {
+export const YourOrders = ({ myOrders }) => {
   const navigate = useNavigate();
-  const [showAdd, setShowAdd] = useState(false);
+  // const [showAdd, setShowAdd] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
   const { t } = useTranslation("/Bills/ns");
   const dispatch = useDispatch();
-  const { orders, loading } = useSelector((state) => state?.orders);
+  const { orders } = useSelector((state) => state?.orders);
   const { userModules } = useSelector((state) => state?.modules);
-  // const { user } = useSelector((state) => state?.auth);
+  const { user } = useSelector((state) => state?.auth);
+  const [record, setRecord] = useState(null);
 
   useEffect(() => {
     (async () => {
@@ -31,7 +35,7 @@ export const YourOrders = () => {
   }, [dispatch]);
 
   // Setting data properly
-  const [data, setData] = useState([]);
+  // const [data, setData] = useState([]);
   // const [status, setStatus] = useState("");
   // const [startDate, setStartDate] = useState("");
   // const [endDate, setEndDate] = useState("");
@@ -41,19 +45,6 @@ export const YourOrders = () => {
     modules: userModules,
   });
 
-  useEffect(() => {
-    setData([]);
-    if (orders?.length) {
-      const dataToSet = orders?.map((b) => {
-        return {
-          ...b,
-          key: b?.id,
-        };
-      });
-      setData(dataToSet);
-    }
-  }, [orders]);
-
   const columns = [
     {
       title: t("orderId"),
@@ -62,8 +53,8 @@ export const YourOrders = () => {
     },
     {
       title: t("client"),
-      dataIndex: "fullName",
-      key: "fullName",
+      dataIndex: "clientFullName",
+      key: "clientFullName",
       render: (fullName) => {
         // let name = "";
         // let userN = fullName?.split(" ");
@@ -134,14 +125,24 @@ export const YourOrders = () => {
   return (
     <div className="p-[40px]">
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
-        <AddOrder show={showAdd} setShow={setShowAdd} />
+        {/* <AddOrder show={showAdd} setShow={setShowAdd} record={record} /> */}
+        <Delete
+          show={showDelete}
+          setShow={setShowDelete}
+          record={record}
+          type="order"
+        />
         <Table
           columns={columns}
-          data={data}
-          loading={loading}
+          data={
+            myOrders
+              ? orders?.filter((order) => order?.adminAssigned === user?.id)
+              : orders
+          }
+          // loading={loading}
           // dateRageFilter={true}
           // statusFilter={statusList()}
-          hideActions
+          // hideActions
           fieldToFilter="orderNo"
           btnData={{
             text: "Add Order",
@@ -150,62 +151,29 @@ export const YourOrders = () => {
                 "/admin/dashboard/billing/orders/your-orders/list/add/new"
               ),
           }}
-          // handleStatus={async (values) => {
-          //   setStatus(values);
-          //   let details = {
-          //     status: values,
-          //     userId: user?.id,
-          //   };
-
-          //   if (startDate && endDate) {
-          //     details['startDate'] = startDate;
-          //     details['endDate'] = endDate;
-          //   }
-          //   await dispatch(getOrders(details));
-          // }}
-          // handleDateRange={async (date, dateString, id) => {
-          //   let startDate = '';
-          //   let endDate = '';
-          //   let details = {
-          //     userId: user?.id,
-          //   };
-          //   if (date) {
-          //     startDate = date[0]._d;
-          //     endDate = date[1]._d;
-          //     details['startDate'] = startDate;
-          //     details['endDate'] = endDate;
-          //   }
-
-          //   if (status) {
-          //     details['status'] = status;
-          //   }
-
-          //   setStartDate(startDate);
-          //   setEndDate(endDate);
-          //   await dispatch(getOrders(details));
-          // }}
-          // editAction={(record) => (
-          //   <Button
-          //     onClick={() => {
-          //       navigate(
-          //         `/admin/dashboard/billing/products-services/list/details/${record?.id}`
-          //       );
-          //     }}
-          //   >
-          //     View
-          //   </Button>
-          // )}
-          // viewAction={(record) => (
-          //   <Button
-          //     onClick={() => {
-          //       navigate(
-          //         `/admin/dashboard/billing/orders/your-orders/list/edit/${record?.id}`
-          //       );
-          //     }}
-          //   >
-          //     View
-          //   </Button>
-          // )}
+          viewAction={(record) => (
+            <Button
+              onClick={() => {
+                navigate(
+                  `/admin/dashboard/billing/orders/your-orders/list/edit/${record?.id}`
+                );
+              }}
+            >
+              View/Edit
+            </Button>
+          )}
+          deleteAction={(record) => (
+            <>
+              <Button
+                onClick={() => {
+                  setRecord(record);
+                  setShowDelete(true);
+                }}
+              >
+                Delete
+              </Button>
+            </>
+          )}
           permissions={permissions}
           t={t}
         />

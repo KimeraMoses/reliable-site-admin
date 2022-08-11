@@ -1,6 +1,6 @@
-import { getConfig } from 'lib';
-const departmentsConfig = (action) =>
-  getConfig({ module: 'Departments', action });
+// import { getConfig } from "lib";
+// const departmentsConfig = (action) =>
+//   getConfig({ module: "Departments", action });
 
 const prefix = `/api/departments`;
 
@@ -8,13 +8,13 @@ export const getDepartmentsConfig = () => ({
   url: `${prefix}/search`,
   defaultData: {
     advancedSearch: {
-      fields: [''],
-      keyword: '',
+      fields: [""],
+      keyword: "",
     },
-    keyword: '',
+    keyword: "",
     pageNumber: 0,
     pageSize: 0,
-    orderBy: [''],
+    orderBy: [""],
   },
   // config: departmentsConfig('View'),
 });
@@ -24,7 +24,7 @@ export const getDepartmentsByUserIdConfig = ({ id }) => ({
   // config: departmentsConfig('View'),
 });
 
-export const getUsersByDepartmentIdConfig = ({ id }) => ({
+export const getUsersByDepartmentIdConfig = (id) => ({
   url: `/api/departments/getdepartmentusers/${id}`,
   // config: departmentsConfig('View'),
 });

@@ -33,13 +33,13 @@ export const getUsers = () => {
     try {
       const { url, config } = getUsersConfig();
       const res = await axios.get(url, config);
-      // console.log('get user res', res);
+      // console.log("get user res", res);
       dispatch(getUsersDispatch(res?.data?.data));
       dispatch(setUserLoading(false));
     } catch (e) {
       toast.error(getError(e));
       dispatch(setUserLoading(false));
-      // console.log('get users errrrr', e);
+      // console.log("get users errrrr", e);
     }
   };
 };
@@ -122,7 +122,7 @@ export const addClientUser = (data) => {
 export const updateUser = (id, data, isClient = false) => {
   return async (dispatch) => {
     dispatch(setUserLoading(true));
-    console.log("updated user", data);
+    // console.log("updated user", data);
     try {
       const { url, config } = updateUserProfileByIDConfig(id, isClient);
       const res = await axios.put(url, data, config);
@@ -145,7 +145,7 @@ export const updateUser = (id, data, isClient = false) => {
       }
     } catch (e) {
       toast.error(getError(e));
-      console.log("Update err", e);
+      // console.log("Update err", e);
     } finally {
       dispatch(setUserLoading(false));
     }
@@ -196,7 +196,7 @@ export const editUserPermissions = ({ permission, uid }) => {
       }
       dispatch(setUserLoading(false));
     } catch (e) {
-      console.log(e);
+      // console.log(e);
       toast.error(getError(e));
       dispatch(setUserLoading(false));
     }

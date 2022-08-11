@@ -10,7 +10,6 @@ import { useEffect, useState } from "react";
 import { getProducts } from "store";
 import { Form, Formik } from "formik";
 import {
-  Add,
   Cancel,
   Delete,
   Renew,
@@ -23,14 +22,13 @@ import { getCategories } from "store";
 export const PSList = () => {
   // const [showAdd, setShowAdd] = useState(false);
   const navigate = useNavigate();
-  const { clients } = useSelector((state) => state?.users);
+  // const { clients } = useSelector((state) => state?.users);
   const { t } = useTranslation("/Bills/ns");
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
     module: "Products",
     modules: userModules,
   });
-  // console.log("clients", clients);
 
   const Options = [
     { label: "Hourly", value: 0 },
@@ -118,12 +116,12 @@ export const PSList = () => {
     },
     {
       title: "Client Name",
-      dataIndex: "userId",
-      key: "userId",
-      render: (text) => {
-        const client = clients?.find((client) => client?.id === text);
-        return client?.fullName ? client.fullName : "N/A";
-      },
+      dataIndex: "assignedClient",
+      key: "assignedClient",
+      // render: (text) => {
+      //   const client = clients?.find((client) => client?.id === text);
+      //   return client?.fullName ? client.fullName : "N/A";
+      // },
     },
     {
       title: "Billing Cycle",
@@ -199,7 +197,7 @@ export const PSList = () => {
             color = "bg-[#1C3238] text-[#0BB783]";
             text = "ACCEPTED";
             break;
-          case 2:
+          case 6:
             color = "bg-[#3A2434] text-[#F64E60]";
             text = "CANCELLED";
             break;

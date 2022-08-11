@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { element, bool } from 'prop-types';
-import { useMediaQuery } from 'react-responsive';
-import { SideBar, TopBar, Notifications } from './components';
+import React, { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { element, bool } from "prop-types";
+import { useMediaQuery } from "react-responsive";
+import { SideBar, TopBar, Notifications } from "./components";
 // import { sidebarData } from './components/SideBar/data';
-import { GetMFAUri } from 'store/Actions/AuthActions';
-import { useDispatch, useSelector } from 'react-redux';
-import { useSidebarData } from './components/SideBar/data';
+import { GetMFAUri } from "store/Actions/AuthActions";
+import { useDispatch, useSelector } from "react-redux";
+import { useSidebarData } from "./components/SideBar/data";
 
 export function DashboardLayout({ children, hide }) {
-  const [active, setActive] = useState('');
-  const [activeSub, setActiveSub] = useState('');
-  const [activeInnerSub, setActiveInnerSub] = useState('');
-  const [activeDeepInnerSub, setActiveDeepInnerSub] = useState('');
+  const [active, setActive] = useState("");
+  const [activeSub, setActiveSub] = useState("");
+  const [activeInnerSub, setActiveInnerSub] = useState("");
+  const [activeDeepInnerSub, setActiveDeepInnerSub] = useState("");
   const user = useSelector((state) => state.auth.user);
   const { pathname } = useLocation();
   const dispatch = useDispatch();
 
   const lessThanDesktop = useMediaQuery({
-    query: '(max-width: 900px)',
+    query: "(max-width: 900px)",
   });
 
   const sidebarData = useSidebarData();
@@ -29,7 +29,7 @@ export function DashboardLayout({ children, hide }) {
   useEffect(() => {
     const activeLink = sidebarData.filter((sideItem) => {
       const { name, path } = sideItem;
-      if (name === 'Dashboard') {
+      if (name === "Dashboard") {
         return path === pathname;
       } else {
         return pathname.includes(path);
@@ -48,7 +48,7 @@ export function DashboardLayout({ children, hide }) {
       if (activeSubLink?.length && activeSubLink[0]?.subLinks?.length) {
         const activeInnerSubLink = activeSubLink[0]?.subLinks?.filter(
           ({ path }) => {
-            const trimmedPathname = path.substring(0, path.lastIndexOf('/'));
+            const trimmedPathname = path.substring(0, path.lastIndexOf("/"));
             return pathname.includes(trimmedPathname);
           }
         );
@@ -60,15 +60,15 @@ export function DashboardLayout({ children, hide }) {
         ) {
           const activeDeepInnerSubLink =
             activeInnerSubLink[0]?.subLinks?.filter(({ path }) => {
-              const trimmedPathname = path.substring(0, path.lastIndexOf('/'));
+              const trimmedPathname = path.substring(0, path.lastIndexOf("/"));
               return pathname.includes(trimmedPathname);
             });
           setActiveDeepInnerSub(activeDeepInnerSubLink[0]);
         } else {
-          setActiveDeepInnerSub('');
+          setActiveDeepInnerSub("");
         }
       } else {
-        setActiveInnerSub('');
+        setActiveInnerSub("");
       }
     }
   }, [pathname]);
@@ -89,7 +89,7 @@ export function DashboardLayout({ children, hide }) {
 
   return (
     <div
-      className={`w-full md:min-h-screen ${hideNoti ? 'notificationShow' : ''}`}
+      className={`w-full md:min-h-screen ${hideNoti ? "notificationShow" : ""}`}
     >
       <TopBar
         hide={hide}
@@ -110,35 +110,35 @@ export function DashboardLayout({ children, hide }) {
           <div className="bg-[#1A1A27] px-[20px] py-[20px] md:px-[40px] flex items-center gap-5">
             <h2 className="text-xl font-normal text-white">{active?.name}</h2>
 
-            {activeSub?.name && !active.hideBread ? (
+            {activeSub?.name && !active?.hideBread ? (
               <>
                 <div className="h-5 w-[1px] bg-[#323248]" />
                 <h6 className="text-white text-[12px]">
                   <Link
                     to={activeSub?.path}
-                    className={activeSub?.name ? 'text-[#92928f]' : ''}
+                    className={activeSub?.name ? "text-[#92928f]" : ""}
                   >{`${activeSub?.name} ${
-                    activeInnerSub?.name ? '-' : ''
+                    activeInnerSub?.name ? "-" : ""
                   } `}</Link>
                   {activeInnerSub?.name && !activeDeepInnerSub ? (
                     <span>{`${activeInnerSub?.name} ${
-                      activeDeepInnerSub ? '-' : ''
+                      activeDeepInnerSub ? "-" : ""
                     } `}</span>
                   ) : activeInnerSub?.name && activeDeepInnerSub ? (
                     <Link
                       to={activeInnerSub?.path}
-                      className={activeInnerSub?.name ? 'text-[#92928f]' : ''}
+                      className={activeInnerSub?.name ? "text-[#92928f]" : ""}
                     >{`${activeInnerSub?.name} ${
-                      activeInnerSub?.name ? '-' : ''
+                      activeInnerSub?.name ? "-" : ""
                     } `}</Link>
                   ) : (
-                    ''
+                    ""
                   )}
 
                   {activeDeepInnerSub?.name ? (
                     <span>{`${activeDeepInnerSub?.name}`}</span>
                   ) : (
-                    ''
+                    ""
                   )}
                 </h6>
               </>

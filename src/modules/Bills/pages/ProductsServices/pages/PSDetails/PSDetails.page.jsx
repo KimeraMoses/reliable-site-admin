@@ -37,7 +37,6 @@ export const PSDetails = () => {
   const departmentsLoading = useSelector(
     (state) => state?.departments?.loading
   );
-  // console.log(product);
 
   const { id } = useParams();
 
@@ -75,7 +74,7 @@ export const PSDetails = () => {
     terminationDate: moment(product?.terminationDate),
     overrideSuspensionDate: moment(product?.overrideSuspensionDate),
     overrideTerminationDate: moment(product?.overrideTerminationDate),
-    assignedToClientId: product?.userId,
+    assignedToClientId: product?.assignedClient,
     billingCycle: product?.billingCycle,
   };
 

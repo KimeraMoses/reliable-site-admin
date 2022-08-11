@@ -16,23 +16,45 @@ import {
   getOrderTemplate,
   // getOrder,
 } from "store/Slices";
+import { getOrder } from "store/Slices/ordersSlice";
+import { getDataCounts } from "./count";
 
 export const createOrder = ({ data }) => {
   return async (dispatch) => {
     dispatch(setOrderLoading(true));
-    console.log("order data", data);
+    // console.log("order data", data);
     try {
       const { url, config } = createOrderConfig();
       const res = await axios.post(url, data, config);
-      console.log("order res", res);
+      // console.log("order res", res);
       if (res?.status === 200) {
         const { url, defaultData, config } = getOrdersConfig();
         const res = await axios.post(url, defaultData, config);
         dispatch(getOrdersDispatch(res?.data?.data));
         toast.success("Order created successfully");
+        dispatch(getDataCounts());
       }
     } catch (e) {
-      console.log(e);
+      // console.log(e);
+      toast.error(getError(e));
+      dispatch(setOrderLoading(false));
+    } finally {
+      dispatch(setOrderLoading(false));
+    }
+  };
+};
+
+export const editOrder = (id, data) => {
+  return async (dispatch) => {
+    dispatch(setOrderLoading(true));
+    try {
+      const { url, config } = getOrderConfig(id);
+      const res = await axios.put(url, { ...data }, config);
+      if (res?.status === 200) {
+        dispatch(getOrders());
+        toast.success("Order status updated successfully");
+      }
+    } catch (e) {
       toast.error(getError(e));
       dispatch(setOrderLoading(false));
     } finally {
@@ -57,6 +79,27 @@ export const getOrders = (params) => {
   };
 };
 
+// Delete Order Template By ID
+export const deleteOrderByID = (id) => {
+  return async (dispatch) => {
+    dispatch(setOrderLoading(true));
+
+    try {
+      const res = await axios.delete(`/api/v1/admin/orders/${id}`);
+      if (res.status === 200) {
+        dispatch(getDataCounts());
+        dispatch(getOrders());
+        toast.success("Order deleted successfully");
+      }
+    } catch (e) {
+      toast.error(getError(e));
+      dispatch(setOrderLoading(false));
+    } finally {
+      dispatch(setOrderLoading(false));
+    }
+  };
+};
+
 // Get All Admin Orders
 export const getOrderDetails = (params) => {
   return async (dispatch) => {
@@ -64,12 +107,10 @@ export const getOrderDetails = (params) => {
     try {
       const { url } = getOrderConfig(params);
       const res = await axios.get(url);
-      console.log("Order res", res);
-      // dispatch(getOrdersDispatch(res?.data?.data));
+      dispatch(getOrder(res?.data?.data));
       dispatch(setOrderLoading(false));
     } catch (e) {
       toast.error(getError(e));
-      console.log("Order err", e);
       dispatch(setOrderLoading(false));
     }
   };
@@ -95,18 +136,16 @@ export const getOrderTemplates = () => {
 export const createOrderTemplate = ({ data }) => {
   return async (dispatch) => {
     dispatch(setOrderLoading(true));
-    console.log("order data", data);
+    // console.log("order data", data);
     try {
       const { url, config } = createOrderTemplateConfig();
       const res = await axios.post(url, data, config);
-      console.log("order res", res);
       if (res?.status === 200) {
         const { url, defaultData, config } = getOrderTemplatesConfig();
         const res = await axios.post(url, defaultData, config);
         dispatch(getOrderTemplates(res?.data?.data));
       }
     } catch (e) {
-      console.log("order err", e);
       toast.error(getError(e));
       dispatch(setOrderLoading(false));
     } finally {
@@ -153,7 +192,6 @@ export const editOrderTemplateByID = (id, data) => {
 
 // Delete Order Template By ID
 export const deleteOrderTemplateByID = (id) => {
-  console.log(id);
   return async (dispatch) => {
     dispatch(setOrderLoading(true));
     try {

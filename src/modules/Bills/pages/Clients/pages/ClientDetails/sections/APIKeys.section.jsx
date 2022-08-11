@@ -1,34 +1,34 @@
-import { Button, Select, Tooltip } from 'antd';
-import { Copy, Down } from 'icons';
-import { Table } from 'components';
-import './APIKeys.styles.scss';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { checkModule } from 'lib/checkModule';
+import { Button, Select, Tooltip } from "antd";
+import { Copy, Down } from "icons";
+import { Table } from "components";
+import "./APIKeys.styles.scss";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
+import { checkModule } from "lib/checkModule";
 
 export const APIKeys = () => {
-  const [selectedSort, setSelectedSort] = useState('label');
+  const [selectedSort, setSelectedSort] = useState("label");
   const [data, setData] = useState([]);
 
-  const { t } = useTranslation('/Users/ns');
+  const { t } = useTranslation("/Users/ns");
 
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Clients',
+    module: "Clients",
     modules: userModules,
   });
 
   const columns = [
     {
-      title: t('label'),
-      dataIndex: 'label',
-      key: 'label',
+      title: t("label"),
+      dataIndex: "label",
+      key: "label",
     },
     {
-      title: t('apiKey'),
-      dataIndex: 'apiKey',
-      key: 'apiKey',
+      title: t("apiKey"),
+      dataIndex: "apiKey",
+      key: "apiKey",
       render: (text) => {
         return (
           <div className="flex gap-[8px] items-center">
@@ -48,14 +48,14 @@ export const APIKeys = () => {
       },
     },
     {
-      title: t('createDate'),
-      key: 'createdAt',
-      dataIndex: 'createdAt',
+      title: t("createDate"),
+      key: "createdAt",
+      dataIndex: "createdAt",
     },
     {
-      title: t('status'),
-      key: 'status',
-      dataIndex: 'status',
+      title: t("status"),
+      key: "status",
+      dataIndex: "status",
       render: (status) => (
         <div className="bg-[#1C3238] px-[8px] py-[4px] text-[#0BB783] w-[fit-content] rounded-[4px]">
           {status}
@@ -68,7 +68,7 @@ export const APIKeys = () => {
     onChange: (selectedRowKeys, selectedRows) => {
       console.log(
         `selectedRowKeys: ${selectedRowKeys}`,
-        'selectedRows: ',
+        "selectedRows: ",
         selectedRows
       );
     },
@@ -85,7 +85,7 @@ export const APIKeys = () => {
         key: i,
         label: `API Key ${i}`,
         apiKey: `${i}0asdwr${i}asd${i}`,
-        createdAt: 'Sunday, March 27th, 2022 at 04:30 PM',
+        createdAt: "Sunday, March 27th, 2022 at 04:30 PM",
         status: `ACTIVE`,
       });
     }
@@ -111,7 +111,7 @@ export const APIKeys = () => {
         <Table
           data={data}
           columns={columns}
-          btnData={{ text: 'Add API Key', onClick: () => {} }}
+          btnData={{ text: "Add API Key", onClick: () => {} }}
           fieldToFilter="label"
           pagination={false}
           rowSelection={rowSelection}
@@ -138,7 +138,7 @@ export const APIKeys = () => {
                 {columns?.map((el) => {
                   return (
                     <Select.Option key={el?.key} value={el?.key}>
-                      {t('sortBy')} {el?.title}
+                      {t("sortBy")} {el?.title}
                     </Select.Option>
                   );
                 })}

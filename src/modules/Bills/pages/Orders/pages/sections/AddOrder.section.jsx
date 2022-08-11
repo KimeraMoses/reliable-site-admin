@@ -1,144 +1,111 @@
 import { Modal } from "components";
-import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createOrder } from "store";
+import { editOrder } from "store";
+import moment from "moment";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
-  productIds: Yup.array().of(Yup.string()).required("This field is required!"),
-  orderForClientId: Yup.string().required("This field is required!"),
-  // customerIP: Yup.string().required('This field is required!'),
-  // orderStatus: Yup.number().required("This field is required!"),
-  notes: Yup.string().required("This field is required!"),
+  orderStatus: Yup.number().required("This field is required!"),
 });
 
-export const AddOrder = ({ show, setShow }) => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [isSelected, setIsSelected] = useState(false);
-  const [searchResults, setSearchResults] = useState([]);
+export const AddOrder = ({ show, setShow, record }) => {
   const dispatch = useDispatch();
-  const { clients } = useSelector((state) => state?.users);
-  const { products } = useSelector((state) => state?.products);
-  const { orderTemplates, loading } = useSelector((state) => state?.orders);
+  const { users } = useSelector((state) => state?.users);
+  const { loading } = useSelector((state) => state?.orders);
+  const isSuperAdmin = useSelector(
+    (state) => state?.auth?.user?.userRolesResponse?.userRoles
+  )[1]?.enabled;
 
-  const keyWordHandler = (e) => {
-    const { value } = e.target;
-    setSearchTerm(value);
-    setIsSelected(false);
-
-    if (searchTerm !== "") {
-      const Results = clients.filter((Result) => {
-        return Object.values(Result)
-          .join(" ")
-          .replace(/-/g, " ")
-          .toLowerCase()
-          .includes(searchTerm.toLowerCase());
-      });
-      setSearchResults(Results);
-    }
-  };
-
-  // const status = [
-  //   "Draft",
-  //   "Pending",
-  //   "Paid",
-  //   "Processing",
-  //   "Completed",
-  //   "Accepted",
-  //   "Canceled",
-  // ];
+  const status = [
+    "Draft",
+    "Pending",
+    "Paid",
+    "Processing",
+    "Completed",
+    "Accepted",
+    "Canceled",
+  ];
 
   const fields = [
     {
-      type: "select",
-      name: "orderTemplateId",
-      placeholder: "Choose Template",
-      title: "Template",
-      options: orderTemplates?.map((template) => ({
-        label: template?.templateName,
-        value: template?.id,
-      })),
+      type: "text",
+      name: "orderNo",
+      placeholder: "Order Number",
+      title: "Order Number",
+      disabled: true,
     },
-    {
-      type: "searchable",
-      name: "orderForClientId",
-      placeholder: "Type client name to search",
-      title: "Client",
-      options: {
-        isSelected,
-        setIsSelected,
-        searchTerm,
-        setSearchTerm,
-        searchResults,
-        setSearchResults,
-        keyWordHandler,
-        clients,
-      },
-    },
-    // {
-    //   type: "select",
-    //   name: "orderStatus",
-    //   placeholder: "Select Status",
-    //   title: "Status",
-    //   options: status?.map((el, idx) => ({
-    //     label: el,
-    //     value: idx,
-    //   })),
-    // },
-    {
-      type: "multiselect",
-      mode: "multiple",
-      name: "productIds",
-      placeholder: "Select Products",
-      title: "Products/Services",
-      options: products?.map((el) => ({
-        label: el?.name,
-        value: el?.id,
-      })),
-    },
-    // {
-    //   type: 'text',
-    //   name: 'customerIP',
-    //   placeholder: 'Enter Customer IP...',
-    //   title: 'Customer IP',
-    // },
     {
       type: "text",
-      name: "notes",
-      placeholder: "Enter Order Notes...",
-      title: "Order Notes",
+      name: "orderForClientId",
+      placeholder: "",
+      title: "Client",
+      disabled: true,
+    },
+    {
+      type: "text",
+      name: "customerIp",
+      placeholder: "154.227.25.101",
+      title: "Customer IP",
+      disabled: true,
+    },
+    {
+      type: "text",
+      name: "lastModifiedOn",
+      placeholder: "",
+      title: "Date modified",
+      disabled: true,
+    },
+
+    {
+      type: "select",
+      name: "orderStatus",
+      placeholder: "Select Status",
+      title: "Status",
+      options: status?.map((el, idx) => ({
+        label: el,
+        value: idx,
+      })),
     },
   ];
 
   const initialValues = {
-    productIds: [],
-    orderForClientId: "",
-    // customerIP: "",
-    orderStatus: "Draft",
-    notes: "",
-    orderTemplateId: orderTemplates && orderTemplates[0]?.id,
+    orderNo: record?.orderNo,
+    orderForClientId: record?.clientFullName,
+    orderStatus: Number(record?.status),
+    adminAssignedId: record?.adminAssigned,
+    lastModifiedOn: moment(record?.lastModifiedOn).format(
+      "DD-MM-YYYY @ HH:MM:ss"
+    ),
+  };
+
+  const superAdminMenu = {
+    type: "select",
+    name: "adminAssignedId",
+    title: "Assigned To",
+    options:
+      users &&
+      users?.map((user) => ({
+        value: user?.id,
+        label: user?.fullName,
+      })),
   };
 
   return (
     <Modal
-      heading="Add Order"
-      submitText="Add Order"
+      heading="Edit Order Status"
+      submitText="Edit Order status"
       show={show}
       loading={loading}
       setShow={setShow}
-      fields={fields}
+      fields={isSuperAdmin ? [...fields, superAdminMenu] : fields}
       initialValues={initialValues}
       validationSchema={validationSchema}
       handleSubmit={async (values) => {
-        await dispatch(
-          createOrder({
-            data: {
-              ...values,
-              orderStatus: Number(values?.orderStatus),
-              tenant: "Admin",
-            },
-          })
-        );
+        const data = {
+          status: Number(values?.orderStatus),
+          adminAssignedId: values?.adminAssigned,
+        };
+        await dispatch(editOrder(record?.id, data));
         setShow(false);
       }}
     />

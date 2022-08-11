@@ -1,30 +1,40 @@
-import { Modal } from 'components';
-import { useDispatch, useSelector } from 'react-redux';
-import { deleteAPIKey } from 'store';
-import * as Yup from 'yup';
+import { Modal } from "components";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { deleteOrderByID } from "store";
+import { deleteAPIKey } from "store";
+import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
-  id: Yup.string().required('ID is required'),
+  id: Yup.string().required("ID is required"),
 });
 
-export const Delete = ({ show, setShow, id }) => {
-  const { loading } = useSelector((state) => state?.apiKeys);
+export const Delete = ({ show, setShow, id, type, record }) => {
+  const [loading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
+
   return (
     <Modal
-      heading="Delete API Key"
+      heading={`Delete ${type === "order" ? "Order" : "API Key"}`}
       customBody={
         <div className="mb-[32px]">
-          Are you sure you wish to delete this API Key? This action is permanent
-          and can not be undone.
+          Are you sure you wish to delete this{" "}
+          {type === "order" ? "Order" : "API Key"}? This action is permanent and
+          can not be undone.
         </div>
       }
-      initialValues={{ id }}
+      initialValues={{ id: record?.id }}
       validationSchema={validationSchema}
-      submitText="Delete API Key"
+      submitText={`Delete ${type === "order" ? "Order" : "API Key"}`}
       loading={loading}
       handleSubmit={async (values) => {
-        await dispatch(deleteAPIKey(values?.id));
+        setIsLoading(true);
+        await dispatch(
+          type === "order"
+            ? deleteOrderByID(values?.id)
+            : deleteAPIKey(values?.id)
+        );
+        setIsLoading(false);
         setShow(false);
       }}
       show={show}

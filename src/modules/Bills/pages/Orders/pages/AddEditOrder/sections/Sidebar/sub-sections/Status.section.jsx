@@ -6,7 +6,7 @@ export const Status = () => {
   const { clients } = useSelector((state) => state?.users);
 
   return (
-    <div className="p-[32px] bg-[#1E1E2D] rounded-[8px] mt-[20px]">
+    <div className="p-[32px] bg-[#1E1E2D] rounded-[8px]">
       <div className="flex justify-between items-center">
         <h6 className="text-white font-medium text-[16px]">Status</h6>
         {/* <div className="w-[11px] h-[11px] rounded-[50%] bg-[#0BB783]" /> */}
@@ -20,7 +20,7 @@ export const Status = () => {
         label="Client"
         data={clients}
       />
-      <Input
+      {/* <Input
         name="status"
         placeholder="Status"
         type="select"
@@ -30,7 +30,7 @@ export const Status = () => {
           { label: "Draft", value: 0 },
           { label: "Pending", value: 1 },
         ]}
-      />
+      /> */}
       <Input
         name="paymentType"
         placeholder="Payment Type"

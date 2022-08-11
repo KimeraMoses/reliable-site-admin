@@ -143,7 +143,7 @@ export const convertUrlToFile = async (imgUrl, fileName) => {
     });
     return file;
   } catch (e) {
-    console.log(e);
+    // console.log(e);
   }
 };
 
