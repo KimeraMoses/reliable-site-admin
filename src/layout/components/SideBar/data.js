@@ -108,6 +108,18 @@ export const useSidebarData = () => {
               name: "All Orders",
               path: "/admin/dashboard/billing/orders/all-orders/list",
               show: true,
+              subLinks: [
+                {
+                  name: "Edit Order",
+                  path: "/admin/dashboard/billing/orders/all-orders/list/edit/:id",
+                  show: true,
+                },
+                {
+                  name: "Add Order",
+                  path: "/admin/dashboard/billing/orders/all-orders/list/add/new",
+                  show: true,
+                },
+              ],
             },
             {
               name: "Your Orders",
