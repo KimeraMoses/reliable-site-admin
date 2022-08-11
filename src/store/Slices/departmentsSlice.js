@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   departments: [],
@@ -8,7 +8,7 @@ const initialState = {
   usersLoading: false,
 };
 const departmentsSlice = createSlice({
-  name: 'departments',
+  name: "departments",
   initialState,
   reducers: {
     getDepartments: (state, { payload }) => {

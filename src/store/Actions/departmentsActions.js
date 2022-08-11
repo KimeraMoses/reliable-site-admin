@@ -9,16 +9,16 @@ import {
   getUsersByDepartmentIdConfig,
   assignDepartmentConfig,
   unAssignDepartmentConfig,
-} from 'lib';
+} from "lib";
 
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 import {
   getDepartmentsDispatch,
   setDepartmentsLoading,
   getUsersDepartmentsDispatch,
   getDepartmentUsersDispatch,
   setDepartmentsUsersLoading,
-} from 'store/Slices';
+} from "store/Slices";
 
 // Get All Departments
 export const getDepartments = () => {
@@ -53,17 +53,19 @@ export const getDepartmentsByUserId = ({ id }) => {
 };
 
 // Get Departments By User ID
-export const getUsersByDepartmentID = ({ id }) => {
+export const getUsersByDepartmentID = (id) => {
   return async (dispatch) => {
-    dispatch(setDepartmentsUsersLoading(true));
-    try {
-      const { url, config } = getUsersByDepartmentIdConfig({ id });
-      const res = await axios.get(url, config);
-      dispatch(getDepartmentUsersDispatch(res?.data?.data));
-      dispatch(setDepartmentsUsersLoading(false));
-    } catch (e) {
-      toast.error(getError(e));
-      dispatch(setDepartmentsUsersLoading(false));
+    if (id) {
+      dispatch(setDepartmentsUsersLoading(true));
+      try {
+        const { url, config } = getUsersByDepartmentIdConfig(id);
+        const res = await axios.get(url, config);
+        dispatch(getDepartmentUsersDispatch(res?.data?.data));
+        dispatch(setDepartmentsUsersLoading(false));
+      } catch (e) {
+        toast.error(getError(e));
+        dispatch(setDepartmentsUsersLoading(false));
+      }
     }
   };
 };
@@ -123,7 +125,7 @@ export const addDepartment = (data) => {
         const { url, defaultData, config } = getDepartmentsConfig();
         const response = await axios.post(url, defaultData, config);
         dispatch(getDepartmentsDispatch(response?.data?.data));
-        toast.success('Departments Added Successfully');
+        toast.success("Departments Added Successfully");
       }
     } catch (e) {
       toast.error(getError(e));
@@ -143,7 +145,7 @@ export const editDepartment = ({ data }) => {
         const { url, defaultData, config } = getDepartmentsConfig();
         const response = await axios.post(url, defaultData, config);
         dispatch(getDepartmentsDispatch(response?.data?.data));
-        toast.success('Departments Updated Successfully');
+        toast.success("Departments Updated Successfully");
       }
     } catch (error) {
       toast.error(getError(error));
@@ -163,7 +165,7 @@ export const deleteDepartment = ({ id }) => {
         const { url, defaultData, config } = getDepartmentsConfig();
         const response = await axios.post(url, defaultData, config);
         dispatch(getDepartmentsDispatch(response?.data?.data));
-        toast.success('Departments Deleted Successfully');
+        toast.success("Departments Deleted Successfully");
       }
     } catch (error) {
       toast.error(getError(error));

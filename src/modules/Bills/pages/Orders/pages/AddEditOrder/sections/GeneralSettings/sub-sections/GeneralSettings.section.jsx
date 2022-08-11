@@ -1,7 +1,7 @@
-import { Button, Input } from 'components';
-import './styles.scss';
+import { Button, Input } from "components";
+import "./styles.scss";
 
-export const GS = () => {
+export const GS = ({ isView }) => {
   return (
     <div className="bg-[#1E1E2D] p-[32px] rounded-[8px]">
       <Input
@@ -9,6 +9,7 @@ export const GS = () => {
         placeholder="Product Name"
         label="Product Name"
         className="mb-[20px]"
+        disabled={isView}
       />
       <Input
         name="description"
@@ -16,10 +17,13 @@ export const GS = () => {
         label="Product Description"
         type="textarea"
         rows={4}
+        disabled={isView}
       />
-      <Button type="ghost" className="h-[52px] mt-[32px]" htmlType="submit">
-        Save Changes
-      </Button>
+      {!isView && (
+        <Button type="ghost" className="h-[52px] mt-[32px]" htmlType="submit">
+          Save Changes
+        </Button>
+      )}
     </div>
   );
 };

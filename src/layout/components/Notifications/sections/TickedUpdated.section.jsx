@@ -1,9 +1,9 @@
-import { Bell } from 'icons/Notifications/Bell.icon';
-import moment from 'moment';
-import { Link } from 'react-router-dom';
+import { Bell } from "icons/Notifications/Bell.icon";
+import moment from "moment";
+import { Link } from "react-router-dom";
 
 export const TickedUpdated = ({ value, user }) => {
-  console.log(value);
+  // console.log(value);
   return (
     <>
       {Object.keys(value).length === 1 ? (
@@ -11,14 +11,14 @@ export const TickedUpdated = ({ value, user }) => {
           className={`notification-block pl-[60px] pt-[13px] pb-[13px] relative`}
         >
           <div className={`noti-icon`}>
-            <Bell fill={'#fff'} />
+            <Bell fill={"#fff"} />
           </div>
           <div className={`noti-content`}>
             <div className="flex justify-between">
               <div className={`text-white`}>
                 {value[0]?.body
-                  .replace('[[firstName]]', user.fullName)
-                  .replace('[[fullName]]', user.fullName)}
+                  .replace("[[firstName]]", user.fullName)
+                  .replace("[[fullName]]", user.fullName)}
               </div>
               <div className={`flex`}>
                 {value[0]?.userImage && (
@@ -30,7 +30,7 @@ export const TickedUpdated = ({ value, user }) => {
                 )}
                 <div className={`text-[#474761] ml-2`}>{`${
                   value[0]?.fullName
-                } added at ${moment(value[0]?.sentAt).format('hh:mm A')}`}</div>
+                } added at ${moment(value[0]?.sentAt).format("hh:mm A")}`}</div>
               </div>
             </div>
           </div>
@@ -40,7 +40,7 @@ export const TickedUpdated = ({ value, user }) => {
           className={`notification-block pl-[60px] pt-[13px] pb-[13px] relative`}
         >
           <div className={`noti-icon`}>
-            <Bell fill={'#fff'} />
+            <Bell fill={"#fff"} />
           </div>
           <div className={`noti-content`}>
             <div className="flex justify-between">
@@ -57,7 +57,7 @@ export const TickedUpdated = ({ value, user }) => {
                 )}
                 <div className={`text-[#474761] ml-2`}>{`${
                   value[0]?.fullName
-                } added at ${moment(value[0]?.sentAt).format('hh:mm A')}`}</div>
+                } added at ${moment(value[0]?.sentAt).format("hh:mm A")}`}</div>
               </div>
             </div>
             <div className={`book-blocks`}>
@@ -69,10 +69,10 @@ export const TickedUpdated = ({ value, user }) => {
                   >
                     <div className="flex">
                       <div className="">
-                        <Link className={`text-[#1890ff]`} to={'#'}>
+                        <Link className={`text-[#1890ff]`} to={"#"}>
                           {d?.body
-                            .replace('[[firstName]]', user.fullName)
-                            .replace('[[fullName]]', user.fullName)}
+                            .replace("[[firstName]]", user.fullName)
+                            .replace("[[fullName]]", user.fullName)}
                         </Link>
                       </div>
                     </div>

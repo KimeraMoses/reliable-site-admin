@@ -94,7 +94,7 @@ export const useSidebarData = () => {
       subLinks: [
         {
           name: "Orders",
-          path: "/admin/dashboard/billing/orders",
+          path: "/admin/dashboard/billing/orders/all-orders/list",
           count:
             isSuperAdmin && data?.orders?.All > 0
               ? data?.orders?.All
@@ -104,6 +104,11 @@ export const useSidebarData = () => {
           show: findModule("Orders"),
           showDropdown: true,
           subLinks: [
+            {
+              name: "All Orders",
+              path: "/admin/dashboard/billing/orders/all-orders/list",
+              show: true,
+            },
             {
               name: "Your Orders",
               path: "/admin/dashboard/billing/orders/your-orders/list",
@@ -121,11 +126,6 @@ export const useSidebarData = () => {
                 },
               ],
             },
-            // {
-            //   name: "All Orders",
-            //   path: "/admin/dashboard/billing/orders/all-orders/list",
-            //   show: true,
-            // },
             {
               name: "Order Templates",
               path: "/admin/dashboard/billing/orders/order-templates/list",
