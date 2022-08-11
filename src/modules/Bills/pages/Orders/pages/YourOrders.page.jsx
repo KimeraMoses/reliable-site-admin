@@ -137,7 +137,7 @@ export const YourOrders = ({ myOrders }) => {
           data={
             myOrders
               ? orders?.filter((order) => order?.adminAssigned === user?.id)
-              : orders
+              : orders?.filter((order) => order?.adminAssigned !== user?.id)
           }
           // loading={loading}
           // dateRageFilter={true}
@@ -148,14 +148,18 @@ export const YourOrders = ({ myOrders }) => {
             text: "Add Order",
             onClick: () =>
               navigate(
-                "/admin/dashboard/billing/orders/your-orders/list/add/new"
+                `/admin/dashboard/billing/orders/${
+                  myOrders ? "your-orders" : "all-orders"
+                }/list/add/new`
               ),
           }}
           viewAction={(record) => (
             <Button
               onClick={() => {
                 navigate(
-                  `/admin/dashboard/billing/orders/your-orders/list/edit/${record?.id}`
+                  `/admin/dashboard/billing/orders/${
+                    myOrders ? "your-orders" : "all-orders"
+                  }/list/edit/${record?.id}`
                 );
               }}
             >

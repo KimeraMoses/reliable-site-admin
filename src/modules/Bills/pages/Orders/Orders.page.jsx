@@ -8,8 +8,9 @@ const Clients = () => {
   return (
     <Routes>
       <Route path="all-orders/list" element={<YourOrders />} />
+      <Route path="all-orders/list/add/new" element={<AddEditOrder />} />
+      <Route path="all-orders/list/edit/:id" element={<EditOrderDetails />} />
       <Route path="your-orders/list" element={<YourOrders myOrders />} />
-      {/*  */}
       <Route path="your-orders/list/add/new" element={<AddEditOrder />} />
       <Route path="your-orders/list/edit/:id" element={<EditOrderDetails />} />
       <Route path="order-templates/list" element={<OrderTemplates />} />
