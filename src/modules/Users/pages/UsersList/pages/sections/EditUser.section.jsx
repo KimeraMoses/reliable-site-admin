@@ -1,20 +1,20 @@
-import { Modal } from 'components';
-import { deepEqual } from 'lib';
-import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
-import { updateUser } from 'store';
-import * as Yup from 'yup';
+import { Modal } from "components";
+import { deepEqual } from "lib";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { updateUser } from "store";
+import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
-  fullName: Yup.string().required('Full name is required'),
-  status: Yup.bool().required('Status is required'),
+  fullName: Yup.string().required("Full name is required"),
+  status: Yup.bool().required("Status is required"),
 });
 
 export const EditUser = ({ t, show, setShow, user }) => {
   const initialValues = {
     fullName: user?.fullName,
     status: user?.status,
-    adminGroupID: user?.adminGroupID,
+    adminGroupId: user?.adminGroupId,
   };
 
   const { loading } = useSelector((state) => state?.users);
@@ -24,27 +24,27 @@ export const EditUser = ({ t, show, setShow, user }) => {
 
   const fields = [
     {
-      type: 'input',
-      name: 'fullName',
-      placeholder: 'Paul.Elliott',
-      title: t('fullName'),
+      type: "input",
+      name: "fullName",
+      placeholder: "Paul.Elliott",
+      title: t("fullName"),
     },
     {
-      type: 'switch',
-      name: 'status',
-      title: t('status'),
+      type: "switch",
+      name: "status",
+      title: t("status"),
     },
     {
-      type: 'select',
-      options: userGroups.length
-        ? userGroups.map((group) => ({
+      type: "select",
+      options: userGroups?.length
+        ? userGroups?.map((group) => ({
             label: group?.groupName,
             value: group?.id,
           }))
         : [],
-      name: 'adminGroupId',
-      placeholder: 'Select Admin Group...',
-      title: t('adminGroup'),
+      name: "adminGroupId",
+      placeholder: "Select Admin Group...",
+      title: t("adminGroup"),
     },
   ];
 
@@ -53,14 +53,14 @@ export const EditUser = ({ t, show, setShow, user }) => {
       show={show}
       setShow={setShow}
       heading={`Edit User ${user?.userName}`}
-      submitText={t('editUser')}
+      submitText={t("editUser")}
       initialValues={initialValues}
       validationSchema={validationSchema}
       loading={loading}
       fields={fields}
       handleSubmit={async (values) => {
         if (deepEqual(values, initialValues)) {
-          toast.warn('Nothing is changed!');
+          toast.warn("Nothing is changed!");
         } else {
           await dispatch(updateUser(user?.id, values));
         }

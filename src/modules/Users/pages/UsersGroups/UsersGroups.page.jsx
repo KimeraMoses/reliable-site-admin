@@ -1,20 +1,20 @@
-import { Button, Switch } from 'antd';
-import * as Yup from 'yup';
-import { Modal, Table } from 'components';
-import './UsersGroups.styles.scss';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { checkModule } from 'lib/checkModule';
-import { getGroupPermissions, getUserGroups } from 'store';
+import { Button, Switch } from "antd";
+import * as Yup from "yup";
+import { Modal, Table } from "components";
+import "./UsersGroups.styles.scss";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { checkModule } from "lib/checkModule";
+import { getGroupPermissions, getUserGroups } from "store";
 import {
   AddGroup,
   AddPermissions,
   EditGroup,
   EditPermissions,
-} from './sections';
-import { deleteGroup } from 'store';
-import moment from 'moment';
+} from "./sections";
+import { deleteGroup } from "store";
+import moment from "moment";
 
 export const UsersGroups = () => {
   const [showAdd, setShowAdd] = useState(false);
@@ -27,13 +27,13 @@ export const UsersGroups = () => {
   const [deleteModal, setDeleteModal] = useState({ show: false, id: null });
   const [activeEditGroup, setActiveEditGroup] = useState(null);
 
-  const { t } = useTranslation('/Users/ns');
+  const { t } = useTranslation("/Users/ns");
 
   //Integration Logic
   // Getting User Level and App Level Modules and Checking If user has permissions for group management
   const { userModules, appModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'AdminGroups',
+    module: "AdminGroups",
     modules: userModules,
   });
   // Setting Module Fields Dynamically
@@ -42,12 +42,14 @@ export const UsersGroups = () => {
   const { userGroups, loading, groupPermissions, group } = useSelector(
     (state) => state?.userGroups
   );
+
+  console.log("User grp", userGroups);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getUserGroups());
   }, [dispatch]);
   useEffect(() => {
-    if (userGroups.length) {
+    if (userGroups?.length) {
       let dataArr = [];
       userGroups.forEach((group) => {
         dataArr.push({
@@ -57,12 +59,10 @@ export const UsersGroups = () => {
           isDefault: group?.isDefault,
           isSuperAdmin: group?.isSuperAdmin,
           status: group?.status,
-          numberOfUsers: group?.numberOfUsers
-            ? Number(group?.numberOfUsers)
-            : 0,
+          userCount: group?.userCount ? Number(group?.userCount) : 0,
           createdAt: group?.createdOn
-            ? moment(group?.createdOn)?.format('MM-DD-YYYY')
-            : 'N/A',
+            ? moment(group?.createdOn)?.format("MM-DD-YYYY")
+            : "N/A",
         });
       });
       setDataSource(dataArr);
@@ -73,43 +73,43 @@ export const UsersGroups = () => {
 
   const columns = [
     {
-      title: t('name'),
-      dataIndex: 'name',
-      key: 'name',
+      title: t("name"),
+      dataIndex: "name",
+      key: "name",
     },
     {
-      title: t('numberOfUsers'),
-      dataIndex: 'numberOfUsers',
-      key: 'numberOfUsers',
+      title: t("numberOfUsers"),
+      dataIndex: "userCount",
+      key: "userCount",
     },
     {
-      title: t('status'),
-      dataIndex: 'status',
-      key: 'status',
+      title: t("status"),
+      dataIndex: "status",
+      key: "status",
       render: (text, record) => {
         return <Switch checked={record?.status} disabled />;
       },
     },
     {
-      title: 'is Default',
-      dataIndex: 'isDefault',
-      key: 'isDefault',
+      title: "is Default",
+      dataIndex: "isDefault",
+      key: "isDefault",
       render: (text, record) => {
         return <Switch checked={record?.isDefault} disabled />;
       },
     },
     {
-      title: 'is Super Admin',
-      dataIndex: 'isSuperAdmin',
-      key: 'isSuperAdmin',
+      title: "is Super Admin",
+      dataIndex: "isSuperAdmin",
+      key: "isSuperAdmin",
       render: (text, record) => {
         return <Switch checked={record?.isSuperAdmin} disabled />;
       },
     },
     {
-      title: t('createDate'),
-      key: 'createdAt',
-      dataIndex: 'createdAt',
+      title: t("createDate"),
+      key: "createdAt",
+      dataIndex: "createdAt",
     },
   ];
 
@@ -154,17 +154,17 @@ export const UsersGroups = () => {
           <Modal
             show={deleteModal?.show}
             setShow={setDeleteModal}
-            heading={t('deleteGroup')}
+            heading={t("deleteGroup")}
             loading={loading}
             customBody={
               <div>
-                <p style={{ marginBottom: '32px' }}>{t('deleteWarning')}</p>
+                <p style={{ marginBottom: "32px" }}>{t("deleteWarning")}</p>
               </div>
             }
             fields={[]}
             validationSchema={Yup.object().shape({})}
             initialValues={{}}
-            submitText={t('deleteGroup')}
+            submitText={t("deleteGroup")}
             handleSubmit={async () => {
               await dispatch(deleteGroup(deleteModal?.id));
               setDeleteModal({ show: false, id: null });
@@ -175,7 +175,7 @@ export const UsersGroups = () => {
             data={dataSource}
             loading={loading}
             fieldToFilter="name"
-            btnData={{ text: t('addGroup'), onClick: () => setShowAdd(true) }}
+            btnData={{ text: t("addGroup"), onClick: () => setShowAdd(true) }}
             editAction={(record) => (
               <>
                 <Button
@@ -186,7 +186,7 @@ export const UsersGroups = () => {
                     })
                   }
                 >
-                  {t('editSettings')}
+                  {t("editSettings")}
                 </Button>
                 <Button
                   onClick={async () => {
@@ -194,7 +194,7 @@ export const UsersGroups = () => {
                     setActiveEditGroup(record);
                   }}
                 >
-                  {t('editPermissions')}
+                  {t("editPermissions")}
                 </Button>
               </>
             )}
