@@ -1,7 +1,7 @@
-import { DashboardLayout } from 'layout';
-import { Navigate, Route, Routes } from 'react-router-dom';
-import { pages } from './pages';
-import './style.scss';
+import { DashboardLayout } from "layout";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { pages } from "./pages";
+import "./style.scss";
 
 export function Bills() {
   return (
@@ -10,13 +10,13 @@ export function Bills() {
         <Route
           path="/"
           element={
-            <Navigate to="/admin/dashboard/billing/orders/your-orders/list" />
+            <Navigate to="/admin/dashboard/billing/orders/all-orders/list" />
           }
         />
         <Route
           path="orders"
           element={
-            <Navigate to="/admin/dashboard/billing/orders/your-orders/list" />
+            <Navigate to="/admin/dashboard/billing/orders/all-orders/list" />
           }
         />
         <Route

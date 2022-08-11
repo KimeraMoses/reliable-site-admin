@@ -94,7 +94,7 @@ export const useSidebarData = () => {
       subLinks: [
         {
           name: "Orders",
-          path: "/admin/dashboard/billing/orders/all-orders/list",
+          path: "/admin/dashboard/billing/orders",
           count:
             isSuperAdmin && data?.orders?.All > 0
               ? data?.orders?.All

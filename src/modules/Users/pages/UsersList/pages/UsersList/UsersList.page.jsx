@@ -1,92 +1,91 @@
-import { Button } from 'antd';
-import * as Yup from 'yup';
-import { Modal, Table } from 'components';
-import './UsersList.styles.scss';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { getUsers } from 'store';
-import { checkModule } from 'lib/checkModule';
-import { EditUser } from '../sections';
-import { getUserGroups } from 'store';
-import { addUser } from 'store';
-import moment from 'moment';
+import { Button } from "antd";
+import * as Yup from "yup";
+import { Modal, Table } from "components";
+import "./UsersList.styles.scss";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { getUsers } from "store";
+import { checkModule } from "lib/checkModule";
+import { EditUser } from "../sections";
+import { getUserGroups } from "store";
+import { addUser } from "store";
+import moment from "moment";
 
 const initialAddValues = {
-  userName: '',
-  fullName: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
+  userName: "",
+  fullName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
   status: true,
-  ipAddress: '',
-  adminGroupId: '',
+  ipAddress: "",
+  adminGroupId: "",
 };
 
 const addValidationSchema = Yup.object().shape({
-  userName: Yup.string().required('Username is required'),
-  fullName: Yup.string().required('Full name is required'),
-  email: Yup.string().email('Email is invalid').required('Email is required'),
+  userName: Yup.string().required("Username is required"),
+  fullName: Yup.string().required("Full name is required"),
+  email: Yup.string().email("Email is invalid").required("Email is required"),
   password: Yup.string()
-    .required('Password is required')
+    .required("Password is required")
     .matches(
       /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
-      'Please use 8 or more characters with a mix of letters, numbers & symbols'
+      "Please use 8 or more characters with a mix of letters, numbers & symbols"
     ),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password'), null], 'Passwords must match')
-    .required('Confirm Password is required'),
-  status: Yup.bool().required('Status is required'),
+    .oneOf([Yup.ref("password"), null], "Passwords must match")
+    .required("Confirm Password is required"),
+  status: Yup.bool().required("Status is required"),
   // ipAddress: Yup.string().required('IP Address is required'),
-  adminGroupId: Yup.string().required('Group is required'),
+  adminGroupId: Yup.string().required("Group is required"),
 });
 
 export const UsersList = () => {
   const [showAdd, setShowAdd] = useState(false);
   const [editModal, setEditModal] = useState(false);
 
-  const { t } = useTranslation('/Users/ns');
+  const { t } = useTranslation("/Users/ns");
 
   const navigate = useNavigate();
 
   const { userGroups } = useSelector((state) => state?.userGroups);
-
   const addFields = [
     {
-      type: 'input',
-      name: 'userName',
-      placeholder: 'Paul.Elliott',
-      title: t('username'),
+      type: "input",
+      name: "userName",
+      placeholder: "Paul.Elliott",
+      title: t("username"),
     },
     {
-      type: 'input',
-      name: 'fullName',
-      placeholder: 'Paul.Elliott',
-      title: t('fullName'),
+      type: "input",
+      name: "fullName",
+      placeholder: "Paul.Elliott",
+      title: t("fullName"),
     },
     {
-      type: 'email',
-      name: 'email',
-      placeholder: 'Paul.Elliott@Fakemail.com',
-      title: t('email'),
+      type: "email",
+      name: "email",
+      placeholder: "Paul.Elliott@Fakemail.com",
+      title: t("email"),
     },
     {
-      type: 'password',
-      name: 'password',
-      placeholder: '*******',
-      title: t('password'),
+      type: "password",
+      name: "password",
+      placeholder: "*******",
+      title: t("password"),
     },
     {
-      type: 'password',
-      name: 'confirmPassword',
-      placeholder: '*******',
-      title: t('confirmPassword'),
+      type: "password",
+      name: "confirmPassword",
+      placeholder: "*******",
+      title: t("confirmPassword"),
     },
     {
-      type: 'switch',
-      name: 'status',
-      title: t('status'),
+      type: "switch",
+      name: "status",
+      title: t("status"),
     },
     // {
     //   type: "input",
@@ -95,41 +94,41 @@ export const UsersList = () => {
     //   title: t("ipAddress"),
     // },
     {
-      type: 'select',
-      options: userGroups.length
-        ? userGroups.map((group) => ({
+      type: "select",
+      options: userGroups?.length
+        ? userGroups?.map((group) => ({
             label: group?.groupName,
             value: group?.id,
           }))
         : [],
-      name: 'adminGroupId',
-      placeholder: 'Select Admin Group...',
-      title: t('adminGroup'),
+      name: "adminGroupId",
+      placeholder: "Select Admin Group...",
+      title: t("adminGroup"),
     },
   ];
 
   const columns = [
     {
-      title: 'Username',
-      dataIndex: 'userName',
-      key: 'userName',
+      title: "Username",
+      dataIndex: "userName",
+      key: "userName",
     },
     {
-      title: t('adminName'),
-      dataIndex: 'name',
-      key: 'name',
+      title: t("adminName"),
+      dataIndex: "name",
+      key: "name",
     },
     {
-      title: t('email'),
-      dataIndex: 'email',
-      key: 'email',
+      title: t("email"),
+      dataIndex: "email",
+      key: "email",
     },
     {
-      title: t('createDate'),
-      key: 'createdOn',
-      dataIndex: 'createdOn',
+      title: t("createDate"),
+      key: "createdOn",
+      dataIndex: "createdOn",
       render: (text) =>
-        moment(text)?.isValid() ? moment(text)?.format('MM-DD-YYYY') : 'N/A',
+        moment(text)?.isValid() ? moment(text)?.format("MM-DD-YYYY") : "N/A",
     },
   ];
 
@@ -137,7 +136,7 @@ export const UsersList = () => {
   const { loading, users } = useSelector((state) => state?.users);
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'AdminUsers',
+    module: "AdminUsers",
     modules: userModules,
   });
   const [tableUsers, setTableUsers] = useState([]);
@@ -150,9 +149,9 @@ export const UsersList = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (users.length) {
+    if (users?.length) {
       let usersData = [];
-      users.forEach((user) => {
+      users?.forEach((user) => {
         usersData.push({
           key: user?.id,
           id: user?.id,
@@ -160,14 +159,16 @@ export const UsersList = () => {
           email: user?.email,
           ...user,
           // TODO: Check with back-end dev for these two fields
-          companyName: user?.companyName ? user?.companyName : 'N/A',
-          createdAt: user?.createdAt ? user?.createdAt : 'N/A',
+          companyName: user?.companyName ? user?.companyName : "N/A",
+          createdAt: user?.createdAt ? user?.createdAt : "N/A",
         });
       });
       setTableUsers(usersData);
     }
   }, [users]);
   // Users Logic End
+
+  console.log("users", users);
 
   // Edit User Logic
   const [editUser, setEditUser] = useState(null);
@@ -179,8 +180,8 @@ export const UsersList = () => {
           <Modal
             show={showAdd}
             setShow={setShowAdd}
-            heading={t('addNewUser')}
-            submitText={t('addAdminUser')}
+            heading={t("addNewUser")}
+            submitText={t("addAdminUser")}
             initialValues={initialAddValues}
             validationSchema={addValidationSchema}
             fields={addFields}
@@ -202,14 +203,14 @@ export const UsersList = () => {
             permissions={permissions}
             fieldToFilter="name"
             btnData={{
-              text: t('addAdminUser'),
+              text: t("addAdminUser"),
               onClick: () => setShowAdd(true),
             }}
             loading={loading}
             viewAction={(record) => {
               return (
                 <>
-                  {' '}
+                  {" "}
                   {/* TODO: Replace with UID */}
                   <Button
                     onClick={() =>
@@ -218,7 +219,7 @@ export const UsersList = () => {
                       )
                     }
                   >
-                    {t('view')}
+                    {t("view")}
                   </Button>
                 </>
               );
