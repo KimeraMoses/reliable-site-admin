@@ -144,15 +144,19 @@ export const YourOrders = ({ myOrders }) => {
           // statusFilter={statusList()}
           // hideActions
           fieldToFilter="orderNo"
-          btnData={{
-            text: "Add Order",
-            onClick: () =>
-              navigate(
-                `/admin/dashboard/billing/orders/${
-                  myOrders ? "your-orders" : "all-orders"
-                }/list/add/new`
-              ),
-          }}
+          btnData={
+            !myOrders
+              ? {
+                  text: "Add Order",
+                  onClick: () =>
+                    navigate(
+                      `/admin/dashboard/billing/orders/${
+                        myOrders ? "your-orders" : "all-orders"
+                      }/list/add/new`
+                    ),
+                }
+              : null
+          }
           viewAction={(record) => (
             <Button
               onClick={() => {
