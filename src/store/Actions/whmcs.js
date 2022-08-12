@@ -1,5 +1,6 @@
-import { axios } from "lib";
+import { axios, getError } from "lib";
 import { importDataConfig, validateDataConfig } from "lib/requests/whmcs";
+import { toast } from "react-toastify";
 import {
   getValidateData,
   setWHMCSError,
@@ -75,11 +76,12 @@ export const importData = ({ data }) => {
           dispatch(setImportProgres(percentCompleted));
         },
       };
-      const res = await axios.post(url, data, newConfig);
-      console.log(res);
+      await axios.post(url, data, newConfig);
+      toast.success("Data imported successfuly");
     } catch (error) {
       dispatch(setImportProgres(90));
       dispatch(setImportError(error?.response?.data));
+      toast.error(getError(error));
     } finally {
       dispatch(setWHMCSLoading(false));
     }
