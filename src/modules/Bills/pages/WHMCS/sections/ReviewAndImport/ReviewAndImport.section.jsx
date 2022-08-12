@@ -1,8 +1,8 @@
-import { Button } from 'components';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { importData } from 'store';
-import { Progress, Tables } from './sub-sections';
+import { Button } from "components";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { importData } from "store";
+import { Progress, Tables } from "./sub-sections";
 
 export const ReviewAndImport = ({ setStep }) => {
   const [showProgress, setShowProgress] = useState(false);
@@ -11,7 +11,6 @@ export const ReviewAndImport = ({ setStep }) => {
     useSelector((state) => state?.whmcs);
 
   const dispatch = useDispatch();
-  console.log(importProgress);
   return (
     <div className="w-full rounded-[8px] bg-[#1E1E2D] min-h-[75vh] flex flex-col justify-between">
       <Progress
@@ -21,10 +20,10 @@ export const ReviewAndImport = ({ setStep }) => {
         setStep={setStep}
         status={
           importProgress < 100 && !importError
-            ? 'importing'
+            ? "importing"
             : importError
-            ? 'failed'
-            : 'success'
+            ? "failed"
+            : "success"
         }
       />
       {/* Top Section */}
