@@ -137,7 +137,7 @@ export const YourOrders = ({ myOrders }) => {
           data={
             myOrders
               ? orders?.filter((order) => order?.adminAssigned === user?.id)
-              : orders?.filter((order) => order?.adminAssigned !== user?.id)
+              : orders
           }
           // loading={loading}
           // dateRageFilter={true}
