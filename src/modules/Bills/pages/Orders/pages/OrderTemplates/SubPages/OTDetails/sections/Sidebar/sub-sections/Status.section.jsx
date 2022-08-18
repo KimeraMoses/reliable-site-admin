@@ -24,7 +24,7 @@ export const Status = () => {
           value: client?.id,
         }))}
       /> */}
-      <Input
+      {/* <Input
         name="status"
         placeholder="Status"
         type="select"
@@ -36,7 +36,7 @@ export const Status = () => {
           { label: "Cancelled", value: 2 },
           { label: "Suspended", value: 3 },
         ]}
-      />
+      /> */}
       <Input
         name="paymentType"
         placeholder="Payment Type"

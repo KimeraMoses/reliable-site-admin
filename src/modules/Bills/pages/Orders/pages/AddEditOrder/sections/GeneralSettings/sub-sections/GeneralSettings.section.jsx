@@ -1,4 +1,4 @@
-import { Button, Input } from "components";
+import { Input } from "components";
 import "./styles.scss";
 
 export const GS = ({ isView }) => {
@@ -19,11 +19,11 @@ export const GS = ({ isView }) => {
         rows={4}
         disabled={isView}
       />
-      {!isView && (
+      {/* {!isView && (
         <Button type="ghost" className="h-[52px] mt-[32px]" htmlType="submit">
           Save Changes
         </Button>
-      )}
+      )} */}
     </div>
   );
 };
