@@ -1,11 +1,14 @@
 import { Button } from "components";
-import { useNavigate } from "react-router-dom";
+import { Delete } from "modules/UserProfile/sections/APIKeys/sections";
+import { useState } from "react";
 import { GS, LineItems } from "./sub-sections";
 
 export const GeneralSettings = () => {
-  const navigate = useNavigate();
+  const [cancel, setCancel] = useState(false);
+
   return (
     <div>
+      <Delete show={cancel} setShow={setCancel} type="Cancel" />
       <GS />
       <LineItems />
       <div className="flex justify-between text-right ">
@@ -13,9 +16,7 @@ export const GeneralSettings = () => {
           type="secondary"
           className="h-[52px] mt-[32px]"
           htmlType="button"
-          onClick={() =>
-            navigate("/admin/dashboard/billing/orders/order-templates/list")
-          }
+          onClick={() => setCancel(true)}
         >
           Cancel Changes
         </Button>
