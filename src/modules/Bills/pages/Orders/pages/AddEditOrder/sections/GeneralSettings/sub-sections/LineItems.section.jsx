@@ -99,7 +99,7 @@ export const LineItems = ({ isView }) => {
       ]);
     }
   };
-  console.log(values?.productLineItems);
+  // console.log(values?.productLineItems);
 
   useEffect(() => {
     let sum = 0;

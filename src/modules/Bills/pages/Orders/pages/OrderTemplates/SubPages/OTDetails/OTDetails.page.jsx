@@ -1,25 +1,25 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 // import moment from 'moment';
-import { Spin } from 'antd';
-import { useParams, useNavigate } from 'react-router-dom';
-import { Form, Formik } from 'formik';
+import { Spin } from "antd";
+import { useParams, useNavigate } from "react-router-dom";
+import { Form, Formik } from "formik";
 import {
   // Navigation,
   Sidebar,
   GeneralSettings,
   // AdvancedSettings,
-} from './sections';
-import './OTDetails.styles.scss';
-import { createServerImage } from 'lib';
+} from "./sections";
+import "./OTDetails.styles.scss";
+import { createServerImage } from "lib";
 import {
   getCategories,
   createOrderTemplate,
   getDepartments,
   getOrderTemplateByID,
-} from 'store';
-import { editOrderTemplateByID } from 'store';
-import { getOrderTemplate } from 'store';
+} from "store";
+import { editOrderTemplateByID } from "store";
+import { getOrderTemplate } from "store";
 // import { updateProductByID } from 'store';
 // import { getClients } from 'store';
 
@@ -58,13 +58,13 @@ export const OTDetails = () => {
   }, []);
 
   const initVal = {
-    preview: orderTemplate ? orderTemplate?.base64Image : '',
+    preview: orderTemplate ? orderTemplate?.base64Image : "",
     isActive: true,
-    name: orderTemplate ? orderTemplate?.name : '',
-    description: orderTemplate ? orderTemplate?.description : '',
-    productName: orderTemplate ? orderTemplate?.productName : '',
-    productDescription: orderTemplate ? orderTemplate?.productDescription : '',
-    thumbnail: orderTemplate ? orderTemplate?.thumbnail : '',
+    name: orderTemplate ? orderTemplate?.name : "",
+    description: orderTemplate ? orderTemplate?.description : "",
+    productName: orderTemplate ? orderTemplate?.productName : "",
+    productDescription: orderTemplate ? orderTemplate?.productDescription : "",
+    thumbnail: orderTemplate ? orderTemplate?.thumbnail : "",
     status: orderTemplate ? orderTemplate?.status : 0,
     orderTemplateCategories: orderTemplate
       ? orderTemplate?.orderTemplateCategories?.map(
@@ -82,11 +82,11 @@ export const OTDetails = () => {
           isDeleted: item?.isDeleted || false,
         }))
       : [],
-    tags: orderTemplate ? orderTemplate?.tags?.split(',') : [],
+    tags: orderTemplate ? orderTemplate?.tags?.split(",") : [],
     paymentType: orderTemplate ? orderTemplate?.paymentType : 0,
     billingCycle: orderTemplate ? orderTemplate?.billingCycle : 0,
-    notes: orderTemplate ? orderTemplate?.notes : '',
-    tenant: 'admin',
+    notes: orderTemplate ? orderTemplate?.notes : "",
+    tenant: "admin",
     // registrationDate: moment(orderTemplate?.registrationDate),
     // nextDueDate: moment(orderTemplate?.nextDueDate),
     // terminationDate: moment(orderTemplate?.terminationDate),
@@ -110,17 +110,17 @@ export const OTDetails = () => {
           productName: values.productName,
           productDescription: values.productDescription,
           thumbnail: img,
-          status: Number(values.status),
-          orderTemplateCategories: id
-            ? values?.orderTemplateCategories?.map((category) => ({
-                categoryId: category,
-              }))
-            : values?.orderTemplateCategories,
-          orderTemplateDepartments: id
-            ? values?.orderTemplateDepartments?.map((department) => ({
-                departmentId: department,
-              }))
-            : values?.orderTemplateDepartments,
+          // status: 1,
+          // orderTemplateCategories: id
+          //   ? values?.orderTemplateCategories?.map((category) => ({
+          //       categoryId: category,
+          //     }))
+          //   : values?.orderTemplateCategories,
+          // orderTemplateDepartments: id
+          //   ? values?.orderTemplateDepartments?.map((department) => ({
+          //       departmentId: department,
+          //     }))
+          //   : values?.orderTemplateDepartments,
           orderTemplateLineItems: values.orderTemplateLineItems?.map((item) => {
             if (id) {
               if (item?.isNew) {
@@ -132,7 +132,7 @@ export const OTDetails = () => {
                 };
               } else {
                 return {
-                  id: item?.isNew ? '' : item?.id,
+                  id: item?.isNew ? "" : item?.id,
                   lineItem: item?.lineItem,
                   price: item?.price,
                   isDeleted: item?.isDeleted ? true : false,
@@ -149,7 +149,7 @@ export const OTDetails = () => {
                 };
               } else {
                 return {
-                  id: item?.isNew ? '' : item?.id,
+                  id: item?.isNew ? "" : item?.id,
                   lineItem: item?.lineItem,
                   price: item?.price,
                   isDeleted: item?.isDeleted ? true : false,
@@ -158,7 +158,7 @@ export const OTDetails = () => {
               }
             }
           }),
-          tags: `${values?.tags}`,
+          // tags: `${values?.tags}`,
           notes: `${values?.notes}`,
           paymentType: Number(values.paymentType),
           billingCycle: Number(values.billingCycle),
@@ -166,11 +166,13 @@ export const OTDetails = () => {
         };
         if (id) {
           await dispatch(editOrderTemplateByID(id, newValues));
+          resetForm();
+          navigate("/admin/dashboard/billing/orders/order-templates/list");
         } else {
           await dispatch(createOrderTemplate({ data: newValues }));
+          resetForm();
+          navigate("/admin/dashboard/billing/orders/order-templates/list");
         }
-        resetForm();
-        navigate('/admin/dashboard/billing/orders/order-templates/list');
       }}
     >
       {({ values }) => {
@@ -184,7 +186,7 @@ export const OTDetails = () => {
                 departmentsLoading ? (
                   <Spin
                     size="large"
-                    style={{ gridColumn: '1/3', alignSelf: 'center' }}
+                    style={{ gridColumn: "1/3", alignSelf: "center" }}
                   />
                 ) : (
                   <>

@@ -1,10 +1,10 @@
-import { Button, DatePicker } from 'components';
+import { DatePicker } from "components";
 
 const fields = [
-  { label: 'Next Due Date', name: 'nextDueDate' },
-  { label: 'Termination Date', name: 'terminationDate' },
-  { label: 'Override Suspension Date', name: 'overrideSuspensionDate' },
-  { label: 'Override Termination Date', name: 'overrideTerminationDate' },
+  { label: "Next Due Date", name: "nextDueDate" },
+  { label: "Termination Date", name: "terminationDate" },
+  { label: "Override Suspension Date", name: "overrideSuspensionDate" },
+  { label: "Override Termination Date", name: "overrideTerminationDate" },
 ];
 
 const DateTitle = ({ title, name }) => {
@@ -34,9 +34,6 @@ export const AdvancedSettings = () => {
           );
         })}
       </div>
-      <Button type="ghost" htmlType="submit" className="mt-[32px] h-[52px]">
-        Save Changes
-      </Button>
     </div>
   );
 };

@@ -116,8 +116,8 @@ export const AddEditOrder = () => {
               description: values.description,
               thumbnail: img,
               assignedToClientId: values.assignedToClientId,
-              productCategories: values?.orderTemplateCategories,
-              productDepartments: values?.orderTemplateDepartments,
+              // productCategories: values?.orderTemplateCategories,
+              // productDepartments: values?.orderTemplateDepartments,
               productLineItems: values.productLineItems?.map((item) => {
                 if (id) {
                   if (item?.isNew) {
@@ -155,8 +155,8 @@ export const AddEditOrder = () => {
                   }
                 }
               }),
-              status: Number(values.status),
-              tags: `${values?.tags}`,
+              status: 0,
+              // tags: `${values?.tags}`,
               paymentType: Number(values.paymentType),
               billingCycle: Number(values.billingCycle),
               notes: values?.notes,

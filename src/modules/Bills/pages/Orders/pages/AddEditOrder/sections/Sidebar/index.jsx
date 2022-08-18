@@ -1,9 +1,9 @@
 import {
-  ProductDetails,
+  // ProductDetails,
   Status,
   Thumbnail,
   ChooseTemplate,
-} from './sub-sections';
+} from "./sub-sections";
 
 export const Sidebar = () => {
   return (
@@ -11,7 +11,7 @@ export const Sidebar = () => {
       <ChooseTemplate />
       <Thumbnail />
       <Status />
-      <ProductDetails />
+      {/* <ProductDetails /> */}
     </div>
   );
 };

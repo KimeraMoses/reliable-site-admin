@@ -1,5 +1,5 @@
-import { Button, Input } from 'components';
-import './styles.scss';
+import { Input } from "components";
+import "./styles.scss";
 
 export const GS = () => {
   return (
@@ -30,9 +30,6 @@ export const GS = () => {
         type="textarea"
         rows={4}
       />
-      <Button type="ghost" className="h-[52px] mt-[32px]" htmlType="submit">
-        Save Changes
-      </Button>
     </div>
   );
 };

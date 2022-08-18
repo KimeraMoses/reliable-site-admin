@@ -22,7 +22,6 @@ import { getDataCounts } from "./count";
 export const createOrder = ({ data }) => {
   return async (dispatch) => {
     dispatch(setOrderLoading(true));
-    // console.log("order data", data);
     try {
       const { url, config } = createOrderConfig();
       const res = await axios.post(url, data, config);
@@ -34,6 +33,7 @@ export const createOrder = ({ data }) => {
         toast.success("Order created successfully");
         dispatch(getDataCounts());
       }
+      dispatch(setOrderLoading(false));
     } catch (e) {
       // console.log(e);
       toast.error(getError(e));
@@ -54,6 +54,7 @@ export const editOrder = (id, data) => {
         dispatch(getOrders());
         toast.success("Order status updated successfully");
       }
+      dispatch(setOrderLoading(false));
     } catch (e) {
       toast.error(getError(e));
       dispatch(setOrderLoading(false));
@@ -91,6 +92,7 @@ export const deleteOrderByID = (id) => {
         dispatch(getOrders());
         toast.success("Order deleted successfully");
       }
+      dispatch(setOrderLoading(false));
     } catch (e) {
       toast.error(getError(e));
       dispatch(setOrderLoading(false));
@@ -124,6 +126,7 @@ export const getOrderTemplates = () => {
       const { url, defaultData, config } = getOrderTemplatesConfig();
       const res = await axios.post(url, defaultData, config);
       dispatch(getOrderTemplatesDispatch(res?.data?.data));
+      dispatch(setOrderLoading(false));
     } catch (e) {
       toast.error(getError(e));
     } finally {
@@ -136,15 +139,16 @@ export const getOrderTemplates = () => {
 export const createOrderTemplate = ({ data }) => {
   return async (dispatch) => {
     dispatch(setOrderLoading(true));
-    // console.log("order data", data);
     try {
       const { url, config } = createOrderTemplateConfig();
       const res = await axios.post(url, data, config);
       if (res?.status === 200) {
+        toast.success("Template created successfuly");
         const { url, defaultData, config } = getOrderTemplatesConfig();
         const res = await axios.post(url, defaultData, config);
         dispatch(getOrderTemplates(res?.data?.data));
       }
+      dispatch(setOrderLoading(false));
     } catch (e) {
       toast.error(getError(e));
       dispatch(setOrderLoading(false));
@@ -161,6 +165,7 @@ export const getOrderTemplateByID = (id) => {
     try {
       const res = await axios.get(`/api/v1/admin/ordertemplates/${id}`);
       dispatch(getOrderTemplate(res?.data?.data));
+      dispatch(setOrderLoading(false));
     } catch (e) {
       toast.error(getError(e));
       dispatch(setOrderLoading(false));
@@ -176,11 +181,13 @@ export const editOrderTemplateByID = (id, data) => {
     dispatch(setOrderLoading(true));
     try {
       const res = await axios.put(`/api/v1/admin/ordertemplates/${id}`, data);
+      toast.success("Changes saved successfully");
       if (res?.status === 200) {
         const { url, defaultData, config } = getOrderTemplatesConfig();
         const res = await axios.post(url, defaultData, config);
         dispatch(getOrderTemplatesDispatch(res?.data?.data));
       }
+      dispatch(setOrderLoading(false));
     } catch (e) {
       toast.error(getError(e));
       dispatch(setOrderLoading(false));
@@ -201,6 +208,7 @@ export const deleteOrderTemplateByID = (id) => {
         const res = await axios.post(url, defaultData, config);
         dispatch(getOrderTemplatesDispatch(res?.data?.data));
       }
+      dispatch(setOrderLoading(false));
     } catch (e) {
       toast.error(getError(e));
       dispatch(setOrderLoading(false));
@@ -222,6 +230,7 @@ export const editOrderTemplate = ({ data }) => {
         const res = await axios.post(url, defaultData, config);
         dispatch(getOrderTemplates(res?.data?.data));
       }
+      dispatch(setOrderLoading(false));
     } catch (e) {
       toast.error(getError(e));
       dispatch(setOrderLoading(false));

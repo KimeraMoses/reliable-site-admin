@@ -1,19 +1,19 @@
-import { useTranslation } from 'react-i18next';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Table } from 'components';
-import { checkModule } from 'lib/checkModule';
-import { NavLink, useNavigate } from 'react-router-dom';
-import { ViewNotes } from '../../../sections';
-import { getOrderTemplates } from 'store';
-import moment from 'moment';
+import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Table } from "components";
+import { checkModule } from "lib/checkModule";
+import { NavLink, useNavigate } from "react-router-dom";
+import { ViewNotes } from "../../../sections";
+import { getOrderTemplates } from "store";
+import moment from "moment";
 // import { OrderTemplate } from '../sections/OrderTemplate.section';
 // import { EditOrderTemplate } from '../sections/EditTemplate.section';
-import { Button, Popconfirm } from 'antd';
-import { deleteOrderTemplateByID } from 'store';
+import { Button, Popconfirm } from "antd";
+import { deleteOrderTemplateByID } from "store";
 
 export const OrderTemplates = () => {
-  const { t } = useTranslation('/Bills/ns');
+  const { t } = useTranslation("/Bills/ns");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -24,14 +24,14 @@ export const OrderTemplates = () => {
 
   // Setting data properly
   const [data, setData] = useState([]);
-  const [notes, setNotes] = useState('');
+  const [notes, setNotes] = useState("");
   const [noteModalShow, setNoteModalShow] = useState(false);
 
   const { orderTemplates, loading } = useSelector((state) => state?.orders);
   const { userModules } = useSelector((state) => state?.modules);
 
   const { permissions } = checkModule({
-    module: 'Orders',
+    module: "Orders",
     modules: userModules,
   });
 
@@ -39,8 +39,8 @@ export const OrderTemplates = () => {
 
   useEffect(() => {
     setData([]);
-    if (orderTemplates.length) {
-      const dataToSet = orderTemplates.map((b) => {
+    if (orderTemplates?.length) {
+      const dataToSet = orderTemplates?.map((b) => {
         return {
           ...b,
           key: b?.id,
@@ -52,26 +52,26 @@ export const OrderTemplates = () => {
 
   const columns = [
     {
-      title: 'Template Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: "Template Name",
+      dataIndex: "name",
+      key: "name",
     },
     {
-      title: 'Created On',
-      dataIndex: 'createdOn',
-      key: 'createdOn',
-      render: (text) => moment(text).format('MM/DD/YYYY'),
+      title: "Created On",
+      dataIndex: "createdOn",
+      key: "createdOn",
+      render: (text) => moment(text).format("MM/DD/YYYY"),
     },
     {
-      title: 'Last Modified On',
-      dataIndex: 'lastModifiedOn',
-      key: 'lastModifiedOn',
-      render: (text) => moment(text).format('MM/DD/YYYY'),
+      title: "Last Modified On",
+      dataIndex: "lastModifiedOn",
+      key: "lastModifiedOn",
+      render: (text) => moment(text).format("MM/DD/YYYY"),
     },
     {
-      title: t('orderNotes'),
-      dataIndex: 'notes',
-      key: 'notes',
+      title: t("orderNotes"),
+      dataIndex: "notes",
+      key: "notes",
       render: (notes, record) => {
         return (
           <NavLink
@@ -82,7 +82,7 @@ export const OrderTemplates = () => {
               setNoteModalShow(true);
             }}
           >
-            {t('viewNotes')}
+            {t("viewNotes")}
           </NavLink>
         );
       },
@@ -127,7 +127,7 @@ export const OrderTemplates = () => {
             return (
               <Popconfirm
                 okButtonProps={{
-                  className: 'bg-[#40a9ff]',
+                  className: "bg-[#40a9ff]",
                 }}
                 title="Are you sure you want to delete this Template?"
                 onConfirm={async () => {
@@ -145,10 +145,10 @@ export const OrderTemplates = () => {
             );
           }}
           btnData={{
-            text: 'Add Template',
+            text: "Add Template",
             onClick: () => {
               navigate(
-                '/admin/dashboard/billing/orders/order-templates/list/add/new'
+                "/admin/dashboard/billing/orders/order-templates/list/add/new"
               );
             },
           }}
