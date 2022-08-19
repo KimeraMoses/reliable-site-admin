@@ -7,12 +7,14 @@ export const Status = () => {
   return (
     <div className="p-[32px] bg-[#1E1E2D] rounded-[8px] mt-[20px]">
       <div className="flex justify-between items-center">
-        <h6 className="text-white font-medium text-[16px]">Status</h6>
+        <h6 className="text-white font-medium text-[16px] mb-[32px]">
+          Payments
+        </h6>
         {/* <div className="w-[11px] h-[11px] rounded-[50%] bg-[#0BB783]" /> */}
       </div>
-      <p className="text-[#474761] text-[14x] mt-[8px] mb-[32px]">
+      {/* <p className="text-[#474761] text-[14x] mt-[8px] mb-[32px]">
         Set The Product Status
-      </p>
+      </p> */}
       {/* <Input
         name="assignedToClientId"
         placeholder="Client"

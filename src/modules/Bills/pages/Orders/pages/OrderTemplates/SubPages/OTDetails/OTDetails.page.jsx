@@ -46,7 +46,7 @@ export const OTDetails = () => {
 
   useEffect(() => {
     (async () => {
-      console.log(id);
+      // console.log(id);
       await dispatch(getCategories());
       if (id) {
         dispatch(getOrderTemplateByID(id));
