@@ -59,11 +59,9 @@ export const Table = ({
     ...AdvancedSearchOptions?.searchValues,
   });
 
-  console.log(values);
   const inputChangeHandler = (e) => {
     const { name, value } = e.target;
     setValues({ ...values, [name]: value });
-    console.log(name, value);
   };
 
   useEffect(() => {
@@ -127,10 +125,6 @@ export const Table = ({
     }
   }, [data, fieldToFilter, search]);
 
-  // const onOpenChange = (open) => {
-  //   console.log(open);
-  // }
-
   // Only Set Data if there are view permissions
   useEffect(() => {
     let dataViewer = [];
@@ -143,6 +137,7 @@ export const Table = ({
     }
     setDataSource(dataViewer);
   }, [data, filtered, permissions]);
+
   // Only Add Actions if there are Update & Delete permissions
   useEffect(() => {
     if (permissions !== undefined && permissions !== null && !hideActions) {
@@ -198,6 +193,7 @@ export const Table = ({
   }, []);
 
   const { RangePicker } = DatePicker;
+
   return (
     <div
       className={`custom-table ${theme === "dark" ? "custom-table-dark" : ""}`}

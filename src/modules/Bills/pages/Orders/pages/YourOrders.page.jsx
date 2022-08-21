@@ -40,8 +40,6 @@ export const YourOrders = ({ myOrders }) => {
     dispatch(getUsers());
   }, []);
 
-  console.log("users", users);
-
   let usersData = [{ value: "", label: "Any" }];
   if (users.length) {
     users?.forEach((user) => {
@@ -51,7 +49,6 @@ export const YourOrders = ({ myOrders }) => {
       });
     });
   }
-  console.log("users da", usersData);
 
   // Setting data properly
   // const [data, setData] = useState([]);
