@@ -9,7 +9,7 @@ import { getProducts } from "store";
 import { Form, Formik } from "formik";
 // import { Add, Delete } from './sections';
 import { getCategories } from "store";
-import { getCancelledProducts } from "store";
+// import { getCancelledProducts } from "store";
 import moment from "moment";
 export const CancellationRequests = () => {
   // const [showAdd, setShowAdd] = useState(false);
@@ -102,7 +102,7 @@ export const CancellationRequests = () => {
       key: "userId",
       render: (text) => {
         const client = clients?.find((client) => client?.id === text);
-        console.log("client", client, text);
+        // console.log("client", client, text);
         return client?.fullName ? client.fullName : "N/A";
       },
     },
@@ -179,7 +179,7 @@ export const CancellationRequests = () => {
   const { products, loading } = useSelector((state) => state?.products);
   const categoriesLoading = useSelector((state) => state?.categories?.loading);
 
-  const [showAdd, setShowAdd] = useState(false);
+  // const [showAdd, setShowAdd] = useState(false);
   const [showDelete, setShowDelete] = useState(false);
   const [record, setRecord] = useState(null);
   return (
@@ -199,6 +199,15 @@ export const CancellationRequests = () => {
                 //   onClick: () => setShowAdd(true),
                 //   text: 'Add New Product',
                 // }}
+                onRow={(record) => {
+                  return {
+                    onClick: () => {
+                      navigate(
+                        `/admin/dashboard/billing/products-services/list/details/${record?.id}`
+                      );
+                    },
+                  };
+                }}
                 editAction={(record) => (
                   <Button
                     onClick={() => {

@@ -26,6 +26,8 @@ import {
 } from "store/Slices";
 import { getUserSettingsSlice } from "store/Slices/usersSlice";
 
+import { getDataCounts } from "./count";
+
 // Get All Admin Users
 export const getUsers = () => {
   return async (dispatch) => {
@@ -109,6 +111,7 @@ export const addClientUser = (data) => {
         const res = await axios.get(url, config);
         dispatch(getClients(res?.data?.data));
         toast.success("Client Added Successfully");
+        if (res.status === 200) dispatch(getDataCounts());
       }
     } catch (e) {
       toast.error(getError(e));

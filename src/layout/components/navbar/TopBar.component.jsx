@@ -1,7 +1,6 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment } from "react";
 import UserTop from "./UserTop.component";
 import Logo from "./Logo.component";
-// import { sidebarData } from '../SideBar/data';
 import { Link, useLocation } from "react-router-dom";
 import { Dropdown, Spin } from "antd";
 import { useSidebarData } from "../SideBar/data";
@@ -50,7 +49,7 @@ export function TopBar({
               {active?.subLinks.map((link) => {
                 const innerLinks = (
                   <div className="bg-[#1e1e2d] flex flex-col">
-                    {innerSubLinks.map((link) => (
+                    {link?.subLinks?.map((link) => (
                       <Link
                         to={link?.path}
                         key={link?.path}
@@ -70,8 +69,7 @@ export function TopBar({
                 } else {
                   return (
                     <Fragment key={link?.path}>
-                      {innerSubLinks?.length &&
-                      pathname.includes(link?.path) ? (
+                      {link?.subLinks?.length ? (
                         <Dropdown overlay={innerLinks}>
                           <Link
                             to={link?.path}

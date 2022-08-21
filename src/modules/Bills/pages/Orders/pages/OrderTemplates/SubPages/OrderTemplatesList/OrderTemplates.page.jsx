@@ -109,6 +109,15 @@ export const OrderTemplates = () => {
           loading={loading}
           fieldToFilter="templateName"
           permissions={permissions}
+          onRow={(record) => {
+            return {
+              onClick: () => {
+                navigate(
+                  `/admin/dashboard/billing/orders/order-templates/list/edit/${record?.id}`
+                );
+              },
+            };
+          }}
           editAction={(record) => {
             return (
               <Button
