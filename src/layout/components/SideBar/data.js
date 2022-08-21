@@ -306,7 +306,7 @@ export const useSidebarData = () => {
           subLinks: [
             {
               name: "Tickets Details",
-              path: "/admin/dashboard/support/tickets/list/details/:id",
+              path: "/admin/dashboard/support/tickets/list",
             },
           ],
         },
