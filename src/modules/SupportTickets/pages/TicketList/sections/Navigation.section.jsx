@@ -6,14 +6,20 @@ export const Navigation = ({ links, active }) => {
           <div
             onClick={link?.onClick}
             key={link?.label}
-            className={`text-[14px] ${active === link?.label ? 'text-[#3699FF]' : 'text-[#6D6D80]'
-              } uppercase cursor-pointer transition-all hover:text-[#3699FF]`}
+            className={`text-[14px] ${
+              active === link?.label ? "text-[#3699FF]" : "text-[#6D6D80]"
+            } uppercase cursor-pointer transition-all hover:text-[#3699FF]`}
           >
-            <span className="inline-block align-middle"> {link?.label}</span><span className={`inline-block align-middle text-[10px] ml-[5px] rounded-[5px] text-[#FFFFFF] pl-[8px] pr-[8px] pt-[2px] pb-[2px] 
-            ${active === link?.label ? 'bg-[#3699FF]' : 'bg-[#6D6D80]'}`}>{link?.count}</span>
+            <span className="inline-block align-middle"> {link?.label}</span>
+            <span
+              className={`inline-block align-middle text-[10px] ml-[5px] rounded-[5px] text-[#FFFFFF] pl-[8px] pr-[8px] pt-[2px] pb-[2px] 
+            ${active === link?.label ? "bg-[#3699FF]" : "bg-[#6D6D80]"}`}
+            >
+              {link?.count}
+            </span>
           </div>
         ))}
       </div>
-    </div >
+    </div>
   );
 };

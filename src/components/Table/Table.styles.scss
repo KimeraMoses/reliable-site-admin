@@ -51,6 +51,32 @@
     background: #1e1e2d;
   }
 }
+.ant-table-row.ant-table-row-level-0.isActive > td {
+  background: #383854;
+}
+
+.ant-select-selector {
+  background-color: #323248 !important;
+  border-color: #323248 !important;
+  color: #92928f !important;
+}
+.ant-pagination-options {
+  .ant-select-arrow {
+    color: #92928f !important;
+  }
+  .ant-select-dropdown {
+    background: #232333 !important;
+
+    .ant-select-item-option-active,
+    .ant-select-item-option:hover {
+      background: #323248 !important;
+      border-color: #323248 !important;
+    }
+    .ant-select-item-option-content {
+      color: #92928f !important;
+    }
+  }
+}
 
 .custom-table {
   // Input in Header

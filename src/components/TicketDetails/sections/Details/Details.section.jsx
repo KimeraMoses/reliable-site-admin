@@ -15,7 +15,7 @@ import {
 import { useLocation } from "react-router-dom";
 import { getUsersByDepartmentID } from "store";
 
-function useQuery() {
+export function useQuery() {
   const { search } = useLocation();
   return useMemo(() => new URLSearchParams(search), [search]);
 }
@@ -35,9 +35,9 @@ export const Details = () => {
   // console.log("ticket details", ticket);
 
   const createdByAdmin = users?.find((user) => user?.id === ticket?.createdBy);
-  const createdByClient = clients?.find(
-    (user) => user?.id === ticket?.createdBy
-  );
+  // const createdByClient = clients?.find(
+  //   (user) => user?.id === ticket?.createdBy
+  // );
 
   useEffect(() => {
     (async () => {
@@ -46,7 +46,7 @@ export const Details = () => {
         goToViolation(repliesId);
       }
     })();
-  }, [id]);
+  }, [id, repliesId]);
 
   useEffect(() => {
     (async () => {
@@ -102,70 +102,76 @@ export const Details = () => {
   });
 
   return (
-    <div className="ticket-wrap bg-[#1E1E2D] text-[#ffffff] p-[40px] rounded-[8px]">
-      {ticket === null && !detailsLoading && !usersLoading ? (
-        <></>
-      ) : detailsLoading || usersLoading ? (
-        <div className="text-center">
-          <Spin
-            size="large"
-            style={{ gridColumn: "1/3", alignSelf: "center" }}
-          />
+    <>
+      {id ? (
+        <div className="ticket-wrap bg-[#1E1E2D] text-[#ffffff] p-[40px] rounded-[8px]">
+          {ticket === null && !detailsLoading && !usersLoading ? (
+            <></>
+          ) : detailsLoading || usersLoading ? (
+            <div className="text-center">
+              <Spin
+                size="large"
+                style={{ gridColumn: "1/3", alignSelf: "center" }}
+              />
+            </div>
+          ) : (
+            <div className="">
+              <div className="flex">
+                <div className="w-[50px] tick">
+                  <TicketIcon />
+                </div>
+                <div className="ml-[20px]">
+                  <h3 className={"text-[24px] text-[#fff]"}>
+                    {ticket?.ticketTitle}
+                  </h3>
+                  <div
+                    className={
+                      "mt-[8px] text-[#474761] flex items-center gap-[12px]"
+                    }
+                  >
+                    <p className="text-[14px]">
+                      By{" "}
+                      {createdByAdmin?.fullName
+                        ? createdByAdmin?.fullName
+                        : ticket?.clientFullName
+                        ? ticket?.clientFullName
+                        : "N/A"}
+                    </p>{" "}
+                    <p
+                      className={`${
+                        createdByAdmin?.fullName
+                          ? "bg-[#1C3238] text-[#0BB783]"
+                          : "bg-[#2F264F] text-[#8950FC]"
+                      } rounded-[4px] text-[14px] px-[8px] py-[4px]`}
+                    >
+                      {createdByAdmin?.fullName
+                        ? "Admin"
+                        : ticket?.clientFullName
+                        ? "Client"
+                        : "N/A"}
+                    </p>
+                  </div>
+                  <p className="text-[14px] mt-[12px] text-[#474761]">
+                    {`Created ${getDifference(
+                      new Date(ticket?.lastModifiedOn)
+                    )} - ${moment(ticket?.lastModifiedOn).format(
+                      "MMMM Do, YYYY h:m A"
+                    )}`}
+                  </p>
+                </div>
+              </div>
+              {/* navigation */}
+              <Navigation active={active} links={links} />
+              {active === "Communication" ? <Communication /> : <></>}
+              {active === "Drafts" ? <Drafts setActive={setActive} /> : <></>}
+              {active === "Comments" ? <Comments /> : <></>}
+              {active === "History" ? <TicketHistory /> : <></>}
+            </div>
+          )}
         </div>
       ) : (
-        <div className="">
-          <div className="flex">
-            <div className="w-[50px] tick">
-              <TicketIcon />
-            </div>
-            <div className="ml-[20px]">
-              <h3 className={"text-[24px] text-[#fff]"}>
-                {ticket?.ticketTitle}
-              </h3>
-              <div
-                className={
-                  "mt-[8px] text-[#474761] flex items-center gap-[12px]"
-                }
-              >
-                <p className="text-[14px]">
-                  By{" "}
-                  {createdByAdmin?.fullName
-                    ? createdByAdmin?.fullName
-                    : ticket?.clientFullName
-                    ? ticket?.clientFullName
-                    : "N/A"}
-                </p>{" "}
-                <p
-                  className={`${
-                    createdByAdmin?.fullName
-                      ? "bg-[#1C3238] text-[#0BB783]"
-                      : "bg-[#2F264F] text-[#8950FC]"
-                  } rounded-[4px] text-[14px] px-[8px] py-[4px]`}
-                >
-                  {createdByAdmin?.fullName
-                    ? "Admin"
-                    : ticket?.clientFullName
-                    ? "Client"
-                    : "N/A"}
-                </p>
-              </div>
-              <p className="text-[14px] mt-[12px] text-[#474761]">
-                {`Created ${getDifference(
-                  new Date(ticket?.lastModifiedOn)
-                )} - ${moment(ticket?.lastModifiedOn).format(
-                  "MMMM Do, YYYY h:m A"
-                )}`}
-              </p>
-            </div>
-          </div>
-          {/* navigation */}
-          <Navigation active={active} links={links} />
-          {active === "Communication" ? <Communication /> : <></>}
-          {active === "Drafts" ? <Drafts setActive={setActive} /> : <></>}
-          {active === "Comments" ? <Comments /> : <></>}
-          {active === "History" ? <TicketHistory /> : <></>}
-        </div>
+        <></>
       )}
-    </div>
+    </>
   );
 };

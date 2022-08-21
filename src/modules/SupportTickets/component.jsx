@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { getDepartments } from "store";
-import { TicketsByDeptId, AllTickets, TicketDetails, MyTickets } from "./pages";
+import { TicketsByDeptId, TicketDetails, MyTickets } from "./pages";
 import { Queue } from "./pages/Queue/TicketDetails.page";
 import "./style.scss";
 
@@ -34,7 +34,7 @@ export const SupportTickets = () => {
         />
         {/* Departments Tickets */}
         {/* All Tickets */}
-        <Route path="tickets/show-all/list" element={<AllTickets />} />
+        <Route path="tickets/show-all/list" element={<TicketDetails />} />
         <Route
           path="tickets/show-all/list/details/:id"
           element={<TicketDetails />}

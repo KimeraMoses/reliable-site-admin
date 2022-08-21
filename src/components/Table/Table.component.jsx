@@ -48,6 +48,7 @@ export const Table = ({
   size,
   headingTitle,
   onRow,
+  rowClassName,
   AdvancedSearchOptions,
 }) => {
   const [dataSource, setDataSource] = useState([]);
@@ -321,6 +322,7 @@ export const Table = ({
             <AntTable
               columns={tableColumns}
               rowKey={rowKey}
+              rowClassName={rowClassName}
               scroll={scroll}
               dataSource={
                 ((values?.client?.length ||
