@@ -83,6 +83,15 @@ export const ClientList = () => {
             onClick: () => setShowAdd(true),
             customClass: "px-[82px]",
           }}
+          onRow={(record) => {
+            return {
+              onClick: () => {
+                navigate(
+                  `/admin/dashboard/billing/clients/list/details/${record?.id}`
+                );
+              },
+            };
+          }}
           viewAction={(record) => (
             <Button
               onClick={() => {

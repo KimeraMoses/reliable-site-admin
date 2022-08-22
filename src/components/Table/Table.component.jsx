@@ -2,6 +2,7 @@ import { Input, Button, Table as AntTable, Dropdown, DatePicker } from "antd";
 import { Dropdown as DropdownIcon } from "icons";
 import { Search } from "icons";
 import { useEffect, useState } from "react";
+import SearchComponent from "./SearchComponent";
 
 import "./Table.styles.scss";
 
@@ -47,12 +48,49 @@ export const Table = ({
   size,
   headingTitle,
   onRow,
+  rowClassName,
+  AdvancedSearchOptions,
 }) => {
   const [dataSource, setDataSource] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
   const [search, setSearch] = useState("");
+  const [values, setValues] = useState({
+    ...AdvancedSearchOptions?.searchValues,
+  });
+
+  const inputChangeHandler = (e) => {
+    const { name, value } = e.target;
+    setValues({ ...values, [name]: value });
+  };
+
+  useEffect(() => {
+    let Results = data?.filter((Result) => {
+      return Object.values(Result)
+        .join(" ")
+        .replace(/-/g, " ")
+        .toLowerCase()
+        .includes(
+          (
+            values?.client ||
+            values?.dateAdded ||
+            values?.orderId ||
+            values?.total ||
+            values?.admin ||
+            values?.status
+          )?.toLowerCase()
+        );
+    });
+    if (values?.dateAdded) {
+      Results = data?.filter(
+        (res) =>
+          new Date(values?.dateAdded).toDateString() ===
+          new Date(res?.createdOn).toDateString()
+      );
+    }
+    setSearchResults(Results);
+  }, [values]);
 
   const keyWordHandler = (e) => {
     const { value } = e.target;
@@ -88,10 +126,6 @@ export const Table = ({
     }
   }, [data, fieldToFilter, search]);
 
-  // const onOpenChange = (open) => {
-  //   console.log(open);
-  // }
-
   // Only Set Data if there are view permissions
   useEffect(() => {
     let dataViewer = [];
@@ -104,6 +138,7 @@ export const Table = ({
     }
     setDataSource(dataViewer);
   }, [data, filtered, permissions]);
+
   // Only Add Actions if there are Update & Delete permissions
   useEffect(() => {
     if (permissions !== undefined && permissions !== null && !hideActions) {
@@ -116,7 +151,10 @@ export const Table = ({
               key: "actions",
               align: "right",
               render: (text, record) => (
-                <div className="flex items-center justify-end">
+                <div
+                  className="flex items-center justify-end"
+                  onClick={(event) => event.stopPropagation()}
+                >
                   <Dropdown
                     overlayClassName="custom-table__table-dropdown-overlay"
                     className="custom-table__table-dropdown"
@@ -156,6 +194,7 @@ export const Table = ({
   }, []);
 
   const { RangePicker } = DatePicker;
+
   return (
     <div
       className={`custom-table ${theme === "dark" ? "custom-table-dark" : ""}`}
@@ -165,7 +204,7 @@ export const Table = ({
         <>
           <div className="flex items-center justify-between custom-table__top-row">
             {/* Input */}
-            <div>
+            <div className="w-full mr-3">
               {
                 <>
                   {permissions?.View ? (
@@ -177,12 +216,23 @@ export const Table = ({
                           {hideSearch ? (
                             <></>
                           ) : (
-                            <Input
-                              placeholder={"Search Here"}
-                              prefix={<Search />}
-                              className="custom-table__input"
-                              onChange={keyWordHandler}
-                            />
+                            <>
+                              {AdvancedSearchOptions ? (
+                                <SearchComponent
+                                  AdvancedSearchOptions={AdvancedSearchOptions}
+                                  values={values}
+                                  setValues={setValues}
+                                  OnChange={inputChangeHandler}
+                                />
+                              ) : (
+                                <Input
+                                  placeholder={"Search Here"}
+                                  prefix={<Search />}
+                                  className="custom-table__input"
+                                  onChange={keyWordHandler}
+                                />
+                              )}
+                            </>
                           )}
                         </>
                       )}
@@ -272,9 +322,15 @@ export const Table = ({
             <AntTable
               columns={tableColumns}
               rowKey={rowKey}
+              rowClassName={rowClassName}
               scroll={scroll}
               dataSource={
-                (search.length > 0 && searchResults.length) > 0
+                ((values?.client?.length ||
+                  values?.orderId?.length ||
+                  values?.dateAdded?.length ||
+                  values?.admin?.length ||
+                  values?.total?.length ||
+                  values?.status?.length) > 0 && searchResults?.length) > 0
                   ? searchResults
                   : dataSource
               }

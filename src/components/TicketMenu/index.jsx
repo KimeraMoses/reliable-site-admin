@@ -1,9 +1,9 @@
-import { message } from 'antd';
-import { Priority } from 'components';
-import { AssignTicket, FollowUp, Status } from 'components/TicketModals';
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { message } from "antd";
+import { Priority } from "components";
+import { AssignTicket, FollowUp, Status } from "components/TicketModals";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useLocation } from "react-router-dom";
 import {
   getTicketsByAdminID,
   getUsersByDepartmentID,
@@ -11,9 +11,9 @@ import {
   getTickets,
   editTicket,
   getTicketsByDepartmentId,
-} from 'store';
+} from "store";
 // import { Icon } from 'antd';
-import './index.scss';
+import "./index.scss";
 
 export const TicketMenu = ({ visible, options, record, x, y }) => {
   const [showPriority, setShowPriority] = useState(false);
@@ -28,7 +28,7 @@ export const TicketMenu = ({ visible, options, record, x, y }) => {
 
   const defaultOptions = [
     {
-      label: 'Transfer',
+      label: "Transfer",
       onClick: async (record) => {
         setAssign(true);
         await dispatch(getTicketById(record?.id));
@@ -36,42 +36,42 @@ export const TicketMenu = ({ visible, options, record, x, y }) => {
       },
     },
     {
-      label: 'Status',
+      label: "Status",
       onClick: async (record) => {
         setStatus(true);
         await dispatch(getTicketById(record?.id));
       },
     },
     {
-      label: 'Follow-Up',
+      label: "Follow-Up",
       onClick: async (record) => {
         setFollowUp(true);
         await dispatch(getTicketById(record?.id));
       },
     },
     {
-      label: 'Priority',
+      label: "Priority",
       onClick: async (record) => {
         setShowPriority(true);
         await dispatch(getTicketById(record?.id));
       },
     },
     {
-      label: 'Pin',
+      label: "Pin",
       onClick: async (record) => {
         await dispatch(editTicket({ data: { ...record, pinTicket: true } }));
-        if (location?.pathname.includes('show-all')) {
+        if (location?.pathname.includes("show-all")) {
           await dispatch(getTickets());
-        } else if (location?.pathname?.includes('by-department')) {
+        } else if (location?.pathname?.includes("by-department")) {
           getTicketsByDepartmentId({ id: location?.state?.departmentId });
         } else {
           await dispatch(getTicketsByAdminID({ id: user?.id }));
         }
-        message.success('Ticket Pinned');
+        message.success("Ticket Pinned");
       },
     },
     {
-      label: 'Delete',
+      label: "Delete",
       onClick: (record) => {
         // message.success('Ticket Deleted');
       },
@@ -86,12 +86,14 @@ export const TicketMenu = ({ visible, options, record, x, y }) => {
       <AssignTicket show={assign} setShow={setAssign} id={record?.id} />
       <Status show={status} setShow={setStatus} id={record?.id} />
       <ul
-        className={`popup ${visible ? '' : 'hidden'}`}
+        className={`popup ${visible ? "" : "hidden"}`}
         style={{ left: `${x}px`, top: `${y}px` }}
       >
         {finalOptions?.map((option) => {
           return (
-            <li onClick={() => option?.onClick(record)}>{option?.label}</li>
+            <li onClick={() => option?.onClick(record)} key={option?.label}>
+              {option?.label}
+            </li>
           );
         })}
       </ul>

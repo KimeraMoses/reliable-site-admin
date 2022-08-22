@@ -1,11 +1,11 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { List, Popconfirm } from 'antd';
-import { genrateFirstLetterName } from 'lib';
-import { Button as CustomButton } from 'components';
-import { deleteComment } from 'store';
-import { getTicketById } from 'store';
-import { updateTicketComments } from 'store';
-import { setTicketCommentLoading } from 'store';
+import { useDispatch, useSelector } from "react-redux";
+import { List, Popconfirm } from "antd";
+import { genrateFirstLetterName } from "lib";
+import { Button as CustomButton } from "components";
+import { deleteComment } from "store";
+import { getTicketById } from "store";
+import { updateTicketComments } from "store";
+import { setTicketCommentLoading } from "store";
 
 export const Drafts = () => {
   const { ticket } = useSelector((state) => state?.tickets);
@@ -15,24 +15,26 @@ export const Drafts = () => {
 
   return (
     <>
-      <div className={'ticket-list-wrap custom-table__table'}>
+      <div className={"ticket-list-wrap custom-table__table"}>
         <List
           itemLayout="vertical"
           size="large"
           pagination={{
-            pageSize: 20,
+            defaultPageSize: 5,
+            showSizeChanger: true,
+            pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
           }}
           dataSource={ticket?.ticketComments?.filter(
             (comment) => comment?.isDraft === true
           )}
-          footer={''}
+          footer={""}
           renderItem={(item) => (
-            <List.Item key={item.id} actions={''} extra={''}>
+            <List.Item key={item.id} actions={""} extra={""}>
               <div
                 id={item.id}
                 className="p-[20px] border-[1px] rounded-[8px] border-[#323248]"
               >
-                <div className={'w-full relative'}>
+                <div className={"w-full relative"}>
                   <div className="flex">
                     <div className="image w-[47px] rounded-[5px] overflow-hidden">
                       {item?.userImagePath ? (
@@ -104,7 +106,7 @@ export const Drafts = () => {
                       </CustomButton>
                       <Popconfirm
                         okButtonProps={{
-                          className: 'bg-[#40a9ff]',
+                          className: "bg-[#40a9ff]",
                         }}
                         title="Are you sure you want to delete this comment?"
                         onConfirm={async () => {

@@ -278,25 +278,25 @@ export const useSidebarData = () => {
       path: "/admin/dashboard/support",
       icon: (fill) => <Support fill={fill} />,
       subLinks: [
-        {
-          name: "Queue",
-          count:
-            data?.tickets?.All > 0
-              ? data?.tickets?.All - data?.tickets?.AssignedToAnyone
-              : null,
-          show: true,
-          path: "/admin/dashboard/support/tickets/queue",
-          // subLinks: [
-          //   {
-          //     name: "Tickets Details",
-          //     path: "/admin/dashboard/support/tickets/list/details/:id",
-          //   },
-          // ],
-        },
+        // {
+        //   name: "Queue",
+        //   count:
+        //     data?.tickets?.All > 0
+        //       ? data?.tickets?.All - data?.tickets?.AssignedToAnyone
+        //       : null,
+        //   show: true,
+        //   path: "/admin/dashboard/support/tickets/queue",
+        //   // subLinks: [
+        //   //   {
+        //   //     name: "Tickets Details",
+        //   //     path: "/admin/dashboard/support/tickets/list/details/:id",
+        //   //   },
+        //   // ],
+        // },
         {
           name: "My Tickets",
           count:
-            isSuperAdmin && data?.tickets?.All > 0
+            !isSuperAdmin && data?.tickets?.All > 0
               ? data?.tickets?.All
               : data?.tickets?.AssignedToMe > 0
               ? data?.tickets?.AssignedToMe
@@ -306,7 +306,7 @@ export const useSidebarData = () => {
           subLinks: [
             {
               name: "Tickets Details",
-              path: "/admin/dashboard/support/tickets/list/details/:id",
+              path: "/admin/dashboard/support/tickets/list",
             },
           ],
         },

@@ -1,76 +1,76 @@
-import { useState } from 'react';
-import { Button } from 'antd';
-import moment from 'moment';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState } from "react";
+import { Button } from "antd";
+import moment from "moment";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
 
-import { Table } from 'components';
-import { checkModule } from 'lib/checkModule';
-import { Delete, Send } from '.';
-import { getNotificationTemplateByID } from 'store';
-import { findSpecificUsers } from 'store';
-import { toast } from 'react-toastify';
+import { Table } from "components";
+import { checkModule } from "lib/checkModule";
+import { Delete, Send } from ".";
+import { getNotificationTemplateByID } from "store";
+import { findSpecificUsers } from "store";
+import { toast } from "react-toastify";
 import {
   axios,
   getNotificationTemplateByIDConfig,
   getSpecificConfig,
-} from 'lib';
+} from "lib";
 
 export const NotificationTemplates = () => {
   const navigate = useNavigate();
 
-  const { t } = useTranslation('/Bills/ns');
+  const { t } = useTranslation("/Bills/ns");
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Clients',
+    module: "Clients",
     modules: userModules,
   });
   const columns = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
       render: (text) => text.substring(0, 4),
     },
     {
-      title: 'Title',
-      dataIndex: 'title',
-      key: 'title',
+      title: "Title",
+      dataIndex: "title",
+      key: "title",
     },
     {
-      title: 'Starts',
-      dataIndex: 'startDate',
-      key: 'startDate',
-      render: (key) => moment(key).format('MM/DD/YYYY'),
+      title: "Starts",
+      dataIndex: "startDate",
+      key: "startDate",
+      render: (key) => moment(key).format("MM/DD/YYYY"),
     },
     {
-      title: 'Ends',
-      dataIndex: 'endDate',
-      key: 'endDate',
-      render: (key) => moment(key).format('MM/DD/YYYY'),
+      title: "Ends",
+      dataIndex: "endDate",
+      key: "endDate",
+      render: (key) => moment(key).format("MM/DD/YYYY"),
     },
     {
-      title: 'status',
-      dataIndex: 'status',
-      key: 'status',
+      title: "status",
+      dataIndex: "status",
+      key: "status",
       render: (text) => {
         const getInfo = ({ type }) => {
           switch (type) {
             case 0:
-              return { styles: 'bg-[#1C3238] text-[#0BB783]', title: 'Active' };
+              return { styles: "bg-[#1C3238] text-[#0BB783]", title: "Active" };
             case 1:
               return {
-                styles: 'bg-[#392F28] text-[#FFA800]',
-                title: 'Disabled',
+                styles: "bg-[#392F28] text-[#FFA800]",
+                title: "Disabled",
               };
             case 2:
               return {
-                styles: 'bg-[#3A2434] text-[#F64E60]',
-                title: 'Expired',
+                styles: "bg-[#3A2434] text-[#F64E60]",
+                title: "Expired",
               };
             default:
-              return { styles: 'bg-[#1C3238] text-[#0BB783]', title: 'Active' };
+              return { styles: "bg-[#1C3238] text-[#0BB783]", title: "Active" };
           }
         };
 
@@ -93,7 +93,7 @@ export const NotificationTemplates = () => {
   const dispatch = useDispatch();
 
   const [del, setDel] = useState(false);
-  const [id, setId] = useState('');
+  const [id, setId] = useState("");
   const [showSend, setShowSend] = useState(false);
 
   return (
@@ -107,12 +107,21 @@ export const NotificationTemplates = () => {
         loading={loading}
         fieldToFilter="title"
         btnData={{
-          text: 'Add New',
+          text: "Add New",
           onClick: () =>
             navigate(
-              '/admin/dashboard/billing/clients/show-notifications/client-notifications/add/new'
+              "/admin/dashboard/billing/clients/show-notifications/client-notifications/add/new"
             ),
-          customClass: 'w-[fit_content]',
+          customClass: "w-[fit_content]",
+        }}
+        onRow={(record) => {
+          return {
+            onClick: () => {
+              navigate(
+                `/admin/dashboard/billing/clients/show-notifications/client-notifications/edit/${record?.id}`
+              );
+            },
+          };
         }}
         editAction={(record) => {
           return (
@@ -150,7 +159,7 @@ export const NotificationTemplates = () => {
                     setShowSend(true);
                   } else {
                     toast.error(
-                      'This template does not have users. Please edit to proceed.'
+                      "This template does not have users. Please edit to proceed."
                     );
                   }
                 }}

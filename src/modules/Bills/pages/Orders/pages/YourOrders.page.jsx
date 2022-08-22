@@ -13,6 +13,7 @@ import { getProducts } from "store";
 import { getOrderTemplates } from "store";
 import { Button } from "antd";
 import { Delete } from "modules/UserProfile/sections/APIKeys/sections";
+import { getUsers } from "store";
 
 export const YourOrders = ({ myOrders }) => {
   const navigate = useNavigate();
@@ -24,7 +25,8 @@ export const YourOrders = ({ myOrders }) => {
   const { userModules } = useSelector((state) => state?.modules);
   const { user } = useSelector((state) => state?.auth);
   const [record, setRecord] = useState(null);
-
+  const { users } = useSelector((state) => state?.users);
+  const { clients } = useSelector((state) => state?.users);
   useEffect(() => {
     (async () => {
       await dispatch(getOrders());
@@ -33,6 +35,20 @@ export const YourOrders = ({ myOrders }) => {
       await dispatch(getProducts());
     })();
   }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getUsers());
+  }, []);
+
+  let usersData = [{ value: "", label: "Any" }];
+  if (users.length) {
+    users?.forEach((user) => {
+      usersData.push({
+        value: user?.fullName,
+        label: user?.userName,
+      });
+    });
+  }
 
   // Setting data properly
   // const [data, setData] = useState([]);
@@ -44,6 +60,70 @@ export const YourOrders = ({ myOrders }) => {
     module: "Orders",
     modules: userModules,
   });
+
+  const AdvancedSearchOptions = {
+    searchValues: {
+      orderId: "",
+      dateAdded: "",
+      status: "",
+      total: "",
+      client: "",
+      admin: "",
+    },
+    fields: [
+      {
+        label: "Order No",
+        name: "orderId",
+        type: "text",
+        variant: "text",
+        placeholder: "36",
+      },
+      {
+        label: "Amount",
+        name: "total",
+        type: "number",
+        variant: "text",
+        placeholder: "100",
+      },
+      {
+        label: "Date",
+        name: "dateAdded",
+        type: "date",
+        variant: "date",
+        placeholder: "12-13-2022",
+      },
+      {
+        label: "Client",
+        name: "client",
+        type: "text",
+        variant: "searchable",
+        options: clients,
+      },
+      {
+        label: "Status",
+        name: "status",
+        type: "select",
+        variant: "select",
+        options: [
+          { label: "Any", value: "" },
+          { label: "Draft", value: 0 },
+          { label: "Pending", value: 1 },
+          { label: "Paid", value: 2 },
+          { label: "Processing", value: 3 },
+          { label: "Completed", value: 4 },
+          { label: "Accepted", value: 5 },
+          { label: "Canceled", value: 6 },
+        ],
+      },
+      {
+        label: "Admin",
+        name: "admin",
+        type: "select",
+        variant: "select",
+        options: usersData,
+      },
+    ],
+  };
 
   const columns = [
     {
@@ -133,12 +213,24 @@ export const YourOrders = ({ myOrders }) => {
           type="order"
         />
         <Table
+          AdvancedSearchOptions={AdvancedSearchOptions}
           columns={columns}
           data={
             myOrders
               ? orders?.filter((order) => order?.adminAssigned === user?.id)
               : orders
           }
+          onRow={(record) => {
+            return {
+              onClick: () => {
+                navigate(
+                  `/admin/dashboard/billing/orders/${
+                    myOrders ? "your-orders" : "all-orders"
+                  }/list/edit/${record?.id}`
+                );
+              },
+            };
+          }}
           // loading={loading}
           // dateRageFilter={true}
           // statusFilter={statusList()}

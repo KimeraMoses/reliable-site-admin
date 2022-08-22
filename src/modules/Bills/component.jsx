@@ -10,13 +10,13 @@ export function Bills() {
         <Route
           path="/"
           element={
-            <Navigate to="/admin/dashboard/billing/orders/all-orders/list" />
+            <Navigate to="/admin/dashboard/billing/orders/your-orders/list" />
           }
         />
         <Route
           path="orders"
           element={
-            <Navigate to="/admin/dashboard/billing/orders/all-orders/list" />
+            <Navigate to="/admin/dashboard/billing/orders/your-orders/list" />
           }
         />
         <Route

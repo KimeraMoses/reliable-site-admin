@@ -26,8 +26,13 @@ import {
 } from "components/TicketModals";
 import { getTicketById } from "store";
 import { editTicket } from "store";
+import { Navigation } from "./Details/sections";
+import { useTranslation } from "react-i18next";
+import { groupBy } from "lib";
+import { useQuery } from "./Details/Details.section";
 
 export const RelatedList = ({ queueList }) => {
+  const { t } = useTranslation("/Tickets/ns");
   const location = useLocation();
   const { allTickets, departmentTickets, loading } = useSelector(
     (state) => state?.tickets
@@ -39,6 +44,8 @@ export const RelatedList = ({ queueList }) => {
   const departmentsLoading = useSelector(
     (state) => state?.departments?.loading
   );
+  const query = useQuery();
+  const id = query.get("tid");
   const tickets = location?.pathname?.includes("show-all")
     ? allTickets
     : location?.pathname.includes("by-department")
@@ -51,6 +58,31 @@ export const RelatedList = ({ queueList }) => {
       : location?.pathname.includes("by-department")
       ? `/admin/dashboard/support/tickets/by-departments/${deptId}/details/${id}?tid=${id}`
       : `/admin/dashboard/support/tickets/list?tid=${id}`;
+
+  useEffect(() => {
+    if (location?.pathname?.includes("show-all") && allTickets?.length > 0) {
+      navigate(
+        `/admin/dashboard/support/tickets/show-all/list/details/${data[0]?.id}?tid=${data[0]?.id}`
+      );
+    } else if (
+      location?.pathname.includes("by-department") &&
+      departmentTickets?.length > 0
+    ) {
+      navigate(
+        `/admin/dashboard/support/tickets/by-departments/${data[0]?.departmentId}/details/${data[0]?.id}?tid=${data[0]?.id}`
+      );
+    }
+    if (
+      userTickets.length > 0 &&
+      !location?.pathname?.includes("show-all") &&
+      allTickets?.length &&
+      !location?.pathname.includes("by-department")
+    ) {
+      navigate(
+        `/admin/dashboard/support/tickets/show-all/list/details/${data[0]?.id}?tid=${data[0]?.id}`
+      );
+    }
+  }, [allTickets, userTickets, departmentTickets]);
 
   const { userModules } = useSelector((state) => state?.modules);
 
@@ -209,126 +241,189 @@ export const RelatedList = ({ queueList }) => {
   const [followup, setFollowUp] = useState(false);
   const [status, setStatus] = useState(false);
   const [assign, setAssign] = useState(false);
+
+  let activeTicket = tickets ? groupBy(tickets, "ticketStatus") : {};
+  useEffect(() => {
+    (async () => {
+      await dispatch(getTickets());
+    })();
+  }, [dispatch]);
+  const [active, setActive] = useState(t("active"));
+
+  const handleActive = (v, text) => {
+    setActive(text);
+    if (tickets.length) {
+      const dataToSet = tickets
+        ?.filter(function (el) {
+          return el.ticketStatus === v;
+        })
+        .map((b) => {
+          return {
+            ...b,
+            key: b?.id,
+          };
+        });
+      setData(dataToSet);
+    }
+  };
+
+  const links = [
+    {
+      label: t("active"),
+      count: activeTicket ? activeTicket[0].length : 0,
+      showCount: true,
+      onClick: () => handleActive(0, t("active")),
+    },
+    {
+      label: t("waiting"),
+      count:
+        activeTicket && Object.keys(activeTicket).length > 2
+          ? activeTicket[2].length
+          : 0,
+      showCount: true,
+      onClick: () => handleActive(2, t("waiting")),
+    },
+    {
+      label: t("closed"),
+      count:
+        activeTicket && Object.keys(activeTicket).length > 1
+          ? activeTicket[1].length
+          : 0,
+      showCount: false,
+      onClick: () => handleActive(1, t("closed")),
+    },
+  ];
+
   return (
-    <div className={`p-[40px] bg-[#1E1E2D] rounded-[8px]`}>
-      <Priority show={showPriority} setShow={setShowPriority} />
-      <FollowUp show={followup} setShow={setFollowUp} />
-      <AssignTicket show={assign} setShow={setAssign} />
-      <Status show={status} setShow={setStatus} />
-      {loading || departmentsLoading || usersLoading ? (
-        <div className="w-full flex items-center justify-center min-h-[400px]">
-          <Spin spinning size="large" />
-        </div>
-      ) : (
-        <div>
-          <Table
-            columns={columns}
-            data={data}
-            fieldToFilter="id"
-            permissions={permissions}
-            pagination={{ pageSize: 4 }}
-            additionalBtns={
-              selectedRows?.length
-                ? [
-                    { text: "Pin", onClick: () => {} },
-                    { text: "Assign", onClick: () => {} },
-                    { text: "Delete", onClick: () => {} },
-                  ]
-                : []
-            }
-            rowSelection={rowSelection}
-            editAction={(record) => {
-              return (
-                <>
-                  {/* <Button>Reply</Button> */}
-                  <Button
-                    onClick={async () => {
-                      setAssign(true);
-                      await dispatch(getTicketById(record?.id));
-                    }}
-                  >
-                    Transfer
-                  </Button>
-                  <Button
-                    onClick={async () => {
-                      setShowPriority(true);
-                      await dispatch(getTicketById(record?.id));
-                    }}
-                  >
-                    Priority
-                  </Button>
-                  <Button
-                    onClick={async () => {
-                      setFollowUp(true);
-                      await dispatch(getTicketById(record?.id));
-                    }}
-                  >
-                    Follow-Up
-                  </Button>
-                  <Button
-                    onClick={async () => {
-                      await dispatch(
-                        editTicket({ data: { ...record, pinTicket: true } })
-                      );
-                      if (location?.pathname.includes("show-all")) {
-                        await dispatch(getTickets());
-                      } else if (
-                        location?.pathname?.includes("by-department")
-                      ) {
-                        getTicketsByDepartmentId({
-                          id: location?.state?.departmentId,
-                        });
-                      } else {
-                        await dispatch(getTicketsByAdminID({ id: user?.id }));
-                      }
-                      message.success("Ticket Pinned");
-                    }}
-                  >
-                    Pin
-                  </Button>
-                </>
-              );
-            }}
-            customFilterSort={<></>}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => {
-                  navigate(
-                    `${currentRoute({
-                      deptId: record?.departmentId,
-                      id: record?.id,
-                    })}`
-                  );
-                }, // click row
-                onDoubleClick: (event) => {}, // double click row
-                onContextMenu: (event) => {
-                  event.preventDefault();
-                  if (!visible) {
-                    document.addEventListener(
-                      `click`,
-                      function onClickOutside() {
-                        setVisible(false);
-                        document.removeEventListener(`click`, onClickOutside);
-                      }
+    <>
+      <Navigation active={active} links={links} />
+
+      <div className={`p-[40px] bg-[#1E1E2D] rounded-[8px] mt-2`}>
+        <Priority show={showPriority} setShow={setShowPriority} />
+        <FollowUp show={followup} setShow={setFollowUp} />
+        <AssignTicket show={assign} setShow={setAssign} />
+        <Status show={status} setShow={setStatus} />
+
+        {loading || departmentsLoading || usersLoading ? (
+          <div className="w-full flex items-center justify-center min-h-[400px]">
+            <Spin spinning size="large" />
+          </div>
+        ) : (
+          <div>
+            <Table
+              columns={columns}
+              data={data}
+              fieldToFilter="id"
+              permissions={permissions}
+              pagination={{
+                defaultPageSize: 5,
+                showSizeChanger: true,
+                pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
+              }}
+              rowClassName={(record) => (record?.id === id ? "isActive" : "")}
+              additionalBtns={
+                selectedRows?.length
+                  ? [
+                      { text: "Pin", onClick: () => {} },
+                      { text: "Assign", onClick: () => {} },
+                      { text: "Delete", onClick: () => {} },
+                    ]
+                  : []
+              }
+              rowSelection={rowSelection}
+              editAction={(record) => {
+                return (
+                  <>
+                    {/* <Button>Reply</Button> */}
+                    <Button
+                      onClick={async () => {
+                        setAssign(true);
+                        await dispatch(getTicketById(record?.id));
+                      }}
+                    >
+                      Transfer
+                    </Button>
+                    <Button
+                      onClick={async () => {
+                        setShowPriority(true);
+                        await dispatch(getTicketById(record?.id));
+                      }}
+                    >
+                      Priority
+                    </Button>
+                    <Button
+                      onClick={async () => {
+                        setFollowUp(true);
+                        await dispatch(getTicketById(record?.id));
+                      }}
+                    >
+                      Follow-Up
+                    </Button>
+                    <Button
+                      onClick={async () => {
+                        await dispatch(
+                          editTicket({ data: { ...record, pinTicket: true } })
+                        );
+                        if (location?.pathname.includes("show-all")) {
+                          await dispatch(getTickets());
+                        } else if (
+                          location?.pathname?.includes("by-department")
+                        ) {
+                          getTicketsByDepartmentId({
+                            id: location?.state?.departmentId,
+                          });
+                        } else {
+                          await dispatch(getTicketsByAdminID({ id: user?.id }));
+                        }
+                        message.success("Ticket Pinned");
+                      }}
+                    >
+                      Pin
+                    </Button>
+                  </>
+                );
+              }}
+              customFilterSort={<></>}
+              onRow={(record, rowIndex) => {
+                return {
+                  onClick: (event) => {
+                    navigate(
+                      `${currentRoute({
+                        deptId: record?.departmentId,
+                        id: record?.id,
+                      })}`
                     );
-                  }
-                  setVisible(true);
-                  setPopup({
-                    record,
-                    x: event.clientX,
-                    y: event.clientY,
-                  });
-                }, // right button click row
-                onMouseEnter: (event) => {}, // mouse enter row
-                onMouseLeave: (event) => {}, // mouse leave row
-              };
-            }}
-            // headingTitle={}
-            // t={t}
-          />
-          {<TicketMenu {...popup} visible={visible} />}
-        </div>
-      )}
-    </div>
+                  }, // click row
+                  onDoubleClick: (event) => {}, // double click row
+                  onContextMenu: (event) => {
+                    event.preventDefault();
+                    if (!visible) {
+                      document.addEventListener(
+                        `click`,
+                        function onClickOutside() {
+                          setVisible(false);
+                          document.removeEventListener(`click`, onClickOutside);
+                        }
+                      );
+                    }
+                    setVisible(true);
+                    setPopup({
+                      record,
+                      x: event.clientX,
+                      y: event.clientY,
+                    });
+                  }, // right button click row
+                  onMouseEnter: (event) => {}, // mouse enter row
+                  onMouseLeave: (event) => {}, // mouse leave row
+                };
+              }}
+              // headingTitle={}
+              // t={t}
+            />
+            {<TicketMenu {...popup} visible={visible} />}
+          </div>
+        )}
+      </div>
+    </>
   );
 };

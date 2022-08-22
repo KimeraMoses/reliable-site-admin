@@ -266,6 +266,15 @@ export const PSList = () => {
                 //   onClick: () => setShowAdd(true),
                 //   text: "Add New Product",
                 // }}
+                onRow={(record) => {
+                  return {
+                    onClick: () => {
+                      navigate(
+                        `/admin/dashboard/billing/products-services/list/details/${record?.id}`
+                      );
+                    },
+                  };
+                }}
                 editAction={(record) => (
                   <Button
                     onClick={() => {

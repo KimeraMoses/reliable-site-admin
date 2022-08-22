@@ -24,7 +24,7 @@ export const Delete = ({ show, setShow, id, type, record }) => {
           ? "Confirm Cancel"
           : "Delete API Key"
       }`}
-      cancelButtonText={type === "Cancel" && "No"}
+      // cancelButtonText={type === "Cancel" && "No"}
       customBody={
         <div className="mb-[32px]">
           {type === "Cancel"

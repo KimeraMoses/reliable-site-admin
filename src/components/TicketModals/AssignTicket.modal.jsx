@@ -1,7 +1,7 @@
-import { Modal } from 'components';
-import { useDispatch, useSelector } from 'react-redux';
-import { addTicketComments } from 'store';
-import { editTicket } from 'store';
+import { Modal } from "components";
+import { useDispatch, useSelector } from "react-redux";
+import { addTicketComments } from "store";
+import { editTicket } from "store";
 
 export const AssignTicket = ({ show, setShow, id }) => {
   // const { users } = useSelector((state) => state?.users);
@@ -12,28 +12,35 @@ export const AssignTicket = ({ show, setShow, id }) => {
     (state) => state?.tickets
   );
 
+  let deptData = [{ value: "", label: "Any" }];
+  if (departmentUsers?.length) {
+    departmentUsers?.forEach((user) => {
+      deptData.push({
+        value: user?.fullName,
+        label: user?.userName,
+      });
+    });
+  }
+
   const fields = [
     {
-      type: 'select',
-      name: 'assignedTo',
-      placeholder: 'Select Admin',
-      options: departmentUsers?.map((user) => ({
-        label: user?.fullName ? user?.fullName : user?.email,
-        value: user?.id,
-      })),
-      title: 'Admin',
+      type: "select",
+      name: "assignedTo",
+      placeholder: "Select Admin",
+      options: deptData,
+      title: "Admin",
     },
     {
-      type: 'textarea',
-      name: 'comment',
-      title: 'Comment',
-      placeholder: 'Enter Comment Here...',
+      type: "textarea",
+      name: "comment",
+      title: "Comment",
+      placeholder: "Enter Comment Here...",
     },
   ];
 
   const initialValues = {
     assignedTo: ticket?.assignedTo,
-    comment: '',
+    comment: "",
   };
 
   const dispatch = useDispatch();

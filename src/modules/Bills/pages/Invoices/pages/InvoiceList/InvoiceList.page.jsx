@@ -1,17 +1,17 @@
-import { Button, Checkbox } from 'antd';
-import { useEffect, useState } from 'react';
-import moment from 'moment';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { checkModule } from 'lib/checkModule';
-import { Table } from 'components';
-import { getInvoices } from 'store';
-import { statusList } from 'lib';
+import { Button, Checkbox } from "antd";
+import { useEffect, useState } from "react";
+import moment from "moment";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { checkModule } from "lib/checkModule";
+import { Table } from "components";
+import { getInvoices } from "store";
+import { statusList } from "lib";
 
 export const InvoiceList = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation('/Bills/ns');
+  const { t } = useTranslation("/Bills/ns");
 
   const dispatch = useDispatch();
 
@@ -25,40 +25,40 @@ export const InvoiceList = () => {
   const { userModules } = useSelector((state) => state?.modules);
 
   const { permissions } = checkModule({
-    module: 'Invoices',
+    module: "Invoices",
     modules: userModules,
   });
 
   const columns = [
     {
-      title: '',
-      dataIndex: 'id',
-      key: 'id',
+      title: "",
+      dataIndex: "id",
+      key: "id",
       render: (id) => {
         return <Checkbox></Checkbox>;
       },
     },
     {
-      title: t('invoiceId'),
-      dataIndex: 'billNo',
-      key: 'billNo',
+      title: t("invoiceId"),
+      dataIndex: "billNo",
+      key: "billNo",
     },
     {
-      title: t('issueDate'),
-      dataIndex: 'createdOn',
-      key: 'createdOn',
-      render: (createdOn) => moment(createdOn).format('DD/MM/YYYY'),
+      title: t("issueDate"),
+      dataIndex: "createdOn",
+      key: "createdOn",
+      render: (createdOn) => moment(createdOn).format("DD/MM/YYYY"),
     },
     {
-      title: t('dueDate'),
-      dataIndex: 'dueDate',
-      key: 'dueDate',
-      render: (dueDate) => moment(dueDate).format('DD/MM/YYYY'),
+      title: t("dueDate"),
+      dataIndex: "dueDate",
+      key: "dueDate",
+      render: (dueDate) => moment(dueDate).format("DD/MM/YYYY"),
     },
     {
-      title: t('issuedFor'),
-      dataIndex: 'issuedFor',
-      key: 'issuedFor',
+      title: t("issuedFor"),
+      dataIndex: "issuedFor",
+      key: "issuedFor",
       render: (issuedFor, record) => {
         return (
           <div className="flex items-center gap-[12px]">
@@ -75,9 +75,9 @@ export const InvoiceList = () => {
       },
     },
     {
-      title: t('issuedBy'),
-      dataIndex: 'issuedBy',
-      key: 'issuedBy',
+      title: t("issuedBy"),
+      dataIndex: "issuedBy",
+      key: "issuedBy",
       render: (issuedBy, record) => {
         return (
           <div className="flex items-center gap-[12px]">
@@ -94,9 +94,9 @@ export const InvoiceList = () => {
       },
     },
     {
-      title: t('status'),
-      dataIndex: 'status',
-      key: 'status',
+      title: t("status"),
+      dataIndex: "status",
+      key: "status",
       render: (status) => {
         const statusValue = statusList(status);
         return (
@@ -112,9 +112,9 @@ export const InvoiceList = () => {
 
   // Setting data properly
   const [data, setData] = useState([]);
-  const [status, setStatus] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  const [status, setStatus] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   useEffect(() => {
     setData([]);
     if (invoices?.length) {
@@ -144,30 +144,39 @@ export const InvoiceList = () => {
               status: values,
             };
             if (startDate && endDate) {
-              details['startDate'] = startDate;
-              details['endDate'] = endDate;
+              details["startDate"] = startDate;
+              details["endDate"] = endDate;
             }
             await dispatch(getInvoices(details));
           }}
           handleDateRange={async (date, dateString, id) => {
-            let startDate = '';
-            let endDate = '';
+            let startDate = "";
+            let endDate = "";
             let details = {};
             if (date) {
               startDate = date[0]._d;
               endDate = date[1]._d;
-              details['startDate'] = startDate;
-              details['endDate'] = endDate;
+              details["startDate"] = startDate;
+              details["endDate"] = endDate;
             }
 
             if (status) {
-              details['status'] = status;
+              details["status"] = status;
             }
 
             setStartDate(startDate);
             setEndDate(endDate);
 
             await dispatch(getInvoices(details));
+          }}
+          onRow={(record) => {
+            return {
+              onClick: () => {
+                navigate(
+                  `/admin/dashboard/billing/invoices/list/details/${record.id}`
+                );
+              },
+            };
           }}
           editAction={(record) => (
             <Button
