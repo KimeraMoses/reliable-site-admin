@@ -259,6 +259,12 @@ export const PSList = () => {
             <Form>
               <Table
                 columns={columns}
+                pagination={{
+                  defaultPageSize: 5,
+                  showSizeChanger: true,
+                  pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
+                  position: ["bottomLeft"],
+                }}
                 data={products}
                 loading={categoriesLoading || loading}
                 fieldToFilter={values?.selectFilter}

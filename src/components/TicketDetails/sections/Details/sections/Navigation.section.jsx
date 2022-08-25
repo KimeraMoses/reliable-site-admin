@@ -1,6 +1,14 @@
-export const Navigation = ({ links, active }) => {
+import { Button } from "components";
+import { useNavigate } from "react-router-dom";
+
+export const Navigation = ({ links, active, isAdmin }) => {
+  const navigate = useNavigate();
   return (
-    <div className="bg-[#1E1E2D] rounded-lg">
+    <div
+      className={`bg-[#323248]  rounded-lg flex justify-between items-center ${
+        !isAdmin ? "mt-4" : ""
+      }`}
+    >
       <div className="bg-[#323248] rounded-lg px-[40px] py-[20px] flex items-center gap-[40px]">
         {links.map((link) => (
           <div
@@ -22,6 +30,19 @@ export const Navigation = ({ links, active }) => {
           </div>
         ))}
       </div>
+      {isAdmin && (
+        <div className="pr-2">
+          <Button
+            onClick={() =>
+              navigate(
+                "/admin/dashboard/support/tickets/show-all/list/generate-ticket"
+              )
+            }
+          >
+            Generate Ticket
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

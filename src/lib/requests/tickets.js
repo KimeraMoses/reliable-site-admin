@@ -1,5 +1,5 @@
-import { getConfig } from 'lib';
-const ticketsConfig = (action) => getConfig({ module: 'Support', action });
+// import { getConfig } from "lib";
+// const ticketsConfig = (action) => getConfig({ module: "Support", action });
 
 const prefix = `/api/tickets`;
 
@@ -8,13 +8,14 @@ export const getTicketsConfig = () => ({
   defaultData: {
     advancedSearch: {
       fields: [],
-      keyword: '',
+      keyword: "",
     },
-    keyword: '',
+    keyword: "",
     pageNumber: 0,
     pageSize: 100,
-    orderBy: ['ticketPriority'],
-    ticketPriority: 0,
+    orderBy: ["ticketPriority"],
+    // ticketPriority: 0,
+    // ticketRelatedTo: 1,
   },
   // config: ticketsConfig('View'),
 });
@@ -43,13 +44,13 @@ export const getAssignedTicketsByIDConfig = ({ id }) => ({
   url: `${prefix}/search`,
   defaultData: {
     advancedSearch: {
-      fields: ['assignedTo'],
+      fields: ["assignedTo"],
       keyword: id,
     },
-    keyword: '',
+    keyword: "",
     pageNumber: 0,
     pageSize: 100,
-    orderBy: [''],
+    orderBy: [""],
     ticketStatus: 0,
     // ticketPriority: '0 = Urgent',
     // ticketRelatedTo: '0 = KnowledgeBase',
@@ -66,14 +67,14 @@ export const getTicketsByDepartmentIdConfig = ({ id }) => ({
   url: `${prefix}/search`,
   defaultData: {
     advancedSearch: {
-      fields: ['departmentId'],
+      fields: ["departmentId"],
       keyword: id,
     },
-    keyword: '',
+    keyword: "",
     pageNumber: 0,
     pageSize: 100,
-    orderBy: [''],
-    ticketStatus: 0,
+    orderBy: [""],
+    // ticketStatus: 0,
     // ticketPriority: '0 = Urgent',
     // ticketRelatedTo: '0 = KnowledgeBase',
   },

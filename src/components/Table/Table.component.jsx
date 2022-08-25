@@ -1,6 +1,7 @@
 import { Input, Button, Table as AntTable, Dropdown, DatePicker } from "antd";
 import { Dropdown as DropdownIcon } from "icons";
 import { Search } from "icons";
+import { axios, getOrdersConfig } from "lib";
 import { useEffect, useState } from "react";
 import SearchComponent from "./SearchComponent";
 
@@ -55,6 +56,8 @@ export const Table = ({
   const [tableColumns, setTableColumns] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
+  const [searchData, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [search, setSearch] = useState("");
   const [values, setValues] = useState({
     ...AdvancedSearchOptions?.searchValues,
@@ -65,32 +68,31 @@ export const Table = ({
     setValues({ ...values, [name]: value });
   };
 
-  useEffect(() => {
-    let Results = data?.filter((Result) => {
-      return Object.values(Result)
-        .join(" ")
-        .replace(/-/g, " ")
-        .toLowerCase()
-        .includes(
-          (
-            values?.client ||
-            values?.dateAdded ||
-            values?.orderId ||
-            values?.total ||
-            values?.admin ||
-            values?.status
-          )?.toLowerCase()
-        );
-    });
-    if (values?.dateAdded) {
-      Results = data?.filter(
-        (res) =>
-          new Date(values?.dateAdded).toDateString() ===
-          new Date(res?.createdOn).toDateString()
-      );
+  const searchOrderHandler = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    console.log("order search", values);
+    const defaultData = {
+      keyword: values?.title ? values?.title : null,
+      pageNumber: 0,
+      pageSize: values?.numResult ? parseInt(values?.numResult) : 2,
+      orderBy: [""],
+      orderStatus: values.status ? parseInt(values.status) : null,
+      adminAssigned: values?.admin ? values?.admin : null,
+      orderNo: values?.orderId ? parseInt(values?.orderId) : null,
+      amount: values.total ? parseInt(values.total) : null,
+      clientId: values?.client ? values?.client : null,
+      createdOn: values?.dateAdded ? values?.dateAdded : null,
+    };
+
+    const { url } = getOrdersConfig();
+    const res = await axios.post(url, defaultData);
+    setIsLoading(false);
+    console.log("Order result", res);
+    if (res.status === 200) {
+      setData(res?.data?.data);
     }
-    setSearchResults(Results);
-  }, [values]);
+  };
 
   const keyWordHandler = (e) => {
     const { value } = e.target;
@@ -217,14 +219,7 @@ export const Table = ({
                             <></>
                           ) : (
                             <>
-                              {AdvancedSearchOptions ? (
-                                <SearchComponent
-                                  AdvancedSearchOptions={AdvancedSearchOptions}
-                                  values={values}
-                                  setValues={setValues}
-                                  OnChange={inputChangeHandler}
-                                />
-                              ) : (
+                              {!AdvancedSearchOptions && (
                                 <Input
                                   placeholder={"Search Here"}
                                   prefix={<Search />}
@@ -306,6 +301,18 @@ export const Table = ({
               )}
             </div>
           </div>
+          <div className="w-full">
+            {AdvancedSearchOptions && (
+              <SearchComponent
+                AdvancedSearchOptions={AdvancedSearchOptions}
+                values={values}
+                setValues={setValues}
+                OnChange={inputChangeHandler}
+                onSubmit={searchOrderHandler}
+                isLoading={isLoading}
+              />
+            )}
+          </div>
           {headingTitle && (
             <h3 className={"text-[#fff] text-[32px] mt-[40px]"}>
               {headingTitle}
@@ -325,13 +332,10 @@ export const Table = ({
               rowClassName={rowClassName}
               scroll={scroll}
               dataSource={
-                ((values?.client?.length ||
-                  values?.orderId?.length ||
-                  values?.dateAdded?.length ||
-                  values?.admin?.length ||
-                  values?.total?.length ||
-                  values?.status?.length) > 0 && searchResults?.length) > 0
+                searchResults?.length > 0
                   ? searchResults
+                  : searchData?.length > 0
+                  ? searchData
                   : dataSource
               }
               size={size}
@@ -341,7 +345,7 @@ export const Table = ({
                   : { position: ["bottomLeft"], showSizeChanger: false }
               }
               rowSelection={rowSelection}
-              loading={permissions?.View ? loading : false}
+              loading={permissions?.View ? loading || isLoading : false}
               locale={{
                 emptyText: permissions?.View
                   ? emptyText || "No Data"

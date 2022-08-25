@@ -41,10 +41,10 @@ export const YourOrders = ({ myOrders }) => {
   }, []);
 
   let usersData = [{ value: "", label: "Any" }];
-  if (users.length) {
+  if (users?.length) {
     users?.forEach((user) => {
       usersData.push({
-        value: user?.fullName,
+        value: user?.id,
         label: user?.userName,
       });
     });
@@ -69,6 +69,8 @@ export const YourOrders = ({ myOrders }) => {
       total: "",
       client: "",
       admin: "",
+      numResult: 3,
+      title: "",
     },
     fields: [
       {
@@ -121,6 +123,18 @@ export const YourOrders = ({ myOrders }) => {
         type: "select",
         variant: "select",
         options: usersData,
+      },
+      {
+        label: "Max Results",
+        name: "numResult",
+        type: "number",
+        variant: "text",
+      },
+      {
+        label: "Search string",
+        name: "title",
+        type: "text",
+        variant: "text",
       },
     ],
   };
@@ -214,6 +228,12 @@ export const YourOrders = ({ myOrders }) => {
         />
         <Table
           AdvancedSearchOptions={AdvancedSearchOptions}
+          pagination={{
+            defaultPageSize: 5,
+            showSizeChanger: true,
+            position: ["bottomLeft"],
+            pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
+          }}
           columns={columns}
           data={
             myOrders

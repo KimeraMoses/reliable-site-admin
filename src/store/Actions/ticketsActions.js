@@ -9,8 +9,8 @@ import {
   getAssignedTicketsByIDConfig,
   getTicketsByDepartmentIdConfig,
   getTicketHistoryByIDConfig,
-} from 'lib';
-import { toast } from 'react-toastify';
+} from "lib";
+import { toast } from "react-toastify";
 import {
   getTicketsDispatch,
   setTicketLoading,
@@ -20,7 +20,7 @@ import {
   getAllTickets,
   setDetailsLoading,
   getTicketHistory,
-} from 'store/Slices';
+} from "store/Slices";
 
 // Get All Admin Ticket
 export const getTickets = (params = []) => {
@@ -31,9 +31,11 @@ export const getTickets = (params = []) => {
       const res = await axios.post(url, defaultData, config);
       dispatch(getAllTickets(res?.data?.data));
       dispatch(setTicketLoading(false));
+      console.log("ticket res", res);
     } catch (e) {
       toast.error(getError(e));
       dispatch(setTicketLoading(false));
+      // console.log(e);
     }
   };
 };
@@ -41,18 +43,20 @@ export const getTickets = (params = []) => {
 // Get Ticket By ID
 export const getTicketById = (id, noLoading) => {
   return async (dispatch) => {
-    if (!noLoading) {
-      dispatch(setDetailsLoading(true));
-    }
-    try {
-      const { url, config } = getTicketConfig(id);
-      const res = await axios.get(url, config);
-      dispatch(getTicket(res?.data?.data));
-      dispatch(setDetailsLoading(false));
-    } catch (e) {
-      toast.error(getError(e));
-      dispatch(getTicket(null));
-      dispatch(setDetailsLoading(false));
+    if (id) {
+      if (!noLoading) {
+        dispatch(setDetailsLoading(true));
+      }
+      try {
+        const { url, config } = getTicketConfig(id);
+        const res = await axios.get(url, config);
+        dispatch(getTicket(res?.data?.data));
+        dispatch(setDetailsLoading(false));
+      } catch (e) {
+        toast.error(getError(e));
+        dispatch(getTicket(null));
+        dispatch(setDetailsLoading(false));
+      }
     }
   };
 };
@@ -60,67 +64,81 @@ export const getTicketById = (id, noLoading) => {
 // Get Ticket History By ID
 export const getTicketHistoryByID = (id) => {
   return async (dispatch) => {
-    try {
-      const { url, config } = getTicketHistoryByIDConfig({ id });
-      const res = await axios.get(url, config);
-      dispatch(getTicketHistory(res?.data?.data));
-    } catch (e) {
-      toast.error(getError(e));
+    if (id) {
+      try {
+        const { url, config } = getTicketHistoryByIDConfig({ id });
+        const res = await axios.get(url, config);
+        dispatch(getTicketHistory(res?.data?.data));
+      } catch (e) {
+        toast.error(getError(e));
+      }
     }
   };
 };
 
 export const getTicketsByClientID = ({ id }) => {
   return async (dispatch) => {
-    dispatch(setTicketLoading(true));
-    try {
-      const { url, config } = getTicketsByClintIDConfig({ id });
-      const res = await axios.get(url, config);
-      dispatch(getTicketsDispatch(res?.data?.data));
-    } catch (e) {
-      toast.error(getError(e));
-      dispatch(getTicketsDispatch([]));
-    } finally {
-      dispatch(setTicketLoading(false));
+    if (id) {
+      dispatch(setTicketLoading(true));
+      try {
+        const { url, config } = getTicketsByClintIDConfig({ id });
+        const res = await axios.get(url, config);
+        dispatch(getTicketsDispatch(res?.data?.data));
+      } catch (e) {
+        toast.error(getError(e));
+        dispatch(getTicketsDispatch([]));
+      } finally {
+        dispatch(setTicketLoading(false));
+      }
     }
   };
 };
 
 export const getTicketsByAdminID = ({ id }) => {
   return async (dispatch) => {
-    dispatch(setTicketLoading(true));
-    try {
-      const { url, defaultData, config } = getAssignedTicketsByIDConfig({ id });
-      const res = await axios.post(url, defaultData, config);
-      dispatch(getTicketsDispatch(res?.data?.data));
-    } catch (e) {
-      toast.error(getError(e));
-      dispatch(getTicketsDispatch([]));
-    } finally {
-      dispatch(setTicketLoading(false));
+    if (id) {
+      dispatch(setTicketLoading(true));
+      try {
+        const { url, defaultData, config } = getAssignedTicketsByIDConfig({
+          id,
+        });
+        const res = await axios.post(url, defaultData, config);
+        dispatch(getTicketsDispatch(res?.data?.data));
+      } catch (e) {
+        toast.error(getError(e));
+        dispatch(getTicketsDispatch([]));
+      } finally {
+        dispatch(setTicketLoading(false));
+      }
     }
   };
 };
 // getTicketsByDepartmentId
 export const getTicketsByDepartmentId = ({ id }) => {
   return async (dispatch, getState) => {
-    dispatch(setTicketLoading(true));
-    try {
-      const { url, defaultData, config } = getTicketsByDepartmentIdConfig({
-        id,
-      });
-      const res = await axios.post(url, defaultData, config);
-      const tickets = res?.data?.data;
-      const usersTickets = tickets?.filter(
-        (ticket) => ticket?.assignedTo === getState()?.auth?.user?.id
-      );
-      console.log(getState()?.auth);
-      dispatch(getDepartmentTickets(usersTickets));
-    } catch (e) {
-      toast.error(getError(e));
-      dispatch(getDepartmentTickets([]));
-    } finally {
-      dispatch(setTicketLoading(false));
+    if (id) {
+      dispatch(setTicketLoading(true));
+      console.log("here, fetching tickets", id);
+      try {
+        const { url, defaultData, config } = getTicketsByDepartmentIdConfig({
+          id,
+        });
+        const res = await axios.post(url, defaultData, config);
+        const tickets = res?.data?.data;
+        // const usersTickets = tickets?.filter(
+        //   (ticket) => ticket?.assignedTo === getState()?.auth?.user?.id
+        // );
+        // console.log(getState()?.auth);
+        dispatch(getDepartmentTickets(tickets));
+        console.log("dept tickets", res);
+        dispatch(setTicketLoading(false));
+      } catch (e) {
+        toast.error(getError(e));
+        console.log("dept err", e);
+        dispatch(getDepartmentTickets([]));
+      } finally {
+        dispatch(setTicketLoading(false));
+      }
     }
   };
 };
@@ -133,7 +151,7 @@ export const editTicket = ({ data }) => {
       const { url, config } = editTicketConfig({ id: data?.id });
       const response = await axios.put(url, data, config);
       if (response.status === 200) {
-        toast.success('Ticket Updated Successfully');
+        toast.success("Ticket Updated Successfully");
       }
     } catch (error) {
       toast.error(getError(error));
@@ -151,7 +169,8 @@ export const createTicket = ({ data }) => {
       const { url, config } = createTicketConfig();
       const response = await axios.post(url, data, config);
       if (response.status === 200) {
-        toast.success('Ticket Created Successfully!');
+        toast.success("Ticket Created Successfully!");
+        dispatch(getTickets());
       }
     } catch (error) {
       toast.error(getError(error));

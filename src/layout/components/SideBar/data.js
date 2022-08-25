@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 export const useSidebarData = () => {
   // Ticket Departments Dynamically Being Done Below
   const { departments } = useSelector((state) => state?.departments);
-  const { tickets } = useSelector((state) => state?.tickets);
+  const { allTickets } = useSelector((state) => state?.tickets);
   const { data } = useSelector((state) => state?.count);
   const isSuperAdmin = useSelector(
     (state) => state?.auth?.user?.userRolesResponse?.userRoles
@@ -24,14 +24,21 @@ export const useSidebarData = () => {
   );
   const ticketsLoading = useSelector((state) => state?.tickets?.loading);
   const dataLoading = useSelector((state) => state?.count?.loading);
-  const { user } = useSelector((state) => state?.auth);
+  // const { user } = useSelector((state) => state?.auth);
+
+  // console.log("ticket dept", allTickets);
+  // const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   dispatch(getTickets());
+  // }, []);
 
   // My Tickets
-  const myTickets = tickets?.filter(
-    (ticket) => ticket?.assignedTo === user?.id
-  );
+  // const myTickets = allTickets?.filter(
+  //   (ticket) => ticket?.assignedTo === user?.id
+  // );
   // Setting Departments
-  const ticketsWithDepartmentName = myTickets?.map((ticket) => ({
+  const ticketsWithDepartmentName = allTickets?.map((ticket) => ({
     ...ticket,
     departmentName: departments?.filter(
       (dept) => dept?.id === ticket?.departmentId
@@ -321,7 +328,16 @@ export const useSidebarData = () => {
               name: "Ticket Details",
               path: "/admin/dashboard/support/tickets/show-all/list/details/:id",
             },
+            {
+              name: "Generate Ticket",
+              path: "/admin/dashboard/support/tickets/show-all/list/generate-ticket",
+            },
           ],
+        },
+        {
+          name: "Advanced Search",
+          show: true,
+          path: "/admin/dashboard/support/tickets/show-all/advanced-search",
         },
       ],
     },

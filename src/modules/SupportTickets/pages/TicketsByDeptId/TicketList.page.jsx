@@ -1,16 +1,16 @@
-import { Navigation } from './sections';
-import { Ticket as TicketIcon } from 'icons';
-import { useEffect, useState } from 'react';
-import { Table } from 'components';
-import { checkModule } from 'lib/checkModule';
-import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { groupBy } from 'lib';
-import { useNavigate, useParams } from 'react-router-dom';
-import { getTicketsByDepartmentId } from 'store';
+import { Navigation } from "./sections";
+import { Ticket as TicketIcon } from "icons";
+import { useEffect, useState } from "react";
+import { Table } from "components";
+import { checkModule } from "lib/checkModule";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { groupBy } from "lib";
+import { useNavigate, useParams } from "react-router-dom";
+import { getTicketsByDepartmentId } from "store";
 
 export const TicketsByDeptId = () => {
-  const { t } = useTranslation('/Tickets/ns');
+  const { t } = useTranslation("/Tickets/ns");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { id } = useParams();
@@ -18,7 +18,9 @@ export const TicketsByDeptId = () => {
   const tickets = useSelector((state) => state?.tickets?.departmentTickets);
   const { userModules } = useSelector((state) => state?.modules);
 
-  let activeTicket = tickets ? groupBy(tickets, 'ticketStatus') : {};
+  let activeTicket = tickets ? groupBy(tickets, "ticketStatus") : {};
+
+  console.log("tickets", tickets);
 
   useEffect(() => {
     (async () => {
@@ -26,28 +28,28 @@ export const TicketsByDeptId = () => {
     })();
   }, [dispatch, id]);
 
-  const [active, setActive] = useState(t('active'));
+  const [active, setActive] = useState(t("active"));
   const links = [
     {
-      label: t('active'),
+      label: t("active"),
       count: activeTicket ? activeTicket[0].length : 0,
-      onClick: () => handleActive(0, t('active')),
+      onClick: () => handleActive(0, t("active")),
     },
     {
-      label: t('waiting'),
+      label: t("waiting"),
       count:
         activeTicket && Object.keys(activeTicket).length > 2
           ? activeTicket[2].length
           : 0,
-      onClick: () => handleActive(2, t('waiting')),
+      onClick: () => handleActive(2, t("waiting")),
     },
     {
-      label: t('closed'),
+      label: t("closed"),
       count:
         activeTicket && Object.keys(activeTicket).length > 1
           ? activeTicket[1].length
           : 0,
-      onClick: () => handleActive(1, t('closed')),
+      onClick: () => handleActive(1, t("closed")),
     },
   ];
 
@@ -69,15 +71,15 @@ export const TicketsByDeptId = () => {
   };
 
   const { permissions } = checkModule({
-    module: 'Support',
+    module: "Support",
     modules: userModules,
   });
 
   const columns = [
     {
-      title: '',
-      dataIndex: 'description',
-      key: 'description',
+      title: "",
+      dataIndex: "description",
+      key: "description",
       render: (description, record) => {
         return (
           <div
@@ -97,7 +99,7 @@ export const TicketsByDeptId = () => {
             <TicketIcon />
             <div className="ml-[8px]">
               <h3 className={`text-[#FFFFFF]`}>
-                {record?.ticketTitle}{' '}
+                {record?.ticketTitle}{" "}
                 {`${
                   record?.tagTitle ? (
                     <span
@@ -106,11 +108,11 @@ export const TicketsByDeptId = () => {
                       ${record?.tagTitle}
                     </span>
                   ) : (
-                    ''
+                    ""
                   )
                 }`}
               </h3>
-              <p className={'text-[#474761] text-[14px] mt-[12px]'}>
+              <p className={"text-[#474761] text-[14px] mt-[12px]"}>
                 {description}
               </p>
             </div>
@@ -145,11 +147,11 @@ export const TicketsByDeptId = () => {
           permissions={permissions}
           hideActions={true}
           headingTitle={
-            active === t('active')
-              ? 'Active Tickets'
-              : active === t('waiting')
-              ? 'Waiting Tickets'
-              : 'Closed Tickets'
+            active === t("active")
+              ? "Active Tickets"
+              : active === t("waiting")
+              ? "Waiting Tickets"
+              : "Closed Tickets"
           }
           t={t}
         />
