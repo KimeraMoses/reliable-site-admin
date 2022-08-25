@@ -51,9 +51,10 @@ function SideLinks({
                         to={link?.path}
                         className={({ isActive }) =>
                           (isActive ? `text-[#3699FF] ` : "text-gray-500 ") +
-                          ` no-underline hover:bg-[#1b1b2b] hover:text-[#3699FF] ease-in duration-100 py-2`
+                          ` flex items-center w-full pl-1 no-underline hover:bg-[#1b1b2b] hover:text-[#3699FF] ease-in duration-100 py-2`
                         }
                       >
+                        <span>{">"}</span>
                         <div className="flex items-center gap-[12px]">
                           <span
                             className={`${

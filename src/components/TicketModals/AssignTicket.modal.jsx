@@ -4,17 +4,15 @@ import { addTicketComments } from "store";
 import { editTicket } from "store";
 
 export const AssignTicket = ({ show, setShow, id }) => {
-  // const { users } = useSelector((state) => state?.users);
-  const { departmentUsers, usersLoading } = useSelector(
-    (state) => state?.departments
-  );
+  const { users } = useSelector((state) => state?.users);
+  const { usersLoading } = useSelector((state) => state?.departments);
   const { ticket, detailsLoading, loading } = useSelector(
     (state) => state?.tickets
   );
 
   let deptData = [{ value: "", label: "Any" }];
-  if (departmentUsers?.length) {
-    departmentUsers?.forEach((user) => {
+  if (users?.length) {
+    users?.forEach((user) => {
       deptData.push({
         value: user?.fullName,
         label: user?.userName,

@@ -133,6 +133,12 @@ export const InvoiceList = () => {
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
         <Table
           columns={columns}
+          pagination={{
+            defaultPageSize: 5,
+            showSizeChanger: true,
+            position: ["bottomLeft"],
+            pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
+          }}
           data={data}
           loading={loading}
           dateRageFilter={true}

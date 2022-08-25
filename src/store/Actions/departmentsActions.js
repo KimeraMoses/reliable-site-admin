@@ -53,7 +53,7 @@ export const getDepartmentsByUserId = ({ id }) => {
 };
 
 // Get Departments By User ID
-export const getUsersByDepartmentID = (id) => {
+export const getUsersByDepartmentID = ({ id }) => {
   return async (dispatch) => {
     if (id) {
       dispatch(setDepartmentsUsersLoading(true));
@@ -95,21 +95,23 @@ export const assignDepartmentByUserId = ({ data }) => {
 // Un-Assign Department from Admin By ID
 export const unAssignDepartmentByUserId = ({ data }) => {
   return async (dispatch) => {
-    dispatch(setDepartmentsLoading(true));
-    try {
-      const { url, config } = unAssignDepartmentConfig();
-      const res = await axios.post(url, data, config);
-      if (res?.status === 200) {
-        const { url, config } = getDepartmentsByUserIdConfig({
-          id: data?.userId,
-        });
-        const res = await axios.get(url, config);
-        dispatch(getUsersDepartmentsDispatch(res?.data?.data));
+    if (data) {
+      dispatch(setDepartmentsLoading(true));
+      try {
+        const { url, config } = unAssignDepartmentConfig();
+        const res = await axios.post(url, data, config);
+        if (res?.status === 200) {
+          const { url, config } = getDepartmentsByUserIdConfig({
+            id: data?.userId,
+          });
+          const res = await axios.get(url, config);
+          dispatch(getUsersDepartmentsDispatch(res?.data?.data));
+        }
+        dispatch(setDepartmentsLoading(false));
+      } catch (e) {
+        toast.error(getError(e));
+        dispatch(setDepartmentsLoading(false));
       }
-      dispatch(setDepartmentsLoading(false));
-    } catch (e) {
-      toast.error(getError(e));
-      dispatch(setDepartmentsLoading(false));
     }
   };
 };

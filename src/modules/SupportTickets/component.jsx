@@ -1,9 +1,11 @@
+import GenerateNewTicket from "components/GenerateTicket/GenerateNewTicket";
 import { DashboardLayout } from "layout";
+import AdvancedSearch from "modules/KnowledgeBase/pages/Articles/pages/View/sections/AdvancedSearch/AdvancedSearch";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { getDepartments } from "store";
-import { TicketsByDeptId, TicketDetails, MyTickets } from "./pages";
+import { TicketDetails, MyTickets } from "./pages";
 import { Queue } from "./pages/Queue/TicketDetails.page";
 import "./style.scss";
 
@@ -22,12 +24,23 @@ export const SupportTickets = () => {
         />
         <Route path="tickets/list" element={<MyTickets />} />
         <Route path="tickets/queue" element={<Queue />} />
+        <Route
+          path="tickets/show-all/list/generate-ticket"
+          element={<GenerateNewTicket />}
+          exact
+        />
+        <Route
+          path="tickets/show-all/advanced-search"
+          element={<AdvancedSearch />}
+        />
         {/* Admin's Ticket List */}
         {/* Department's Tickets' */}
-        <Route
+        <Route path="tickets/by-departments/:id" element={<TicketDetails />} />
+        <Route path="tickets/list/details" element={<TicketDetails />} />
+        {/* <Route
           path="tickets/by-departments/:id"
           element={<TicketsByDeptId />}
-        />
+        /> */}
         <Route
           path="tickets/by-departments/:deptId/details/:id"
           element={<TicketDetails />}

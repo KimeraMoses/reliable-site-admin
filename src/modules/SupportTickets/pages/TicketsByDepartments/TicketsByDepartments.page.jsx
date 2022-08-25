@@ -1,18 +1,18 @@
-import { Navigation } from './sections';
-import { Ticket as TicketIcon } from 'icons';
-import { useEffect, useState } from 'react';
-import { Table } from 'components';
-import { checkModule } from 'lib/checkModule';
-import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { getTicketsByAdminID } from 'store';
-import { getDepartments } from 'store';
-import { Spin } from 'antd';
-import './TicketsByDepartment.styles.scss';
+import { Navigation } from "./sections";
+import { Ticket as TicketIcon } from "icons";
+import { useEffect, useState } from "react";
+import { Table } from "components";
+import { checkModule } from "lib/checkModule";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
+import { getTicketsByAdminID } from "store";
+import { getDepartments } from "store";
+import { Spin } from "antd";
+import "./TicketsByDepartment.styles.scss";
 
 export const TicketsByDepartment = () => {
-  const { t } = useTranslation('/Tickets/ns');
+  const { t } = useTranslation("/Tickets/ns");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { tickets, loading } = useSelector((state) => state?.tickets);
@@ -22,6 +22,7 @@ export const TicketsByDepartment = () => {
   );
   const { user } = useSelector((state) => state?.auth);
   const { userModules } = useSelector((state) => state?.modules);
+  // const { id } = useParams();
 
   useEffect(() => {
     (async () => {
@@ -31,15 +32,15 @@ export const TicketsByDepartment = () => {
   }, [dispatch]);
 
   const { permissions } = checkModule({
-    module: 'Support',
+    module: "Support",
     modules: userModules,
   });
 
   const columns = [
     {
-      title: '',
-      dataIndex: 'description',
-      key: 'description',
+      title: "",
+      dataIndex: "description",
+      key: "description",
       render: (description, record) => {
         return (
           <div
@@ -59,7 +60,7 @@ export const TicketsByDepartment = () => {
             <TicketIcon />
             <div className="ml-[8px]">
               <h3 className={`text-[#FFFFFF]`}>
-                {record?.ticketTitle}{' '}
+                {record?.ticketTitle}{" "}
                 {`${
                   record?.tagTitle ? (
                     <span
@@ -68,11 +69,11 @@ export const TicketsByDepartment = () => {
                       ${record?.tagTitle}
                     </span>
                   ) : (
-                    ''
+                    ""
                   )
                 }`}
               </h3>
-              <p className={'text-[#474761] text-[14px] mt-[12px]'}>
+              <p className={"text-[#474761] text-[14px] mt-[12px]"}>
                 {description}
               </p>
             </div>

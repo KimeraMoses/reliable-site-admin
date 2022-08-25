@@ -1,33 +1,33 @@
-import { Spin } from 'antd';
-import { Button, Input } from 'components';
-import { Form, Formik } from 'formik';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { createTicket } from 'store';
+import { Spin } from "antd";
+import { Button, Input } from "components";
+import { Form, Formik } from "formik";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { createTicket } from "store";
 
-export const GenerateTicket = () => {
+export const GenerateTicket = ({ isAdmin }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, users, clients } = useSelector((state) => state?.users);
   const { departments } = useSelector((state) => state?.departments);
   const departmentLoading = useSelector((state) => state?.departments?.loading);
-  let usersData = [{ value: '', label: 'Select User' }];
+  let usersData = [{ value: "", label: "Select User" }];
   users?.forEach((user) => {
     usersData.push({
       value: user?.id,
       label: user?.fullName,
     });
   });
-  let clientsData = [{ value: '', label: 'Select Client' }];
+  let clientsData = [{ value: "", label: "Select Client" }];
   clients?.forEach((user) => {
     clientsData.push({
       value: user?.id,
       label: user?.fullName,
     });
   });
-  let departmentsData = [{ value: '', label: 'Select Department' }];
+  let departmentsData = [{ value: "", label: "Select Department" }];
   departments?.forEach((departments) => {
     departmentsData.push({
       value: departments?.id,
@@ -37,18 +37,18 @@ export const GenerateTicket = () => {
   return (
     <div className="bg-[#1E1E2D] mt-[32px] p-[32px] rounded-[8px]">
       <h6 className="text-white text-[20px]">
-        Generate Ticket For This Article
+        Generate Ticket For {isAdmin ? "Client" : "This Article"}
       </h6>
       <Spin spinning={loading || departmentLoading}>
         <Formik
           initialValues={{
-            assignTo: '',
+            assignTo: "",
             status: 0,
             priority: 0,
-            ticketTitle: '',
-            description: '',
-            departmentId: '',
-            clientId: '',
+            ticketTitle: "",
+            description: "",
+            departmentId: "",
+            clientId: "",
           }}
           enableReinitialize
           onSubmit={async (values) => {
@@ -60,14 +60,14 @@ export const GenerateTicket = () => {
                 ticketTitle: values?.ticketTitle,
                 clientId: values?.clientId,
                 description: values?.description,
-                ticketRelatedTo: 0,
-                ticketRelatedToId: id,
+                ticketRelatedTo: isAdmin ? 1 : 0,
+                ticketRelatedToId: isAdmin ? values?.clientId : id,
                 departmentId: values?.departmentId,
               };
               await dispatch(createTicket({ data: final }));
-              navigate('/admin/dashboard/support/tickets/show-all/list');
+              navigate("/admin/dashboard/support/tickets/show-all/list");
             } else {
-              toast.error('Please select appropriate values.');
+              toast.error("Please select appropriate values.");
             }
           }}
         >
@@ -95,8 +95,8 @@ export const GenerateTicket = () => {
                   />
                   <Input
                     options={[
-                      { label: 'Active', value: 0 },
-                      { label: 'Waiting', value: 1 },
+                      { label: "Active", value: 0 },
+                      { label: "Waiting", value: 1 },
                     ]}
                     type="select"
                     name="status"
@@ -104,8 +104,8 @@ export const GenerateTicket = () => {
                   />
                   <Input
                     options={[
-                      { label: 'Urgent', value: 0 },
-                      { label: 'Not Urgent', value: 1 },
+                      { label: "Urgent", value: 0 },
+                      { label: "Not Urgent", value: 1 },
                     ]}
                     type="select"
                     name="priority"

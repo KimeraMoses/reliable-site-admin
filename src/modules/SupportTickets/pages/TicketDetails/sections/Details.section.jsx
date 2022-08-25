@@ -1,14 +1,14 @@
-import { Ticket as TicketIcon } from 'icons';
-import { useDispatch, useSelector } from 'react-redux';
-import { Spin } from 'antd';
-import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
-import { getTicketById } from 'store';
-import moment from 'moment';
-import { getDifference } from 'lib';
-import { Navigation } from '.';
-import { Comments } from './Comments.section';
-import { TicketHistory } from './TicketHistory.section';
+import { Ticket as TicketIcon } from "icons";
+import { useDispatch, useSelector } from "react-redux";
+import { Spin } from "antd";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { getTicketById } from "store";
+import moment from "moment";
+import { getDifference } from "lib";
+import { Navigation } from ".";
+import { Comments } from "./Comments.section";
+import { TicketHistory } from "./TicketHistory.section";
 
 export const Details = () => {
   const { id } = useParams();
@@ -19,7 +19,7 @@ export const Details = () => {
   const loading = detailsLoading;
   let search = window.location.search;
   let params = new URLSearchParams(search);
-  let repliesId = params.get('id');
+  let repliesId = params.get("id");
 
   // const { permissions } = checkModule({
   //   module: 'Users',
@@ -41,7 +41,7 @@ export const Details = () => {
     }
   };
 
-  const linksArr = ['Comments', 'History'];
+  const linksArr = ["Comments", "History"];
   // Handle Navigation
   const [active, setActive] = useState(linksArr[0]);
   const links = linksArr?.map((link) => {
@@ -57,7 +57,7 @@ export const Details = () => {
         <div className="text-center">
           <Spin
             size="large"
-            style={{ gridColumn: '1/3', alignSelf: 'center' }}
+            style={{ gridColumn: "1/3", alignSelf: "center" }}
           />
         </div>
       ) : (
@@ -67,23 +67,23 @@ export const Details = () => {
               <TicketIcon />
             </div>
             <div className="ml-[20px]">
-              <h3 className={'text-[24px] text-[#fff]'}>
+              <h3 className={"text-[24px] text-[#fff]"}>
                 {ticket?.ticketTitle}
               </h3>
-              <p className={'mt-[8px] text-[#474761]'}>
-                <span className="mr-[20px]">By {ticket?.createdByName}</span>{' '}
+              <p className={"mt-[8px] text-[#474761]"}>
+                <span className="mr-[20px]">By {ticket?.createdByName}</span>{" "}
                 <span>{`Created ${getDifference(
-                  new Date(ticket.createdOn)
+                  new Date(ticket?.createdOn)
                 )} - ${moment(ticket?.createdOn).format(
-                  'MMMM Do, YYYY h:m A'
+                  "MMMM Do, YYYY h:m A"
                 )}`}</span>
               </p>
             </div>
           </div>
           {/* navigation */}
           <Navigation active={active} links={links} />
-          {active === 'Comments' ? <Comments /> : <></>}
-          {active === 'History' ? <TicketHistory /> : <></>}
+          {active === "Comments" ? <Comments /> : <></>}
+          {active === "History" ? <TicketHistory /> : <></>}
         </div>
       )}
     </div>

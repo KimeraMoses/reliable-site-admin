@@ -72,11 +72,11 @@ const validationSchemaReplies = Yup.object().shape({
 export const Communication = () => {
   const { t } = useTranslation("/Tickets/ns");
   const [selected, setSelected] = useState([]);
-
+  const { users } = useSelector((state) => state?.users);
   const { commentLoading } = useSelector((state) => state?.ticketComments);
   const { repliesLoading } = useSelector((state) => state?.ticketReplies);
   const isSelected = (id) => selected.indexOf(id) !== -1;
-  const { departmentUsers } = useSelector((state) => state?.departments);
+  // const { departmentUsers } = useSelector((state) => state?.departments);
   const { id } = useParams();
   const dispatch = useDispatch();
   // console.log(departmentUsers);
@@ -100,7 +100,7 @@ export const Communication = () => {
       value: ticket?.assignedTo,
       options: () => {
         let usersData = [{ value: "", label: "Select" }];
-        departmentUsers?.forEach((user) => {
+        users?.forEach((user) => {
           usersData.push({
             value: user?.id,
             label: user?.fullName,

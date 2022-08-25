@@ -1,11 +1,13 @@
 import { Input } from "antd";
+import { Button } from "components";
 import React, { useState } from "react";
 
-const SearchableField = (props) => {
+export const SearchableField = (props) => {
   const { label, name, disabled, placeholder, data, setValues, values } = props;
   const [searchTerm, setSearchTerm] = useState("");
   const [isSelected, setIsSelected] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
+  const [selectedClient, setSelectedClient] = useState("");
 
   const keyWordHandler = (e) => {
     const { value } = e.target;
@@ -42,7 +44,7 @@ const SearchableField = (props) => {
           disabled={disabled}
           name={name}
           className="custom-table__input p-2 text-[#92928F]"
-          value={isSelected ? values?.client : searchTerm}
+          value={isSelected ? selectedClient : searchTerm}
           onChange={keyWordHandler}
         />
 
@@ -56,7 +58,8 @@ const SearchableField = (props) => {
                       <li
                         onClick={() => {
                           setIsSelected(true);
-                          setValues({ ...values, client: result?.fullName });
+                          setValues({ ...values, client: result?.id });
+                          setSelectedClient(result?.fullName);
                           setSearchTerm("");
                           setSearchResults([]);
                         }}
@@ -82,68 +85,82 @@ const SearchableField = (props) => {
 };
 
 const SearchComponent = (props) => {
-  const { values, OnChange, setValues, AdvancedSearchOptions } = props;
+  const {
+    values,
+    OnChange,
+    setValues,
+    AdvancedSearchOptions,
+    isLoading,
+    onSubmit,
+  } = props;
 
   return (
-    <div className="w-full p-2 border-[1px] border-[#323248]  rounded-md">
-      <h4 className="text-white font-medium text-md mb-4">Advanced Search</h4>
-      <div className="w-full flex justify-between flex-wrap flex-col lg:flex-row">
-        {AdvancedSearchOptions?.fields?.map((field) => {
-          if (field?.variant === "searchable") {
-            return (
-              <div className="w-full lg:w-1/2">
-                <div className="flex items-center justify-between mr-3 py-1  border-b-[1px] border-b-[#323248] border-dashed">
-                  <div className="text-white w-1/4 mr-2">{field?.label}</div>
-                  <SearchableField
-                    name="client"
-                    placeholder="Type to search client"
-                    data={field?.options}
-                    values={values}
-                    setValues={setValues}
-                  />
+    <form onSubmit={onSubmit}>
+      <div className="w-full p-2 rounded-md">
+        <h4 className="text-white font-medium text-md mb-4">Advanced Search</h4>
+        <div className="w-full flex justify-between flex-wrap flex-col lg:flex-row">
+          {AdvancedSearchOptions?.fields?.map((field) => {
+            if (field?.variant === "searchable") {
+              return (
+                <div className="w-full lg:w-1/2" key={field?.name}>
+                  <div className="flex items-center justify-between mr-3 py-1  border-b-[1px] border-b-[#323248] border-dashed">
+                    <div className="text-white w-1/4 mr-2">{field?.label}</div>
+                    <SearchableField
+                      name="client"
+                      placeholder="Type to search client"
+                      data={field?.options}
+                      values={values}
+                      setValues={setValues}
+                    />
+                  </div>
                 </div>
-              </div>
-            );
-          } else if (field?.variant === "select") {
-            return (
-              <div className="w-full lg:w-1/2">
-                <div className="flex items-center justify-between mr-3 py-1 border-b-[1px] border-b-[#323248] border-dashed">
-                  <div className="text-white w-1/4 mr-2">{field?.label}</div>
-                  <select
-                    value={values?.status}
-                    onChange={OnChange}
-                    placeholder="Any"
-                    name={field?.name}
-                    className="form-select appearance-none text-[14px] block w-full p-2 text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0 focus:bg-[#171723] focus:border-none focus:outline-none"
-                  >
-                    {field?.options?.map((option) => (
-                      <option value={option?.value} key={option?.value}>
-                        {option?.label}
-                      </option>
-                    ))}
-                  </select>
+              );
+            } else if (field?.variant === "select") {
+              return (
+                <div className="w-full lg:w-1/2" key={field?.name}>
+                  <div className="flex items-center justify-between mr-3 py-1 border-b-[1px] border-b-[#323248] border-dashed">
+                    <div className="text-white w-1/4 mr-2">{field?.label}</div>
+                    <select
+                      value={values[field?.name]}
+                      onChange={OnChange}
+                      placeholder="Any"
+                      name={field?.name}
+                      className="form-select appearance-none text-[14px] block w-full p-2 text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0 focus:bg-[#171723] focus:border-none focus:outline-none"
+                    >
+                      {field?.options?.map((option) => (
+                        <option value={option?.value} key={option?.value}>
+                          {option?.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
                 </div>
-              </div>
-            );
-          } else {
-            return (
-              <div className="w-full lg:w-1/2">
-                <div className="flex items-center justify-between mr-3 py-1 border-b-[1px] border-b-[#323248] border-dashed">
-                  <div className="text-white w-1/4 mr-2">{field?.label}</div>
-                  <Input
-                    value={values[field?.name]}
-                    onChange={OnChange}
-                    name={field?.name}
-                    type={field?.type}
-                    className="custom-table__input p-2 text-[#92928F]"
-                  />
+              );
+            } else {
+              return (
+                <div className="w-full lg:w-1/2" key={field?.name}>
+                  <div className="flex items-center justify-between mr-3 py-1 border-b-[1px] border-b-[#323248] border-dashed">
+                    <div className="text-white w-1/4 mr-2">{field?.label}</div>
+                    <Input
+                      value={values[field?.name]}
+                      onChange={OnChange}
+                      name={field?.name}
+                      type={field?.type}
+                      className="custom-table__input p-2 text-[#92928F]"
+                    />
+                  </div>
                 </div>
-              </div>
-            );
-          }
-        })}
+              );
+            }
+          })}
+        </div>
+        <div className="text-right mr-2 mt-3">
+          <Button htmlType="submit" type="ghost">
+            {isLoading ? "Searching..." : "Search"}
+          </Button>
+        </div>
       </div>
-    </div>
+    </form>
   );
 };
 
