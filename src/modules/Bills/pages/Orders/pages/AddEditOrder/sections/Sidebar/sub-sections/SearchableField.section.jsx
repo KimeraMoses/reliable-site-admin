@@ -17,7 +17,7 @@ export const SearchableField = ({
     const { value } = e.target;
     setSearchTerm(value);
     setIsSelected(false);
-
+    console.log(value);
     if (searchTerm !== "") {
       const Results = data?.filter((Result) => {
         return Object.values(Result)

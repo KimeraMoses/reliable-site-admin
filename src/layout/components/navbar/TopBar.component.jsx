@@ -10,11 +10,9 @@ export function TopBar({
   hide = false,
   hideSide,
   toggleSide,
-  innerSubLinks,
   toggleNotification,
 }) {
   const { pathname } = useLocation();
-
   const sidebarData = useSidebarData();
 
   let active = null;
@@ -64,7 +62,7 @@ export function TopBar({
                     ))}
                   </div>
                 );
-                if (!link?.show) {
+                if (!link?.showTop) {
                   return <></>;
                 } else {
                   return (

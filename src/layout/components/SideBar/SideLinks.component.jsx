@@ -45,7 +45,8 @@ function SideLinks({
             >
               {subLinks?.map(
                 (link) =>
-                  link?.show && (
+                  link?.show &&
+                  link?.showSide && (
                     <li>
                       <NavLink
                         to={link?.path}
@@ -68,7 +69,7 @@ function SideLinks({
                           </Badge>
                         </div>
                       </NavLink>
-                      {/* {!hideSide && link?.subLinks?.length && (
+                      {!hideSide && link?.subLinks?.length > 0 && (
                         <ul
                           className={`sublinks text-gray-500 ${
                             isActive ? "bg-[#1B1B28]" : ""
@@ -76,8 +77,10 @@ function SideLinks({
                         >
                           {link?.subLinks?.map(
                             (link) =>
-                              link?.show && (
-                                <li>
+                              link?.show &&
+                              link?.showSide && (
+                                <li className="flex items-center">
+                                  <span>{">>"}</span>
                                   <NavLink
                                     to={link?.path}
                                     className={({ isActive }) =>
@@ -95,16 +98,18 @@ function SideLinks({
                                       >
                                         &nbsp; {link?.name}
                                       </span>
-                                      <Badge pill bg="primary">
-                                        {link?.count}
-                                      </Badge>
+                                      {link?.count && (
+                                        <Badge pill bg="primary">
+                                          {link?.count}
+                                        </Badge>
+                                      )}
                                     </div>
                                   </NavLink>
                                 </li>
                               )
                           )}
                         </ul>
-                      )} */}
+                      )}
                     </li>
                   )
               )}

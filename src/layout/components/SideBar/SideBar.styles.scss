@@ -16,15 +16,13 @@
 
   li {
     padding: 8px 0 0 46px;
-    display: flex;
-    align-items: center;
-    // &::after {
-    //   content: ">";
-    //   display: inline-block;
-    // }
+    // display: flex;
+    // align-items: center;
 
     li {
-      padding: 8px 0 0 20px;
+      padding: 0 0 0 20px;
+      // display: flex;
+      // align-items: center;
     }
   }
 }

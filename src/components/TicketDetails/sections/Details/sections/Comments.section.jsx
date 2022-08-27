@@ -153,8 +153,8 @@ export const Comments = () => {
                       </div>
                       <div className="text-[#474761] text-[14px]">
                         {`${getDifference(
-                          new Date(item?.lastModifiedOn)
-                        )} - ${moment(item?.lastModifiedOn).format(
+                          new Date(item?.createdOn)
+                        )} - ${moment(item?.createdOn).format(
                           "MMMM Do, YYYY h:m A"
                         )}`}
                       </div>

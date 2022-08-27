@@ -33,20 +33,13 @@ export const SupportTickets = () => {
           path="tickets/show-all/advanced-search"
           element={<AdvancedSearch />}
         />
-        {/* Admin's Ticket List */}
-        {/* Department's Tickets' */}
-        <Route path="tickets/by-departments/:id" element={<TicketDetails />} />
-        <Route path="tickets/list/details" element={<TicketDetails />} />
-        {/* <Route
-          path="tickets/by-departments/:id"
-          element={<TicketsByDeptId />}
-        /> */}
+
         <Route
-          path="tickets/by-departments/:deptId/details/:id"
+          path="tickets/by-departments/:deptId"
           element={<TicketDetails />}
         />
-        {/* Departments Tickets */}
-        {/* All Tickets */}
+        <Route path="tickets/list/details" element={<TicketDetails />} />
+
         <Route path="tickets/show-all/list" element={<TicketDetails />} />
         <Route
           path="tickets/show-all/list/details/:id"
