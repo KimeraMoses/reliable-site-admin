@@ -24,19 +24,7 @@ export const useSidebarData = () => {
   );
   const ticketsLoading = useSelector((state) => state?.tickets?.loading);
   const dataLoading = useSelector((state) => state?.count?.loading);
-  // const { user } = useSelector((state) => state?.auth);
 
-  // console.log("ticket dept", allTickets);
-  // const dispatch = useDispatch();
-
-  // useEffect(() => {
-  //   dispatch(getTickets());
-  // }, []);
-
-  // My Tickets
-  // const myTickets = allTickets?.filter(
-  //   (ticket) => ticket?.assignedTo === user?.id
-  // );
   // Setting Departments
   const ticketsWithDepartmentName = allTickets?.map((ticket) => ({
     ...ticket,
@@ -59,7 +47,6 @@ export const useSidebarData = () => {
     counts[x?.departmentName] = (counts[x?.departmentName] || 0) + 1;
   });
 
-  // console.log(data);
   function getUniqueListBy(arr, key) {
     return [...new Map(arr?.map((item) => [item?.[key], item]))?.values()];
   }
@@ -70,6 +57,8 @@ export const useSidebarData = () => {
     path: `/admin/dashboard/support/tickets/by-departments/${el?.departmentId}`,
     count: counts[el?.departmentName],
     show: true,
+    showTop: false,
+    showSide: counts[el?.departmentName] > 0 ? true : false,
     subLinks: [
       {
         name: "Ticket Details",
@@ -77,6 +66,8 @@ export const useSidebarData = () => {
       },
     ],
   }));
+
+  console.log(links, allTickets, departments);
 
   const findModule = (moduleName) =>
     checkModule({ modules: userModules, module: moduleName })?.permissions
@@ -109,6 +100,8 @@ export const useSidebarData = () => {
               ? data?.orders?.NotCompleted
               : null,
           show: findModule("Orders"),
+          showTop: true,
+          showSide: true,
           showDropdown: true,
           subLinks: [
             {
@@ -132,6 +125,8 @@ export const useSidebarData = () => {
               name: "Your Orders",
               path: "/admin/dashboard/billing/orders/your-orders/list",
               show: true,
+              showTop: false,
+              showSide: false,
               subLinks: [
                 {
                   name: "Edit Order",
@@ -170,6 +165,8 @@ export const useSidebarData = () => {
           path: "/admin/dashboard/billing/clients",
           show: findModule("Clients"),
           showDropdown: true,
+          showTop: true,
+          showSide: true,
           subLinks: [
             {
               name: "Clients List",
@@ -207,6 +204,8 @@ export const useSidebarData = () => {
           // count: data?.products?.All > 0 ? data?.products?.All : null,
           path: "/admin/dashboard/billing/products-services",
           showDropdown: true,
+          showTop: true,
+          showSide: true,
           subLinks: [
             {
               name: "Products & Services List",
@@ -230,6 +229,8 @@ export const useSidebarData = () => {
           show: findModule("Invoices"),
           path: "/admin/dashboard/billing/invoices",
           showDropdown: true,
+          showTop: true,
+          showSide: true,
           subLinks: [
             {
               name: "Invoice List",
@@ -252,6 +253,8 @@ export const useSidebarData = () => {
         {
           name: "WHMCS Import Tool",
           show: findModule("WHMCS"),
+          showTop: true,
+          showSide: true,
           path: "/admin/dashboard/billing/WHMCS-import",
         },
         {
@@ -259,6 +262,8 @@ export const useSidebarData = () => {
           path: "/admin/dashboard/billing/logs",
           show: findModule("Logs"),
           showDropdown: true,
+          showTop: true,
+          showSide: true,
           subLinks: [
             { name: "Logs", path: "/admin/dashboard/billing/logs" },
             { name: "Gateway Logs", path: "#" },
@@ -285,49 +290,69 @@ export const useSidebarData = () => {
       path: "/admin/dashboard/support",
       icon: (fill) => <Support fill={fill} />,
       subLinks: [
-        // {
-        //   name: "Queue",
-        //   count:
-        //     data?.tickets?.All > 0
-        //       ? data?.tickets?.All - data?.tickets?.AssignedToAnyone
-        //       : null,
-        //   show: true,
-        //   path: "/admin/dashboard/support/tickets/queue",
-        //   // subLinks: [
-        //   //   {
-        //   //     name: "Tickets Details",
-        //   //     path: "/admin/dashboard/support/tickets/list/details/:id",
-        //   //   },
-        //   // ],
-        // },
+        {
+          name: "Waiting",
+          count:
+            data?.tickets?.All > 0
+              ? data?.tickets?.All - data?.tickets?.AssignedToAnyone
+              : null,
+          show: true,
+          showTop: false,
+          showSide: true,
+          path: "/admin/dashboard/support/tickets/queue",
+          subLinks: [...links],
+        },
+        {
+          name: "Unassigned Queue",
+          count:
+            data?.tickets?.All > 0
+              ? data?.tickets?.All - data?.tickets?.AssignedToAnyone
+              : null,
+          show: true,
+          showTop: false,
+          showSide: true,
+          path: "/admin/dashboard/support/tickets/queue",
+          subLinks: [...links],
+        },
+        {
+          name: "All Tickets",
+          count: data?.tickets?.All > 0 ? data?.tickets?.All : null,
+          show: true,
+          showTop: false,
+          showSide: true,
+          path: "/admin/dashboard/support/tickets/show-all/list",
+          subLinks: [...links],
+        },
         {
           name: "My Tickets",
           count:
-            !isSuperAdmin && data?.tickets?.All > 0
-              ? data?.tickets?.All
-              : data?.tickets?.AssignedToMe > 0
+            data?.tickets?.AssignedToMe > 0
               ? data?.tickets?.AssignedToMe
               : null,
           show: true,
+          showTop: true,
+          showSide: false,
           path: "/admin/dashboard/support/tickets/list",
-          subLinks: [
-            {
-              name: "Tickets Details",
-              path: "/admin/dashboard/support/tickets/list",
-            },
-          ],
+          // subLinks: [
+          //   {
+          //     name: "Tickets Details",
+          //     path: "/admin/dashboard/support/tickets/list",
+          //   },
+          // ],
         },
-        ...links,
+        // ...links,
         {
-          name: "Tickets List",
+          name: "All Tickets",
           count: data?.tickets?.All > 0 ? data?.tickets?.All : null,
           show: findModule("TicketList"),
+          showTop: true,
+          showSide: false,
           path: "/admin/dashboard/support/tickets/show-all/list",
           subLinks: [
-            {
-              name: "Ticket Details",
-              path: "/admin/dashboard/support/tickets/show-all/list/details/:id",
-            },
+            // {
+            //   name: "Ticket Details",
+            //   path: "/admin/dashboard/support/tickets/show-all/list/details/:id",
+            // },
             {
               name: "Generate Ticket",
               path: "/admin/dashboard/support/tickets/show-all/list/generate-ticket",
@@ -337,6 +362,8 @@ export const useSidebarData = () => {
         {
           name: "Advanced Search",
           show: true,
+          showTop: false,
+          showSide: true,
           path: "/admin/dashboard/support/tickets/show-all/advanced-search",
         },
       ],
@@ -357,6 +384,8 @@ export const useSidebarData = () => {
           count: data?.articlesCount > 0 ? data?.articlesCount : null,
           path: "/admin/dashboard/knowledge-base/articles",
           show: true,
+          showTop: true,
+          showSide: true,
           subLinks: [
             {
               name: "Article Detail",
@@ -376,6 +405,8 @@ export const useSidebarData = () => {
           name: "Feedback",
           path: "/admin/dashboard/knowledge-base/feedback",
           show: true,
+          showTop: true,
+          showSide: true,
           subLinks: [
             {
               name: "Feedback Details",
@@ -386,6 +417,8 @@ export const useSidebarData = () => {
         {
           name: "Categories",
           show: true,
+          showTop: true,
+          showSide: true,
           path: "/admin/dashboard/knowledge-base/categories",
         },
       ],
@@ -400,21 +433,29 @@ export const useSidebarData = () => {
         {
           name: "Annual Income Report",
           show: true,
+          showTop: true,
+          showSide: true,
           path: "/admin/dashboard/reports/anuual/income",
         },
         {
           name: "Support Response Time",
           show: true,
+          showTop: true,
+          showSide: true,
           path: "/admin/dashboard/reports/support-response/time",
         },
         {
           name: "Support Ticket Reply Count",
           show: true,
+          showTop: true,
+          showSide: true,
           path: "/admin/dashboard/reports/support-ticket-reply/count",
         },
         {
           name: "Reports By Filters",
           show: true,
+          showTop: true,
+          showSide: true,
           path: "/admin/dashboard/reports/tickets-by/filters",
         },
       ],
@@ -430,41 +471,57 @@ export const useSidebarData = () => {
           name: "General",
           path: "/admin/dashboard/settings/general",
           show: true,
+          showTop: true,
+          showSide: true,
         },
         {
           name: "Tickets",
           path: "/admin/dashboard/settings/tickets",
           show: true,
+          showTop: true,
+          showSide: true,
         },
         {
           name: "Billing",
           path: "/admin/dashboard/settings/billing",
           show: findModule("BillingSettings"),
+          showTop: true,
+          showSide: true,
         },
         {
           name: "Payment Gateways",
           path: "/admin/dashboard/settings/payment-gateways",
           show: findModule("PaymentGateways"),
+          showTop: true,
+          showSide: true,
         },
         {
           name: "Support",
           show: true,
+          showTop: true,
+          showSide: true,
           path: "/admin/dashboard/settings/support",
         },
         {
           name: "Departments",
           path: "/admin/dashboard/settings/departments",
           show: findModule("Departments"),
+          showTop: true,
+          showSide: true,
         },
         {
           name: "Brands",
           path: "/admin/dashboard/settings/brands",
           show: findModule("Brands"),
+          showTop: true,
+          showSide: true,
         },
         {
           name: "SMTP",
           path: "/admin/dashboard/settings/smtp",
           show: findModule("SMTP"),
+          showTop: true,
+          showSide: true,
           subLinks: [
             {
               name: "Add New Configuration",
@@ -480,6 +537,8 @@ export const useSidebarData = () => {
           name: "Email Templates",
           path: "/admin/dashboard/settings/email-templates",
           show: findModule("EmailTemplates"),
+          showTop: true,
+          showSide: true,
           subLinks: [
             {
               name: "Add New Template",
@@ -494,6 +553,8 @@ export const useSidebarData = () => {
         {
           name: "Admin Users",
           show: findModule("AdminUsers") && findModule("AdminGroups"),
+          showTop: true,
+          showSide: true,
           count: data?.adminsCount > 0 ? data?.adminsCount : null,
           path: "/admin/dashboard/settings/users/list",
           subLinks: [
@@ -507,17 +568,23 @@ export const useSidebarData = () => {
           name: "Admin Groups",
           show: findModule("AdminUsers") && findModule("AdminGroups"),
           count: data?.adminGroupCount > 0 ? data?.adminGroupCount : null,
+          showTop: true,
+          showSide: true,
           path: "/admin/dashboard/settings/users/groups",
         },
         {
           name: "Maintenance",
           show: true,
+          showTop: true,
+          showSide: true,
           path: "/admin/dashboard/settings/maintenance",
         },
         {
           name: "API",
           path: "/admin/dashboard/settings/api",
           show: findModule("SettingAPIKeys"),
+          showTop: true,
+          showSide: true,
         },
         // {
         //   name: 'Portal',

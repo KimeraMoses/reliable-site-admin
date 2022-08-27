@@ -1,19 +1,19 @@
 // import { useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
-import moment from 'moment';
-import { useEffect, useState } from 'react';
-import * as Yup from 'yup';
-import { useDispatch, useSelector } from 'react-redux';
-import { getAnnualReports } from 'store';
-import { Formik, Form } from 'formik';
-import { Spin } from 'antd';
-import { Button, Input } from 'components';
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import moment from "moment";
+import { useEffect, useState } from "react";
+import * as Yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
+import { getAnnualReports } from "store";
+import { Formik, Form } from "formik";
+import { Spin } from "antd";
+import { Button, Input } from "components";
 // import { FilterCheck, FilterIndicator } from '../../components';
 
 let data = [];
 for (let i = 1; i <= 1; i++) {
   data.push({
-    month: moment('2022-06-14T07:18:27.043Z').format('MMM'),
+    month: moment("2022-06-14T07:18:27.043Z").format("MMM"),
     totalAmount: i * 20,
   });
 }
@@ -28,11 +28,11 @@ export const AnnualIncomeReport = () => {
   const [data, setData] = useState([]);
 
   const initialValues = {
-    year: '2022',
+    year: "2022",
   };
 
   const validationSchema = Yup.object().shape({
-    year: Yup.string().required('Year is required!'),
+    year: Yup.string().required("Year is required!"),
   });
 
   const { annualReports, loading } = useSelector((state) => state?.reports);
@@ -83,9 +83,9 @@ export const AnnualIncomeReport = () => {
                         className="min-w-[200px]"
                         type="select"
                         options={[
-                          { label: '2022', value: '2022' },
-                          { label: '2021', value: '2021' },
-                          { label: '2020', value: '2020' },
+                          { label: "2022", value: "2022" },
+                          { label: "2021", value: "2021" },
+                          { label: "2020", value: "2020" },
                         ]}
                         name="year"
                       />
@@ -114,7 +114,7 @@ export const AnnualIncomeReport = () => {
             </h5>
             {/* Chart */}
             <div className="w-full">
-              {data.length ? (
+              {data?.length ? (
                 <ResponsiveContainer width="100%" height={437}>
                   <BarChart
                     barSize={30}
@@ -130,16 +130,16 @@ export const AnnualIncomeReport = () => {
                   >
                     <XAxis
                       dataKey="month"
-                      tickFormatter={(text) => moment(text)?.format('MMM-YYYY')}
+                      tickFormatter={(text) => moment(text)?.format("MMM-YYYY")}
                       strokeDasharray="3 3"
                       stroke="#323248"
-                      tick={{ fill: '#474761' }}
+                      tick={{ fill: "#474761" }}
                     />
                     <YAxis
                       width={35}
                       strokeDasharray="3 3"
                       stroke="#323248"
-                      tick={{ fill: '#474761' }}
+                      tick={{ fill: "#474761" }}
                     />
                     <Bar dataKey="totalAmount" fill="#8950FC" />
                     {/* <Bar

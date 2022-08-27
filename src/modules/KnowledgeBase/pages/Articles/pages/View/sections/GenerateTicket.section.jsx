@@ -1,10 +1,15 @@
 import { Spin } from "antd";
 import { Button, Input } from "components";
 import { Form, Formik } from "formik";
+import { SearchableField } from "modules/Bills/pages/Orders/pages/AddEditOrder/sections/Sidebar/sub-sections";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { getUsers } from "store";
+import { getClients } from "store";
 import { createTicket } from "store";
+import { Checkbox } from "antd";
 
 export const GenerateTicket = ({ isAdmin }) => {
   const { id } = useParams();
@@ -13,6 +18,11 @@ export const GenerateTicket = ({ isAdmin }) => {
   const { loading, users, clients } = useSelector((state) => state?.users);
   const { departments } = useSelector((state) => state?.departments);
   const departmentLoading = useSelector((state) => state?.departments?.loading);
+
+  useEffect(() => {
+    dispatch(getClients());
+    dispatch(getUsers());
+  }, []);
   let usersData = [{ value: "", label: "Select User" }];
   users?.forEach((user) => {
     usersData.push({
@@ -20,13 +30,13 @@ export const GenerateTicket = ({ isAdmin }) => {
       label: user?.fullName,
     });
   });
-  let clientsData = [{ value: "", label: "Select Client" }];
-  clients?.forEach((user) => {
-    clientsData.push({
-      value: user?.id,
-      label: user?.fullName,
-    });
-  });
+  // let clientsData = [{ value: "", label: "Select Client" }];
+  // clients?.forEach((user) => {
+  //   clientsData.push({
+  //     value: user?.id,
+  //     label: user?.fullName,
+  //   });
+  // });
   let departmentsData = [{ value: "", label: "Select Department" }];
   departments?.forEach((departments) => {
     departmentsData.push({
@@ -49,6 +59,7 @@ export const GenerateTicket = ({ isAdmin }) => {
             description: "",
             departmentId: "",
             clientId: "",
+            incoming: false,
           }}
           enableReinitialize
           onSubmit={async (values) => {
@@ -71,7 +82,8 @@ export const GenerateTicket = ({ isAdmin }) => {
             }
           }}
         >
-          {() => {
+          {({ setFieldValue, values }) => {
+            console.log(values);
             return (
               <Form>
                 <div className="mt-[40px] grid grid-cols-3 gap-[16px]">
@@ -117,12 +129,24 @@ export const GenerateTicket = ({ isAdmin }) => {
                     name="departmentId"
                     label="Select Department"
                   />
-                  <Input
-                    options={clientsData}
-                    type="select"
+                  <SearchableField
                     name="clientId"
-                    label="Select Client"
+                    placeholder="Search client"
+                    label="Client"
+                    data={clients}
                   />
+                  <div className="flex items-center">
+                    <Checkbox
+                      name="incoming"
+                      value={values?.incoming}
+                      onChange={(e) =>
+                        setFieldValue("incoming", e.target.checked)
+                      }
+                    />
+                    <label className="ml-2 text-white text-[14px]">
+                      Incoming Ticket
+                    </label>
+                  </div>
                 </div>
                 <div className="flex items-center gap-[12px]">
                   <Button

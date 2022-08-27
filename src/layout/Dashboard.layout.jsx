@@ -3,10 +3,11 @@ import { Link, useLocation } from "react-router-dom";
 import { element, bool } from "prop-types";
 import { useMediaQuery } from "react-responsive";
 import { SideBar, TopBar, Notifications } from "./components";
-// import { sidebarData } from './components/SideBar/data';
 import { GetMFAUri } from "store/Actions/AuthActions";
 import { useDispatch, useSelector } from "react-redux";
 import { useSidebarData } from "./components/SideBar/data";
+import { getDepartments } from "store";
+import { getAllTickets } from "store";
 
 export function DashboardLayout({ children, hide }) {
   const [active, setActive] = useState("");
@@ -14,6 +15,8 @@ export function DashboardLayout({ children, hide }) {
   const [activeInnerSub, setActiveInnerSub] = useState("");
   const [activeDeepInnerSub, setActiveDeepInnerSub] = useState("");
   const user = useSelector((state) => state.auth.user);
+  const { departments } = useSelector((state) => state?.departments);
+  const { allTickets } = useSelector((state) => state?.tickets);
   const { pathname } = useLocation();
   const dispatch = useDispatch();
 
@@ -35,6 +38,7 @@ export function DashboardLayout({ children, hide }) {
         return pathname.includes(path);
       }
     });
+
     setActive(activeLink[0]);
 
     // Set Sublink
@@ -87,6 +91,35 @@ export function DashboardLayout({ children, hide }) {
     setHideNoti(f);
   };
 
+  useEffect(() => {
+    dispatch(getDepartments());
+    dispatch(getAllTickets());
+  }, []);
+
+  // Setting Departments
+  const ticketsWithDepartmentName = allTickets?.map((ticket) => ({
+    ...ticket,
+    departmentName: departments?.filter(
+      (dept) => dept?.id === ticket?.departmentId
+    )[0]?.name,
+  }));
+
+  // console.log(ticketsWithDepartmentName);
+
+  const finalTickets = ticketsWithDepartmentName?.filter(
+    (ticket) => ticket?.departmentName !== undefined
+  );
+
+  function getUniqueListBy(arr, key) {
+    return [...new Map(arr?.map((item) => [item?.[key], item]))?.values()];
+  }
+  const uniqueDeptTickets = getUniqueListBy(finalTickets, "departmentId");
+
+  const deptLinks = uniqueDeptTickets?.map((el) => ({
+    name: el?.departmentName,
+    deptId: el?.departmentId,
+    path: `/admin/dashboard/support/tickets/by-departments/${el?.departmentId}`,
+  }));
   return (
     <div
       className={`w-full md:min-h-screen ${hideNoti ? "notificationShow" : ""}`}
@@ -108,9 +141,70 @@ export function DashboardLayout({ children, hide }) {
         )}
         <div className="col">
           <div className="bg-[#1A1A27] px-[20px] py-[20px] md:px-[40px] flex items-center gap-5">
-            <h2 className="text-xl font-normal text-white">{active?.name}</h2>
+            {pathname?.split("/")[3] === "support" ? (
+              <>
+                <h2 className="text-xl font-normal text-white">Support</h2>
+                <div className="h-5 w-[1px] bg-[#323248]" />
+                <h6 className="text-white text-[12px]">
+                  <Link
+                    to="/admin/dashboard/support/tickets/list"
+                    className={`${
+                      !pathname.includes("show-all") &&
+                      pathname.includes("details")
+                        ? "bg-[#1b1b2b] text-[#3699FF]"
+                        : "text-[#92928F]"
+                    } hover:bg-[#1b1b2b] hover:text-[#3699FF]`}
+                  >
+                    My Tickets
+                  </Link>
+                  {" - "}
+                  <Link
+                    to="/admin/dashboard/support/tickets/show-all/list"
+                    className={`${
+                      pathname.includes("show-all")
+                        ? "bg-[#1b1b2b] text-[#3699FF]"
+                        : "text-[#92928F]"
+                    } hover:bg-[#1b1b2b] hover:text-[#3699FF]`}
+                  >
+                    All Tickets
+                  </Link>
+                  {" - "}
+                  <Link
+                    to="/admin/dashboard/support/tickets/show-all/list"
+                    className={`${
+                      pathname.includes("queue")
+                        ? "bg-[#1b1b2b] text-[#3699FF]"
+                        : "text-[#92928F]"
+                    } hover:bg-[#1b1b2b] hover:text-[#3699FF]`}
+                  >
+                    Queue
+                  </Link>
+                </h6>
+                <div className="h-5 w-[1px] bg-[#323248]" />
+                {deptLinks?.map((link) => (
+                  <Link
+                    to={link?.path}
+                    className={`${
+                      pathname.includes("by-departments") &&
+                      pathname.includes(link?.deptId)
+                        ? "bg-[#1b1b2b] text-[#3699FF]"
+                        : "text-[#92928F]"
+                    } hover:bg-[#1b1b2b] hover:text-[#3699FF]`}
+                  >
+                    {link?.name}
+                  </Link>
+                ))}
+              </>
+            ) : (
+              <></>
+            )}
+            {pathname?.split("/")[3] !== "support" && (
+              <h2 className="text-xl font-normal text-white">{active?.name}</h2>
+            )}
 
-            {activeSub?.name && !active?.hideBread ? (
+            {pathname?.split("/")[3] !== "support" &&
+            activeSub?.name &&
+            !active?.hideBread ? (
               <>
                 <div className="h-5 w-[1px] bg-[#323248]" />
                 <h6 className="text-white text-[12px]">

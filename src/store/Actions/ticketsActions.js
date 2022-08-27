@@ -44,6 +44,7 @@ export const getTickets = (params = []) => {
 export const getTicketById = (id, noLoading) => {
   return async (dispatch) => {
     if (id) {
+      // console.log("here", id);
       if (!noLoading) {
         dispatch(setDetailsLoading(true));
       }
@@ -52,6 +53,7 @@ export const getTicketById = (id, noLoading) => {
         const res = await axios.get(url, config);
         dispatch(getTicket(res?.data?.data));
         dispatch(setDetailsLoading(false));
+        // console.log("single ticket", res);
       } catch (e) {
         toast.error(getError(e));
         dispatch(getTicket(null));
@@ -118,7 +120,7 @@ export const getTicketsByDepartmentId = ({ id }) => {
   return async (dispatch, getState) => {
     if (id) {
       dispatch(setTicketLoading(true));
-      console.log("here, fetching tickets", id);
+      // console.log("here, fetching tickets", id);
       try {
         const { url, defaultData, config } = getTicketsByDepartmentIdConfig({
           id,
@@ -130,11 +132,11 @@ export const getTicketsByDepartmentId = ({ id }) => {
         // );
         // console.log(getState()?.auth);
         dispatch(getDepartmentTickets(tickets));
-        console.log("dept tickets", res);
+        // console.log("dept tickets", res);
         dispatch(setTicketLoading(false));
       } catch (e) {
         toast.error(getError(e));
-        console.log("dept err", e);
+        // console.log("dept err", e);
         dispatch(getDepartmentTickets([]));
       } finally {
         dispatch(setTicketLoading(false));

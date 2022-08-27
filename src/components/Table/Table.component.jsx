@@ -328,6 +328,7 @@ export const Table = ({
           >
             <AntTable
               columns={tableColumns}
+              // className="max-h-[200px]"
               rowKey={rowKey}
               rowClassName={rowClassName}
               scroll={scroll}

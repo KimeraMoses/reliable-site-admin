@@ -19,7 +19,7 @@ export const Details = () => {
   const loading = detailsLoading;
   let search = window.location.search;
   let params = new URLSearchParams(search);
-  let repliesId = params.get("id");
+  let repliesId = params.get("tid");
 
   // const { permissions } = checkModule({
   //   module: 'Users',

@@ -15,7 +15,7 @@ import {
   editTicket,
 } from "store";
 import { Button as CustomButton, Input, FollowUp } from "components";
-import { genrateFirstLetterName } from "lib";
+import { genrateFirstLetterName, getDifference } from "lib";
 import { deleteComment } from "store";
 import { setTicketCommentLoading } from "store";
 import { updateTicketComments } from "store";
@@ -210,7 +210,6 @@ export const Communication = () => {
   };
   // Follow-Up Modal
   const [showFollowUp, setShowFollowUp] = useState(false);
-
   return (
     <>
       <FollowUp show={showFollowUp} setShow={setShowFollowUp} />
@@ -390,7 +389,11 @@ export const Communication = () => {
                           </span>
                         )}
                       </div>
-                      <div className="text-[#474761] text-[14px]">1 Hour</div>
+                      <div className="text-[#474761] text-[14px]">{`${getDifference(
+                        new Date(item?.createdOn)
+                      )} - ${moment(item?.createdOn).format(
+                        "MMMM Do, YYYY h:m A"
+                      )}`}</div>
                     </div>
                   </div>
                   {ticket?.ticketStatus === 0 && (

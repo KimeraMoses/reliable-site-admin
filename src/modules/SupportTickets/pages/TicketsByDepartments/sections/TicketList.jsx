@@ -26,13 +26,15 @@ import {
 } from "components/TicketModals";
 import { getTicketById } from "store";
 import { editTicket } from "store";
-import { Navigation } from "./Details/sections";
+// import { Navigation } from "./Details/sections";
 import { useTranslation } from "react-i18next";
 import { axios, getTicketsConfig, groupBy } from "lib";
-import { useQuery } from "./Details/Details.section";
+// import { useQuery } from "./Details/Details.section";
 import { TicketSearch } from "modules/KnowledgeBase/pages/Articles/pages/View/sections/AdvancedSearch/AdvancedSearch";
+import { useQuery } from "components/TicketDetails/sections/Details/Details.section";
+import { Navigation } from "../../AllTickets/sections";
 
-export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
+export const TicketList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
   const { t } = useTranslation("/Tickets/ns");
   const location = useLocation();
 
@@ -48,7 +50,7 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
   );
   const query = useQuery();
   const ticket_id = query.get("tid");
-  const { deptId } = useParams();
+  const { id, deptId } = useParams();
   const tickets = location?.pathname?.includes("show-all")
     ? allTickets
     : location?.pathname.includes("by-department")
@@ -61,8 +63,39 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
     location?.pathname?.includes("show-all")
       ? `/admin/dashboard/support/tickets/show-all/list/details/${id}?tid=${id}`
       : location?.pathname.includes("by-department")
-      ? `/admin/dashboard/support/tickets/by-departments/${deptId}?tid=${id}`
-      : `/admin/dashboard/support/tickets/list/details?tid=${id}`;
+      ? `/admin/dashboard/support/tickets/by-departments/${deptId}/details/${id}?tid=${id}`
+      : `/admin/dashboard/support/tickets/list?tid=${id}`;
+
+  //   useEffect(() => {
+  //     if (
+  //       !isSearch &&
+  //       location?.pathname?.includes("show-all") &&
+  //       allTickets?.length > 0
+  //     ) {
+  //       navigate(
+  //         `/admin/dashboard/support/tickets/show-all/list/details/${allTickets[0]?.id}?tid=${allTickets[0]?.id}`
+  //       );
+  //     } else if (
+  //       !isSearch &&
+  //       location?.pathname.includes("by-department") &&
+  //       departmentTickets?.length > 0 &&
+  //       !ticket_id
+  //     ) {
+  //       navigate(
+  //         `/admin/dashboard/support/tickets/by-departments/${id}?tid=${departmentTickets[0]?.id}`
+  //       );
+  //     }
+  //     if (
+  //       !isSearch &&
+  //       userTickets?.length > 0 &&
+  //       !location?.pathname?.includes("show-all") &&
+  //       !location?.pathname.includes("by-department")
+  //     ) {
+  //       navigate(
+  //         `/admin/dashboard/support/tickets/list/details?tid=${userTickets[0]?.id}`
+  //       );
+  //     }
+  //   }, [departmentTickets, userTickets, allTickets, location?.pathname]);
 
   const { userModules } = useSelector((state) => state?.modules);
 
@@ -206,7 +239,7 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
       await dispatch(getUsers());
       await dispatch(getClients());
     })();
-  }, [dispatch, deptId]);
+  }, [dispatch, id, deptId]);
 
   // Selected Rows
   const [selectedRows, setSelectedRows] = useState(false);
@@ -250,39 +283,6 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
       setData(dataToSet);
     }
   };
-
-  useEffect(() => {
-    if (data?.length) {
-      if (
-        !isSearch &&
-        location?.pathname?.includes("show-all") &&
-        allTickets?.length > 0
-      ) {
-        navigate(
-          `/admin/dashboard/support/tickets/show-all/list/details/${data[0]?.id}?tid=${data[0]?.id}`
-        );
-      } else if (
-        !isSearch &&
-        location?.pathname.includes("by-department") &&
-        departmentTickets?.length > 0 &&
-        !ticket_id
-      ) {
-        navigate(
-          `/admin/dashboard/support/tickets/by-departments/${deptId}?tid=${data[0]?.id}`
-        );
-      }
-      if (
-        !isSearch &&
-        userTickets?.length > 0 &&
-        !location?.pathname?.includes("show-all") &&
-        !location?.pathname.includes("by-department")
-      ) {
-        navigate(
-          `/admin/dashboard/support/tickets/list/details?tid=${data[0]?.id}`
-        );
-      }
-    }
-  }, [data]);
 
   const links = [
     {
@@ -382,7 +382,7 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
             pagination={{
               defaultPageSize: 5,
               showSizeChanger: true,
-              position: ["bottomRight"],
+              position: ["bottomLeft"],
               pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
             }}
             rowClassName={(record) =>
