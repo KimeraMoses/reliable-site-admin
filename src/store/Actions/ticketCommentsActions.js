@@ -3,12 +3,12 @@ import {
   axios,
   getTicketCommentsConfig,
   addTicketCommentConfig,
-} from 'lib';
-import { toast } from 'react-toastify';
+} from "lib";
+import { toast } from "react-toastify";
 import {
   getTicketCommentsDispatch,
   setTicketCommentLoading,
-} from 'store/Slices';
+} from "store/Slices";
 
 // Get All Admin Ticket Comments
 export const getTicketComments = (params = []) => {
@@ -18,7 +18,7 @@ export const getTicketComments = (params = []) => {
       const { url, defaultData, config } = getTicketCommentsConfig();
 
       if (params?.ticketId) {
-        defaultData.advancedSearch.fields.push('ticketId');
+        defaultData.advancedSearch.fields.push("ticketId");
         defaultData.advancedSearch.keyword = params?.ticketId;
       }
       const res = await axios.post(url, defaultData, config);
@@ -35,13 +35,16 @@ export const getTicketComments = (params = []) => {
 export const addTicketComments = (data) => {
   return async (dispatch) => {
     dispatch(setTicketCommentLoading(true));
+    // console.log("ticket comment data", data);
     try {
       const { url, config } = addTicketCommentConfig();
       const res = await axios.post(url, data, config);
       if (res.status === 200) {
-        toast.success('Ticket Comments Added Successfully');
+        toast.success("Ticket Comments Added Successfully");
       }
+      // console.log("ticket comment res", res);
     } catch (e) {
+      // console.log("ticket comment error", e);
       toast.error(getError(e));
     } finally {
       dispatch(setTicketCommentLoading(false));
@@ -55,11 +58,11 @@ export const updateTicketComments = ({ data }) => {
     dispatch(setTicketCommentLoading(true));
     try {
       const res = await axios.put(`/api/ticketcomments/${data?.id}`, data, {
-        modulename: 'Users',
-        moduleactionname: 'Update',
+        modulename: "Users",
+        moduleactionname: "Update",
       });
       if (res.status === 200) {
-        toast.success('Ticket Comments Updated Successfully');
+        toast.success("Ticket Comments Updated Successfully");
       }
     } catch (e) {
       toast.error(getError(e));
@@ -75,11 +78,11 @@ export const deleteComment = ({ id }) => {
     dispatch(setTicketCommentLoading(true));
     try {
       const res = await axios.delete(`/api/ticketcomments/${id}`, {
-        modulename: 'Users',
-        moduleactionname: 'Delete',
+        modulename: "Users",
+        moduleactionname: "Delete",
       });
       if (res.status === 200) {
-        toast.success('Ticket Comments Deleted Successfully');
+        toast.success("Ticket Comments Deleted Successfully");
       }
     } catch (e) {
       toast.error(getError(e));

@@ -21,6 +21,7 @@ import {
   setDetailsLoading,
   getTicketHistory,
 } from "store/Slices";
+import { getDataCounts } from "./count";
 
 // Get All Admin Ticket
 export const getTickets = (params = []) => {
@@ -31,7 +32,8 @@ export const getTickets = (params = []) => {
       const res = await axios.post(url, defaultData, config);
       dispatch(getAllTickets(res?.data?.data));
       dispatch(setTicketLoading(false));
-      console.log("ticket res", res);
+      dispatch(getDataCounts());
+      // console.log("ticket list res", res);
     } catch (e) {
       toast.error(getError(e));
       dispatch(setTicketLoading(false));
@@ -53,9 +55,10 @@ export const getTicketById = (id, noLoading) => {
         const res = await axios.get(url, config);
         dispatch(getTicket(res?.data?.data));
         dispatch(setDetailsLoading(false));
-        // console.log("single ticket", res);
+        // console.log("single ticket by id", res);
       } catch (e) {
         toast.error(getError(e));
+        // console.log("ticket by id err", e);
         dispatch(getTicket(null));
         dispatch(setDetailsLoading(false));
       }
@@ -147,16 +150,19 @@ export const getTicketsByDepartmentId = ({ id }) => {
 
 export const editTicket = ({ data }) => {
   return async (dispatch) => {
+    // console.log("Edit", data);
     dispatch(setTicketCommentLoading(true));
     dispatch(setTicketLoading(true));
     try {
       const { url, config } = editTicketConfig({ id: data?.id });
       const response = await axios.put(url, data, config);
-      if (response.status === 200) {
+      if (response?.status === 200) {
         toast.success("Ticket Updated Successfully");
       }
+      // console.log("edit res", response);
     } catch (error) {
       toast.error(getError(error));
+      // console.log("ticket error", error);
     } finally {
       dispatch(setTicketCommentLoading(false));
       dispatch(setTicketLoading(false));

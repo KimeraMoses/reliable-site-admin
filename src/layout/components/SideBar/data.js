@@ -67,8 +67,6 @@ export const useSidebarData = () => {
     ],
   }));
 
-  console.log(links, allTickets, departments);
-
   const findModule = (moduleName) =>
     checkModule({ modules: userModules, module: moduleName })?.permissions
       ?.View;

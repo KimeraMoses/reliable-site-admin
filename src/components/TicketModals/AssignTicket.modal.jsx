@@ -9,12 +9,11 @@ export const AssignTicket = ({ show, setShow, id }) => {
   const { ticket, detailsLoading, loading } = useSelector(
     (state) => state?.tickets
   );
-
   let deptData = [{ value: "", label: "Any" }];
   if (users?.length) {
     users?.forEach((user) => {
       deptData.push({
-        value: user?.fullName,
+        value: user?.id,
         label: user?.userName,
       });
     });
