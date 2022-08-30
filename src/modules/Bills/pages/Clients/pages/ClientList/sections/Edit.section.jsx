@@ -1,18 +1,27 @@
-import { Modal } from 'components';
-import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateUser } from 'store';
-import * as Yup from 'yup';
+import { Modal } from "components";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUserPassword } from "store";
+import { updateUser } from "store";
+import * as Yup from "yup";
 
 const validationSchema = Yup.object().shape({
-  fullName: Yup.string().required('Full name is required'),
-  status: Yup.bool().required('Status is required'),
+  fullName: Yup.string().required("Full name is required"),
+  status: Yup.bool().required("Status is required"),
   // ipAddress: Yup.string().required('IP Address is required'),
-  brandId: Yup.string().required('Brand is required'),
+  brandId: Yup.string().required("Brand is required"),
+  password: Yup.string().matches(
+    /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
+    "Please use 8 or more characters with a mix of letters, numbers & symbols"
+  ),
+  confirmPassword: Yup.string().oneOf(
+    [Yup.ref("password"), null],
+    "Passwords must match"
+  ),
 });
 
 export const EditClientUser = ({ show, setShow, client }) => {
-  const { t } = useTranslation('/Users/ns');
+  const { t } = useTranslation("/Users/ns");
   const dispatch = useDispatch();
   const { loading, clients } = useSelector((state) => state?.users);
   // const allUsers = [...users, ...clients];
@@ -22,42 +31,71 @@ export const EditClientUser = ({ show, setShow, client }) => {
     fullName: client?.fullName,
     status: client?.status,
     parentID:
-      !client?.parentID || client?.parentID === '0' ? '' : client?.parentID,
-    brandId: !client?.brandId || client?.brandId === '0' ? '' : client?.brandId,
+      !client?.parentID || client?.parentID === "0" ? "" : client?.parentID,
+    brandId: !client?.brandId || client?.brandId === "0" ? "" : client?.brandId,
+    password: "",
+    confirmPassword: "",
+    ipAddress: "",
   };
 
   const editFields = [
     {
-      type: 'input',
-      name: 'fullName',
-      placeholder: 'Paul.Elliott',
-      title: t('fullName'),
+      type: "input",
+      name: "fullName",
+      placeholder: "Paul.Elliott",
+      title: t("fullName"),
     },
 
     {
-      type: 'switch',
-      name: 'status',
-      title: t('status'),
+      type: "switch",
+      name: "status",
+      title: t("status"),
     },
     {
-      type: 'select',
-      name: 'brandId',
-      title: 'Select Brand',
-      placeholder: 'Select Brand',
+      type: "select",
+      name: "brandId",
+      title: "Select Brand",
+      placeholder: "Select Brand",
       options: brands?.map((brand) => ({
         label: brand?.name,
         value: brand?.id,
       })),
     },
     {
-      type: 'select',
-      name: 'parentID',
-      placeholder: 'Select Parent User',
-      title: 'Parent User',
+      type: "select",
+      name: "parentID",
+      placeholder: "Select Parent User",
+      title: "Parent User",
       options: clients?.map((user) => ({
         label: user?.userName,
         value: user?.id,
       })),
+    },
+    {
+      type: "multiselect",
+      name: "ipAddress",
+      placeholder: "253.205.121.39",
+      title: t("ipAddress"),
+      mode: "tags",
+      options:
+        clients?.restrictAccessIPAddress > 0
+          ? clients?.restrictAccessIPAddress?.map((ip) => ({
+              label: ip,
+              value: ip,
+            }))
+          : null,
+    },
+    {
+      type: "password",
+      name: "password",
+      placeholder: "*******",
+      title: "Change Password",
+    },
+    {
+      type: "password",
+      name: "confirmPassword",
+      placeholder: "*******",
+      title: "Confirm New Password",
     },
   ];
   return (
@@ -71,7 +109,22 @@ export const EditClientUser = ({ show, setShow, client }) => {
       initialValues={initialValues}
       validationSchema={validationSchema}
       handleSubmit={async (values) => {
-        await dispatch(updateUser(client?.id, values, true));
+        const editData = {
+          fullName: values?.fullName,
+          status: values?.status,
+          parentID: values?.parentID ? values?.parentID : "",
+          brandId: values?.brandId,
+          ipAddresses: values?.ipAddress,
+        };
+        await dispatch(updateUser(client?.id, editData, true));
+        if (values?.password) {
+          const data = {
+            userId: client?.id,
+            password: values?.password,
+            confirmPassword: values?.confirmPassword,
+          };
+          await dispatch(updateUserPassword(data));
+        }
         setShow(false);
       }}
     />

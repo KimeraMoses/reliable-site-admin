@@ -55,12 +55,12 @@
   background: #383854;
 }
 
-.ant-select-selector {
-  background-color: #323248 !important;
-  border-color: #323248 !important;
-  color: #92928f !important;
-}
 .ant-pagination-options {
+  .ant-select-selector {
+    background-color: #323248 !important;
+    border-color: #323248 !important;
+    color: #92928f !important;
+  }
   .ant-select-arrow {
     color: #92928f !important;
   }

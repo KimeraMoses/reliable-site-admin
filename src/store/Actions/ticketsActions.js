@@ -161,6 +161,7 @@ export const editTicket = ({ data }) => {
         toast.success("Ticket Updated Successfully");
         dispatch(getTickets());
         dispatch(getTicketsByAdminID(data?.assignedTo));
+        dispatch(getTicketHistoryByID(data?.id));
       }
     } catch (error) {
       toast.error(getError(error));
@@ -189,23 +190,22 @@ export const createTicket = ({ data }) => {
   };
 };
 
-// Get Ticket History By ID
+// Delete Ticket by ID
 export const deleteTicket = (id) => {
   return async (dispatch) => {
-    console.log(id);
     if (id) {
+      dispatch(setTicketLoading(true));
       try {
         const { url } = getTicketConfig(id);
         const res = await axios.delete(url);
-        // dispatch(getTicketHistory(res?.data?.data));
         if (res?.status === 200) {
           toast.success("Ticket deleted Successfully");
           dispatch(getTickets());
+          dispatch(setTicketLoading(false));
         }
-        console.log("Delete ticket", res);
       } catch (e) {
+        dispatch(setTicketLoading(false));
         toast.error(getError(e));
-        console.log("Delete ticket e", e);
       }
     }
   };

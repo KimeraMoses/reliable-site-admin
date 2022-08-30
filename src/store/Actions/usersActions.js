@@ -14,6 +14,7 @@ import {
   addUserAppSettings,
   registerClientConfig,
   getSpecificConfig,
+  updateUserPasswordConfig,
 } from "lib";
 import { toast } from "react-toastify";
 import {
@@ -146,6 +147,25 @@ export const updateUser = (id, data, isClient = false) => {
         }
         toast.success("User Updated Successfully");
       }
+    } catch (e) {
+      toast.error(getError(e));
+      // console.log("Update err", e);
+    } finally {
+      dispatch(setUserLoading(false));
+    }
+  };
+};
+
+// Update User
+export const updateUserPassword = (data) => {
+  return async (dispatch) => {
+    dispatch(setUserLoading(true));
+    // console.log("updated user", data);
+    try {
+      const { url } = updateUserPasswordConfig();
+      const res = await axios.post(url, data);
+      console.log(res);
+      toast.success("User Password Successfully");
     } catch (e) {
       toast.error(getError(e));
       // console.log("Update err", e);

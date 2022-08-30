@@ -35,8 +35,6 @@ export function Modal({
     setShow(false);
   };
 
-
-
   return (
     <BSModal
       show={show}
@@ -59,6 +57,7 @@ export function Modal({
             }}
           >
             {({ errors, touched, values }) => {
+              console.log(values);
               return (
                 <Form>
                   {customBody ? (
@@ -263,7 +262,8 @@ export function Modal({
 
                                             {options?.searchTerm.length > 1 && (
                                               <div className="relative w-full text-left">
-                                                {options?.searchResults.length > 0 ? (
+                                                {options?.searchResults.length >
+                                                0 ? (
                                                   <ul className="absolute top-0 right-0 left-0 border-0 margin-0 bg-[#171723] pl-0 rounded shadow-md list-none max-h-48 overflow-y-auto z-50">
                                                     {options?.searchTerm &&
                                                       options?.searchResults.map(
@@ -421,12 +421,14 @@ export function Modal({
                                                         <div className="imgwrap">
                                                           {user.imageUrl ? (
                                                             <img
+                                                              alt=""
                                                               src={
                                                                 user.imageUrl
                                                               }
                                                             />
                                                           ) : (
                                                             <img
+                                                              alt=""
                                                               src={
                                                                 "https://via.placeholder.com/200"
                                                               }
@@ -457,6 +459,8 @@ export function Modal({
                                     options={options}
                                     placeholder={placeholder}
                                     mode={mode}
+                                    disabled={false}
+                                    className="bg-[#171723]"
                                   />
                                 ) : type === "textarea" ? (
                                   <Input
