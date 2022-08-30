@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
-import { Modal as BSModal } from 'react-bootstrap';
-import './Modal.styles.scss';
-import { Button, Checkbox } from 'antd';
-import { Fragment } from 'react';
+import { useState, useEffect } from "react";
+import { Modal as BSModal } from "react-bootstrap";
+import "./Modal.styles.scss";
+import { Button, Checkbox } from "antd";
+import { Fragment } from "react";
 
 export function Modal({
   show,
@@ -12,7 +12,7 @@ export function Modal({
   handleSubmit,
   permissions = [
     {
-      name: 'ModuleManagement',
+      name: "ModuleManagement",
       permissionDetail: {
         Create: false,
         View: true,
@@ -21,8 +21,8 @@ export function Modal({
       },
     },
   ],
-  submitText = 'Configure Permissions',
-  cancelButtonText = 'Cancel',
+  submitText = "Configure Permissions",
+  cancelButtonText = "Cancel",
   handleCancel,
 }) {
   const [permissionsState, setPermissionsState] = useState([]);
@@ -108,7 +108,7 @@ export function Modal({
                                         : permission;
                                     }
                                   );
-                                  console.log(newPermissions);
+                                  // console.log(newPermissions);
                                   setPermissionsState(newPermissions);
                                 }}
                               >
@@ -133,7 +133,7 @@ export function Modal({
                                         : permission;
                                     }
                                   );
-                                  console.log(newPermissions);
+                                  // console.log(newPermissions);
                                   setPermissionsState(newPermissions);
                                 }}
                               >
@@ -158,7 +158,7 @@ export function Modal({
                                         : permission;
                                     }
                                   );
-                                  console.log(newPermissions);
+                                  // console.log(newPermissions);
                                   setPermissionsState(newPermissions);
                                 }}
                               >
@@ -183,7 +183,7 @@ export function Modal({
                                         : permission;
                                     }
                                   );
-                                  console.log(newPermissions);
+                                  // console.log(newPermissions);
                                   setPermissionsState(newPermissions);
                                 }}
                               >
