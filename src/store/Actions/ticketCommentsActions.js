@@ -9,6 +9,7 @@ import {
   getTicketCommentsDispatch,
   setTicketCommentLoading,
 } from "store/Slices";
+import { getTickets } from "./ticketsActions";
 
 // Get All Admin Ticket Comments
 export const getTicketComments = (params = []) => {
@@ -41,6 +42,7 @@ export const addTicketComments = (data) => {
       const res = await axios.post(url, data, config);
       if (res.status === 200) {
         toast.success("Ticket Comments Added Successfully");
+        dispatch(getTickets());
       }
       // console.log("ticket comment res", res);
     } catch (e) {
@@ -63,6 +65,7 @@ export const updateTicketComments = ({ data }) => {
       });
       if (res.status === 200) {
         toast.success("Ticket Comments Updated Successfully");
+        dispatch(getTickets());
       }
     } catch (e) {
       toast.error(getError(e));
@@ -83,6 +86,7 @@ export const deleteComment = ({ id }) => {
       });
       if (res.status === 200) {
         toast.success("Ticket Comments Deleted Successfully");
+        dispatch(getTickets());
       }
     } catch (e) {
       toast.error(getError(e));

@@ -54,6 +54,7 @@ export const getTicketById = (id, noLoading) => {
         const { url, config } = getTicketConfig(id);
         const res = await axios.get(url, config);
         dispatch(getTicket(res?.data?.data));
+        dispatch(getTicketHistoryByID(id));
         dispatch(setDetailsLoading(false));
         // console.log("single ticket by id", res);
       } catch (e) {
@@ -109,6 +110,7 @@ export const getTicketsByAdminID = ({ id }) => {
         });
         const res = await axios.post(url, defaultData, config);
         dispatch(getTicketsDispatch(res?.data?.data));
+        console.log("user ticket", res);
       } catch (e) {
         toast.error(getError(e));
         dispatch(getTicketsDispatch([]));
@@ -150,7 +152,6 @@ export const getTicketsByDepartmentId = ({ id }) => {
 
 export const editTicket = ({ data }) => {
   return async (dispatch) => {
-    // console.log("Edit", data);
     dispatch(setTicketCommentLoading(true));
     dispatch(setTicketLoading(true));
     try {
@@ -158,11 +159,11 @@ export const editTicket = ({ data }) => {
       const response = await axios.put(url, data, config);
       if (response?.status === 200) {
         toast.success("Ticket Updated Successfully");
+        dispatch(getTickets());
+        dispatch(getTicketsByAdminID(data?.assignedTo));
       }
-      // console.log("edit res", response);
     } catch (error) {
       toast.error(getError(error));
-      // console.log("ticket error", error);
     } finally {
       dispatch(setTicketCommentLoading(false));
       dispatch(setTicketLoading(false));
@@ -184,6 +185,28 @@ export const createTicket = ({ data }) => {
       toast.error(getError(error));
     } finally {
       dispatch(setTicketLoading(false));
+    }
+  };
+};
+
+// Get Ticket History By ID
+export const deleteTicket = (id) => {
+  return async (dispatch) => {
+    console.log(id);
+    if (id) {
+      try {
+        const { url } = getTicketConfig(id);
+        const res = await axios.delete(url);
+        // dispatch(getTicketHistory(res?.data?.data));
+        if (res?.status === 200) {
+          toast.success("Ticket deleted Successfully");
+          dispatch(getTickets());
+        }
+        console.log("Delete ticket", res);
+      } catch (e) {
+        toast.error(getError(e));
+        console.log("Delete ticket e", e);
+      }
     }
   };
 };

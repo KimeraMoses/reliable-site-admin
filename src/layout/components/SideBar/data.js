@@ -33,8 +33,6 @@ export const useSidebarData = () => {
     )[0]?.name,
   }));
 
-  // console.log(ticketsWithDepartmentName);
-
   const finalTickets = ticketsWithDepartmentName?.filter(
     (ticket) => ticket?.departmentName !== undefined
   );
@@ -66,6 +64,50 @@ export const useSidebarData = () => {
       },
     ],
   }));
+
+  const waitingLinks = getUniqueListBy(
+    data?.tickets?.WaitingDeptGroupCount,
+    "department"
+  )?.map((el) => ({
+    name: el?.department,
+    path: `/admin/dashboard/support/tickets/by-departments/${
+      departments.find((dept) => dept?.name === el?.department)?.id
+    }`,
+    count: el?.count,
+    show: true,
+    showTop: false,
+    showSide: el?.count > 0 ? true : false,
+  }));
+
+  const allDeptLinks = getUniqueListBy(
+    data?.tickets?.DeptGroupCount,
+    "department"
+  )?.map((el) => ({
+    name: el?.department,
+    path: `/admin/dashboard/support/tickets/by-departments/${
+      departments.find((dept) => dept?.name === el?.department)?.id
+    }`,
+    count: el?.count,
+    show: true,
+    showTop: false,
+    showSide: el?.count > 0 ? true : false,
+  }));
+
+  const unAssignedDeptLinks = getUniqueListBy(
+    data?.tickets?.UnAssigned,
+    "department"
+  )?.map((el) => ({
+    name: el?.department,
+    path: `/admin/dashboard/support/tickets/by-departments/${
+      departments.find((dept) => dept?.name === el?.department)?.id
+    }`,
+    count: el?.count,
+    show: true,
+    showTop: false,
+    showSide: el?.count > 0 ? true : false,
+  }));
+
+  console.log("data", data);
 
   const findModule = (moduleName) =>
     checkModule({ modules: userModules, module: moduleName })?.permissions
@@ -290,27 +332,21 @@ export const useSidebarData = () => {
       subLinks: [
         {
           name: "Waiting",
-          count:
-            data?.tickets?.All > 0
-              ? data?.tickets?.All - data?.tickets?.AssignedToAnyone
-              : null,
+          count: data?.tickets?.Waiting > 0 ? data?.tickets?.Waiting : null,
           show: true,
           showTop: false,
           showSide: true,
           path: "/admin/dashboard/support/tickets/queue",
-          subLinks: [...links],
+          subLinks: [...waitingLinks],
         },
         {
           name: "Unassigned Queue",
-          count:
-            data?.tickets?.All > 0
-              ? data?.tickets?.All - data?.tickets?.AssignedToAnyone
-              : null,
+          count: data?.tickets?.UnAssigned,
           show: true,
           showTop: false,
           showSide: true,
           path: "/admin/dashboard/support/tickets/queue",
-          subLinks: [...links],
+          subLinks: [...unAssignedDeptLinks],
         },
         {
           name: "All Tickets",
@@ -319,7 +355,7 @@ export const useSidebarData = () => {
           showTop: false,
           showSide: true,
           path: "/admin/dashboard/support/tickets/show-all/list",
-          subLinks: [...links],
+          subLinks: [...allDeptLinks],
         },
         {
           name: "My Tickets",
@@ -331,14 +367,7 @@ export const useSidebarData = () => {
           showTop: true,
           showSide: false,
           path: "/admin/dashboard/support/tickets/list",
-          // subLinks: [
-          //   {
-          //     name: "Tickets Details",
-          //     path: "/admin/dashboard/support/tickets/list",
-          //   },
-          // ],
         },
-        // ...links,
         {
           name: "All Tickets",
           count: data?.tickets?.All > 0 ? data?.tickets?.All : null,
@@ -347,14 +376,11 @@ export const useSidebarData = () => {
           showSide: false,
           path: "/admin/dashboard/support/tickets/show-all/list",
           subLinks: [
-            // {
-            //   name: "Ticket Details",
-            //   path: "/admin/dashboard/support/tickets/show-all/list/details/:id",
-            // },
             {
               name: "Generate Ticket",
               path: "/admin/dashboard/support/tickets/show-all/list/generate-ticket",
             },
+            ...links,
           ],
         },
         {

@@ -31,6 +31,7 @@ import { useTranslation } from "react-i18next";
 import { axios, getTicketsConfig, groupBy } from "lib";
 import { useQuery } from "./Details/Details.section";
 import { TicketSearch } from "modules/KnowledgeBase/pages/Articles/pages/View/sections/AdvancedSearch/AdvancedSearch";
+import { deleteTicket } from "store";
 
 export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
   const { t } = useTranslation("/Tickets/ns");
@@ -208,6 +209,13 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
     })();
   }, [dispatch, deptId]);
 
+  useEffect(() => {
+    (async () => {
+      await dispatch(getUsers());
+      await dispatch(getClients());
+    })();
+  }, []);
+
   // Selected Rows
   const [selectedRows, setSelectedRows] = useState(false);
 
@@ -337,8 +345,9 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
     const { url } = getTicketsConfig();
     const res = await axios.post(url, defaultData);
     setIsLoading(false);
-    setSearchResults(res?.data?.data?.length);
+    console.log(res);
     if (res.status === 200) {
+      setSearchResults(res?.data?.data?.length);
       setData(res?.data?.data);
     }
   };
@@ -446,6 +455,13 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
                     }}
                   >
                     Pin
+                  </Button>
+                  <Button
+                    onClick={async () => {
+                      await dispatch(deleteTicket(record?.id));
+                    }}
+                  >
+                    Delete
                   </Button>
                 </>
               );

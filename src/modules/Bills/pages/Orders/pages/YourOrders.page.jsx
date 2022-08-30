@@ -91,7 +91,7 @@ export const YourOrders = ({ myOrders }) => {
         label: "Date",
         name: "dateAdded",
         type: "date",
-        variant: "date",
+        variant: "dateRange",
         placeholder: "12-13-2022",
       },
       {

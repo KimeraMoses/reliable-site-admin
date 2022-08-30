@@ -1,6 +1,8 @@
 import { Input } from "antd";
 import { Button } from "components";
 import React, { useState } from "react";
+import moment from "moment";
+import { DatePicker as $DatePicker } from "antd";
 
 export const SearchableField = (props) => {
   const { label, name, disabled, placeholder, data, setValues, values } = props;
@@ -133,6 +135,29 @@ const SearchComponent = (props) => {
                         </option>
                       ))}
                     </select>
+                  </div>
+                </div>
+              );
+            } else if (field?.variant === "dateRange") {
+              return (
+                <div className="w-full lg:w-1/2" key={field?.name}>
+                  <div className="flex items-center justify-between mr-3 py-1 border-b-[1px] border-b-[#323248] border-dashed">
+                    <div className="text-white w-1/4 mr-2">{field?.label}</div>
+                    <$DatePicker.RangePicker
+                      onChange={(date) => {
+                        const startDate = moment(date[0]).toISOString();
+                        const endDate = moment(date[1]).toISOString();
+                        setValues({
+                          ...values,
+                          [field?.name]: [startDate, endDate],
+                        });
+                      }}
+                      name="dateAdded"
+                      dropdownClassName="custom-date-picker-dd"
+                      format="MM/DD/YYYY"
+                      separator={<></>}
+                      className="custom-date-picker w-full h-[52px] bg-[#171723] rounded-[8px] text-[#92928F] flex items-center justify-between px-[16px]"
+                    />
                   </div>
                 </div>
               );

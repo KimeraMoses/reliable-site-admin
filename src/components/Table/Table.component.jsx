@@ -4,7 +4,6 @@ import { Search } from "icons";
 import { axios, getOrdersConfig } from "lib";
 import { useEffect, useState } from "react";
 import SearchComponent from "./SearchComponent";
-
 import "./Table.styles.scss";
 
 // Methods to Select Rows
@@ -67,6 +66,7 @@ export const Table = ({
     const { name, value } = e.target;
     setValues({ ...values, [name]: value });
   };
+  console.log(values?.dateAdded);
 
   const searchOrderHandler = async (e) => {
     e.preventDefault();
@@ -82,7 +82,8 @@ export const Table = ({
       orderNo: values?.orderId ? parseInt(values?.orderId) : null,
       amount: values.total ? parseInt(values.total) : null,
       clientId: values?.client ? values?.client : null,
-      createdOn: values?.dateAdded ? values?.dateAdded : null,
+      startDate: values?.dateAdded[0] ? values?.dateAdded[0] : null,
+      endDate: values?.dateAdded[1] ? values?.dateAdded[1] : null,
     };
 
     const { url } = getOrdersConfig();

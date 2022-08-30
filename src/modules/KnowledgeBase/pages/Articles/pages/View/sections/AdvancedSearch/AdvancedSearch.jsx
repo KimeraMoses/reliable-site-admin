@@ -4,6 +4,8 @@ import { SearchableField } from "components/Table/SearchComponent";
 import { RelatedList } from "components/TicketDetails/sections";
 import React from "react";
 import { useSelector } from "react-redux";
+import moment from "moment";
+import { DatePicker as $DatePicker } from "antd";
 
 export const TicketSearch = (props) => {
   const {
@@ -56,6 +58,29 @@ export const TicketSearch = (props) => {
                   </div>
                 </div>
               );
+            } else if (field?.variant === "dateRange") {
+              return (
+                <div className="w-full lg:w-1/2" key={field?.name}>
+                  <div className="flex items-center justify-between mr-3 py-1 border-b-[1px] border-b-[#323248] border-dashed">
+                    <div className="text-white w-1/4 mr-2">{field?.label}</div>
+                    <$DatePicker.RangePicker
+                      onChange={(date) => {
+                        const startDate = moment(date[0]).format("DD-MM-YYYY");
+                        const endDate = moment(date[1]).format("DD-MM-YYYY");
+                        setValues({
+                          ...values,
+                          [field?.name]: `${startDate}, ${endDate}`,
+                        });
+                      }}
+                      name="dateAdded"
+                      dropdownClassName="custom-date-picker-dd"
+                      format="MM/DD/YYYY"
+                      separator={<></>}
+                      className="custom-date-picker w-full h-[52px] bg-[#171723] rounded-[8px] text-[#92928F] flex items-center justify-between px-[16px]"
+                    />
+                  </div>
+                </div>
+              );
             } else {
               return (
                 <div className="w-full lg:w-1/2" key={field?.name}>
@@ -66,7 +91,6 @@ export const TicketSearch = (props) => {
                       onChange={OnChange}
                       name={field?.name}
                       type={field?.type}
-                      //   placeholder={field?.placeholder}
                       className="custom-table__input p-2 text-[#92928F]"
                     />
                   </div>
@@ -133,17 +157,12 @@ const AdvancedSearch = () => {
         variant: "text",
         placeholder: "100",
       },
-      //   {
-      //     label: "Username",
-      //     name: "name",
-      //     type: "text",
-      //     variant: "text",
-      //   },
+
       {
         label: "Date",
         name: "dateAdded",
         type: "date",
-        variant: "date",
+        variant: "dateRange",
         placeholder: "12-13-2022",
       },
       {
@@ -189,15 +208,6 @@ const AdvancedSearch = () => {
         type: "number",
         variant: "text",
         placeholder: 0,
-        // options: [
-        //   { label: "select max result", value: "" },
-        //   { label: "5", value: 5 },
-        //   { label: "10", value: 10 },
-        //   { label: "20", value: 20 },
-        //   { label: "50", value: 50 },
-        //   { label: "100", value: 100 },
-        //   { label: "200", value: 200 },
-        // ],
       },
     ],
   };

@@ -2,7 +2,7 @@ import { Spin } from "antd";
 import { Button, Input } from "components";
 import { Form, Formik } from "formik";
 import { SearchableField } from "modules/Bills/pages/Orders/pages/AddEditOrder/sections/Sidebar/sub-sections";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -12,6 +12,7 @@ import { createTicket } from "store";
 import { Checkbox } from "antd";
 
 export const GenerateTicket = ({ isAdmin }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -59,10 +60,11 @@ export const GenerateTicket = ({ isAdmin }) => {
             description: "",
             departmentId: "",
             clientId: "",
-            incoming: false,
+            incomingFromClient: false,
           }}
           enableReinitialize
           onSubmit={async (values) => {
+            setIsLoading(true);
             if (values?.assignTo) {
               const final = {
                 assignedTo: values?.assignTo,
@@ -74,10 +76,13 @@ export const GenerateTicket = ({ isAdmin }) => {
                 ticketRelatedTo: isAdmin ? 1 : 0,
                 ticketRelatedToId: isAdmin ? values?.clientId : id,
                 departmentId: values?.departmentId,
+                incomingFromClient: values?.incomingFromClient,
               };
               await dispatch(createTicket({ data: final }));
+              setIsLoading(false);
               navigate("/admin/dashboard/support/tickets/show-all/list");
             } else {
+              setIsLoading(false);
               toast.error("Please select appropriate values.");
             }
           }}
@@ -137,10 +142,10 @@ export const GenerateTicket = ({ isAdmin }) => {
                   />
                   <div className="flex items-center">
                     <Checkbox
-                      name="incoming"
-                      value={values?.incoming}
+                      name="incomingFromClient"
+                      value={values?.incomingFromClient}
                       onChange={(e) =>
-                        setFieldValue("incoming", e.target.checked)
+                        setFieldValue("incomingFromClient", e.target.checked)
                       }
                     />
                     <label className="ml-2 text-white text-[14px]">
@@ -152,9 +157,10 @@ export const GenerateTicket = ({ isAdmin }) => {
                   <Button
                     type="primary"
                     htmlType="submit"
+                    disabled={isLoading}
                     className="w-[fit_content] h-[55px] mt-[32px]"
                   >
-                    Generate Ticket
+                    {isLoading ? "Generating..." : "Generate Ticket"}
                   </Button>
                 </div>
               </Form>
