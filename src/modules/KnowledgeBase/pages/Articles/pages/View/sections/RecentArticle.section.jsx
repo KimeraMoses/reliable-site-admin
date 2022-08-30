@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { getAllRecentArticles } from 'store';
-import './RecentArticle.styles.scss';
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { getAllRecentArticles } from "store";
+import "./RecentArticle.styles.scss";
 
 const ArticleCard = ({ id, imagePath, title, bodyText }) => {
   const [imgError, setImgError] = useState(false);
@@ -48,7 +48,6 @@ export const RecentArticle = () => {
     dispatch(getAllRecentArticles());
   }, []);
   const { recentArticles } = useSelector((state) => state?.articles);
-  console.log(recentArticles);
   return (
     <div className="recent-article">
       <div className="">

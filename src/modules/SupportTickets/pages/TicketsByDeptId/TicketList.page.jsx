@@ -20,8 +20,6 @@ export const TicketsByDeptId = () => {
 
   let activeTicket = tickets ? groupBy(tickets, "ticketStatus") : {};
 
-  console.log("tickets", tickets);
-
   useEffect(() => {
     (async () => {
       await dispatch(getTicketsByDepartmentId({ id }));

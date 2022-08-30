@@ -13,13 +13,13 @@ import {
   cancelProductByIDConfig,
   unSuspenseProductByID,
   renewProductByID,
-} from 'lib';
-import { toast } from 'react-toastify';
+} from "lib";
+import { toast } from "react-toastify";
 import {
   getProductsDispatch,
   getProductDispatch,
   setProductsLoading,
-} from 'store/Slices';
+} from "store/Slices";
 
 // Get All Products
 export const getProducts = () => {
@@ -84,13 +84,13 @@ export const getProductByID = (id) => {
 // Update Product By ID
 export const updateProductByID = (id, data) => {
   return async (dispatch) => {
-    dispatch(setProductsLoading(true));
     try {
+      dispatch(setProductsLoading(true));
       const res = await updateProductsByIDCall(id, data);
       if (res?.status === 200) {
         const product = await getProductsByIDCall(id);
         dispatch(getProductDispatch(product?.data?.data));
-        toast.success('Product updated successfully');
+        toast.success("Product updated successfully");
       }
     } catch (error) {
       toast.error(getError(error));
@@ -109,7 +109,7 @@ export const createProduct = (data) => {
       if (res?.status === 200) {
         const products = await getProductsCall();
         dispatch(getProductsDispatch(products?.data?.data));
-        toast.success('Product created successfully');
+        toast.success("Product created successfully");
       }
     } catch (error) {
       toast.error(getError(error));
@@ -128,7 +128,7 @@ export const deleteProductByID = (id) => {
       if (res?.status === 200) {
         const products = await getProductsCall();
         dispatch(getProductsDispatch(products?.data?.data));
-        toast.success('Product deleted successfully');
+        toast.success("Product deleted successfully");
       }
     } catch (error) {
       toast.error(getError(error));
@@ -140,32 +140,32 @@ export const deleteProductByID = (id) => {
 
 // Suspensd, Cancel, UnSuspend, Renew, or Terminate Product By ID
 export const performProductActionsByID = (id, type) => {
-  let url = '';
-  let config = '';
+  let url = "";
+  let config = "";
   switch (type) {
-    case 'SUSPEND':
+    case "SUSPEND":
       url = suspendProductByID(id).url;
       config = suspendProductByID(id).config;
       break;
-    case 'TERMINATE':
+    case "TERMINATE":
       url = terminateProductByID(id).url;
       config = terminateProductByID(id).config;
       break;
-    case 'CANCEL':
+    case "CANCEL":
       url = cancelProductByIDConfig(id).url;
       config = cancelProductByIDConfig(id).config;
       break;
-    case 'UNSUSPEND':
+    case "UNSUSPEND":
       url = unSuspenseProductByID(id).url;
       config = unSuspenseProductByID(id).config;
       break;
-    case 'RENEW':
+    case "RENEW":
       url = renewProductByID(id).url;
       config = renewProductByID(id).config;
       break;
     default:
-      url = '';
-      config = '';
+      url = "";
+      config = "";
   }
   return async (dispatch) => {
     dispatch(setProductsLoading(true));
@@ -174,7 +174,7 @@ export const performProductActionsByID = (id, type) => {
       if (res?.status === 200) {
         const products = await getProductsCall();
         dispatch(getProductsDispatch(products?.data?.data));
-        toast.success('Product updated successfully');
+        toast.success("Product updated successfully");
       }
     } catch (error) {
       toast.error(getError(error));

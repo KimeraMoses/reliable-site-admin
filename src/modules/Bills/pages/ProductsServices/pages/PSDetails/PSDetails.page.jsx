@@ -13,7 +13,7 @@ import {
   AdvancedSettings,
 } from "./sections";
 import "./PSDetails.styles.scss";
-import { createServerImage } from "lib";
+// import { createServerImage } from "lib";
 import { getCategories } from "store";
 import { updateProductByID } from "store";
 import { getClients } from "store";
@@ -48,7 +48,6 @@ export const PSDetails = () => {
       await dispatch(getDepartments());
     })();
   }, []);
-
   const initVal = {
     preview: product?.base64Image,
     thumbnail: product?.thumbnail,
@@ -83,32 +82,32 @@ export const PSDetails = () => {
       initialValues={initVal}
       enableReinitialize
       onSubmit={async (values) => {
-        const img = await createServerImage(values.thumbnail);
+        // const img = await createServerImage(values.thumbnail);
         const newValues = {
-          thumbnail: img,
-          status: Number(values?.status),
-          productCategories: values?.productCategories?.map((item) => ({
-            categoryId: item,
-          })),
-          productDepartments: values?.productDepartments?.map((item) => ({
-            departmentId: item,
-          })),
-          paymentType: Number(values?.paymentType),
-          billingCycle: Number(values?.billingCycle),
-          tags: `${values?.tags}`,
-          name: values?.name,
-          description: values?.description,
-          productLineItems: values?.productLineItems?.map((item) => ({
-            id: item?.id,
-            lineItem: item?.lineItem,
-            price: item?.price,
-            isDeleted: item?.isDeleted,
-            priceType: item?.priceType,
-          })),
-          notes: values?.notes,
-          registrationDate: values?.registrationDate?.toISOString(),
-          nextDueDate: values?.nextDueDate?.toISOString(),
-          terminationDate: values?.terminationDate?.toISOString(),
+          // thumbnail: img,
+          // status: Number(values?.status),
+          // productCategories: values?.productCategories?.map((item) => ({
+          //   categoryId: item,
+          // })),
+          // productDepartments: values?.productDepartments?.map((item) => ({
+          //   departmentId: item,
+          // })),
+          // paymentType: Number(values?.paymentType),
+          // billingCycle: Number(values?.billingCycle),
+          // tags: `${values?.tags}`,
+          // name: values?.name,
+          // description: values?.description,
+          // productLineItems: values?.productLineItems?.map((item) => ({
+          //   id: item?.id,
+          //   lineItem: item?.lineItem,
+          //   price: item?.price,
+          //   isDeleted: item?.isDeleted,
+          //   priceType: item?.priceType,
+          // })),
+          // notes: values?.notes,
+          // registrationDate: values?.registrationDate?.toISOString(),
+          // nextDueDate: values?.nextDueDate?.toISOString(),
+          // terminationDate: values?.terminationDate?.toISOString(),
           overrideSuspensionDate: values?.overrideSuspensionDate?.toISOString(),
           overrideTerminationDate:
             values?.overrideTerminationDate?.toISOString(),
@@ -117,7 +116,7 @@ export const PSDetails = () => {
         // console.log(newValues);
       }}
     >
-      {({ values }) => {
+      {() => {
         // console.log("Form values", values);
         return (
           <Form>

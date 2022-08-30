@@ -1,20 +1,20 @@
-import * as Yup from 'yup';
-import { useDispatch, useSelector } from 'react-redux';
+import * as Yup from "yup";
+import { useDispatch, useSelector } from "react-redux";
 
-import { Input, Modal } from 'components';
-import { Info } from 'icons';
-import QRCode from 'react-qr-code';
-import { axios, getError, validateMFAConfig } from 'lib';
-import { logout } from 'store/Slices/authSlice';
-import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import { Input, Modal } from "components";
+import { Info } from "icons";
+import QRCode from "react-qr-code";
+import { axios, getError, validateMFAConfig } from "lib";
+import { logout } from "store/Slices/authSlice";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const initialValues = {
-  code: '',
+  code: "",
 };
 
 const validationSchema = Yup.object().shape({
-  code: Yup.string().required('Code is required'),
+  code: Yup.string().required("Code is required"),
 });
 
 export const AuthApps = ({ show, setShow }) => {
@@ -44,7 +44,7 @@ export const AuthApps = ({ show, setShow }) => {
             isRemember: false,
           });
           if (res?.status === 200) {
-            toast.success('MFA Enabled Successfully');
+            toast.success("MFA Enabled Successfully");
             // Logout
             dispatch(logout());
           }
@@ -52,7 +52,6 @@ export const AuthApps = ({ show, setShow }) => {
           toast.error(getError(e));
           setLoading(false);
         }
-        console.log(values);
         setShow(false);
       }}
       loading={loading}
@@ -76,7 +75,7 @@ export const AuthApps = ({ show, setShow }) => {
           {/* QR Image */}
           <div className="mb-[32px] flex items-center justify-center">
             <QRCode
-              value={params?.get('secret')}
+              value={params?.get("secret")}
               title="Scan QR Code to Enable MFA"
               width={200}
               height={200}
@@ -95,7 +94,7 @@ export const AuthApps = ({ show, setShow }) => {
               your app, and enter your username and the code:
             </p>
             <p className="text-white text-[16px] text-center font-medium">
-              {params?.get('secret')}
+              {params?.get("secret")}
             </p>
             {/* Input */}
           </div>

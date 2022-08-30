@@ -2,20 +2,20 @@ import {
   Button,
   // Select,
   Tooltip,
-} from 'antd';
+} from "antd";
 import {
   Copy,
   //  Down
-} from 'icons';
-import { Table } from 'components';
-import './APIKeys.styles.scss';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Add, Delete, EditAPIKey, EditPermissions } from './sections';
+} from "icons";
+import { Table } from "components";
+import "./APIKeys.styles.scss";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Add, Delete, EditAPIKey, EditPermissions } from "./sections";
 // import { checkModule } from 'lib/checkModule';
-import { useSelector, useDispatch } from 'react-redux';
-import { getAPIKeysByUID } from 'store';
-import { getAPIKeyByID } from 'store';
+import { useSelector, useDispatch } from "react-redux";
+import { getAPIKeysByUID } from "store";
+import { getAPIKeyByID } from "store";
 
 export const APIKeys = () => {
   const [show, setShow] = useState(false);
@@ -37,18 +37,18 @@ export const APIKeys = () => {
   //   modules: userModules,
   // });
 
-  const { t } = useTranslation('/Users/ns');
+  const { t } = useTranslation("/Users/ns");
 
   const columns = [
     {
-      title: t('label'),
-      dataIndex: 'label',
-      key: 'label',
+      title: t("label"),
+      dataIndex: "label",
+      key: "label",
     },
     {
-      title: t('apiKey'),
-      dataIndex: 'apiKey',
-      key: 'apiKey',
+      title: t("apiKey"),
+      dataIndex: "apiKey",
+      key: "apiKey",
       render: (text) => {
         return (
           <div className="flex gap-[8px] items-center">
@@ -68,23 +68,23 @@ export const APIKeys = () => {
       },
     },
     {
-      title: t('createDate'),
-      key: 'createdAt',
-      dataIndex: 'createdAt',
+      title: t("createDate"),
+      key: "createdAt",
+      dataIndex: "createdAt",
     },
     {
-      title: t('status'),
-      key: 'status',
-      dataIndex: 'status',
+      title: t("status"),
+      key: "status",
+      dataIndex: "status",
       render: (status) => (
         <div
           className={`${
             status
-              ? 'bg-[#1C3238] text-[#0BB783]'
-              : 'bg-[#3A2434] text-[#F64E60]'
+              ? "bg-[#1C3238] text-[#0BB783]"
+              : "bg-[#3A2434] text-[#F64E60]"
           } px-[8px] py-[4px] w-[fit-content] rounded-[4px]`}
         >
-          {status ? 'ACTIVE' : 'INACTIVE'}
+          {status ? "ACTIVE" : "INACTIVE"}
         </div>
       ),
     },
@@ -92,11 +92,6 @@ export const APIKeys = () => {
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(
-        `selectedRowKeys: ${selectedRowKeys}`,
-        'selectedRows: ',
-        selectedRows
-      );
       setSelectedRows(selectedRows);
     },
   };
@@ -114,9 +109,9 @@ export const APIKeys = () => {
       apiKeys.forEach((key) => {
         dataArr.push({
           key: key?.id,
-          label: key?.label !== null ? key?.label : 'N/A',
+          label: key?.label !== null ? key?.label : "N/A",
           apiKey: key?.applicationKey,
-          createdAt: key?.createdAt ? key?.createdAt : 'N/A',
+          createdAt: key?.createdAt ? key?.createdAt : "N/A",
           status: key?.statusApi,
           validTill: key?.validTill,
           tenant: key?.tenant,
@@ -138,13 +133,13 @@ export const APIKeys = () => {
           additionalBtns={
             selectedRows?.length
               ? [
-                  { text: 'Enable', onClick: () => {} },
-                  { text: 'Disable', onClick: () => {} },
-                  { text: 'Delete', onClick: () => {} },
+                  { text: "Enable", onClick: () => {} },
+                  { text: "Disable", onClick: () => {} },
+                  { text: "Delete", onClick: () => {} },
                 ]
               : []
           }
-          btnData={{ text: 'Add API Key', onClick: () => setShow(true) }}
+          btnData={{ text: "Add API Key", onClick: () => setShow(true) }}
           fieldToFilter="label"
           pagination={false}
           rowSelection={rowSelection}

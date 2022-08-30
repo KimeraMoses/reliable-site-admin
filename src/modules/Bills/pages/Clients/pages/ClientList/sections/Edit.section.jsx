@@ -35,7 +35,7 @@ export const EditClientUser = ({ show, setShow, client }) => {
     brandId: !client?.brandId || client?.brandId === "0" ? "" : client?.brandId,
     password: "",
     confirmPassword: "",
-    ipAddress: "",
+    ipAddresses: client?.ipAddresses,
   };
 
   const editFields = [
@@ -72,20 +72,6 @@ export const EditClientUser = ({ show, setShow, client }) => {
       })),
     },
     {
-      type: "multiselect",
-      name: "ipAddress",
-      placeholder: "253.205.121.39",
-      title: t("ipAddress"),
-      mode: "tags",
-      options:
-        clients?.restrictAccessIPAddress > 0
-          ? clients?.restrictAccessIPAddress?.map((ip) => ({
-              label: ip,
-              value: ip,
-            }))
-          : null,
-    },
-    {
       type: "password",
       name: "password",
       placeholder: "*******",
@@ -96,6 +82,20 @@ export const EditClientUser = ({ show, setShow, client }) => {
       name: "confirmPassword",
       placeholder: "*******",
       title: "Confirm New Password",
+    },
+    {
+      type: "multiselect",
+      name: "ipAddresses",
+      placeholder: "253.205.121.39",
+      title: t("ipAddress"),
+      mode: "tags",
+      options:
+        client?.ipAddresses?.length > 0
+          ? client?.ipAddresses?.map((ip) => ({
+              label: ip,
+              value: ip,
+            }))
+          : null,
     },
   ];
   return (
@@ -114,7 +114,7 @@ export const EditClientUser = ({ show, setShow, client }) => {
           status: values?.status,
           parentID: values?.parentID ? values?.parentID : "",
           brandId: values?.brandId,
-          ipAddresses: values?.ipAddress,
+          ipAddresses: values?.ipAddresses,
         };
         await dispatch(updateUser(client?.id, editData, true));
         if (values?.password) {

@@ -57,7 +57,7 @@ export function Modal({
             }}
           >
             {({ errors, touched, values }) => {
-              console.log(values);
+              // console.log(values);
               return (
                 <Form>
                   {customBody ? (

@@ -90,8 +90,7 @@ export const LineItems = () => {
         isDeleted: true,
       };
     });
-    console.log("newItemsFinal", newItemsFinal);
-    console.log("deletedItemsFinal", deletedItemsFinal);
+
     if (newItems?.length < 1) {
       toast.error("At least one item is required");
     } else {

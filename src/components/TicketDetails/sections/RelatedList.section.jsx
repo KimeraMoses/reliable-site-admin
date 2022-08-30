@@ -345,7 +345,7 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
     const { url } = getTicketsConfig();
     const res = await axios.post(url, defaultData);
     setIsLoading(false);
-    console.log(res);
+    // console.log(res);
     if (res.status === 200) {
       setSearchResults(res?.data?.data?.length);
       setData(res?.data?.data);

@@ -39,7 +39,7 @@ export const Status = () => {
         className="mb-[20px]"
         options={[
           { label: "One Time", value: 0 },
-          { label: "Monthly", value: 1 },
+          { label: "Recurring", value: 1 },
         ]}
       />
       <Input

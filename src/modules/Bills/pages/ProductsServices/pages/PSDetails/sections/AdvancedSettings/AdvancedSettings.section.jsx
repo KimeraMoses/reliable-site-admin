@@ -1,10 +1,18 @@
-import { DatePicker } from "components";
+import { Button, DatePicker } from "components";
 
 const fields = [
-  { label: "Next Due Date", name: "nextDueDate" },
-  { label: "Termination Date", name: "terminationDate" },
-  { label: "Override Suspension Date", name: "overrideSuspensionDate" },
-  { label: "Override Termination Date", name: "overrideTerminationDate" },
+  { label: "Next Due Date", name: "nextDueDate", disabled: true },
+  { label: "Termination Date", name: "terminationDate", disabled: true },
+  {
+    label: "Override Suspension Date",
+    name: "overrideSuspensionDate",
+    disabled: false,
+  },
+  {
+    label: "Override Termination Date",
+    name: "overrideTerminationDate",
+    disabled: false,
+  },
 ];
 
 const DateTitle = ({ title, name, disabled }) => {
@@ -40,22 +48,17 @@ export const AdvancedSettings = () => {
         {fields?.map((field) => {
           return (
             <DateTitle
-              key={field.name}
-              name={field.name}
-              title={field.label}
-              disabled
+              key={field?.name}
+              name={field?.name}
+              title={field?.label}
+              disabled={field?.disabled}
             />
           );
         })}
       </div>
-      {/* <Button
-        type="ghost"
-        htmlType="submit"
-        className="mt-[32px] h-[52px]"
-        disabled
-      >
+      <Button type="ghost" htmlType="submit" className="mt-[32px] h-[52px]">
         Save Changes
-      </Button> */}
+      </Button>
     </div>
   );
 };

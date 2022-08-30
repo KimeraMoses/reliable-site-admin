@@ -1,43 +1,43 @@
-import './ClientDetails.styles.scss';
-import { useEffect, useState } from 'react';
+import "./ClientDetails.styles.scss";
+import { useEffect, useState } from "react";
 import {
   UserProfileCard,
   SubUsers,
   Navigation,
   // Overview
   AssignedTickets,
-  PastEmails,
+  // PastEmails,
   ProductsServices,
   // Events & Logs
   // EventsLogs,
   AccountStatement,
   Settings,
-  UserPermissions,
+  // UserPermissions,
   APIKeys,
   Logs,
   LoginSessions,
-} from './sections';
+} from "./sections";
 // import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { Spin } from 'antd';
-import { useParams } from 'react-router-dom';
-import { getUserById } from 'store';
-import { getUserModulesById } from 'store';
+import { useDispatch, useSelector } from "react-redux";
+import { Spin } from "antd";
+import { useParams } from "react-router-dom";
+import { getUserById } from "store";
+import { getUserModulesById } from "store";
 
 export const ClientDetails = () => {
   // const { t } = useTranslation('/Bills/ns');
 
-  const [active, setActive] = useState('OVERVIEW');
+  const [active, setActive] = useState("OVERVIEW");
 
   const links = [
-    { label: 'OVERVIEW', onClick: () => setActive('OVERVIEW') },
-    { label: 'PERMISSIONS', onClick: () => setActive('PERMISSIONS') },
-    { label: 'API KEYS', onClick: () => setActive('API KEYS') },
-    { label: 'SETTINGS', onClick: () => setActive('SETTINGS') },
-    { label: 'EVENTS & LOGS', onClick: () => setActive('EVENTS & LOGS') },
+    { label: "OVERVIEW", onClick: () => setActive("OVERVIEW") },
+    // { label: "PERMISSIONS", onClick: () => setActive("PERMISSIONS") },
+    { label: "API KEYS", onClick: () => setActive("API KEYS") },
+    { label: "SETTINGS", onClick: () => setActive("SETTINGS") },
+    { label: "EVENTS & LOGS", onClick: () => setActive("EVENTS & LOGS") },
     {
-      label: 'ACCOUNT STATEMENT',
-      onClick: () => setActive('ACCOUNT STATEMENT'),
+      label: "ACCOUNT STATEMENT",
+      onClick: () => setActive("ACCOUNT STATEMENT"),
     },
   ];
 
@@ -56,7 +56,7 @@ export const ClientDetails = () => {
         {loading || user === null ? (
           <Spin
             size="large"
-            style={{ gridColumn: '1/3', alignSelf: 'center' }}
+            style={{ gridColumn: "1/3", alignSelf: "center" }}
           />
         ) : (
           <>
@@ -69,7 +69,7 @@ export const ClientDetails = () => {
             </div>
             <div className="admin-details__right">
               <Navigation active={active} links={links} />
-              {active === 'OVERVIEW' ? (
+              {active === "OVERVIEW" ? (
                 <>
                   <ProductsServices />
                   <AssignedTickets />
@@ -79,10 +79,10 @@ export const ClientDetails = () => {
               ) : (
                 <></>
               )}
-              {active === 'SETTINGS' ? <Settings /> : <></>}
-              {active === 'API KEYS' ? <APIKeys /> : <></>}
-              {active === 'PERMISSIONS' ? <UserPermissions /> : <></>}
-              {active === 'EVENTS & LOGS' ? (
+              {active === "SETTINGS" ? <Settings /> : <></>}
+              {active === "API KEYS" ? <APIKeys /> : <></>}
+              {/* {active === "PERMISSIONS" ? <UserPermissions /> : <></>} */}
+              {active === "EVENTS & LOGS" ? (
                 <>
                   <LoginSessions />
                   <Logs />
@@ -90,7 +90,7 @@ export const ClientDetails = () => {
               ) : (
                 <></>
               )}
-              {active === 'ACCOUNT STATEMENT' ? <AccountStatement /> : <></>}
+              {active === "ACCOUNT STATEMENT" ? <AccountStatement /> : <></>}
             </div>
           </>
         )}

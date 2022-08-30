@@ -9,14 +9,14 @@ import {
   getError,
   updateAdminGroup,
   updateAdminGroupPermission,
-} from 'lib';
+} from "lib";
 import {
   getGroup,
   getUserGroupsDispatch,
   getUserPermissionsDispatch,
   setUserGroupsLoading,
-} from 'store/Slices';
-import { toast } from 'react-toastify';
+} from "store/Slices";
+import { toast } from "react-toastify";
 
 // Get All Groups
 export const getUserGroups = () => {
@@ -26,13 +26,13 @@ export const getUserGroups = () => {
       const { url } = getAdminGroupsConfig();
       const groupsRes = await axios.post(url, {
         advancedSearch: {
-          fields: [''],
-          keyword: '',
+          fields: [""],
+          keyword: "",
         },
-        keyword: '',
+        keyword: "",
         pageNumber: 0,
         pageSize: 0,
-        orderBy: [''],
+        orderBy: [""],
       });
       const groupsData = groupsRes?.data?.data;
       dispatch(getUserGroupsDispatch(groupsData));
@@ -69,7 +69,7 @@ export const editGroupPermissions = ({ permission, gid }) => {
         const updateObj = {
           name: permission?.name,
           permissionDetail: JSON.stringify(permission?.permissionDetail),
-          tenant: 'Admin',
+          tenant: "Admin",
           isActive: true,
           adminGroupId: permission?.adminGroupId,
         };
@@ -79,7 +79,7 @@ export const editGroupPermissions = ({ permission, gid }) => {
         const createObj = {
           name: permission?.name,
           permissionDetail: JSON.stringify(permission?.permissionDetail),
-          tenant: 'Admin',
+          tenant: "Admin",
           isActive: true,
           adminGroupId: gid,
         };
@@ -87,7 +87,6 @@ export const editGroupPermissions = ({ permission, gid }) => {
       }
       dispatch(setUserGroupsLoading(false));
     } catch (e) {
-      console.log(e);
       toast.error(getError(e));
       dispatch(setUserGroupsLoading(false));
     }
@@ -101,7 +100,7 @@ export const addGroup = (groupData) => async (dispatch, getState) => {
     const { url, config } = createAdminGroup();
     const addData = {
       ...groupData,
-      tenant: 'Admin',
+      tenant: "Admin",
     };
     const res = await axios.post(url, addData, config);
     const getConfig = getAdminGroupById(res?.data?.data);
@@ -126,7 +125,7 @@ export const updateGroup = (group) => async (dispatch, getState) => {
     const { url, config } = updateAdminGroup(group?.id);
     const updateData = {
       ...group,
-      tenant: 'Admin',
+      tenant: "Admin",
     };
     const res = await axios.put(url, updateData, config);
     const getConfig = getAdminGroupById(res?.data?.data);
@@ -135,7 +134,6 @@ export const updateGroup = (group) => async (dispatch, getState) => {
       return group?.id !== userGroup?.data?.data?.id;
     });
     const newGroups = [userGroup?.data?.data, ...updatedGroups];
-    console.log(newGroups);
     dispatch(getUserGroups(newGroups));
     dispatch(setUserGroupsLoading(false));
   } catch (e) {
@@ -150,7 +148,6 @@ export const deleteGroup = (groupID) => async (dispatch, getState) => {
   try {
     const { url, config } = deleteAdminGroup(groupID);
     const res = await axios.delete(url, config);
-    console.log(res);
     const updatedGroups = getState().userGroups.userGroups.filter((group) => {
       return group?.id !== res?.data?.data;
     });

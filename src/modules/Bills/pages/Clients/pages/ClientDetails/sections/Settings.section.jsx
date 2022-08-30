@@ -1,16 +1,15 @@
-import { Formik, Form, Field } from 'formik';
-import moment from 'moment';
-import { Spin, Switch } from 'antd';
-import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { Fragment, useEffect, useState } from 'react';
-import { getUserSettingsById } from 'store';
-import { updateUserSettings } from 'store';
-import { DatePicker, Input } from 'components';
-import { deepEqual } from 'lib';
+import { Formik, Form, Field } from "formik";
+import { Spin, Switch } from "antd";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { Fragment, useEffect, useState } from "react";
+import { getUserSettingsById } from "store";
+import { updateUserSettings } from "store";
+import { DatePicker, Input } from "components";
+import { deepEqual } from "lib";
 
 export const Settings = () => {
-  const { t } = useTranslation('/Users/ns');
+  const { t } = useTranslation("/Users/ns");
   const [loading, setLoading] = useState(false);
 
   const { user, userSettings } = useSelector((state) => state?.users);
@@ -29,54 +28,62 @@ export const Settings = () => {
   console.log(userSettings);
 
   const initialValues = {
-    clientStatus: userSettings?.clientStatus || false,
-    requestPerIPOverride: userSettings?.requestPerIPOverride || 0,
+    clientStatus: userSettings?.clientStatus,
+    requestPerIPOverride: userSettings?.requestPerIPOverride
+      ? userSettings?.requestPerIPOverride
+      : 0,
     ipRestrictionIntervalOverrideInSeconds:
-      userSettings?.ipRestrictionIntervalOverrideInSeconds || 0,
-    apiKeyLimitOverride: userSettings?.apiKeyLimitOverride || 0,
+      userSettings?.ipRestrictionIntervalOverrideInSeconds
+        ? userSettings?.ipRestrictionIntervalOverrideInSeconds
+        : 0,
+    apiKeyLimitOverride: userSettings?.apiKeyLimitOverride
+      ? userSettings?.apiKeyLimitOverride
+      : 0,
     apiKeyIntervalOverrideInSeconds:
-      userSettings?.apiKeyIntervalOverrideInSeconds || 0,
-    restrictAccessToIPAddress: userSettings?.restrictAccessToIPAddress || '',
-    extendSuspensionDate:
-      moment(userSettings?.extendSuspensionDate) || moment(),
+      userSettings?.apiKeyIntervalOverrideInSeconds
+        ? userSettings?.apiKeyIntervalOverrideInSeconds
+        : 0,
+    restrictAccessToIPAddress: userSettings?.restrictAccessToIPAddress
+      ? userSettings?.restrictAccessToIPAddress
+      : "",
     userId: user?.id,
     id: userSettings?.id,
   };
 
   const fields = [
-    { label: 'Client Status', name: 'clientStatus', type: 'switch' },
+    { label: "Client Status", name: "clientStatus", type: "switch" },
     {
-      label: 'Request Per IP Override',
-      name: 'requestPerIPOverride',
-      type: 'number',
+      label: "Request Per IP Override",
+      name: "requestPerIPOverride",
+      type: "number",
     },
     {
-      label: t('IPRestrictionOverride'),
-      name: 'ipRestrictionIntervalOverrideInSeconds',
-      type: 'number',
+      label: t("IPRestrictionOverride"),
+      name: "ipRestrictionIntervalOverrideInSeconds",
+      type: "number",
     },
-    { label: t('apiKeyLimit'), name: 'apiKeyLimitOverride', type: 'number' },
+    { label: t("apiKeyLimit"), name: "apiKeyLimitOverride", type: "number" },
     {
-      label: t('apiKeyInterval'),
-      name: 'apiKeyIntervalOverrideInSeconds',
-      type: 'input',
-    },
-    {
-      label: t('ipAddress'),
-      name: 'restrictAccessToIPAddress',
-      type: 'input',
+      label: t("apiKeyInterval"),
+      name: "apiKeyIntervalOverrideInSeconds",
+      type: "input",
     },
     {
-      label: 'Extend Suspension Date',
-      name: 'extendSuspensionDate',
-      type: 'date',
+      label: t("ipAddress"),
+      name: "restrictAccessToIPAddress",
+      type: "input",
     },
+    // {
+    //   label: "Extend Suspension Date",
+    //   name: "extendSuspensionDate",
+    //   type: "date",
+    // },
   ];
 
   return (
     <div className="bg-[#1E1E2D] mt-[20px] rounded-[8px]">
       <h6 className="text-white text-[16px] px-[32px] pt-[32px]">
-        {t('settings')}
+        {t("settings")}
       </h6>
       <div className="border-dashed border-t-[1px] h-[0px] border-[#323248] mt-[32px] mb-[32px]" />
       {/* FORM ROW */}
@@ -101,14 +108,14 @@ export const Settings = () => {
                   {fields?.map((el) => {
                     return (
                       <Fragment key={el?.name}>
-                        {el?.type === 'date' ? (
+                        {el?.type === "date" ? (
                           <div className="w-full">
                             <div className="text-white mb-[12px] text-[14px]">
                               {el?.label}
                             </div>
                             <DatePicker name={el?.name} />
                           </div>
-                        ) : el?.type === 'switch' ? (
+                        ) : el?.type === "switch" ? (
                           <Field name={el?.name}>
                             {({
                               field, // { name, value, onChange, onBlur }
@@ -121,10 +128,10 @@ export const Settings = () => {
                                 </div>
                                 <div className="flex items-center justify-between w-full h-[52px] px-[16px] py-[0px] bg-[#171723] text-[#92928F] rounded-[8px]">
                                   <div className="text-[#92928F]">
-                                    {field?.value ? 'Enabled' : 'Disabled'}
+                                    {field?.value ? "Enabled" : "Disabled"}
                                   </div>
                                   <Switch
-                                    checked={field?.value}
+                                    checked={field?.clientStatus}
                                     onChange={(e) => {
                                       setFieldValue(el?.name, e);
                                     }}
@@ -154,14 +161,14 @@ export const Settings = () => {
                     type="button"
                     className="bg-[#323248] text-white rounded-[8px] py-[12px] px-[24px]"
                   >
-                    {t('discard')}
+                    {t("discard")}
                   </button>
                   <button
                     type="submit"
                     className="bg-[#3699FF] text-white rounded-[8px] py-[12px] px-[24px] disabled:opacity-70 disabled:cursor-not-allowed"
                     disabled={deepEqual(initialValues, values)}
                   >
-                    {t('saveChanges')}
+                    {t("saveChanges")}
                   </button>
                 </div>
               </Spin>

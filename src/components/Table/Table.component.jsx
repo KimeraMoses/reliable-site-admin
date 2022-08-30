@@ -66,12 +66,10 @@ export const Table = ({
     const { name, value } = e.target;
     setValues({ ...values, [name]: value });
   };
-  console.log(values?.dateAdded);
 
   const searchOrderHandler = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    console.log("order search", values);
     const defaultData = {
       keyword: values?.title ? values?.title : null,
       pageNumber: 0,
@@ -89,7 +87,6 @@ export const Table = ({
     const { url } = getOrdersConfig();
     const res = await axios.post(url, defaultData);
     setIsLoading(false);
-    console.log("Order result", res);
     if (res.status === 200) {
       setData(res?.data?.data);
     }

@@ -1,38 +1,38 @@
-import { Button } from 'antd';
-import { Table } from 'components';
-import { checkModule } from 'lib/checkModule';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { getEmailTemplate } from 'store';
-import { Delete } from './sections';
+import { Button } from "antd";
+import { Table } from "components";
+import { checkModule } from "lib/checkModule";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { getEmailTemplate } from "store";
+import { Delete } from "./sections";
 
 const columns = [
   {
-    title: 'Subject',
-    dataIndex: 'subject',
-    key: 'subject',
-    width: '15%',
+    title: "Subject",
+    dataIndex: "subject",
+    key: "subject",
+    width: "15%",
   },
   {
-    title: 'Configuration',
-    dataIndex: 'smtpConfigurationId',
-    key: 'smtpConfigurationId',
+    title: "Configuration",
+    dataIndex: "smtpConfigurationId",
+    key: "smtpConfigurationId",
   },
   {
-    title: 'Event',
-    dataIndex: 'event',
-    key: 'event',
+    title: "Event",
+    dataIndex: "event",
+    key: "event",
   },
   {
-    title: 'Added By',
-    dataIndex: 'addedBy',
-    key: 'addedBy',
+    title: "Added By",
+    dataIndex: "addedBy",
+    key: "addedBy",
   },
   {
-    title: 'Status',
-    dataIndex: 'status',
-    key: 'status',
+    title: "Status",
+    dataIndex: "status",
+    key: "status",
     render: (status) => (
       <span>
         {status ? (
@@ -57,7 +57,7 @@ export const List = () => {
   // Check for permissions Start
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'EmailTemplates',
+    module: "EmailTemplates",
     modules: userModules,
   });
   // Check for permissions End
@@ -66,7 +66,6 @@ export const List = () => {
     (state) => state.emailTemplates
   );
 
-  console.log(emailTemplates);
   const { smtps } = useSelector((state) => state?.smtps);
   const { users } = useSelector((state) => state?.users);
   const smtpsLoading = useSelector((state) => state?.smtps?.loading);
@@ -79,24 +78,24 @@ export const List = () => {
       subject: emailTemplate?.subject,
       smtpConfigurationId:
         smtps.find((x) => x.id === emailTemplate?.smtpConfigurationId)?.host ||
-        'N/A',
+        "N/A",
       event: [
-        'General',
-        'Email Confirmation',
-        'Email OTP',
-        'Product Cancellation',
-        'Reset Password',
-        'Ticket Update',
-        'Ticket Create',
-        'Ticket Assignment',
-        'Orders',
-        'Invoice',
-        'Product Status Updated',
+        "General",
+        "Email Confirmation",
+        "Email OTP",
+        "Product Cancellation",
+        "Reset Password",
+        "Ticket Update",
+        "Ticket Create",
+        "Ticket Assignment",
+        "Orders",
+        "Invoice",
+        "Product Status Updated",
       ]?.find((evt, idx) => idx === emailTemplate?.emailTemplateType),
       addedBy: emailTemplate?.isSystem
-        ? 'System'
+        ? "System"
         : users?.find((x) => x?.id === emailTemplate?.createdBy)?.fullName ||
-          'N/A',
+          "N/A",
       isSystem: emailTemplate?.isSystem,
       status: emailTemplate?.status,
     });
@@ -116,9 +115,9 @@ export const List = () => {
         permissions={permissions}
         fieldToFilter="name"
         btnData={{
-          text: 'Add New Template',
+          text: "Add New Template",
           onClick: () => {
-            navigate('/admin/dashboard/settings/email-templates/template/add');
+            navigate("/admin/dashboard/settings/email-templates/template/add");
           },
         }}
         loading={loading || smtpsLoading || usersLoading}

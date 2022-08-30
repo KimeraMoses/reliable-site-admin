@@ -40,7 +40,7 @@ export const AddClientUser = ({ show, setShow }) => {
     password: "",
     confirmPassword: "",
     status: true,
-    ipAddress: "",
+    ipAddresses: "",
     companyName: "",
     brandId: "",
     address1: "",
@@ -89,10 +89,12 @@ export const AddClientUser = ({ show, setShow }) => {
       title: t("status"),
     },
     // {
-    //   type: "input",
-    //   name: "ipAddress",
+    //   type: "multiselect",
+    //   name: "ipAddresses",
     //   placeholder: "253.205.121.39",
     //   title: t("ipAddress"),
+    //   mode: "tags",
+    //   options: [],
     // },
     {
       type: "input",

@@ -136,11 +136,8 @@ export const updateUser = (id, data, isClient = false) => {
         const res = await axios.get(url, config);
         dispatch(getUser(res?.data?.data));
         // If Get User Done Then Get All Users
-        if (res.status === 200 && isClient) {
-          const { url, config } = getClientsConfig();
-          const res = await axios.get(url, config);
-          dispatch(getClientsDispatch(res?.data?.data));
-        } else if (res?.status === 200) {
+        if (res?.status === 200) {
+          dispatch(getClients());
           const { url, config } = getUsersConfig();
           const res = await axios.get(url, config);
           dispatch(getUsers(res?.data?.data));
@@ -159,16 +156,14 @@ export const updateUser = (id, data, isClient = false) => {
 // Update User
 export const updateUserPassword = (data) => {
   return async (dispatch) => {
-    dispatch(setUserLoading(true));
-    // console.log("updated user", data);
     try {
+      dispatch(setUserLoading(true));
       const { url } = updateUserPasswordConfig();
       const res = await axios.post(url, data);
-      console.log(res);
       toast.success("User Password Successfully");
     } catch (e) {
       toast.error(getError(e));
-      // console.log("Update err", e);
+      dispatch(setUserLoading(false));
     } finally {
       dispatch(setUserLoading(false));
     }

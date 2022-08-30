@@ -1,24 +1,24 @@
 // import { useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
-import moment from 'moment';
-import { FilterCheck, FilterIndicator } from '../../components';
-import { Button, DateRangePicker } from 'components';
-import { Form, Formik } from 'formik';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Spin } from 'antd';
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import moment from "moment";
+import { FilterCheck, FilterIndicator } from "../../components";
+import { Button, DateRangePicker } from "components";
+import { Form, Formik } from "formik";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Spin } from "antd";
 import {
   getReportsByCustomer,
   getReportsByAgent,
   getReportsByDepartment,
   getReportsByPriority,
   getReportsByStatus,
-} from 'store';
+} from "store";
 
 let dataHolder = [];
 for (let i = 1; i <= 12; i++) {
   dataHolder.push({
-    createdOn: moment(`${i}`, 'M').format('MMM'),
+    createdOn: moment(`${i}`, "M").format("MMM"),
     byCustomer: 400,
     byAgent: 300,
     byStatus: 200,
@@ -29,18 +29,18 @@ for (let i = 1; i <= 12; i++) {
 
 const getLabel = ({ filterName }) => {
   switch (filterName) {
-    case 'byCustomer':
-      return { label: 'Tickets by Customer', color: 'bg-[#FFA800]' };
-    case 'byAgent':
-      return { label: 'Tickets by Agent', color: 'bg-[#8950FC]' };
-    case 'byStatus':
-      return { label: 'Tickets by Status', color: 'bg-[#53a739]' };
-    case 'byDepartment':
-      return { label: 'Tickets by Department', color: 'bg-[#fc8c50]' };
-    case 'byPriority':
-      return { label: 'Tickets by Priority', color: 'bg-[#5095fc]' };
+    case "byCustomer":
+      return { label: "Tickets by Customer", color: "bg-[#FFA800]" };
+    case "byAgent":
+      return { label: "Tickets by Agent", color: "bg-[#8950FC]" };
+    case "byStatus":
+      return { label: "Tickets by Status", color: "bg-[#53a739]" };
+    case "byDepartment":
+      return { label: "Tickets by Department", color: "bg-[#fc8c50]" };
+    case "byPriority":
+      return { label: "Tickets by Priority", color: "bg-[#5095fc]" };
     default:
-      return '';
+      return "";
   }
 };
 
@@ -162,7 +162,7 @@ export const TicketsByFilter = () => {
                     })
                   );
                 }}
-                initialValues={{ dates: '' }}
+                initialValues={{ dates: "" }}
               >
                 <Form className="flex items-center gap-[20px]">
                   <div className="min-w-[200px]">
@@ -218,19 +218,18 @@ export const TicketsByFilter = () => {
                       dataKey="createdOn"
                       strokeDasharray="3 3"
                       stroke="#323248"
-                      tick={{ fill: '#474761' }}
-                      tickFormatter={(text) => moment(text)?.format('MMM-YYYY')}
+                      tick={{ fill: "#474761" }}
+                      tickFormatter={(text) => moment(text)?.format("MMM-YYYY")}
                     />
                     <YAxis
                       width={35}
                       strokeDasharray="3 3"
                       stroke="#323248"
-                      tick={{ fill: '#474761' }}
+                      tick={{ fill: "#474761" }}
                     />
                     {Object.keys(filters).map((filter, idx) => {
                       const color = getLabel({ filterName: filter })?.color;
                       const fillColor = color?.substring(4, 11);
-                      console.log(fillColor);
                       return (
                         <Bar
                           dataKey={filter}

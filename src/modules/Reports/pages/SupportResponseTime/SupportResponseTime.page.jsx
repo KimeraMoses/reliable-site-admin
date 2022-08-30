@@ -1,18 +1,18 @@
 // import { useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from 'recharts';
-import moment from 'moment';
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer } from "recharts";
+import moment from "moment";
 // import { FilterCheck, FilterIndicator } from '../../components';
-import { Button, DateRangePicker } from 'components';
-import { Form, Formik } from 'formik';
+import { Button, DateRangePicker } from "components";
+import { Form, Formik } from "formik";
 // import { useEffect } from 'react';
-import { getResponseReports } from 'store';
-import { useDispatch, useSelector } from 'react-redux';
-import { Spin } from 'antd';
+import { getResponseReports } from "store";
+import { useDispatch, useSelector } from "react-redux";
+import { Spin } from "antd";
 
 let dataHolder = [];
 for (let i = 1; i <= 12; i++) {
   dataHolder.push({
-    createdOn: moment(`${i}`, 'M').format('MMM'),
+    createdOn: moment(`${i}`, "M").format("MMM"),
   });
 }
 
@@ -44,7 +44,6 @@ export const SupportResponseTime = () => {
 
   const dispatch = useDispatch();
   const { responseReports, loading } = useSelector((state) => state?.reports);
-  console.log(responseReports);
 
   return (
     <div className="m-[40px] max-w-[1367px]">
@@ -78,7 +77,7 @@ export const SupportResponseTime = () => {
                     })
                   );
                 }}
-                initialValues={{ dates: '' }}
+                initialValues={{ dates: "" }}
               >
                 <Form className="flex items-center gap-[20px]">
                   <div className="min-w-[350px]">
@@ -136,16 +135,16 @@ export const SupportResponseTime = () => {
                       dataKey="createdOn"
                       strokeDasharray="3 3"
                       stroke="#323248"
-                      tick={{ fill: '#474761' }}
-                      tickFormatter={(text) => moment(text)?.format('MMM-YYYY')}
+                      tick={{ fill: "#474761" }}
+                      tickFormatter={(text) => moment(text)?.format("MMM-YYYY")}
                     />
                     <YAxis
                       width={35}
                       strokeDasharray="3 3"
                       stroke="#323248"
-                      tick={{ fill: '#474761' }}
+                      tick={{ fill: "#474761" }}
                     />
-                    <Bar dataKey="response" fill={'#FFA800'} />
+                    <Bar dataKey="response" fill={"#FFA800"} />
                     {/* {Object.keys(filters).map((filter, idx) => {
                   return (
                     <Bar

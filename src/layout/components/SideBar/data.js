@@ -107,8 +107,6 @@ export const useSidebarData = () => {
     showSide: el?.count > 0 ? true : false,
   }));
 
-  console.log("data", data);
-
   const findModule = (moduleName) =>
     checkModule({ modules: userModules, module: moduleName })?.permissions
       ?.View;

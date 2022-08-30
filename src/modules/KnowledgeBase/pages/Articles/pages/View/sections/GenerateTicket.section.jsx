@@ -88,7 +88,6 @@ export const GenerateTicket = ({ isAdmin }) => {
           }}
         >
           {({ setFieldValue, values }) => {
-            console.log(values);
             return (
               <Form>
                 <div className="mt-[40px] grid grid-cols-3 gap-[16px]">

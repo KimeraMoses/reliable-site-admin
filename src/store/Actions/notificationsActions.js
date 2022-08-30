@@ -3,9 +3,9 @@ import {
   axios,
   getNotificationsConfig,
   notificationsReadConfig,
-} from 'lib';
-import { toast } from 'react-toastify';
-import { getNotificationsDispatch, setNotificationLoading } from 'store/Slices';
+} from "lib";
+import { toast } from "react-toastify";
+import { getNotificationsDispatch, setNotificationLoading } from "store/Slices";
 
 // Get All Admin Notifications
 export const getNotificationss = (params = {}) => {
@@ -14,7 +14,7 @@ export const getNotificationss = (params = {}) => {
     try {
       const { url, defaultData, config } = getNotificationsConfig();
       if (params?.toUserId) {
-        defaultData.advancedSearch.fields.push('toUserId');
+        defaultData.advancedSearch.fields.push("toUserId");
         defaultData.advancedSearch.keyword = params?.toUserId;
       }
 
@@ -33,7 +33,6 @@ export const notificationsRead = (ids) => {
     dispatch(setNotificationLoading(true));
     try {
       const { url, config } = notificationsReadConfig();
-      console.log(ids);
       const res = await axios.put(url, ids, config);
       dispatch(getNotificationsDispatch(res?.data?.data));
       dispatch(setNotificationLoading(false));

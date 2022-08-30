@@ -43,7 +43,6 @@ export const UsersGroups = () => {
     (state) => state?.userGroups
   );
 
-  console.log("User grp", userGroups);
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getUserGroups());

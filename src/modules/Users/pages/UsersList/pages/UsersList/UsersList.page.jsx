@@ -168,8 +168,6 @@ export const UsersList = () => {
   }, [users]);
   // Users Logic End
 
-  console.log("users", users);
-
   // Edit User Logic
   const [editUser, setEditUser] = useState(null);
 
