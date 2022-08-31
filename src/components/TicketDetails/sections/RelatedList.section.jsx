@@ -16,7 +16,7 @@ import {
 } from "store";
 import { getUsers } from "store";
 import { getClients } from "store";
-import { Button, message } from "antd";
+import { Button, message, Spin } from "antd";
 import moment from "moment";
 import {
   AssignTicket,
@@ -381,132 +381,143 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
           />
         )}
 
-        <div>
-          <Table
-            columns={columns}
-            loading={isLoading || loading || departmentsLoading || usersLoading}
-            data={data}
-            fieldToFilter="id"
-            permissions={permissions}
-            pagination={{
-              defaultPageSize: 5,
-              showSizeChanger: true,
-              position: ["bottomRight"],
-              pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
-            }}
-            rowClassName={(record) =>
-              record?.id === ticket_id ? "isActive" : ""
-            }
-            additionalBtns={
-              selectedRows?.length
-                ? [
-                    { text: "Pin", onClick: () => {} },
-                    { text: "Assign", onClick: () => {} },
-                    { text: "Delete", onClick: () => {} },
-                  ]
-                : []
-            }
-            rowSelection={rowSelection}
-            editAction={(record) => {
-              return (
-                <>
-                  {/* <Button>Reply</Button> */}
-                  <Button
-                    onClick={async () => {
-                      setAssign(true);
-                      dispatch(getCurrentOnlineUsers());
-                      await dispatch(getTicketById(record?.id));
-                    }}
-                  >
-                    Transfer
-                  </Button>
-                  <Button
-                    onClick={async () => {
-                      setShowPriority(true);
-                      await dispatch(getTicketById(record?.id));
-                    }}
-                  >
-                    Priority
-                  </Button>
-                  <Button
-                    onClick={async () => {
-                      setFollowUp(true);
-                      await dispatch(getTicketById(record?.id));
-                    }}
-                  >
-                    Follow-Up
-                  </Button>
-                  <Button
-                    onClick={async () => {
-                      await dispatch(
-                        editTicket({ data: { ...record, pinTicket: true } })
-                      );
-                      if (location?.pathname.includes("show-all")) {
-                        await dispatch(getTickets());
-                      } else if (
-                        location?.pathname?.includes("by-department")
-                      ) {
-                        getTicketsByDepartmentId({
-                          id: location?.state?.departmentId,
-                        });
-                      } else {
-                        await dispatch(getTicketsByAdminID({ id: user?.id }));
-                      }
-                      message.success("Ticket Pinned");
-                    }}
-                  >
-                    Pin
-                  </Button>
-                  <Button
-                    onClick={async () => {
-                      await dispatch(deleteTicket(record?.id));
-                    }}
-                  >
-                    Delete
-                  </Button>
-                </>
-              );
-            }}
-            customFilterSort={<></>}
-            onRow={(record, rowIndex) => {
-              return {
-                onClick: (event) => {
-                  navigate(
-                    `${currentRoute({
-                      deptId: record?.departmentId,
-                      id: record?.id,
-                    })}`
-                  );
-                }, // click row
-                onDoubleClick: (event) => {}, // double click row
-                onContextMenu: (event) => {
-                  event.preventDefault();
-                  if (!visible) {
-                    document.addEventListener(
-                      `click`,
-                      function onClickOutside() {
-                        setVisible(false);
-                        document.removeEventListener(`click`, onClickOutside);
-                      }
+        {isLoading || loading || departmentsLoading || usersLoading ? (
+          <div className="flex justify-center items-center min-h-[200px]">
+            <Spin
+              spinning={
+                isLoading || loading || departmentsLoading || usersLoading
+              }
+            />
+          </div>
+        ) : (
+          <div>
+            <Table
+              columns={columns}
+              loading={
+                isLoading || loading || departmentsLoading || usersLoading
+              }
+              data={data}
+              fieldToFilter="id"
+              permissions={permissions}
+              pagination={{
+                defaultPageSize: 5,
+                showSizeChanger: true,
+                position: ["bottomRight"],
+                pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
+              }}
+              rowClassName={(record) =>
+                record?.id === ticket_id ? "isActive" : ""
+              }
+              additionalBtns={
+                selectedRows?.length
+                  ? [
+                      { text: "Pin", onClick: () => {} },
+                      { text: "Assign", onClick: () => {} },
+                      { text: "Delete", onClick: () => {} },
+                    ]
+                  : []
+              }
+              rowSelection={rowSelection}
+              editAction={(record) => {
+                return (
+                  <>
+                    {/* <Button>Reply</Button> */}
+                    <Button
+                      onClick={async () => {
+                        setAssign(true);
+                        dispatch(getCurrentOnlineUsers());
+                        await dispatch(getTicketById(record?.id));
+                      }}
+                    >
+                      Transfer
+                    </Button>
+                    <Button
+                      onClick={async () => {
+                        setShowPriority(true);
+                        await dispatch(getTicketById(record?.id));
+                      }}
+                    >
+                      Priority
+                    </Button>
+                    <Button
+                      onClick={async () => {
+                        setFollowUp(true);
+                        await dispatch(getTicketById(record?.id));
+                      }}
+                    >
+                      Follow-Up
+                    </Button>
+                    <Button
+                      onClick={async () => {
+                        await dispatch(
+                          editTicket({ data: { ...record, pinTicket: true } })
+                        );
+                        if (location?.pathname.includes("show-all")) {
+                          await dispatch(getTickets());
+                        } else if (
+                          location?.pathname?.includes("by-department")
+                        ) {
+                          getTicketsByDepartmentId({
+                            id: location?.state?.departmentId,
+                          });
+                        } else {
+                          await dispatch(getTicketsByAdminID({ id: user?.id }));
+                        }
+                        message.success("Ticket Pinned");
+                      }}
+                    >
+                      Pin
+                    </Button>
+                    <Button
+                      onClick={async () => {
+                        await dispatch(deleteTicket(record?.id));
+                      }}
+                    >
+                      Delete
+                    </Button>
+                  </>
+                );
+              }}
+              customFilterSort={<></>}
+              onRow={(record, rowIndex) => {
+                return {
+                  onClick: (event) => {
+                    navigate(
+                      `${currentRoute({
+                        deptId: record?.departmentId,
+                        id: record?.id,
+                      })}`
                     );
-                  }
-                  setVisible(true);
-                  setPopup({
-                    record,
-                    x: event.clientX,
-                    y: event.clientY,
-                  });
-                }, // right button click row
-                onMouseEnter: (event) => {}, // mouse enter row
-                onMouseLeave: (event) => {}, // mouse leave row
-              };
-            }}
-            // headingTitle={}
-            // t={t}
-          />
-          {<TicketMenu {...popup} visible={visible} />}
-        </div>
-        {/* )} */}
+                  }, // click row
+                  onDoubleClick: (event) => {}, // double click row
+                  onContextMenu: (event) => {
+                    event.preventDefault();
+                    if (!visible) {
+                      document.addEventListener(
+                        `click`,
+                        function onClickOutside() {
+                          setVisible(false);
+                          document.removeEventListener(`click`, onClickOutside);
+                        }
+                      );
+                    }
+                    setVisible(true);
+                    setPopup({
+                      record,
+                      x: event.clientX,
+                      y: event.clientY,
+                    });
+                  }, // right button click row
+                  onMouseEnter: (event) => {}, // mouse enter row
+                  onMouseLeave: (event) => {}, // mouse leave row
+                };
+              }}
+              // headingTitle={}
+              // t={t}
+            />
+            {<TicketMenu {...popup} visible={visible} />}
+          </div>
+        )}
       </div>
     </>
   );
