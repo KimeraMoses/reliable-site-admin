@@ -133,7 +133,7 @@ const AdvancedSearch = () => {
       admin: "",
       title: "",
       priority: "",
-      numResult: 3,
+      numResult: 100,
     },
     fields: [
       {

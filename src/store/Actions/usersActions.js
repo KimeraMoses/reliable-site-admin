@@ -15,10 +15,12 @@ import {
   registerClientConfig,
   getSpecificConfig,
   updateUserPasswordConfig,
+  getOnlineUsersConfig,
 } from "lib";
 import { toast } from "react-toastify";
 import {
   getUser,
+  getOnlineUsers,
   getUserModule,
   getUsersDispatch,
   getSpecificUsersDispatch,
@@ -43,6 +45,24 @@ export const getUsers = () => {
       toast.error(getError(e));
       dispatch(setUserLoading(false));
       // console.log("get users errrrr", e);
+    }
+  };
+};
+
+// Get Online Users
+export const getCurrentOnlineUsers = () => {
+  return async (dispatch) => {
+    dispatch(setUserLoading(true));
+    try {
+      const { url } = getOnlineUsersConfig();
+      const res = await axios.get(url);
+      console.log("get online users res", res);
+      dispatch(getOnlineUsers(res?.data));
+      dispatch(setUserLoading(false));
+    } catch (e) {
+      toast.error(getError(e));
+      dispatch(setUserLoading(false));
+      console.log("get online users errrrr", e);
     }
   };
 };
@@ -159,7 +179,7 @@ export const updateUserPassword = (data) => {
     try {
       dispatch(setUserLoading(true));
       const { url } = updateUserPasswordConfig();
-      const res = await axios.post(url, data);
+      await axios.post(url, data);
       toast.success("User Password Successfully");
     } catch (e) {
       toast.error(getError(e));

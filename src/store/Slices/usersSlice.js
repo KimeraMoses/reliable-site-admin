@@ -1,7 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   users: [],
+  onlineUsers: [],
   user: null,
   clients: [],
   userSettings: null,
@@ -10,11 +11,14 @@ const initialState = {
   specificUsers: [],
 };
 const usersSlice = createSlice({
-  name: 'users',
+  name: "users",
   initialState,
   reducers: {
     getUsers: (state, { payload }) => {
       state.users = payload;
+    },
+    getOnlineUsers: (state, { payload }) => {
+      state.onlineUsers = payload;
     },
     getClients: (state, { payload }) => {
       state.clients = payload;
@@ -46,6 +50,7 @@ export const {
   getUserModule,
   getUserSettingsSlice,
   getSpecificUsersDispatch,
+  getOnlineUsers,
 } = actions;
 
 export default reducer;

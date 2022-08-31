@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { getDepartments } from "store";
 import { TicketDetails, MyTickets } from "./pages";
-import { Queue } from "./pages/Queue/TicketDetails.page";
+import Queue from "./pages/Queue/Queue";
 import "./style.scss";
 
 export const SupportTickets = () => {
@@ -23,7 +23,8 @@ export const SupportTickets = () => {
           element={<Navigate to="/admin/dashboard/support/tickets/list" />}
         />
         <Route path="tickets/list" element={<MyTickets />} />
-        <Route path="tickets/queue" element={<Queue />} />
+        <Route path="tickets/queue" element={<Queue type="queue" />} />
+        <Route path="tickets/waiting" element={<Queue type="waiting" />} />
         <Route
           path="tickets/show-all/list/generate-ticket"
           element={<GenerateNewTicket />}

@@ -26,6 +26,7 @@ const DateTitle = ({ title, name, disabled }) => {
         hideTime
         format="MM/DD/YYYY"
         disabled={disabled}
+        className="disabled:bg-[#323248] disabled:text-[#92928F]"
       />
     </div>
   );

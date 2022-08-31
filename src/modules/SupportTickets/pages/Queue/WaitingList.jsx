@@ -29,7 +29,7 @@ import { Navigation } from "../AllTickets/sections";
 import { useQuery } from "components/TicketDetails/sections/Details/Details.section";
 import { getDepartments } from "store";
 
-export const QueueList = () => {
+export const WaitingList = () => {
   const { t } = useTranslation("/Tickets/ns");
 
   const { allTickets, loading } = useSelector((state) => state?.tickets);
@@ -44,14 +44,15 @@ export const QueueList = () => {
   const deptId = query.get("deptId");
   const tickets = deptId
     ? allTickets?.filter(
-        (ticket) => ticket?.assignedTo === "" && ticket?.departmentId === deptId
+        (ticket) =>
+          ticket?.ticketStatus === 1 && ticket?.departmentId === deptId
       )
-    : allTickets?.filter((ticket) => ticket?.assignedTo === "");
+    : allTickets?.filter((ticket) => ticket?.ticketStatus === 1);
 
   const currentRoute = ({ id = "" }) =>
     deptId
-      ? `/admin/dashboard/support/tickets/queue?tid=${id}&&deptId=${deptId}`
-      : `/admin/dashboard/support/tickets/queue?tid=${id}`;
+      ? `/admin/dashboard/support/tickets/waiting?tid=${id}&&deptId=${deptId}`
+      : `/admin/dashboard/support/tickets/waiting?tid=${id}`;
 
   const { userModules } = useSelector((state) => state?.modules);
 
@@ -86,14 +87,6 @@ export const QueueList = () => {
   const [visible, setVisible] = useState(false);
   const [popup, setPopup] = useState(null);
 
-  // useEffect(() => {
-  //   (async () => {
-  //     await dispatch(getUsers());
-  //     await dispatch(getClients());
-  //     await dispatch(getTickets());
-  //   })();
-  // }, []);
-
   useEffect(() => {
     dispatch(getUsers());
     dispatch(getDepartments());
@@ -118,7 +111,7 @@ export const QueueList = () => {
 
   let activeTicket = tickets ? groupBy(tickets, "ticketStatus") : {};
 
-  const [active, setActive] = useState(t("active"));
+  const [active, setActive] = useState(t("waiting"));
 
   const handleActive = (v, text) => {
     setActive(text);
@@ -139,10 +132,10 @@ export const QueueList = () => {
 
   useEffect(() => {
     if (!deptId && data?.length) {
-      navigate(`/admin/dashboard/support/tickets/queue?tid=${data[0]?.id}`);
+      navigate(`/admin/dashboard/support/tickets/waiting?tid=${data[0]?.id}`);
     } else if (deptId && data?.length) {
       navigate(
-        `/admin/dashboard/support/tickets/queue?tid=${data[0]?.id}&&deptId=${deptId}`
+        `/admin/dashboard/support/tickets/waiting?tid=${data[0]?.id}&&deptId=${deptId}`
       );
     }
   }, [data]);
@@ -237,8 +230,8 @@ export const QueueList = () => {
   const links = [
     {
       label: t("active"),
-      count: activeTicket ? activeTicket[0]?.length : 0,
-      showCount: true,
+      count: 0,
+      showCount: false,
       onClick: () => handleActive(0, t("active")),
     },
     {

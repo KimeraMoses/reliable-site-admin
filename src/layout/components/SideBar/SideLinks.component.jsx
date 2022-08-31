@@ -98,11 +98,9 @@ function SideLinks({
                                       >
                                         &nbsp; {link?.name}
                                       </span>
-                                      {link?.count && (
-                                        <Badge pill bg="primary">
-                                          {link?.count}
-                                        </Badge>
-                                      )}
+                                      <Badge pill bg="primary">
+                                        {link?.count}
+                                      </Badge>
                                     </div>
                                   </NavLink>
                                 </li>

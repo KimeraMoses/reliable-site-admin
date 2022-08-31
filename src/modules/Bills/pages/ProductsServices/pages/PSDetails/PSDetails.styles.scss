@@ -30,3 +30,13 @@
   &__right {
   }
 }
+
+.ant-picker.ant-picker-disabled {
+  background: #323248;
+  border-color: #323248;
+  cursor: not-allowed;
+  color: #92928f !important;
+}
+.ant-picker-input > input[disabled] {
+  color: #92928f !important;
+}

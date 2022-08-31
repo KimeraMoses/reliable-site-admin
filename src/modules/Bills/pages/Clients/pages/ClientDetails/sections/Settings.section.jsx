@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Fragment, useEffect, useState } from "react";
 import { getUserSettingsById } from "store";
 import { updateUserSettings } from "store";
-import { DatePicker, Input } from "components";
+import { DatePicker, Input, MultiSelect } from "components";
 import { deepEqual } from "lib";
 
 export const Settings = () => {
@@ -25,8 +25,6 @@ export const Settings = () => {
     }
   }, [user]);
 
-  console.log(userSettings);
-
   const initialValues = {
     clientStatus: userSettings?.clientStatus,
     requestPerIPOverride: userSettings?.requestPerIPOverride
@@ -45,7 +43,7 @@ export const Settings = () => {
         : 0,
     restrictAccessToIPAddress: userSettings?.restrictAccessToIPAddress
       ? userSettings?.restrictAccessToIPAddress
-      : "",
+      : [],
     userId: user?.id,
     id: userSettings?.id,
   };
@@ -68,16 +66,21 @@ export const Settings = () => {
       name: "apiKeyIntervalOverrideInSeconds",
       type: "input",
     },
+
     {
-      label: t("ipAddress"),
+      type: "multiselect",
       name: "restrictAccessToIPAddress",
-      type: "input",
+      placeholder: "253.205.121.39",
+      label: "Restrict to IP Addresses",
+      mode: "tags",
+      options:
+        userSettings?.restrictAccessToIPAddress?.length > 0
+          ? userSettings?.restrictAccessToIPAddress?.map((ip) => ({
+              label: ip,
+              value: ip,
+            }))
+          : null,
     },
-    // {
-    //   label: "Extend Suspension Date",
-    //   name: "extendSuspensionDate",
-    //   type: "date",
-    // },
   ];
 
   return (
@@ -101,6 +104,7 @@ export const Settings = () => {
         enableReinitialize
       >
         {({ values }) => {
+          console.log(values);
           return (
             <Form className="pb-[32px]">
               <Spin spinning={loading}>
@@ -131,7 +135,7 @@ export const Settings = () => {
                                     {field?.value ? "Enabled" : "Disabled"}
                                   </div>
                                   <Switch
-                                    checked={field?.clientStatus}
+                                    checked={field?.value}
                                     onChange={(e) => {
                                       setFieldValue(el?.name, e);
                                     }}
@@ -143,6 +147,20 @@ export const Settings = () => {
                               </div>
                             )}
                           </Field>
+                        ) : el?.type === "multiselect" ? (
+                          <div className="w-full">
+                            <div className="text-white mb-[12px] text-[14px]">
+                              {el?.label}
+                            </div>
+                            <MultiSelect
+                              name={el?.name}
+                              options={el?.options}
+                              placeholder={el?.placeholder}
+                              mode={el?.mode}
+                              disabled={false}
+                              className="bg-[#171723]"
+                            />
+                          </div>
                         ) : (
                           <Input
                             key={el.name}

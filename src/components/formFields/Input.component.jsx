@@ -1,5 +1,6 @@
 import { Field } from "formik";
 import { Input as $Input, Switch } from "antd";
+import "./input.scss";
 
 const InputType = ({
   field,
@@ -37,10 +38,14 @@ const InputType = ({
               customOnChange(e);
             }
           }}
-          className="form-select appearance-none text-[14px] block w-full px-[16px] h-[52px] text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0 focus:bg-[#171723] focus:border-none focus:outline-none"
+          className="form-select appearance-none text-[14px] block w-full px-[16px] h-[52px] text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0 focus:bg-[#171723] focus:border-none focus:outline-none disabled:bg-[#323248] disabled:text-[#92928F]"
         >
           {finalOptions?.map((option) => (
-            <option value={option?.value} key={option?.value}>
+            <option
+              value={option?.value}
+              key={option?.value}
+              className={option?.isActive ? "isActive" : "offline"}
+            >
               {option?.label}
             </option>
           ))}
@@ -54,7 +59,7 @@ const InputType = ({
           value={values[name]}
           rows={rows}
           onChange={(e) => setFieldValue(name, e.target.value)}
-          className="appearance-none block w-full px-[16px] py-[16px] text-base font-normal text-[#92928f] placeholder:text-[#92928F] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0 focus:bg-[#171723] focus:border-none focus:outline-none"
+          className="appearance-none block w-full px-[16px] py-[16px] text-base font-normal text-[#92928f] placeholder:text-[#92928F] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0 focus:bg-[#171723] focus:border-none focus:outline-none disabled:bg-[#323248] disabled:text-[#92928F]"
         />
       );
     default:

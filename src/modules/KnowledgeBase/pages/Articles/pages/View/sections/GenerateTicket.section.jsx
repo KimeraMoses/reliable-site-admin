@@ -10,25 +10,34 @@ import { getUsers } from "store";
 import { getClients } from "store";
 import { createTicket } from "store";
 import { Checkbox } from "antd";
+import { getCurrentOnlineUsers } from "store";
 
 export const GenerateTicket = ({ isAdmin }) => {
   const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, users, clients } = useSelector((state) => state?.users);
+  const { loading, users, onlineUsers, clients } = useSelector(
+    (state) => state?.users
+  );
   const { departments } = useSelector((state) => state?.departments);
   const departmentLoading = useSelector((state) => state?.departments?.loading);
 
   useEffect(() => {
     dispatch(getClients());
     dispatch(getUsers());
+    dispatch(getCurrentOnlineUsers());
   }, []);
+
   let usersData = [{ value: "", label: "Select User" }];
   users?.forEach((user) => {
+    const isOnline = onlineUsers?.find((admin) => admin?.userId === user?.id)
+      ? true
+      : false;
     usersData.push({
       value: user?.id,
-      label: user?.fullName,
+      label: user?.fullName ? user?.fullName : "N/A",
+      isActive: isOnline ? true : false,
     });
   });
   // let clientsData = [{ value: "", label: "Select Client" }];

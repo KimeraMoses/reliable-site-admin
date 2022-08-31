@@ -70,7 +70,7 @@ export const useSidebarData = () => {
     "department"
   )?.map((el) => ({
     name: el?.department,
-    path: `/admin/dashboard/support/tickets/by-departments/${
+    path: `/admin/dashboard/support/tickets/waiting?deptId=${
       departments.find((dept) => dept?.name === el?.department)?.id
     }`,
     count: el?.count,
@@ -98,7 +98,7 @@ export const useSidebarData = () => {
     "department"
   )?.map((el) => ({
     name: el?.department,
-    path: `/admin/dashboard/support/tickets/by-departments/${
+    path: `/admin/dashboard/support/tickets/queue?deptId=${
       departments.find((dept) => dept?.name === el?.department)?.id
     }`,
     count: el?.count,
@@ -111,6 +111,7 @@ export const useSidebarData = () => {
     checkModule({ modules: userModules, module: moduleName })?.permissions
       ?.View;
 
+  // console.log("count", data);
   // Side Bar Data
   const sidebarData = [
     {
@@ -319,12 +320,7 @@ export const useSidebarData = () => {
       name: "Support",
       module: "Support",
       show: findModule("Support"),
-      count:
-        isSuperAdmin && data?.tickets?.All > 0
-          ? data?.tickets?.All
-          : data?.tickets?.AssignedToMe > 0
-          ? data?.tickets?.AssignedToMe
-          : null,
+      count: data?.tickets?.Active > 0 ? data?.tickets?.Active : null,
       path: "/admin/dashboard/support",
       icon: (fill) => <Support fill={fill} />,
       subLinks: [
@@ -334,12 +330,12 @@ export const useSidebarData = () => {
           show: true,
           showTop: false,
           showSide: true,
-          path: "/admin/dashboard/support/tickets/queue",
+          path: "/admin/dashboard/support/tickets/waiting",
           subLinks: [...waitingLinks],
         },
         {
           name: "Unassigned Queue",
-          count: data?.tickets?.UnAssigned,
+          count: data?.tickets?.UnAssignedTotal,
           show: true,
           showTop: false,
           showSide: true,
@@ -358,8 +354,8 @@ export const useSidebarData = () => {
         {
           name: "My Tickets",
           count:
-            data?.tickets?.AssignedToMe > 0
-              ? data?.tickets?.AssignedToMe
+            data?.tickets?.totalAssignedToMe > 0
+              ? data?.tickets?.totalAssignedToMe
               : null,
           show: true,
           showTop: true,

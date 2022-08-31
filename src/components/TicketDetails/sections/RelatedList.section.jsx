@@ -56,8 +56,6 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
     ? departmentTickets
     : userTickets;
 
-  // console.log("dept", departmentTickets);
-
   const currentRoute = ({ deptId = "", id = "" }) =>
     location?.pathname?.includes("show-all")
       ? `/admin/dashboard/support/tickets/show-all/list/details/${id}?tid=${id}`
@@ -235,6 +233,7 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
   const [assign, setAssign] = useState(false);
 
   let activeTicket = tickets ? groupBy(tickets, "ticketStatus") : {};
+
   useEffect(() => {
     (async () => {
       await dispatch(getTickets());

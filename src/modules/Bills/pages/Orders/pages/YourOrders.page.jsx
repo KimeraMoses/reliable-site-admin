@@ -69,7 +69,7 @@ export const YourOrders = ({ myOrders }) => {
       total: "",
       client: "",
       admin: "",
-      numResult: 3,
+      numResult: 100,
       title: "",
     },
     fields: [

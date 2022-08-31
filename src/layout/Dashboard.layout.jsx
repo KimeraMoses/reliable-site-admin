@@ -170,7 +170,7 @@ export function DashboardLayout({ children, hide }) {
                   </Link>
                   {" - "}
                   <Link
-                    to="/admin/dashboard/support/tickets/show-all/list"
+                    to="/admin/dashboard/support/tickets/queue"
                     className={`${
                       pathname.includes("queue")
                         ? "bg-[#1b1b2b] text-[#3699FF]"
