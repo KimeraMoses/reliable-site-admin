@@ -32,6 +32,7 @@ import { axios, getTicketsConfig, groupBy } from "lib";
 import { useQuery } from "./Details/Details.section";
 import { TicketSearch } from "modules/KnowledgeBase/pages/Articles/pages/View/sections/AdvancedSearch/AdvancedSearch";
 import { deleteTicket } from "store";
+import { getCurrentOnlineUsers } from "store";
 
 export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
   const { t } = useTranslation("/Tickets/ns");
@@ -413,6 +414,7 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
                   <Button
                     onClick={async () => {
                       setAssign(true);
+                      dispatch(getCurrentOnlineUsers());
                       await dispatch(getTicketById(record?.id));
                     }}
                   >

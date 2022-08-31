@@ -261,7 +261,7 @@
   }
 
   & label::after {
-    content: '';
+    content: "";
     position: absolute;
     top: 50%;
     right: 0;
@@ -273,7 +273,7 @@
     border-radius: 4px;
   }
   & label::before {
-    content: '';
+    content: "";
     position: absolute;
     right: 8px;
     top: 11px;
@@ -350,5 +350,11 @@
   }
   & + .custdes {
     margin: 16px 0 0 0;
+  }
+}
+
+.form-select {
+  .isActive {
+    color: #3dff02;
   }
 }

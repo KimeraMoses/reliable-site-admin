@@ -219,6 +219,11 @@ export function Modal({
                                               <option
                                                 value={option?.value}
                                                 key={option?.value}
+                                                className={
+                                                  option?.isActive
+                                                    ? "isActive"
+                                                    : ""
+                                                }
                                               >
                                                 {option?.label}
                                               </option>

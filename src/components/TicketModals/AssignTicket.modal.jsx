@@ -4,20 +4,22 @@ import { addTicketComments } from "store";
 import { editTicket } from "store";
 
 export const AssignTicket = ({ show, setShow, id }) => {
-  const { users } = useSelector((state) => state?.users);
+  const { users, onlineUsers } = useSelector((state) => state?.users);
   const { usersLoading } = useSelector((state) => state?.departments);
   const { ticket, detailsLoading, loading } = useSelector(
     (state) => state?.tickets
   );
   let deptData = [{ value: "", label: "Any" }];
-  if (users?.length) {
-    users?.forEach((user) => {
-      deptData.push({
-        value: user?.id,
-        label: user?.userName,
-      });
+  users?.forEach((user) => {
+    const isOnline = onlineUsers?.find((admin) => admin?.userId === user?.id)
+      ? true
+      : false;
+    deptData.push({
+      value: user?.id,
+      label: user?.fullName ? user?.fullName : "N/A",
+      isActive: isOnline ? true : false,
     });
-  }
+  });
 
   const fields = [
     {
