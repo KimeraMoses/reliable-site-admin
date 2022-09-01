@@ -289,6 +289,8 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
           `/admin/dashboard/support/tickets/list/details?tid=${data[0]?.id}`
         );
       }
+    } else {
+      navigate(`/admin/dashboard/support/tickets/list/details`);
     }
   }, [data]);
 
@@ -302,11 +304,11 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
     {
       label: t("waiting"),
       count:
-        activeTicket && Object.keys(activeTicket)?.length > 2
-          ? activeTicket[2].length
+        activeTicket && Object.keys(activeTicket)?.length > 1
+          ? activeTicket[1].length
           : 0,
       showCount: true,
-      onClick: () => handleActive(2, t("waiting")),
+      onClick: () => handleActive(1, t("waiting")),
     },
     {
       label: t("closed"),
@@ -315,7 +317,7 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
           ? activeTicket[1].length
           : 0,
       showCount: false,
-      onClick: () => handleActive(1, t("closed")),
+      onClick: () => handleActive(2, t("closed")),
     },
   ];
 

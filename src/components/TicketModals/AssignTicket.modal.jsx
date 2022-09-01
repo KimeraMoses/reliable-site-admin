@@ -9,7 +9,7 @@ export const AssignTicket = ({ show, setShow, id }) => {
   const { ticket, detailsLoading, loading } = useSelector(
     (state) => state?.tickets
   );
-  let deptData = [{ value: "", label: "Any" }];
+  let deptData = [];
   users?.forEach((user) => {
     const isOnline = onlineUsers?.find((admin) => admin?.userId === user?.id)
       ? true
@@ -26,7 +26,9 @@ export const AssignTicket = ({ show, setShow, id }) => {
       type: "select",
       name: "assignedTo",
       placeholder: "Select Admin",
-      options: deptData,
+      options: deptData?.sort((a, b) =>
+        a?.isActive === b?.isActive ? 0 : a?.isActive ? -1 : 1
+      ),
       title: "Admin",
     },
     {

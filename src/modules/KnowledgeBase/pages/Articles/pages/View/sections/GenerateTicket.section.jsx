@@ -5,7 +5,6 @@ import { SearchableField } from "modules/Bills/pages/Orders/pages/AddEditOrder/s
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
-import { toast } from "react-toastify";
 import { getUsers } from "store";
 import { getClients } from "store";
 import { createTicket } from "store";
@@ -29,7 +28,7 @@ export const GenerateTicket = ({ isAdmin }) => {
     dispatch(getCurrentOnlineUsers());
   }, []);
 
-  let usersData = [{ value: "", label: "Select User" }];
+  let usersData = [];
   users?.forEach((user) => {
     const isOnline = onlineUsers?.find((admin) => admin?.userId === user?.id)
       ? true
@@ -72,9 +71,10 @@ export const GenerateTicket = ({ isAdmin }) => {
             incomingFromClient: false,
           }}
           enableReinitialize
-          onSubmit={async (values) => {
-            setIsLoading(true);
-            if (values?.assignTo) {
+          onSubmit={
+            async (values) => {
+              setIsLoading(true);
+              // if (values?.assignTo) {
               const final = {
                 assignedTo: values?.assignTo,
                 ticketStatus: Number(values?.status),
@@ -90,11 +90,13 @@ export const GenerateTicket = ({ isAdmin }) => {
               await dispatch(createTicket({ data: final }));
               setIsLoading(false);
               navigate("/admin/dashboard/support/tickets/show-all/list");
-            } else {
-              setIsLoading(false);
-              toast.error("Please select appropriate values.");
             }
-          }}
+            // else {
+            //   setIsLoading(false);
+            //   toast.error("Please select appropriate values.");
+            // }
+            // }
+          }
         >
           {({ setFieldValue, values }) => {
             return (
@@ -113,7 +115,10 @@ export const GenerateTicket = ({ isAdmin }) => {
                     label="Description"
                   />
                   <Input
-                    options={usersData}
+                    options={usersData?.sort((a, b) =>
+                      a?.isActive === b?.isActive ? 0 : a?.isActive ? -1 : 1
+                    )}
+                    placeholder="Select Admin"
                     type="select"
                     name="assignTo"
                     label="Assign To"

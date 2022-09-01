@@ -34,11 +34,14 @@ export const WaitingList = () => {
 
   const { allTickets, loading } = useSelector((state) => state?.tickets);
   const { users } = useSelector((state) => state?.users);
+  const { user } = useSelector((state) => state?.auth);
   const { departments } = useSelector((state) => state?.departments);
   const usersLoading = useSelector((state) => state?.users?.loading);
   const departmentsLoading = useSelector(
     (state) => state?.departments?.loading
   );
+
+  console.log("User", user);
   const query = useQuery();
   const ticket_id = query.get("tid");
   const deptId = query.get("deptId");
@@ -47,8 +50,12 @@ export const WaitingList = () => {
         (ticket) =>
           ticket?.ticketStatus === 1 && ticket?.departmentId === deptId
       )
-    : allTickets?.filter((ticket) => ticket?.ticketStatus === 1);
+    : allTickets?.filter(
+        (ticket) =>
+          ticket?.ticketStatus === 1 && ticket?.assignedTo === user?.id
+      );
 
+  console.log("tickets", tickets);
   const currentRoute = ({ id = "" }) =>
     deptId
       ? `/admin/dashboard/support/tickets/waiting?tid=${id}&&deptId=${deptId}`
@@ -81,7 +88,6 @@ export const WaitingList = () => {
 
   const navigate = useNavigate();
 
-  const { user } = useSelector((state) => state?.auth);
   const dispatch = useDispatch();
 
   const [visible, setVisible] = useState(false);
@@ -115,10 +121,10 @@ export const WaitingList = () => {
 
   const handleActive = (v, text) => {
     setActive(text);
-    if (tickets?.length) {
-      const dataToSet = tickets
+    if (allTickets?.length) {
+      const dataToSet = allTickets
         ?.filter(function (el) {
-          return el.ticketStatus === v;
+          return el.ticketStatus === v && el?.assignedTo === user?.id;
         })
         .map((b) => {
           return {
@@ -137,6 +143,8 @@ export const WaitingList = () => {
       navigate(
         `/admin/dashboard/support/tickets/waiting?tid=${data[0]?.id}&&deptId=${deptId}`
       );
+    } else if (data?.length < 1) {
+      navigate(`/admin/dashboard/support/tickets/waiting`);
     }
   }, [data]);
 
@@ -226,12 +234,14 @@ export const WaitingList = () => {
       render: (text) => <>{text ? text : "N/A"}</>,
     },
   ];
-
+  console.log(activeTicket[0], activeTicket);
   const links = [
     {
       label: t("active"),
-      count: 0,
-      showCount: false,
+      count: allTickets?.filter(
+        (el) => el.ticketStatus === 0 && el?.assignedTo === user?.id
+      )?.length,
+      showCount: true,
       onClick: () => handleActive(0, t("active")),
     },
     {

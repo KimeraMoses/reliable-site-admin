@@ -117,8 +117,11 @@ export const QueueList = () => {
   const [assign, setAssign] = useState(false);
 
   let activeTicket = tickets ? groupBy(tickets, "ticketStatus") : {};
-
-  const [active, setActive] = useState(t("active"));
+  const activeTab = allTickets?.filter((ticket) => ticket?.assignedTo === "")[0]
+    ?.ticketStatus;
+  const [active, setActive] = useState(
+    t(`${activeTab === 0 ? "active" : activeTab === 1 ? "waiting" : "closed"}`)
+  );
 
   const handleActive = (v, text) => {
     setActive(text);
@@ -144,6 +147,8 @@ export const QueueList = () => {
       navigate(
         `/admin/dashboard/support/tickets/queue?tid=${data[0]?.id}&&deptId=${deptId}`
       );
+    } else if (data?.length < 1) {
+      navigate(`/admin/dashboard/support/tickets/queue`);
     }
   }, [data]);
 
@@ -233,11 +238,12 @@ export const QueueList = () => {
       render: (text) => <>{text ? text : "N/A"}</>,
     },
   ];
-
   const links = [
     {
       label: t("active"),
-      count: activeTicket ? activeTicket[0]?.length : 0,
+      count: allTickets?.filter(
+        (el) => el.ticketStatus === 0 && el?.assignedTo === ""
+      )?.length,
       showCount: true,
       onClick: () => handleActive(0, t("active")),
     },
