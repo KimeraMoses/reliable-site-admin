@@ -290,7 +290,13 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
         );
       }
     } else {
-      navigate(`/admin/dashboard/support/tickets/list/details`);
+      if (location?.pathname?.includes("show-all")) {
+        navigate(`/admin/dashboard/support/tickets/show-all/list`);
+      } else if (location?.pathname.includes("by-department")) {
+        navigate(`/admin/dashboard/support/tickets/by-departments/${deptId}`);
+      } else {
+        navigate(`/admin/dashboard/support/tickets/list/details`);
+      }
     }
   }, [data]);
 
