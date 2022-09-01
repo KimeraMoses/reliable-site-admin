@@ -25,7 +25,7 @@ export const useSidebarData = () => {
   const ticketsLoading = useSelector((state) => state?.tickets?.loading);
   const dataLoading = useSelector((state) => state?.count?.loading);
 
-  console.log("count", data);
+  // console.log("count", data);
 
   // Setting Departments
   const ticketsWithDepartmentName = allTickets?.map((ticket) => ({

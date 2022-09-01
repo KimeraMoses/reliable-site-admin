@@ -26,7 +26,7 @@ export const Details = () => {
     (state) => state?.tickets
   );
   const { usersLoading } = useSelector((state) => state?.departments);
-  const { users, clients } = useSelector((state) => state?.users);
+  const { users } = useSelector((state) => state?.users);
   let search = window.location.search;
   let params = new URLSearchParams(search);
   let repliesId = params.get("id");

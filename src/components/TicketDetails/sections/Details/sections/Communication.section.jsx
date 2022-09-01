@@ -4,7 +4,7 @@ import { Reply as ReplyIcon } from "icons";
 import { Formik, Form, Field } from "formik";
 import { useDispatch, useSelector } from "react-redux";
 import { Dropdown, List, Button, Popconfirm } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
 import moment from "moment";
@@ -19,6 +19,7 @@ import { genrateFirstLetterName, getDifference } from "lib";
 import { deleteComment } from "store";
 import { setTicketCommentLoading } from "store";
 import { updateTicketComments } from "store";
+import { getCurrentOnlineUsers } from "store";
 
 const CustomSelectUpdate = ({
   label,
@@ -88,6 +89,9 @@ export const Communication = () => {
   const { ticket } = useSelector((state) => state?.tickets);
 
   // console.log("ticket", ticket);
+  useEffect(() => {
+    dispatch(getCurrentOnlineUsers());
+  }, []);
 
   const commentSource = ticket?.ticketComments?.filter(
     (comment) => comment?.ticketCommentType === 0 && !comment?.isDraft
@@ -95,7 +99,6 @@ export const Communication = () => {
   const finalComments = commentSource?.sort(
     (a, b) => Number(b?.isSticky) - Number(a?.isSticky)
   );
-
   const fields = [
     {
       name: "assignedTo",
@@ -110,13 +113,17 @@ export const Communication = () => {
           )
             ? true
             : false;
+          console.log("isonline", user?.fullName, isOnline);
           usersData.push({
             value: user?.id,
             label: user?.fullName ? user?.fullName : "N/A",
             isActive: isOnline ? true : false,
           });
         });
-        return usersData;
+
+        return usersData?.sort((a, b) =>
+          a?.isActive === b?.isActive ? 0 : a?.isActive ? -1 : 1
+        );
       },
     },
     {

@@ -31,7 +31,6 @@ export const Comments = () => {
     (a, b) => Number(b?.isSticky) - Number(a?.isSticky)
   );
 
-  console.log("tickets", ticket);
   return (
     <>
       <div className={`form ticket-form mt-[20px]`}>

@@ -4,6 +4,7 @@ import AdvancedSearch from "modules/KnowledgeBase/pages/Articles/pages/View/sect
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Navigate, Route, Routes } from "react-router-dom";
+import { getCurrentOnlineUsers } from "store";
 import { getDepartments } from "store";
 import { TicketDetails, MyTickets } from "./pages";
 import Queue from "./pages/Queue/Queue";
@@ -13,6 +14,7 @@ export const SupportTickets = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getDepartments());
+    dispatch(getCurrentOnlineUsers());
   }, []);
   return (
     <DashboardLayout>
