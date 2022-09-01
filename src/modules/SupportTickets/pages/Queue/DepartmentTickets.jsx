@@ -29,9 +29,9 @@ import { Navigation } from "../AllTickets/sections";
 import { useQuery } from "components/TicketDetails/sections/Details/Details.section";
 import { getDepartments } from "store";
 
-export const QueueList = () => {
+export const DepartmentList = () => {
   const { t } = useTranslation("/Tickets/ns");
-  const [active, setActive] = useState("");
+
   const { allTickets, loading } = useSelector((state) => state?.tickets);
   const { users } = useSelector((state) => state?.users);
   const { departments } = useSelector((state) => state?.departments);
@@ -41,17 +41,14 @@ export const QueueList = () => {
   );
   const query = useQuery();
   const ticket_id = query.get("tid");
+  // const deptId = query.get("deptId");
   const { deptId } = useParams();
-  const tickets = deptId
-    ? allTickets?.filter(
-        (ticket) => ticket?.assignedTo === "" && ticket?.departmentId === deptId
-      )
-    : allTickets?.filter((ticket) => ticket?.assignedTo === "");
+  const tickets = allTickets?.filter(
+    (ticket) => ticket?.assignedTo === "" && ticket?.departmentId === deptId
+  );
 
   const currentRoute = ({ id = "" }) =>
-    deptId
-      ? `/admin/dashboard/support/tickets/queue/${deptId}?tid=${id}`
-      : `/admin/dashboard/support/tickets/queue?tid=${id}`;
+    `/admin/dashboard/support/tickets/queue/${deptId}?tid=${id}`;
 
   const { userModules } = useSelector((state) => state?.modules);
 
@@ -86,6 +83,14 @@ export const QueueList = () => {
   const [visible, setVisible] = useState(false);
   const [popup, setPopup] = useState(null);
 
+  // useEffect(() => {
+  //   (async () => {
+  //     await dispatch(getUsers());
+  //     await dispatch(getClients());
+  //     await dispatch(getTickets());
+  //   })();
+  // }, []);
+
   useEffect(() => {
     dispatch(getUsers());
     dispatch(getDepartments());
@@ -103,12 +108,16 @@ export const QueueList = () => {
     },
   };
 
+  //   console.log("unassigned", data);
+
   const [showPriority, setShowPriority] = useState(false);
   const [followup, setFollowUp] = useState(false);
   const [status, setStatus] = useState(false);
   const [assign, setAssign] = useState(false);
 
   let activeTicket = tickets ? groupBy(tickets, "ticketStatus") : {};
+
+  const [active, setActive] = useState(t("active"));
 
   const handleActive = (v, text) => {
     setActive(text);
@@ -128,14 +137,12 @@ export const QueueList = () => {
   };
 
   useEffect(() => {
-    if (!deptId && data?.length) {
-      navigate(`/admin/dashboard/support/tickets/queue?tid=${data[0]?.id}`);
-    } else if (deptId && data?.length) {
+    if (data?.length) {
       navigate(
         `/admin/dashboard/support/tickets/queue/${deptId}?tid=${data[0]?.id}`
       );
-    } else if (data?.length < 1) {
-      navigate(`/admin/dashboard/support/tickets/queue`);
+    } else {
+      navigate(`/admin/dashboard/support/tickets/queue/${deptId}`);
     }
   }, [data]);
 

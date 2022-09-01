@@ -24,7 +24,15 @@ export const SupportTickets = () => {
         />
         <Route path="tickets/list" element={<MyTickets />} />
         <Route path="tickets/queue" element={<Queue type="queue" />} />
+        <Route
+          path="tickets/queue/:deptId"
+          element={<Queue type="department" />}
+        />
         <Route path="tickets/waiting" element={<Queue type="waiting" />} />
+        <Route
+          path="tickets/waiting/:deptId"
+          element={<Queue type="departmentwaiting" />}
+        />
         <Route
           path="tickets/show-all/list/generate-ticket"
           element={<GenerateNewTicket />}

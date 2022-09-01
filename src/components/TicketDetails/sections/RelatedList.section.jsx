@@ -240,6 +240,7 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
       await dispatch(getTickets());
     })();
   }, [dispatch]);
+
   const [active, setActive] = useState(t("active"));
 
   const handleActive = (v, text) => {

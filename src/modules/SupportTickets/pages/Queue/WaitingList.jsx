@@ -41,7 +41,6 @@ export const WaitingList = () => {
     (state) => state?.departments?.loading
   );
 
-  console.log("User", user);
   const query = useQuery();
   const ticket_id = query.get("tid");
   const deptId = query.get("deptId");
@@ -55,7 +54,6 @@ export const WaitingList = () => {
           ticket?.ticketStatus === 1 && ticket?.assignedTo === user?.id
       );
 
-  console.log("tickets", tickets);
   const currentRoute = ({ id = "" }) =>
     deptId
       ? `/admin/dashboard/support/tickets/waiting?tid=${id}&&deptId=${deptId}`
@@ -234,7 +232,6 @@ export const WaitingList = () => {
       render: (text) => <>{text ? text : "N/A"}</>,
     },
   ];
-  console.log(activeTicket[0], activeTicket);
   const links = [
     {
       label: t("active"),

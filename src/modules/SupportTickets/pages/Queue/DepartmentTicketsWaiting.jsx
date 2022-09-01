@@ -29,11 +29,12 @@ import { Navigation } from "../AllTickets/sections";
 import { useQuery } from "components/TicketDetails/sections/Details/Details.section";
 import { getDepartments } from "store";
 
-export const QueueList = () => {
+export const DepartmentListWaiting = () => {
   const { t } = useTranslation("/Tickets/ns");
-  const [active, setActive] = useState("");
+
   const { allTickets, loading } = useSelector((state) => state?.tickets);
   const { users } = useSelector((state) => state?.users);
+  const { user } = useSelector((state) => state.auth);
   const { departments } = useSelector((state) => state?.departments);
   const usersLoading = useSelector((state) => state?.users?.loading);
   const departmentsLoading = useSelector(
@@ -41,17 +42,15 @@ export const QueueList = () => {
   );
   const query = useQuery();
   const ticket_id = query.get("tid");
+  // const deptId = query.get("deptId");
   const { deptId } = useParams();
-  const tickets = deptId
-    ? allTickets?.filter(
-        (ticket) => ticket?.assignedTo === "" && ticket?.departmentId === deptId
-      )
-    : allTickets?.filter((ticket) => ticket?.assignedTo === "");
+  const tickets = allTickets?.filter(
+    (ticket) =>
+      ticket?.assignedTo === user?.id && ticket?.departmentId === deptId
+  );
 
   const currentRoute = ({ id = "" }) =>
-    deptId
-      ? `/admin/dashboard/support/tickets/queue/${deptId}?tid=${id}`
-      : `/admin/dashboard/support/tickets/queue?tid=${id}`;
+    `/admin/dashboard/support/tickets/waiting/${deptId}?tid=${id}`;
 
   const { userModules } = useSelector((state) => state?.modules);
 
@@ -80,7 +79,6 @@ export const QueueList = () => {
 
   const navigate = useNavigate();
 
-  const { user } = useSelector((state) => state?.auth);
   const dispatch = useDispatch();
 
   const [visible, setVisible] = useState(false);
@@ -110,6 +108,8 @@ export const QueueList = () => {
 
   let activeTicket = tickets ? groupBy(tickets, "ticketStatus") : {};
 
+  const [active, setActive] = useState("");
+
   const handleActive = (v, text) => {
     setActive(text);
     if (tickets?.length) {
@@ -128,14 +128,12 @@ export const QueueList = () => {
   };
 
   useEffect(() => {
-    if (!deptId && data?.length) {
-      navigate(`/admin/dashboard/support/tickets/queue?tid=${data[0]?.id}`);
-    } else if (deptId && data?.length) {
+    if (data?.length) {
       navigate(
-        `/admin/dashboard/support/tickets/queue/${deptId}?tid=${data[0]?.id}`
+        `/admin/dashboard/support/tickets/waiting/${deptId}?tid=${data[0]?.id}`
       );
-    } else if (data?.length < 1) {
-      navigate(`/admin/dashboard/support/tickets/queue`);
+    } else {
+      navigate(`/admin/dashboard/support/tickets/waiting/${deptId}`);
     }
   }, [data]);
 
@@ -228,32 +226,23 @@ export const QueueList = () => {
   const links = [
     {
       label: t("active"),
-      count: deptId
-        ? allTickets?.filter(
-            (el) =>
-              el.ticketStatus === 0 &&
-              el?.departmentId === deptId &&
-              el?.assignedTo === ""
-          )?.length
-        : allTickets?.filter(
-            (el) => el.ticketStatus === 0 && el?.assignedTo === ""
-          )?.length,
+      count: allTickets?.filter(
+        (el) =>
+          el.ticketStatus === 0 &&
+          el?.assignedTo === user?.id &&
+          el?.departmentId === deptId
+      )?.length,
       showCount: true,
       onClick: () => handleActive(0, t("active")),
     },
     {
       label: t("waiting"),
-      // count: activeTicket ? activeTicket[1]?.length : 0,
-      count: deptId
-        ? allTickets?.filter(
-            (el) =>
-              el.ticketStatus === 1 &&
-              el?.departmentId === deptId &&
-              el?.assignedTo === ""
-          )?.length
-        : allTickets?.filter(
-            (el) => el.ticketStatus === 1 && el?.assignedTo === ""
-          )?.length,
+      count: allTickets?.filter(
+        (el) =>
+          el.ticketStatus === 1 &&
+          el?.assignedTo === user?.id &&
+          el?.departmentId === deptId
+      )?.length,
       showCount: true,
       onClick: () => handleActive(1, t("waiting")),
     },

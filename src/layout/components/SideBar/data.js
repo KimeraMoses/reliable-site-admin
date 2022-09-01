@@ -72,7 +72,7 @@ export const useSidebarData = () => {
     "department"
   )?.map((el) => ({
     name: el?.department,
-    path: `/admin/dashboard/support/tickets/waiting?deptId=${
+    path: `/admin/dashboard/support/tickets/waiting/${
       departments.find((dept) => dept?.name === el?.department)?.id
     }`,
     count: el?.count,
@@ -100,7 +100,7 @@ export const useSidebarData = () => {
     "department"
   )?.map((el) => ({
     name: el?.department,
-    path: `/admin/dashboard/support/tickets/queue?deptId=${
+    path: `/admin/dashboard/support/tickets/queue/${
       departments.find((dept) => dept?.name === el?.department)?.id
     }`,
     count: el?.count,

@@ -44,7 +44,11 @@ const CustomSelectUpdate = ({
         className="form-select appearance-none block w-full px-[16px] h-[52px] text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0 focus:bg-[#171723] focus:border-none focus:outline-none"
       >
         {options?.map((option) => (
-          <option value={option?.value} key={option?.value}>
+          <option
+            value={option?.value}
+            key={option?.value}
+            className={option?.isActive ? "text-[#3dff02]" : ""}
+          >
             {option?.label}
           </option>
         ))}
@@ -72,7 +76,7 @@ const validationSchemaReplies = Yup.object().shape({
 export const Communication = () => {
   const { t } = useTranslation("/Tickets/ns");
   const [selected, setSelected] = useState([]);
-  const { users } = useSelector((state) => state?.users);
+  const { users, onlineUsers } = useSelector((state) => state?.users);
   const { commentLoading } = useSelector((state) => state?.ticketComments);
   const { repliesLoading } = useSelector((state) => state?.ticketReplies);
   const isSelected = (id) => selected.indexOf(id) !== -1;
@@ -99,11 +103,17 @@ export const Communication = () => {
       type: "select",
       value: ticket?.assignedTo,
       options: () => {
-        let usersData = [{ value: "", label: "Select" }];
+        let usersData = [];
         users?.forEach((user) => {
+          const isOnline = onlineUsers?.find(
+            (admin) => admin?.userId === user?.id
+          )
+            ? true
+            : false;
           usersData.push({
             value: user?.id,
-            label: user?.fullName,
+            label: user?.fullName ? user?.fullName : "N/A",
+            isActive: isOnline ? true : false,
           });
         });
         return usersData;
@@ -242,7 +252,7 @@ export const Communication = () => {
                 placeholder={field.placeholder}
                 type={field.type}
                 options={field.options()}
-                className={"custom-select"}
+                className={"custom-selectt"}
                 value={field.value}
                 onChange={(e) => handleUpdateTicket(e)}
               />
