@@ -186,7 +186,7 @@ export const Communication = () => {
     },
   ];
   // Ticket Data
-
+  // console.log("selected ticket", ticket);
   const handleReplyInput = (id) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];

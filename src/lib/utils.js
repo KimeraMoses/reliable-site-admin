@@ -2,6 +2,7 @@ import axios from "axios";
 import { EditorState, ContentState, convertFromHTML } from "draft-js";
 import { browserName, browserVersion } from "react-device-detect";
 import moment from "moment";
+// import { DateTime as dt } from "luxon";
 import * as XLSX from "xlsx";
 import * as FileSaver from "file-saver";
 
@@ -198,23 +199,45 @@ export const getDifference = (date) => {
   return `${diffInYears} Years Ago`;
 };
 
-function convertUTCDateToLocalDate(date) {
-  var newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+// function convertUTCDateToLocalDate(date) {
+//   var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
 
-  var offset = date.getTimezoneOffset() / 60;
-  var hours = date.getHours();
+//   var offset = date.getTimezoneOffset() / 60;
+//   var hours = date.getHours();
 
-  newDate.setHours(hours - offset);
+//   newDate.setHours(hours - offset);
 
-  return newDate;
-}
+//   return newDate;
+// }
+
+// export const getTimeDiff = (date) => {
+//   const startTime = moment(new Date(date).toLocaleString(), "HH:mm:ss a");
+
+//   const endTime = moment(new Date().toLocaleString(), "HH:mm:ss a");
+//   // calculate total duration
+//   const duration = moment.duration(endTime.diff(startTime));
+//   // duration in hours
+//   const hours = parseInt(duration.asHours());
+//   const seconds = parseInt(duration.asSeconds());
+//   // duration in minutes
+//   const minutes = parseInt(duration.asMinutes()) % 60;
+//   // const minutes = parseInt(duration.asMinutes());
+//   const newHrs = hours === 0 ? "" : hours > 0 ? `${hours} hrs` : `${hours} hr`;
+//   const newMins =
+//     minutes === 0
+//       ? `${seconds} ${seconds === 1 ? "second" : "seconds"}`
+//       : minutes > 0
+//       ? `${minutes} mins`
+//       : `${minutes} min`;
+//   let timeDiff = newHrs + " " + newMins;
+//   return timeDiff;
+// };
 
 export const getTimeDiff = (date) => {
-  const startTime = moment(
-    new Date(convertUTCDateToLocalDate(new Date(date))).toLocaleString(),
-    "HH:mm:ss a"
-  );
-  const endTime = moment(new Date().toLocaleString(), "HH:mm:ss a");
+  const startTime = moment.utc(date);
+
+  const endTime = moment.utc(new Date());
+
   // calculate total duration
   const duration = moment.duration(endTime.diff(startTime));
   // duration in hours
@@ -222,10 +245,20 @@ export const getTimeDiff = (date) => {
   const seconds = parseInt(duration.asSeconds());
   // duration in minutes
   const minutes = parseInt(duration.asMinutes()) % 60;
-  const newHrs = hours === 0 ? "" : hours > 0 ? `${hours} hrs` : `${hours} hr`;
+  // const minutes = parseInt(duration.asMinutes());
+  const newHrs =
+    hours === 0
+      ? ""
+      : hours === 1
+      ? `${hours} hr`
+      : hours > 0
+      ? `${hours} hrs`
+      : `${hours} hr`;
   const newMins =
     minutes === 0
       ? `${seconds} ${seconds === 1 ? "second" : "seconds"}`
+      : minutes === 1
+      ? `${minutes} min`
       : minutes > 0
       ? `${minutes} mins`
       : `${minutes} min`;
