@@ -7,7 +7,6 @@ import { Dropdown, List, Button, Popconfirm } from "antd";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import * as Yup from "yup";
-import moment from "moment";
 import {
   getTicketById,
   addTicketReplies,
@@ -15,7 +14,7 @@ import {
   editTicket,
 } from "store";
 import { Button as CustomButton, Input, FollowUp } from "components";
-import { genrateFirstLetterName, getDifference } from "lib";
+import { genrateFirstLetterName, getTimeDiff } from "lib";
 import { deleteComment } from "store";
 import { setTicketCommentLoading } from "store";
 import { updateTicketComments } from "store";
@@ -171,13 +170,11 @@ export const Communication = () => {
     // { title: "Duration", value: ticket?.duration },
     {
       title: "Idle",
-      value: `${moment(ticket?.lastModifiedOn).format(
-        "HH:mm:ss"
-      )} since modified`,
+      value: `${getTimeDiff(ticket?.lastModifiedOn)} since modified`,
     },
     {
       title: "Duration",
-      value: `${moment(ticket?.createdOn).format("HH:mm:ss")} since created`,
+      value: `${getTimeDiff(ticket?.createdOn)} since created`,
     },
     {
       title: "Assigned To",
@@ -407,11 +404,9 @@ export const Communication = () => {
                           </span>
                         )}
                       </div>
-                      <div className="text-[#474761] text-[14px]">{`${getDifference(
-                        new Date(item?.createdOn)
-                      )} - ${moment(item?.createdOn).format(
-                        "MMMM Do, YYYY h:m A"
-                      )}`}</div>
+                      <div className="text-[#474761] text-[14px]">
+                        {getTimeDiff(item?.createdOn)}
+                      </div>
                     </div>
                   </div>
                   {ticket?.ticketStatus === 0 && (

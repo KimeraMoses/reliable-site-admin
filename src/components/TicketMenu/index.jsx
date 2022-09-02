@@ -4,6 +4,7 @@ import { AssignTicket, FollowUp, Status } from "components/TicketModals";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
+import { deleteTicket } from "store";
 import {
   getTicketsByAdminID,
   getUsersByDepartmentID,
@@ -70,9 +71,9 @@ export const TicketMenu = ({ visible, options, record, x, y }) => {
       },
     },
     {
-      label: "Deleteee",
-      onClick: (record) => {
-        // message.success('Ticket Deleted');
+      label: "Delete",
+      onClick: async (record) => {
+        await dispatch(deleteTicket(record?.id));
       },
     },
   ];

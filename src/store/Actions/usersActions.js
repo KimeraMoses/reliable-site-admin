@@ -56,13 +56,11 @@ export const getCurrentOnlineUsers = () => {
     try {
       const { url } = getOnlineUsersConfig();
       const res = await axios.get(url);
-      console.log("get online users res", res);
       dispatch(getOnlineUsers(res?.data));
       dispatch(setUserLoading(false));
     } catch (e) {
       toast.error(getError(e));
       dispatch(setUserLoading(false));
-      console.log("get online users errrrr", e);
     }
   };
 };

@@ -22,6 +22,7 @@ import {
   getTicketHistory,
 } from "store/Slices";
 import { getDataCounts } from "./count";
+import { getCurrentOnlineUsers } from "./usersActions";
 
 // Get All Admin Ticket
 export const getTickets = (params = []) => {
@@ -46,7 +47,6 @@ export const getTickets = (params = []) => {
 export const getTicketById = (id, noLoading) => {
   return async (dispatch) => {
     if (id) {
-      // console.log("here", id);
       if (!noLoading) {
         dispatch(setDetailsLoading(true));
       }
@@ -55,6 +55,7 @@ export const getTicketById = (id, noLoading) => {
         const res = await axios.get(url, config);
         dispatch(getTicket(res?.data?.data));
         dispatch(getTicketHistoryByID(id));
+        dispatch(getCurrentOnlineUsers());
         dispatch(setDetailsLoading(false));
         // console.log("single ticket by id", res);
       } catch (e) {
@@ -110,7 +111,6 @@ export const getTicketsByAdminID = ({ id }) => {
         });
         const res = await axios.post(url, defaultData, config);
         dispatch(getTicketsDispatch(res?.data?.data));
-        console.log("user ticket", res);
       } catch (e) {
         toast.error(getError(e));
         dispatch(getTicketsDispatch([]));

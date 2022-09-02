@@ -198,6 +198,22 @@ export const getDifference = (date) => {
   return `${diffInYears} Years Ago`;
 };
 
+export const getTimeDiff = (date) => {
+  const startTime = moment(new Date(date).toTimeString(), "HH:mm:ss a");
+  const endTime = moment(new Date().toTimeString(), "HH:mm:ss a");
+  // calculate total duration
+  const duration = moment.duration(endTime.diff(startTime));
+  // duration in hours
+  const hours = parseInt(duration.asHours());
+  // duration in minutes
+  const minutes = parseInt(duration.asMinutes()) % 60;
+  const newHrs = hours === 0 ? "" : hours > 0 ? `${hours} hrs` : `${hours} hr`;
+  const newMins =
+    minutes === 0 ? "" : minutes > 0 ? `${minutes} mins` : `${minutes} min`;
+  let timeDiff = newHrs + " " + newMins;
+  return timeDiff;
+};
+
 // Get IP Address Info
 export const getIPData = async () => {
   const res = await axios.get("https://geolocation-db.com/json/");

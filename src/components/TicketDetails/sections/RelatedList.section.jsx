@@ -28,7 +28,7 @@ import { getTicketById } from "store";
 import { editTicket } from "store";
 import { Navigation } from "./Details/sections";
 import { useTranslation } from "react-i18next";
-import { axios, getTicketsConfig, groupBy } from "lib";
+import { axios, getTicketsConfig, getTimeDiff, groupBy } from "lib";
 import { useQuery } from "./Details/Details.section";
 import { TicketSearch } from "modules/KnowledgeBase/pages/Articles/pages/View/sections/AdvancedSearch/AdvancedSearch";
 import { deleteTicket } from "store";
@@ -94,7 +94,6 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
     }
   }, [tickets]);
 
-  console.log("data", data);
   const navigate = useNavigate();
 
   const columns = [
@@ -139,7 +138,12 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
               }
               onClick={async () => {
                 await dispatch(
-                  editTicket({ data: { ...record, pinTicket: true } })
+                  editTicket({
+                    data: {
+                      ...record,
+                      pinTicket: record?.pinTicket ? false : true,
+                    },
+                  })
                 );
                 if (location?.pathname.includes("show-all")) {
                   await dispatch(getTickets());
@@ -150,7 +154,9 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
                 } else {
                   await dispatch(getTicketsByAdminID({ id: user?.id }));
                 }
-                message.success("Ticket Pinned");
+                message.success(
+                  `Ticket${record?.pinTicket ? " Unpinned" : " Pinned"}`
+                );
               }}
             >
               <PushpinOutlined />
@@ -168,15 +174,6 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
       title: "Created By",
       dataIndex: "clientFullName",
       key: "clientFullName",
-      // render: (text) => {
-      //   const client = clients?.find((client) => client?.id === text);
-      //   const admin = users?.find((user) => user?.id === text);
-      //   return client?.fullName
-      //     ? client.fullName
-      //     : admin?.fullName
-      //     ? admin.fullName
-      //     : "N/A";
-      // },
     },
     {
       title: "Department",
@@ -210,12 +207,11 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
     },
     {
       title: "Idle Time",
-      dataIndex: "idleTime",
-      key: "idleTime",
-      render: (text) => <>{text ? text : "N/A"}</>,
+      dataIndex: "lastModifiedOn",
+      key: "lastModifiedOn",
+      render: (date) => (date ? getTimeDiff(date) : "N/A"),
     },
   ];
-
   const { user } = useSelector((state) => state?.auth);
   const dispatch = useDispatch();
 
@@ -503,7 +499,12 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
                     <Button
                       onClick={async () => {
                         await dispatch(
-                          editTicket({ data: { ...record, pinTicket: true } })
+                          editTicket({
+                            data: {
+                              ...record,
+                              pinTicket: record?.pinTicket ? false : true,
+                            },
+                          })
                         );
                         if (location?.pathname.includes("show-all")) {
                           await dispatch(getTickets());
@@ -516,7 +517,9 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
                         } else {
                           await dispatch(getTicketsByAdminID({ id: user?.id }));
                         }
-                        message.success("Ticket Pinned");
+                        message.success(
+                          `Ticket${record?.pinTicket ? " Unpinned" : " Pinned"}`
+                        );
                       }}
                     >
                       Pin

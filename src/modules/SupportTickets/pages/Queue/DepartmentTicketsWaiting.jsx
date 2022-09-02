@@ -23,7 +23,7 @@ import {
 import { getTicketById } from "store";
 import { editTicket } from "store";
 import { useTranslation } from "react-i18next";
-import { groupBy } from "lib";
+import { getTimeDiff, groupBy } from "lib";
 import { deleteTicket } from "store";
 import { Navigation } from "../AllTickets/sections";
 import { useQuery } from "components/TicketDetails/sections/Details/Details.section";
@@ -269,9 +269,9 @@ export const DepartmentListWaiting = () => {
     },
     {
       title: "Idle Time",
-      dataIndex: "idleTime",
-      key: "idleTime",
-      render: (text) => <>{text ? text : "N/A"}</>,
+      dataIndex: "lastModifiedOn",
+      key: "lastModifiedOn",
+      render: (date) => (date ? getTimeDiff(date) : "N/A"),
     },
   ];
   const links = [
