@@ -23,7 +23,6 @@ export const TicketMenu = ({ visible, options, record, x, y }) => {
 
   const dispatch = useDispatch();
   const location = useLocation();
-
   const { user } = useState((state) => state?.auth);
 
   const defaultOptions = [
@@ -71,7 +70,7 @@ export const TicketMenu = ({ visible, options, record, x, y }) => {
       },
     },
     {
-      label: "Delete",
+      label: "Deleteee",
       onClick: (record) => {
         // message.success('Ticket Deleted');
       },

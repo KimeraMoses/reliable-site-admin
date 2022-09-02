@@ -43,7 +43,6 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
   const userTickets = useSelector((state) => state?.tickets?.tickets);
   const { users } = useSelector((state) => state?.users);
   const { departments } = useSelector((state) => state?.departments);
-  const usersLoading = useSelector((state) => state?.users?.loading);
   const departmentsLoading = useSelector(
     (state) => state?.departments?.loading
   );
@@ -81,13 +80,21 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
           key: b?.id,
         };
       });
-      const trueFirst = dataToSet.sort(
-        (a, b) => Number(b?.pinTicket) - Number(a?.pinTicket)
-      );
+      const trueFirst = dataToSet
+        ?.sort(
+          (a, b) =>
+            new Date(b?.lastModifiedOn).getTime() -
+            new Date(a?.lastModifiedOn).getTime()
+        )
+        ?.sort((a, b) =>
+          a?.pinTicket === b?.pinTicket ? 0 : a?.pinTicket ? -1 : 1
+        );
+
       setData(trueFirst);
     }
   }, [tickets]);
 
+  console.log("data", data);
   const navigate = useNavigate();
 
   const columns = [
@@ -104,6 +111,10 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
                   ? "action-icon action-icon-active"
                   : "action-icon"
               }
+              onClick={async () => {
+                setFollowUp(true);
+                await dispatch(getTicketById(record?.id));
+              }}
             >
               <FieldTimeOutlined />
             </div>
@@ -113,6 +124,10 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
                   ? "action-icon action-icon-active"
                   : "action-icon"
               }
+              onClick={async () => {
+                setShowPriority(true);
+                await dispatch(getTicketById(record?.id));
+              }}
             >
               <RiseOutlined />
             </div>
@@ -122,6 +137,21 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
                   ? "action-icon action-icon-active"
                   : "action-icon"
               }
+              onClick={async () => {
+                await dispatch(
+                  editTicket({ data: { ...record, pinTicket: true } })
+                );
+                if (location?.pathname.includes("show-all")) {
+                  await dispatch(getTickets());
+                } else if (location?.pathname?.includes("by-department")) {
+                  getTicketsByDepartmentId({
+                    id: location?.state?.departmentId,
+                  });
+                } else {
+                  await dispatch(getTicketsByAdminID({ id: user?.id }));
+                }
+                message.success("Ticket Pinned");
+              }}
             >
               <PushpinOutlined />
             </div>
@@ -240,7 +270,30 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
     })();
   }, [dispatch]);
 
-  const [active, setActive] = useState(t("active"));
+  const selectedTicket = tickets?.find(
+    (ticket) => ticket?.id === ticket_id
+  )?.ticketStatus;
+  const [active, setActive] = useState(
+    `${
+      selectedTicket === 1
+        ? t("waiting")
+        : selectedTicket === 2
+        ? t("closed")
+        : t("active")
+    }`
+  );
+
+  useEffect(() => {
+    setActive(
+      `${
+        selectedTicket === 1
+          ? t("waiting")
+          : selectedTicket === 2
+          ? t("closed")
+          : t("active")
+      }`
+    );
+  }, [tickets]);
 
   const handleActive = (v, text) => {
     setActive(text);
@@ -260,7 +313,7 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
   };
 
   useEffect(() => {
-    if (data?.length) {
+    if (!isSearch && data?.length) {
       if (
         !isSearch &&
         location?.pathname?.includes("show-all") &&
@@ -289,7 +342,7 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
           `/admin/dashboard/support/tickets/list/details?tid=${data[0]?.id}`
         );
       }
-    } else {
+    } else if (!isSearch && data?.length < 1) {
       if (location?.pathname?.includes("show-all")) {
         navigate(`/admin/dashboard/support/tickets/show-all/list`);
       } else if (location?.pathname.includes("by-department")) {
@@ -389,21 +442,15 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
           />
         )}
 
-        {isLoading || loading || departmentsLoading || usersLoading ? (
+        {isLoading || loading || departmentsLoading ? (
           <div className="flex justify-center items-center min-h-[200px]">
-            <Spin
-              spinning={
-                isLoading || loading || departmentsLoading || usersLoading
-              }
-            />
+            <Spin spinning={isLoading || loading || departmentsLoading} />
           </div>
         ) : (
           <div>
             <Table
               columns={columns}
-              loading={
-                isLoading || loading || departmentsLoading || usersLoading
-              }
+              loading={isLoading || loading || departmentsLoading}
               data={data}
               fieldToFilter="id"
               permissions={permissions}
@@ -429,7 +476,6 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
               editAction={(record) => {
                 return (
                   <>
-                    {/* <Button>Reply</Button> */}
                     <Button
                       onClick={async () => {
                         setAssign(true);
@@ -519,10 +565,8 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
                   onMouseLeave: (event) => {}, // mouse leave row
                 };
               }}
-              // headingTitle={}
-              // t={t}
             />
-            {<TicketMenu {...popup} visible={visible} />}
+            <TicketMenu {...popup} visible={visible} />
           </div>
         )}
       </div>

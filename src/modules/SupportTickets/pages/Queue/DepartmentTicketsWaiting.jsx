@@ -9,7 +9,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { checkModule } from "lib/checkModule";
 import "../../../../components/TicketDetails/sections/styles.scss";
-import { getTicketsByAdminID, getTickets } from "store";
+import { getTickets } from "store";
 import { getUsers } from "store";
 import { getClients } from "store";
 import { Button, message, Spin } from "antd";
@@ -36,7 +36,6 @@ export const DepartmentListWaiting = () => {
   const { users } = useSelector((state) => state?.users);
   const { user } = useSelector((state) => state.auth);
   const { departments } = useSelector((state) => state?.departments);
-  const usersLoading = useSelector((state) => state?.users?.loading);
   const departmentsLoading = useSelector(
     (state) => state?.departments?.loading
   );
@@ -70,9 +69,16 @@ export const DepartmentListWaiting = () => {
           key: b?.id,
         };
       });
-      const trueFirst = dataToSet.sort(
-        (a, b) => Number(b?.pinTicket) - Number(a?.pinTicket)
-      );
+      const trueFirst = dataToSet
+        ?.sort(
+          (a, b) =>
+            new Date(b?.lastModifiedOn).getTime() -
+            new Date(a?.lastModifiedOn).getTime()
+        )
+        ?.sort((a, b) =>
+          a?.pinTicket === b?.pinTicket ? 0 : a?.pinTicket ? -1 : 1
+        );
+
       setData(trueFirst);
     }
   }, [allTickets, deptId]);
@@ -108,7 +114,31 @@ export const DepartmentListWaiting = () => {
 
   let activeTicket = tickets ? groupBy(tickets, "ticketStatus") : {};
 
-  const [active, setActive] = useState("");
+  // const [active, setActive] = useState("");
+  const selectedTicket = tickets?.find(
+    (ticket) => ticket?.id === ticket_id
+  )?.ticketStatus;
+  const [active, setActive] = useState(
+    `${
+      selectedTicket === 1
+        ? t("waiting")
+        : selectedTicket === 2
+        ? t("closed")
+        : t("active")
+    }`
+  );
+
+  useEffect(() => {
+    setActive(
+      `${
+        selectedTicket === 1
+          ? t("waiting")
+          : selectedTicket === 2
+          ? t("closed")
+          : t("active")
+      }`
+    );
+  }, [tickets]);
 
   const handleActive = (v, text) => {
     setActive(text);
@@ -151,6 +181,10 @@ export const DepartmentListWaiting = () => {
                   ? "action-icon action-icon-active"
                   : "action-icon"
               }
+              onClick={async () => {
+                setFollowUp(true);
+                await dispatch(getTicketById(record?.id));
+              }}
             >
               <FieldTimeOutlined />
             </div>
@@ -160,6 +194,10 @@ export const DepartmentListWaiting = () => {
                   ? "action-icon action-icon-active"
                   : "action-icon"
               }
+              onClick={async () => {
+                setShowPriority(true);
+                await dispatch(getTicketById(record?.id));
+              }}
             >
               <RiseOutlined />
             </div>
@@ -169,6 +207,19 @@ export const DepartmentListWaiting = () => {
                   ? "action-icon action-icon-active"
                   : "action-icon"
               }
+              onClick={async () => {
+                await dispatch(
+                  editTicket({
+                    data: {
+                      ...record,
+                      pinTicket: record?.pinTicket ? false : true,
+                    },
+                  })
+                );
+                message.success(
+                  `Ticket${record?.pinTicket ? " Unpinned" : " Pinned"}`
+                );
+              }}
             >
               <PushpinOutlined />
             </div>
@@ -263,15 +314,15 @@ export const DepartmentListWaiting = () => {
         <FollowUp show={followup} setShow={setFollowUp} />
         <AssignTicket show={assign} setShow={setAssign} />
         <Status show={status} setShow={setStatus} />
-        {loading || departmentsLoading || usersLoading ? (
+        {loading || departmentsLoading ? (
           <div className="flex justify-center items-center min-h-[200px]">
-            <Spin spinning={loading || departmentsLoading || usersLoading} />
+            <Spin spinning={loading || departmentsLoading} />
           </div>
         ) : (
           <div>
             <Table
               columns={columns}
-              loading={loading || departmentsLoading || usersLoading}
+              loading={loading || departmentsLoading}
               data={data}
               fieldToFilter="id"
               permissions={permissions}
@@ -325,10 +376,16 @@ export const DepartmentListWaiting = () => {
                     <Button
                       onClick={async () => {
                         await dispatch(
-                          editTicket({ data: { ...record, pinTicket: true } })
+                          editTicket({
+                            data: {
+                              ...record,
+                              pinTicket: record?.pinTicket ? false : true,
+                            },
+                          })
                         );
-                        await dispatch(getTicketsByAdminID({ id: user?.id }));
-                        message.success("Ticket Pinned");
+                        message.success(
+                          `Ticket${record?.pinTicket ? " Unpinned" : " Pinned"}`
+                        );
                       }}
                     >
                       Pin

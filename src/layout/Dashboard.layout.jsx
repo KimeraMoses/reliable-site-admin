@@ -133,7 +133,7 @@ export function DashboardLayout({ children, hide }) {
           activeSub && activeSub.showDropdown ? activeSub.subLinks : []
         }
       />
-      <div className="flex">
+      <div className="flex w-full">
         {!hide && (
           <div className="col-auto">
             <SideBar hideSide={hideSide} />
@@ -240,6 +240,7 @@ export function DashboardLayout({ children, hide }) {
               <></>
             )}
           </div>
+
           {children}
         </div>
       </div>

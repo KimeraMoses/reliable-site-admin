@@ -3,6 +3,7 @@ import { Button } from "components";
 import React, { useState } from "react";
 import moment from "moment";
 import { DatePicker as $DatePicker } from "antd";
+import "./SearchComponent.scss";
 
 export const SearchableField = (props) => {
   const { label, name, disabled, placeholder, data, setValues, values } = props;
@@ -130,7 +131,11 @@ const SearchComponent = (props) => {
                       className="form-select appearance-none text-[14px] block w-full p-2 text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0 focus:bg-[#171723] focus:border-none focus:outline-none"
                     >
                       {field?.options?.map((option) => (
-                        <option value={option?.value} key={option?.value}>
+                        <option
+                          value={option?.value}
+                          key={option?.value}
+                          className={option?.isActive ? "isActive" : ""}
+                        >
                           {option?.label}
                         </option>
                       ))}

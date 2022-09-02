@@ -14,6 +14,7 @@ import { getOrderTemplates } from "store";
 import { Button } from "antd";
 import { Delete } from "modules/UserProfile/sections/APIKeys/sections";
 import { getUsers } from "store";
+import { getCurrentOnlineUsers } from "store";
 
 export const YourOrders = ({ myOrders }) => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ export const YourOrders = ({ myOrders }) => {
   const { userModules } = useSelector((state) => state?.modules);
   const { user } = useSelector((state) => state?.auth);
   const [record, setRecord] = useState(null);
-  const { users } = useSelector((state) => state?.users);
+  const { users, onlineUsers } = useSelector((state) => state?.users);
   const { clients } = useSelector((state) => state?.users);
   useEffect(() => {
     (async () => {
@@ -38,23 +39,26 @@ export const YourOrders = ({ myOrders }) => {
 
   useEffect(() => {
     dispatch(getUsers());
+    dispatch(getCurrentOnlineUsers());
   }, []);
 
-  let usersData = [{ value: "", label: "Any" }];
+  let usersData = [];
   if (users?.length) {
     users?.forEach((user) => {
+      const isOnline = onlineUsers?.find((admin) => admin?.userId === user?.id)
+        ? true
+        : false;
       usersData.push({
         value: user?.id,
-        label: user?.userName,
+        label: user?.fullName
+          ? `${user?.fullName}${isOnline ? "   (Online)" : ""}`
+          : "N/A",
+        isActive: isOnline ? true : false,
       });
     });
   }
 
   // Setting data properly
-  // const [data, setData] = useState([]);
-  // const [status, setStatus] = useState("");
-  // const [startDate, setStartDate] = useState("");
-  // const [endDate, setEndDate] = useState("");
 
   const { permissions } = checkModule({
     module: "Orders",
@@ -121,6 +125,7 @@ export const YourOrders = ({ myOrders }) => {
         label: "Admin",
         name: "admin",
         type: "select",
+        placeholder: "Select Admin",
         variant: "select",
         options: usersData,
       },

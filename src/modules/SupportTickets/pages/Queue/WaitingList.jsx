@@ -31,12 +31,10 @@ import { getDepartments } from "store";
 
 export const WaitingList = () => {
   const { t } = useTranslation("/Tickets/ns");
-
   const { allTickets, loading } = useSelector((state) => state?.tickets);
   const { users } = useSelector((state) => state?.users);
   const { user } = useSelector((state) => state?.auth);
   const { departments } = useSelector((state) => state?.departments);
-  const usersLoading = useSelector((state) => state?.users?.loading);
   const departmentsLoading = useSelector(
     (state) => state?.departments?.loading
   );
@@ -77,9 +75,16 @@ export const WaitingList = () => {
           key: b?.id,
         };
       });
-      const trueFirst = dataToSet.sort(
-        (a, b) => Number(b?.pinTicket) - Number(a?.pinTicket)
-      );
+      const trueFirst = dataToSet
+        ?.sort(
+          (a, b) =>
+            new Date(b?.lastModifiedOn).getTime() -
+            new Date(a?.lastModifiedOn).getTime()
+        )
+        ?.sort((a, b) =>
+          a?.pinTicket === b?.pinTicket ? 0 : a?.pinTicket ? -1 : 1
+        );
+
       setData(trueFirst);
     }
   }, [allTickets]);
@@ -160,6 +165,10 @@ export const WaitingList = () => {
                   ? "action-icon action-icon-active"
                   : "action-icon"
               }
+              onClick={async () => {
+                setFollowUp(true);
+                await dispatch(getTicketById(record?.id));
+              }}
             >
               <FieldTimeOutlined />
             </div>
@@ -169,6 +178,10 @@ export const WaitingList = () => {
                   ? "action-icon action-icon-active"
                   : "action-icon"
               }
+              onClick={async () => {
+                setShowPriority(true);
+                await dispatch(getTicketById(record?.id));
+              }}
             >
               <RiseOutlined />
             </div>
@@ -178,6 +191,20 @@ export const WaitingList = () => {
                   ? "action-icon action-icon-active"
                   : "action-icon"
               }
+              onClick={async () => {
+                await dispatch(
+                  editTicket({
+                    data: {
+                      ...record,
+                      pinTicket: record?.pinTicket ? false : true,
+                    },
+                  })
+                );
+                await dispatch(getTicketsByAdminID({ id: user?.id }));
+                message.success(
+                  `Ticket${record?.pinTicket ? " Unpinned" : " Pinned"}`
+                );
+              }}
             >
               <PushpinOutlined />
             </div>
@@ -264,15 +291,15 @@ export const WaitingList = () => {
         <FollowUp show={followup} setShow={setFollowUp} />
         <AssignTicket show={assign} setShow={setAssign} />
         <Status show={status} setShow={setStatus} />
-        {loading || departmentsLoading || usersLoading ? (
+        {loading || departmentsLoading ? (
           <div className="flex justify-center items-center min-h-[200px]">
-            <Spin spinning={loading || departmentsLoading || usersLoading} />
+            <Spin spinning={loading || departmentsLoading} />
           </div>
         ) : (
           <div>
             <Table
               columns={columns}
-              loading={loading || departmentsLoading || usersLoading}
+              loading={loading || departmentsLoading}
               data={data}
               fieldToFilter="id"
               permissions={permissions}

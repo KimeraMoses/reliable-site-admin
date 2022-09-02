@@ -9,7 +9,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { checkModule } from "lib/checkModule";
 import "../../../../components/TicketDetails/sections/styles.scss";
-import { getTicketsByAdminID, getTickets } from "store";
+import { getTickets } from "store";
 import { getUsers } from "store";
 import { getClients } from "store";
 import { Button, message, Spin } from "antd";
@@ -31,11 +31,9 @@ import { getDepartments } from "store";
 
 export const QueueList = () => {
   const { t } = useTranslation("/Tickets/ns");
-  const [active, setActive] = useState("");
   const { allTickets, loading } = useSelector((state) => state?.tickets);
   const { users } = useSelector((state) => state?.users);
   const { departments } = useSelector((state) => state?.departments);
-  const usersLoading = useSelector((state) => state?.users?.loading);
   const departmentsLoading = useSelector(
     (state) => state?.departments?.loading
   );
@@ -59,7 +57,30 @@ export const QueueList = () => {
     module: "Support",
     modules: userModules,
   });
+  const selectedTicket = tickets?.find(
+    (ticket) => ticket?.id === ticket_id
+  )?.ticketStatus;
+  const [active, setActive] = useState(
+    `${
+      selectedTicket === 1
+        ? t("waiting")
+        : selectedTicket === 2
+        ? t("closed")
+        : t("active")
+    }`
+  );
 
+  useEffect(() => {
+    setActive(
+      `${
+        selectedTicket === 1
+          ? t("waiting")
+          : selectedTicket === 2
+          ? t("closed")
+          : t("active")
+      }`
+    );
+  }, [tickets]);
   // Setting data properly
   const [data, setData] = useState([]);
   useEffect(() => {
@@ -71,16 +92,21 @@ export const QueueList = () => {
           key: b?.id,
         };
       });
-      const trueFirst = dataToSet.sort(
-        (a, b) => Number(b?.pinTicket) - Number(a?.pinTicket)
-      );
+      const trueFirst = dataToSet
+        ?.sort(
+          (a, b) =>
+            new Date(b?.lastModifiedOn).getTime() -
+            new Date(a?.lastModifiedOn).getTime()
+        )
+        ?.sort((a, b) =>
+          a?.pinTicket === b?.pinTicket ? 0 : a?.pinTicket ? -1 : 1
+        );
+
       setData(trueFirst);
     }
   }, [allTickets, deptId]);
 
   const navigate = useNavigate();
-
-  const { user } = useSelector((state) => state?.auth);
   const dispatch = useDispatch();
 
   const [visible, setVisible] = useState(false);
@@ -153,6 +179,10 @@ export const QueueList = () => {
                   ? "action-icon action-icon-active"
                   : "action-icon"
               }
+              onClick={async () => {
+                setFollowUp(true);
+                await dispatch(getTicketById(record?.id));
+              }}
             >
               <FieldTimeOutlined />
             </div>
@@ -162,6 +192,10 @@ export const QueueList = () => {
                   ? "action-icon action-icon-active"
                   : "action-icon"
               }
+              onClick={async () => {
+                setShowPriority(true);
+                await dispatch(getTicketById(record?.id));
+              }}
             >
               <RiseOutlined />
             </div>
@@ -171,6 +205,19 @@ export const QueueList = () => {
                   ? "action-icon action-icon-active"
                   : "action-icon"
               }
+              onClick={async () => {
+                await dispatch(
+                  editTicket({
+                    data: {
+                      ...record,
+                      pinTicket: record?.pinTicket ? false : true,
+                    },
+                  })
+                );
+                message.success(
+                  `Ticket${record?.pinTicket ? " Unpinned" : " Pinned"}`
+                );
+              }}
             >
               <PushpinOutlined />
             </div>
@@ -274,15 +321,15 @@ export const QueueList = () => {
         <FollowUp show={followup} setShow={setFollowUp} />
         <AssignTicket show={assign} setShow={setAssign} />
         <Status show={status} setShow={setStatus} />
-        {loading || departmentsLoading || usersLoading ? (
+        {loading || departmentsLoading ? (
           <div className="flex justify-center items-center min-h-[200px]">
-            <Spin spinning={loading || departmentsLoading || usersLoading} />
+            <Spin spinning={loading || departmentsLoading} />
           </div>
         ) : (
           <div>
             <Table
               columns={columns}
-              loading={loading || departmentsLoading || usersLoading}
+              loading={loading || departmentsLoading}
               data={data}
               fieldToFilter="id"
               permissions={permissions}
@@ -336,10 +383,16 @@ export const QueueList = () => {
                     <Button
                       onClick={async () => {
                         await dispatch(
-                          editTicket({ data: { ...record, pinTicket: true } })
+                          editTicket({
+                            data: {
+                              ...record,
+                              pinTicket: record?.pinTicket ? false : true,
+                            },
+                          })
                         );
-                        await dispatch(getTicketsByAdminID({ id: user?.id }));
-                        message.success("Ticket Pinned");
+                        message.success(
+                          `Ticket${record?.pinTicket ? " Unpinned" : " Pinned"}`
+                        );
                       }}
                     >
                       Pin

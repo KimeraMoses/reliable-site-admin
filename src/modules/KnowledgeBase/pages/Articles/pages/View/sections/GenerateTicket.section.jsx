@@ -35,7 +35,9 @@ export const GenerateTicket = ({ isAdmin }) => {
       : false;
     usersData.push({
       value: user?.id,
-      label: user?.fullName ? user?.fullName : "N/A",
+      label: user?.fullName
+        ? `${user?.fullName}${isOnline ? "   (Online)" : ""}`
+        : "N/A",
       isActive: isOnline ? true : false,
     });
   });

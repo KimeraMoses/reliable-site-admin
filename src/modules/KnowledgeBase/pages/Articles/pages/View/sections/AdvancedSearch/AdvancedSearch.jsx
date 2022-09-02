@@ -2,10 +2,12 @@ import { Input } from "antd";
 import { Button } from "components";
 import { SearchableField } from "components/Table/SearchComponent";
 import { RelatedList } from "components/TicketDetails/sections";
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import moment from "moment";
 import { DatePicker as $DatePicker } from "antd";
+import { useDispatch } from "react-redux";
+import { getCurrentOnlineUsers } from "store";
 
 export const TicketSearch = (props) => {
   const {
@@ -50,7 +52,11 @@ export const TicketSearch = (props) => {
                       className="form-select appearance-none text-[14px] block w-full p-2 text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0 focus:bg-[#171723] focus:border-none focus:outline-none"
                     >
                       {field?.options?.map((option) => (
-                        <option value={option?.value} key={option?.value}>
+                        <option
+                          value={option?.value}
+                          key={option?.value}
+                          className={option?.isActive ? "text-[#3dff02]" : ""}
+                        >
                           {option?.label}
                         </option>
                       ))}
@@ -111,14 +117,25 @@ export const TicketSearch = (props) => {
 
 const AdvancedSearch = () => {
   const { clients } = useSelector((state) => state?.users);
-  const { users } = useSelector((state) => state?.users);
+  const { users, onlineUsers } = useSelector((state) => state?.users);
+  const dispatch = useDispatch();
 
-  let usersData = [{ value: "", label: "Any" }];
+  useEffect(() => {
+    dispatch(getCurrentOnlineUsers());
+  }, []);
+
+  let usersData = [];
   if (users?.length) {
     users?.forEach((user) => {
+      const isOnline = onlineUsers?.find((admin) => admin?.userId === user?.id)
+        ? true
+        : false;
       usersData.push({
         value: user?.id,
-        label: user?.userName,
+        label: user?.fullName
+          ? `${user?.fullName}${isOnline ? "   (Online)" : ""}`
+          : "N/A",
+        isActive: isOnline ? true : false,
       });
     });
   }
@@ -176,6 +193,7 @@ const AdvancedSearch = () => {
         label: "Admin",
         name: "admin",
         type: "select",
+        placeholder: "Select Admin",
         variant: "select",
         options: usersData,
       },

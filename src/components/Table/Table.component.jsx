@@ -203,7 +203,6 @@ export const Table = ({
       {permissions !== undefined && permissions !== null ? (
         <>
           <div className="flex items-center justify-between custom-table__top-row">
-            {/* Input */}
             <div className="w-full mr-3">
               {
                 <>
@@ -236,7 +235,6 @@ export const Table = ({
                 </>
               }
             </div>
-            {/* Button */}
 
             <div className="flex items-center gap-[8px]">
               {dateRageFilter && (
@@ -317,8 +315,6 @@ export const Table = ({
             </h3>
           )}
 
-          {/* Header End */}
-          {/* Table */}
           <div
             className={`custom-table__table ${
               hideHeaders ? "custom-table__table-hide-headers" : ""
@@ -326,7 +322,6 @@ export const Table = ({
           >
             <AntTable
               columns={tableColumns}
-              // className="max-h-[200px]"
               rowKey={rowKey}
               rowClassName={rowClassName}
               scroll={scroll}

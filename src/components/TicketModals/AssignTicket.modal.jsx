@@ -1,22 +1,28 @@
 import { Modal } from "components";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { getCurrentOnlineUsers } from "store";
 import { addTicketComments } from "store";
 import { editTicket } from "store";
 
 export const AssignTicket = ({ show, setShow, id }) => {
   const { users, onlineUsers } = useSelector((state) => state?.users);
-  const { usersLoading } = useSelector((state) => state?.departments);
-  const { ticket, detailsLoading, loading } = useSelector(
-    (state) => state?.tickets
-  );
+  const { ticket } = useSelector((state) => state?.tickets);
   let deptData = [];
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getCurrentOnlineUsers());
+  }, []);
+
   users?.forEach((user) => {
     const isOnline = onlineUsers?.find((admin) => admin?.userId === user?.id)
       ? true
       : false;
     deptData.push({
       value: user?.id,
-      label: user?.fullName ? user?.fullName : "N/A",
+      label: user?.fullName
+        ? `${user?.fullName}${isOnline ? "   (Online)" : ""}`
+        : "N/A",
       isActive: isOnline ? true : false,
     });
   });
@@ -44,8 +50,6 @@ export const AssignTicket = ({ show, setShow, id }) => {
     comment: "",
   };
 
-  const dispatch = useDispatch();
-
   return (
     <Modal
       heading="Assign Ticket"
@@ -54,7 +58,7 @@ export const AssignTicket = ({ show, setShow, id }) => {
       setShow={setShow}
       fields={fields}
       initialValues={initialValues}
-      loading={detailsLoading || loading || usersLoading}
+      // loading={detailsLoading || loading || usersLoading}
       handleSubmit={async (values) => {
         const finalTicketValues = {
           ...ticket,
