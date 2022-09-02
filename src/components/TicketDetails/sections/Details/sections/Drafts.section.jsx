@@ -57,7 +57,7 @@ export const Drafts = () => {
                       {/* <div className="text-[#474761] text-[14px]">1 Hour</div> */}
                     </div>
                   </div>
-                  {ticket?.ticketStatus === 0 && (
+                  {ticket?.ticketStatus === 0 && ticket?.assignedTo !== "" && (
                     <div className="flex items-center gap-[12px] text-[16px] absolute right-5 top-1">
                       {/* <CustomButton
                         className="px-[16px] py-[5px] text-[14px] h-[36px]"

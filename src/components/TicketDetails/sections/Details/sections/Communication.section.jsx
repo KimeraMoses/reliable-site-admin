@@ -274,7 +274,9 @@ export const Communication = () => {
             <Form>
               <div
                 className={`relative mb-[32px] items-end ${
-                  ticket?.ticketStatus > 0 && "pointer-events-none opacity-30"
+                  ticket?.ticketStatus > 0 || ticket?.assignedTo === ""
+                    ? "pointer-events-none opacity-30"
+                    : ""
                 }`}
               >
                 <Input
