@@ -100,7 +100,7 @@ export const Details = () => {
     };
   });
 
-  console.log("active ticket", ticket);
+  // console.log("active ticket", ticket);
 
   return (
     <>

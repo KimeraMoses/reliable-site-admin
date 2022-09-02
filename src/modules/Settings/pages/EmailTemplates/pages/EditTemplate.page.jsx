@@ -42,7 +42,7 @@ export const EditTemplate = () => {
   const emailEditorRef = useRef(null);
 
   const onReady = () => {
-    console.log("onReady");
+    // console.log("onReady");
   };
   // Email Editor Settings End
 

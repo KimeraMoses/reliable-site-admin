@@ -1,21 +1,21 @@
-import * as Yup from 'yup';
-import { Formik, Form } from 'formik';
+import * as Yup from "yup";
+import { Formik, Form } from "formik";
 
-import { Input, Button } from 'components';
-import './styles.scss';
-import { useNavigate } from 'react-router-dom';
-import { useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Spin } from 'antd';
-import EmailEditor from 'react-email-editor';
-import { addEmailTemplate } from 'store';
-import { getTemplateVariables } from 'lib';
+import { Input, Button } from "components";
+import "./styles.scss";
+import { useNavigate } from "react-router-dom";
+import { useRef } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Spin } from "antd";
+import EmailEditor from "react-email-editor";
+import { addEmailTemplate } from "store";
+import { getTemplateVariables } from "lib";
 
 const validationSchema = Yup.object().shape({
-  subject: Yup.string().required('Subject is required'),
-  smtpConfigurationId: Yup.string().required('Configuration is required'),
-  status: Yup.boolean().required('Status is required'),
-  emailTemplateType: Yup.number().required('This field is required'),
+  subject: Yup.string().required("Subject is required"),
+  smtpConfigurationId: Yup.string().required("Configuration is required"),
+  status: Yup.boolean().required("Status is required"),
+  emailTemplateType: Yup.number().required("This field is required"),
 });
 
 export const AddTemplate = () => {
@@ -44,16 +44,16 @@ export const AddTemplate = () => {
     // emailEditorRef.current.editor.loadDesign(templateJson);
   };
   const onReady = () => {
-    console.log('onReady');
+    // console.log('onReady');
   };
   // Email Editor Settings End
 
   const initialValues = {
-    subject: '',
-    body: '',
-    tenant: 'Admin',
+    subject: "",
+    body: "",
+    tenant: "Admin",
     status: false,
-    smtpConfigurationId: '',
+    smtpConfigurationId: "",
     emailTemplateType: 0,
   };
 
@@ -69,7 +69,7 @@ export const AddTemplate = () => {
           const { design, html } = data;
           const finalValues = {
             ...values,
-            variables: '[fullName], [company], [address]',
+            variables: "[fullName], [company], [address]",
             createdBy: user?.id,
             emailTemplateType: Number(values?.emailTemplateType),
             isSystem: Number(values?.emailTemplateType) === 0 ? false : true,
@@ -83,7 +83,7 @@ export const AddTemplate = () => {
             })
           );
 
-          navigate('/admin/dashboard/settings/email-templates');
+          navigate("/admin/dashboard/settings/email-templates");
         });
       }}
     >
@@ -115,17 +115,17 @@ export const AddTemplate = () => {
                       type="select"
                       // [ 0 = General, 1 = EmailConfirmation, 2 = EmailOTP, 3 = ProductCancellation, 4 = ResetPassword, 5 = TicketUpdate ]
                       options={[
-                        'General',
-                        'Email Confirmation',
-                        'Email OTP',
-                        'Product Cancellation',
-                        'Reset Password',
-                        'Ticket Update',
-                        'Ticket Create',
-                        'Ticket Assignment',
-                        'Orders',
-                        'Invoice',
-                        'Product Status Updated',
+                        "General",
+                        "Email Confirmation",
+                        "Email OTP",
+                        "Product Cancellation",
+                        "Reset Password",
+                        "Ticket Update",
+                        "Ticket Create",
+                        "Ticket Assignment",
+                        "Orders",
+                        "Invoice",
+                        "Product Status Updated",
                       ].map((el, idx) => {
                         return {
                           value: idx,
@@ -150,7 +150,7 @@ export const AddTemplate = () => {
                   </div>
                   <div className="bg-[#1E1E2D] p-[32px] rounded-[8px] mt-[20px]">
                     <EmailEditor
-                      appearance={{ theme: 'dark' }}
+                      appearance={{ theme: "dark" }}
                       ref={emailEditorRef}
                       onLoad={onLoad}
                       onReady={onReady}

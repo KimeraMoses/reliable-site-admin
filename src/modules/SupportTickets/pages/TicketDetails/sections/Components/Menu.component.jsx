@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 // import { Icon } from 'antd';
-import './index.scss';
+import "./index.scss";
 
 const Popup = ({ record, x, y }) => {
   const onMergeClick = ({ ticket }) => {
-    console.log(ticket);
+    // console.log(ticket);
   };
 
   return (

@@ -104,7 +104,6 @@ export const Settings = () => {
         enableReinitialize
       >
         {({ values }) => {
-          console.log(values);
           return (
             <Form className="pb-[32px]">
               <Spin spinning={loading}>
