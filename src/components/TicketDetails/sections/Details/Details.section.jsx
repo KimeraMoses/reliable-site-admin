@@ -3,8 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Spin } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import { getTicketById } from "store";
-import moment from "moment";
-import { getDifference } from "lib";
+import { getTimeDiff } from "lib";
 import {
   Communication,
   TicketHistory,
@@ -101,6 +100,8 @@ export const Details = () => {
     };
   });
 
+  console.log("active ticket", ticket);
+
   return (
     <>
       {id ? (
@@ -131,7 +132,7 @@ export const Details = () => {
                   >
                     <p className="text-[14px]">
                       By{" "}
-                      {createdByAdmin?.fullName
+                      {!ticket?.incomingFromClient && createdByAdmin?.fullName
                         ? createdByAdmin?.fullName
                         : ticket?.clientFullName
                         ? ticket?.clientFullName
@@ -139,12 +140,12 @@ export const Details = () => {
                     </p>{" "}
                     <p
                       className={`${
-                        createdByAdmin?.fullName
+                        !ticket?.incomingFromClient && createdByAdmin?.fullName
                           ? "bg-[#1C3238] text-[#0BB783]"
                           : "bg-[#2F264F] text-[#8950FC]"
                       } rounded-[4px] text-[14px] px-[8px] py-[4px]`}
                     >
-                      {createdByAdmin?.fullName
+                      {!ticket?.incomingFromClient && createdByAdmin?.fullName
                         ? "Admin"
                         : ticket?.clientFullName
                         ? "Client"
@@ -152,11 +153,7 @@ export const Details = () => {
                     </p>
                   </div>
                   <p className="text-[14px] mt-[12px] text-[#474761]">
-                    {`Created ${getDifference(
-                      new Date(ticket?.lastModifiedOn)
-                    )} - ${moment(ticket?.lastModifiedOn).format(
-                      "MMMM Do, YYYY h:m A"
-                    )}`}
+                    {`Created ${getTimeDiff(ticket?.createdOn)} ago`}
                   </p>
                 </div>
               </div>
