@@ -136,8 +136,9 @@ export const GenerateTicket = ({ isAdmin }) => {
                   />
                   <Input
                     options={[
-                      { label: "Urgent", value: 0 },
-                      { label: "Not Urgent", value: 1 },
+                      { label: "Low", value: 0 },
+                      { label: "Normal", value: 1 },
+                      { label: "High", value: 2 },
                     ]}
                     type="select"
                     name="priority"
