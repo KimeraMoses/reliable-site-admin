@@ -212,6 +212,7 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
       render: (date) => (date ? getTimeDiff(date) : "N/A"),
     },
   ];
+  console.log("datat", data);
   const { user } = useSelector((state) => state?.auth);
   const dispatch = useDispatch();
 

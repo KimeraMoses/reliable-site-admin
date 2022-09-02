@@ -198,8 +198,22 @@ export const getDifference = (date) => {
   return `${diffInYears} Years Ago`;
 };
 
+function convertUTCDateToLocalDate(date) {
+  var newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+
+  var offset = date.getTimezoneOffset() / 60;
+  var hours = date.getHours();
+
+  newDate.setHours(hours - offset);
+
+  return newDate;
+}
+
 export const getTimeDiff = (date) => {
-  const startTime = moment(new Date(date).toLocaleString(), "HH:mm:ss a");
+  const startTime = moment(
+    new Date(convertUTCDateToLocalDate(new Date(date))).toLocaleString(),
+    "HH:mm:ss a"
+  );
   const endTime = moment(new Date().toLocaleString(), "HH:mm:ss a");
   // calculate total duration
   const duration = moment.duration(endTime.diff(startTime));
