@@ -3,13 +3,14 @@ import { Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-
+import moment from "moment";
 import { getClients, getUsers, getBrands } from "store";
 import { checkModule } from "lib/checkModule";
 import { Table } from "components";
 import { AddClientUser, EditClientUser } from "./sections";
 
 export const ClientList = () => {
+  const { settings } = useSelector((state) => state.appSettings);
   const [showAdd, setShowAdd] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
   const [clientDetails, setClientDetails] = useState(null);
@@ -53,15 +54,15 @@ export const ClientList = () => {
       title: "Created Date",
       dataIndex: "createdOn",
       key: "createdOn",
-      render: (date) => getFullDate(date),
+      render: (createdOn) => moment(createdOn).format(settings?.dateFormat),
     },
   ];
 
-  const getFullDate = (date) => {
-    const dateAndTime = date.split("T");
+  // const getFullDate = (date) => {
+  //   const dateAndTime = date.split("T");
 
-    return dateAndTime[0].split("-").reverse().join("-");
-  };
+  //   return dateAndTime[0].split("-").reverse().join("-");
+  // };
 
   return (
     <div className="p-[40px]">
@@ -122,6 +123,19 @@ export const ClientList = () => {
               {/* <Button onClick={() => {}}>Login As Client</Button> */}
             </>
           )}
+          // deleteAction={(record) => (
+          //   <>
+          //     <Button
+          //       onClick={() => {
+          //         setShowEdit(true);
+          //         setClientDetails(record);
+          //       }}
+          //     >
+          //       Delete
+          //     </Button>
+          //     {/* <Button onClick={() => {}}>Login As Client</Button> */}
+          //   </>
+          // )}
           permissions={permissions}
           t={t}
         />

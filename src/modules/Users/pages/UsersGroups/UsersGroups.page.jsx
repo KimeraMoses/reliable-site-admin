@@ -26,6 +26,7 @@ export const UsersGroups = () => {
   const [editModal, setEditModal] = useState({ show: false, values: {} });
   const [deleteModal, setDeleteModal] = useState({ show: false, id: null });
   const [activeEditGroup, setActiveEditGroup] = useState(null);
+  const { settings } = useSelector((state) => state.appSettings);
 
   const { t } = useTranslation("/Users/ns");
 
@@ -109,6 +110,10 @@ export const UsersGroups = () => {
       title: t("createDate"),
       key: "createdAt",
       dataIndex: "createdAt",
+      render: (text) =>
+        moment(text)?.isValid()
+          ? moment(text)?.format(settings?.dateFormat)
+          : "N/A",
     },
   ];
 
@@ -173,6 +178,12 @@ export const UsersGroups = () => {
             columns={columns}
             data={dataSource}
             loading={loading}
+            pagination={{
+              defaultPageSize: 5,
+              showSizeChanger: true,
+              position: ["bottomRight"],
+              pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
+            }}
             fieldToFilter="name"
             btnData={{ text: t("addGroup"), onClick: () => setShowAdd(true) }}
             editAction={(record) => (

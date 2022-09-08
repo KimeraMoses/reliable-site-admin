@@ -73,7 +73,7 @@ export const useSidebarData = () => {
   )?.map((el) => ({
     name: el?.department,
     path: `/admin/dashboard/support/tickets/waiting/${
-      departments.find((dept) => dept?.name === el?.department)?.id
+      departments?.find((dept) => dept?.name === el?.department)?.id
     }`,
     count: el?.count,
     show: true,
@@ -87,7 +87,7 @@ export const useSidebarData = () => {
   )?.map((el) => ({
     name: el?.department,
     path: `/admin/dashboard/support/tickets/by-departments/${
-      departments.find((dept) => dept?.name === el?.department)?.id
+      departments?.find((dept) => dept?.name === el?.department)?.id
     }`,
     count: el?.count,
     show: true,
@@ -101,7 +101,7 @@ export const useSidebarData = () => {
   )?.map((el) => ({
     name: el?.department,
     path: `/admin/dashboard/support/tickets/queue/${
-      departments.find((dept) => dept?.name === el?.department)?.id
+      departments?.find((dept) => dept?.name === el?.department)?.id
     }`,
     count: el?.count,
     show: true,
@@ -142,7 +142,7 @@ export const useSidebarData = () => {
               : null,
           show: findModule("Orders"),
           showTop: true,
-          showSide: true,
+          showSide: false,
           showDropdown: true,
           subLinks: [
             {
@@ -207,7 +207,7 @@ export const useSidebarData = () => {
           show: findModule("Clients"),
           showDropdown: true,
           showTop: true,
-          showSide: true,
+          showSide: false,
           subLinks: [
             {
               name: "Clients List",
@@ -246,7 +246,7 @@ export const useSidebarData = () => {
           path: "/admin/dashboard/billing/products-services",
           showDropdown: true,
           showTop: true,
-          showSide: true,
+          showSide: false,
           subLinks: [
             {
               name: "Products & Services List",
@@ -271,7 +271,7 @@ export const useSidebarData = () => {
           path: "/admin/dashboard/billing/invoices",
           showDropdown: true,
           showTop: true,
-          showSide: true,
+          showSide: false,
           subLinks: [
             {
               name: "Invoice List",
@@ -295,7 +295,7 @@ export const useSidebarData = () => {
           name: "WHMCS Import Tool",
           show: findModule("WHMCS"),
           showTop: true,
-          showSide: true,
+          showSide: false,
           path: "/admin/dashboard/billing/WHMCS-import",
         },
         {
@@ -304,7 +304,7 @@ export const useSidebarData = () => {
           show: findModule("Logs"),
           showDropdown: true,
           showTop: true,
-          showSide: true,
+          showSide: false,
           subLinks: [
             { name: "Logs", path: "/admin/dashboard/billing/logs" },
             { name: "Gateway Logs", path: "#" },
@@ -405,7 +405,7 @@ export const useSidebarData = () => {
           path: "/admin/dashboard/knowledge-base/articles",
           show: true,
           showTop: true,
-          showSide: true,
+          showSide: false,
           subLinks: [
             {
               name: "Article Detail",
@@ -426,7 +426,7 @@ export const useSidebarData = () => {
           path: "/admin/dashboard/knowledge-base/feedback",
           show: true,
           showTop: true,
-          showSide: true,
+          showSide: false,
           subLinks: [
             {
               name: "Feedback Details",
@@ -438,7 +438,7 @@ export const useSidebarData = () => {
           name: "Categories",
           show: true,
           showTop: true,
-          showSide: true,
+          showSide: false,
           path: "/admin/dashboard/knowledge-base/categories",
         },
       ],
@@ -454,28 +454,28 @@ export const useSidebarData = () => {
           name: "Annual Income Report",
           show: true,
           showTop: true,
-          showSide: true,
+          showSide: false,
           path: "/admin/dashboard/reports/anuual/income",
         },
         {
           name: "Support Response Time",
           show: true,
           showTop: true,
-          showSide: true,
+          showSide: false,
           path: "/admin/dashboard/reports/support-response/time",
         },
         {
           name: "Support Ticket Reply Count",
           show: true,
           showTop: true,
-          showSide: true,
+          showSide: false,
           path: "/admin/dashboard/reports/support-ticket-reply/count",
         },
         {
           name: "Reports By Filters",
           show: true,
           showTop: true,
-          showSide: true,
+          showSide: false,
           path: "/admin/dashboard/reports/tickets-by/filters",
         },
       ],
@@ -492,34 +492,34 @@ export const useSidebarData = () => {
           path: "/admin/dashboard/settings/general",
           show: true,
           showTop: true,
-          showSide: true,
+          showSide: false,
         },
         {
           name: "Tickets",
           path: "/admin/dashboard/settings/tickets",
           show: true,
           showTop: true,
-          showSide: true,
+          showSide: false,
         },
         {
           name: "Billing",
           path: "/admin/dashboard/settings/billing",
           show: findModule("BillingSettings"),
           showTop: true,
-          showSide: true,
+          showSide: false,
         },
         {
           name: "Payment Gateways",
           path: "/admin/dashboard/settings/payment-gateways",
           show: findModule("PaymentGateways"),
           showTop: true,
-          showSide: true,
+          showSide: false,
         },
         {
           name: "Support",
           show: true,
           showTop: true,
-          showSide: true,
+          showSide: false,
           path: "/admin/dashboard/settings/support",
         },
         {
@@ -527,21 +527,21 @@ export const useSidebarData = () => {
           path: "/admin/dashboard/settings/departments",
           show: findModule("Departments"),
           showTop: true,
-          showSide: true,
+          showSide: false,
         },
         {
           name: "Brands",
           path: "/admin/dashboard/settings/brands",
           show: findModule("Brands"),
           showTop: true,
-          showSide: true,
+          showSide: false,
         },
         {
           name: "SMTP",
           path: "/admin/dashboard/settings/smtp",
           show: findModule("SMTP"),
           showTop: true,
-          showSide: true,
+          showSide: false,
           subLinks: [
             {
               name: "Add New Configuration",
@@ -558,7 +558,7 @@ export const useSidebarData = () => {
           path: "/admin/dashboard/settings/email-templates",
           show: findModule("EmailTemplates"),
           showTop: true,
-          showSide: true,
+          showSide: false,
           subLinks: [
             {
               name: "Add New Template",
@@ -574,7 +574,7 @@ export const useSidebarData = () => {
           name: "Admin Users",
           show: findModule("AdminUsers") && findModule("AdminGroups"),
           showTop: true,
-          showSide: true,
+          showSide: false,
           count: data?.adminsCount > 0 ? data?.adminsCount : null,
           path: "/admin/dashboard/settings/users/list",
           subLinks: [
@@ -589,14 +589,14 @@ export const useSidebarData = () => {
           show: findModule("AdminUsers") && findModule("AdminGroups"),
           count: data?.adminGroupCount > 0 ? data?.adminGroupCount : null,
           showTop: true,
-          showSide: true,
+          showSide: false,
           path: "/admin/dashboard/settings/users/groups",
         },
         {
           name: "Maintenance",
           show: true,
           showTop: true,
-          showSide: true,
+          showSide: false,
           path: "/admin/dashboard/settings/maintenance",
         },
         {
@@ -604,7 +604,7 @@ export const useSidebarData = () => {
           path: "/admin/dashboard/settings/api",
           show: findModule("SettingAPIKeys"),
           showTop: true,
-          showSide: true,
+          showSide: false,
         },
         // {
         //   name: 'Portal',

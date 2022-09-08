@@ -398,6 +398,7 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
       clientEmail: values?.email ? values?.email : null,
       clientId: values?.client ? values?.client : null,
       createdOn: values?.dateAdded ? values?.dateAdded : null,
+      departmentId: values?.department ? values?.department : null,
     };
     const { url } = getTicketsConfig();
     const res = await axios.post(url, defaultData);

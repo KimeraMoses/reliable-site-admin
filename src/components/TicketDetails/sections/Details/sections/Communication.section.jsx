@@ -105,7 +105,7 @@ export const Communication = () => {
       type: "select",
       value: ticket?.assignedTo,
       options: () => {
-        let usersData = [];
+        let usersData = [{ label: "Any", value: "" }];
         users?.forEach((user) => {
           const isOnline = onlineUsers?.find(
             (admin) => admin?.userId === user?.id

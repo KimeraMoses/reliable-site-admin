@@ -4,13 +4,12 @@ import { Spin } from "antd";
 import { checkModule } from "lib/checkModule";
 import { useDispatch, useSelector } from "react-redux";
 import "../../styles.scss";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getTicketHistoryByID } from "store";
 import { setTicketCommentLoading } from "store";
-import { deepDiffMapper } from "lib/deepDifference";
 
 export const TicketHistory = () => {
-  const [data, setData] = useState(false);
+  // const [data, setData] = useState(false);
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
     module: "Support",

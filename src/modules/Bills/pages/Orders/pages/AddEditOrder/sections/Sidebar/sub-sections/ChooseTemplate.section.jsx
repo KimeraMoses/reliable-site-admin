@@ -31,16 +31,14 @@ export const ChooseTemplate = () => {
   const [selected, setSelected] = useState("");
   const { orderTemplates } = useSelector((state) => state?.orders);
 
-  const { values, setFieldValue } = useFormikContext();
-
-  // console.log(values);
+  const { setFieldValue } = useFormikContext();
 
   useEffect(() => {
     if (selected) {
       const template = orderTemplates?.find(
         (template) => template?.id === selected
       );
-      // console.log(template);
+      console.log(template);
       setFieldValue("preview", template?.base64Image);
       setFieldValue("name", template?.productName);
       setFieldValue("description", template?.productDescription);

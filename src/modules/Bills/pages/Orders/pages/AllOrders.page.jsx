@@ -14,6 +14,7 @@ import { getOrderTemplates } from "store";
 
 export const AllOrders = () => {
   const navigate = useNavigate();
+  const { settings } = useSelector((state) => state.appSettings);
   const [showAdd, setShowAdd] = useState(false);
   const { t } = useTranslation("/Bills/ns");
   const dispatch = useDispatch();
@@ -121,13 +122,14 @@ export const AllOrders = () => {
       title: t("dateAdded"),
       dataIndex: "createdOn",
       key: "createdOn",
-      render: (createdOn) => moment(createdOn).format("DD-MM-YYYY"),
+      render: (createdOn) => moment(createdOn).format(settings?.dateFormat),
     },
     {
       title: t("dateModified"),
       dataIndex: "lastModifiedOn",
       key: "lastModifiedOn",
-      render: (lastModifiedOn) => moment(lastModifiedOn).format("DD-MM-YYYY"),
+      render: (lastModifiedOn) =>
+        moment(lastModifiedOn).format(settings?.dateFormat),
     },
   ];
 
@@ -152,7 +154,7 @@ export const AllOrders = () => {
           pagination={{
             defaultPageSize: 5,
             showSizeChanger: true,
-            position: ["bottomLeft"],
+            position: ["bottomRight"],
             pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
           }}
           dateRageFilter={true}

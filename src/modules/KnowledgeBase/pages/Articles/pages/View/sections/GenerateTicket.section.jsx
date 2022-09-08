@@ -28,7 +28,7 @@ export const GenerateTicket = ({ isAdmin }) => {
     dispatch(getCurrentOnlineUsers());
   }, []);
 
-  let usersData = [];
+  let usersData = [{ label: "Any", value: "" }];
   users?.forEach((user) => {
     const isOnline = onlineUsers?.find((admin) => admin?.userId === user?.id)
       ? true

@@ -19,6 +19,7 @@ import { getCurrentOnlineUsers } from "store";
 export const YourOrders = ({ myOrders }) => {
   const navigate = useNavigate();
   // const [showAdd, setShowAdd] = useState(false);
+  const { settings } = useSelector((state) => state.appSettings);
   const [showDelete, setShowDelete] = useState(false);
   const { t } = useTranslation("/Bills/ns");
   const dispatch = useDispatch();
@@ -42,7 +43,7 @@ export const YourOrders = ({ myOrders }) => {
     dispatch(getCurrentOnlineUsers());
   }, []);
 
-  let usersData = [];
+  let usersData = [{ label: "Any", value: "" }];
   if (users?.length) {
     users?.forEach((user) => {
       const isOnline = onlineUsers?.find((admin) => admin?.userId === user?.id)
@@ -211,13 +212,14 @@ export const YourOrders = ({ myOrders }) => {
       title: t("dateAdded"),
       dataIndex: "createdOn",
       key: "createdOn",
-      render: (createdOn) => moment(createdOn).format("DD-MM-YYYY"),
+      render: (createdOn) => moment(createdOn).format(settings?.dateFormat),
     },
     {
       title: t("dateModified"),
       dataIndex: "lastModifiedOn",
       key: "lastModifiedOn",
-      render: (lastModifiedOn) => moment(lastModifiedOn).format("DD-MM-YYYY"),
+      render: (lastModifiedOn) =>
+        moment(lastModifiedOn).format(settings?.dateFormat),
     },
   ];
 
@@ -236,7 +238,7 @@ export const YourOrders = ({ myOrders }) => {
           pagination={{
             defaultPageSize: 5,
             showSizeChanger: true,
-            position: ["bottomLeft"],
+            position: ["bottomRight"],
             pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
           }}
           columns={columns}
@@ -261,19 +263,15 @@ export const YourOrders = ({ myOrders }) => {
           // statusFilter={statusList()}
           // hideActions
           fieldToFilter="orderNo"
-          btnData={
-            !myOrders
-              ? {
-                  text: "Add Order",
-                  onClick: () =>
-                    navigate(
-                      `/admin/dashboard/billing/orders/${
-                        myOrders ? "your-orders" : "all-orders"
-                      }/list/add/new`
-                    ),
-                }
-              : null
-          }
+          btnData={{
+            text: "Add Order",
+            onClick: () =>
+              navigate(
+                `/admin/dashboard/billing/orders/${
+                  myOrders ? "your-orders" : "all-orders"
+                }/list/add/new`
+              ),
+          }}
           viewAction={(record) => (
             <Button
               onClick={() => {

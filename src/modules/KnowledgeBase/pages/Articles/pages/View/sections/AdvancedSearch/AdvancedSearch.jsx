@@ -8,6 +8,7 @@ import moment from "moment";
 import { DatePicker as $DatePicker } from "antd";
 import { useDispatch } from "react-redux";
 import { getCurrentOnlineUsers } from "store";
+import { getDepartments } from "store";
 
 export const TicketSearch = (props) => {
   const {
@@ -105,7 +106,7 @@ export const TicketSearch = (props) => {
             }
           })}
         </div>
-        <div className="text-right mr-2 -mt-8">
+        <div className="text-right mr-2 mt-3">
           <Button htmlType="submit" disabled={isLoading}>
             {isLoading ? "Searching..." : "Search"}
           </Button>
@@ -118,13 +119,15 @@ export const TicketSearch = (props) => {
 const AdvancedSearch = () => {
   const { clients } = useSelector((state) => state?.users);
   const { users, onlineUsers } = useSelector((state) => state?.users);
+  const { departments } = useSelector((state) => state?.departments);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getCurrentOnlineUsers());
+    dispatch(getDepartments());
   }, []);
 
-  let usersData = [];
+  let usersData = [{ label: "Any", value: "" }];
   if (users?.length) {
     users?.forEach((user) => {
       const isOnline = onlineUsers?.find((admin) => admin?.userId === user?.id)
@@ -140,6 +143,16 @@ const AdvancedSearch = () => {
     });
   }
 
+  let ticketDepartments = [{ label: "Any", value: "" }];
+  if (departments?.length) {
+    departments?.forEach((dept) => {
+      ticketDepartments.push({
+        value: dept?.id,
+        label: dept?.name,
+      });
+    });
+  }
+
   const AdvancedSearchOptions = {
     searchValues: {
       ticketNo: "",
@@ -150,6 +163,7 @@ const AdvancedSearch = () => {
       admin: "",
       title: "",
       priority: "",
+      department: "",
       numResult: 100,
     },
     fields: [
@@ -206,6 +220,8 @@ const AdvancedSearch = () => {
           { label: "Any", value: "" },
           { label: "Active", value: 0 },
           { label: "Waiting", value: 1 },
+          { label: "Closed", value: 2 },
+          { label: "Closed and Locked", value: 3 },
         ],
       },
       {
@@ -215,8 +231,9 @@ const AdvancedSearch = () => {
         variant: "select",
         options: [
           { label: "Any", value: "" },
-          { label: "Urgent", value: 0 },
-          { label: "Not Urgent", value: 1 },
+          { label: "Low", value: 0 },
+          { label: "Normal", value: 1 },
+          { label: "High", value: 2 },
         ],
       },
 
@@ -226,6 +243,14 @@ const AdvancedSearch = () => {
         type: "number",
         variant: "text",
         placeholder: 0,
+      },
+      {
+        label: "Department",
+        name: "department",
+        type: "select",
+        // placeholder: "Selec",
+        variant: "select",
+        options: ticketDepartments,
       },
     ],
   };

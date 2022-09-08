@@ -21,6 +21,7 @@ import { getCategories } from "store";
 
 export const PSList = () => {
   // const [showAdd, setShowAdd] = useState(false);
+  const { settings } = useSelector((state) => state.appSettings);
   const navigate = useNavigate();
   // const { clients } = useSelector((state) => state?.users);
   const { t } = useTranslation("/Bills/ns");
@@ -162,7 +163,7 @@ export const PSList = () => {
       title: "Next Due Date",
       dataIndex: "nextDueDate",
       key: "nextDueDate",
-      render: (nextDueDate) => moment(nextDueDate).format("DD-MM-YYYY"),
+      render: (nextDueDate) => moment(nextDueDate).format(settings?.dateFormat),
       width: "70px",
     },
     {
@@ -263,7 +264,7 @@ export const PSList = () => {
                   defaultPageSize: 5,
                   showSizeChanger: true,
                   pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
-                  position: ["bottomLeft"],
+                  position: ["bottomRight"],
                 }}
                 data={products}
                 loading={categoriesLoading || loading}

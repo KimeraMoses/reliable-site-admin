@@ -176,6 +176,7 @@ export const OTDetails = () => {
       }}
     >
       {({ values }) => {
+        console.log("set notes", values);
         return (
           <Form>
             <div className="users">

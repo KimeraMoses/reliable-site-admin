@@ -1,5 +1,5 @@
 import { GS, LineItems, Note } from "./sub-sections";
-import { AdvancedSettings } from "../AdvancedSettings";
+// import { AdvancedSettings } from "../AdvancedSettings";
 import { Button } from "components";
 
 export const GeneralSettings = ({ isView }) => {
@@ -8,7 +8,7 @@ export const GeneralSettings = ({ isView }) => {
       <GS />
       <LineItems />
       <Note />
-      <AdvancedSettings />
+      {/* <AdvancedSettings /> */}
       <div className="text-right ">
         {!isView && (
           <Button type="ghost" className="h-[52px] mt-[32px]" htmlType="submit">

@@ -30,7 +30,7 @@ const validationSchema = Yup.object().shape({
 export const AddClientUser = ({ show, setShow }) => {
   const { t } = useTranslation("/Users/ns");
   const dispatch = useDispatch();
-  const { loading, clients } = useSelector((state) => state?.users);
+  const { loading } = useSelector((state) => state?.users);
   const { countries } = useCountries();
   const { brands } = useSelector((state) => state?.brands);
   const brandsLoading = useSelector((state) => state?.brands?.loading);
@@ -40,7 +40,7 @@ export const AddClientUser = ({ show, setShow }) => {
     password: "",
     confirmPassword: "",
     status: true,
-    ipAddresses: "",
+    // ipAddresses: "",
     companyName: "",
     brandId: "",
     address1: "",
@@ -49,7 +49,7 @@ export const AddClientUser = ({ show, setShow }) => {
     state_region: "",
     zipCode: "",
     country: "",
-    parentID: "",
+    // parentID: "",
   };
 
   const addFields = [
@@ -151,16 +151,16 @@ export const AddClientUser = ({ show, setShow }) => {
         value: brand?.id,
       })),
     },
-    {
-      type: "select",
-      name: "parentID",
-      placeholder: "Select Parent User",
-      title: "Parent User",
-      options: clients?.map((user) => ({
-        label: user?.userName,
-        value: user?.id,
-      })),
-    },
+    // {
+    //   type: "select",
+    //   name: "parentID",
+    //   placeholder: "Select Parent User",
+    //   title: "Parent User",
+    //   options: clients?.map((user) => ({
+    //     label: user?.userName,
+    //     value: user?.id,
+    //   })),
+    // },
   ];
   return (
     <Modal

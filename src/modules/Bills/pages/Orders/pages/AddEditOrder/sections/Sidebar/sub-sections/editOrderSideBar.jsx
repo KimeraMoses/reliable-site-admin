@@ -1,28 +1,42 @@
 import { Button, Input } from "components";
 import { useState } from "react";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { getOnlineUsers } from "store";
+import { getUsers } from "store";
 
 export const EditOrderSideBar = () => {
   const [adminList, setAdminList] = useState([]);
-  const departmentsUsers = useSelector(
-    (state) => state?.departments?.departmentUsers
-  );
+  const dispatch = useDispatch();
+  const { users, onlineUsers } = useSelector((state) => state?.users);
   const isSuperAdmin = useSelector(
     (state) => state?.auth?.user?.userRolesResponse?.userRoles
   )[1]?.enabled;
 
   useEffect(() => {
-    let usersData = [{ value: "", label: "Select" }];
-    departmentsUsers.forEach((user) => {
+    dispatch(getUsers());
+    dispatch(getOnlineUsers());
+  }, []);
+
+  useEffect(() => {
+    let usersData = [];
+    users?.forEach((user) => {
+      const isOnline = onlineUsers?.find((admin) => admin?.userId === user?.id)
+        ? true
+        : false;
       usersData.push({
         value: user?.id,
-        label: user?.fullName,
+        label: user?.fullName
+          ? `${user?.fullName}${isOnline ? "   (Online)" : ""}`
+          : "N/A",
+        isActive: isOnline ? true : false,
       });
     });
-    setAdminList(usersData);
-  }, [departmentsUsers]);
 
+    setAdminList(usersData);
+  }, [users]);
+  // console.log(onlineUsers, adminList);
   return (
     <div className="p-[32px] bg-[#1E1E2D] rounded-[8px]">
       <div className="flex justify-between items-center">

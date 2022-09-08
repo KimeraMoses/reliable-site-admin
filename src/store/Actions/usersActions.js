@@ -56,6 +56,7 @@ export const getCurrentOnlineUsers = () => {
     try {
       const { url } = getOnlineUsersConfig();
       const res = await axios.get(url);
+      // console.log(res);
       dispatch(getOnlineUsers(res?.data));
       dispatch(setUserLoading(false));
     } catch (e) {

@@ -43,6 +43,7 @@ const addValidationSchema = Yup.object().shape({
 });
 
 export const UsersList = () => {
+  const { settings } = useSelector((state) => state.appSettings);
   const [showAdd, setShowAdd] = useState(false);
   const [editModal, setEditModal] = useState(false);
 
@@ -128,7 +129,9 @@ export const UsersList = () => {
       key: "createdOn",
       dataIndex: "createdOn",
       render: (text) =>
-        moment(text)?.isValid() ? moment(text)?.format("MM-DD-YYYY") : "N/A",
+        moment(text)?.isValid()
+          ? moment(text)?.format(settings?.dateFormat)
+          : "N/A",
     },
   ];
 
@@ -199,6 +202,12 @@ export const UsersList = () => {
             columns={columns}
             data={tableUsers}
             permissions={permissions}
+            pagination={{
+              defaultPageSize: 5,
+              showSizeChanger: true,
+              position: ["bottomRight"],
+              pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
+            }}
             fieldToFilter="name"
             btnData={{
               text: t("addAdminUser"),

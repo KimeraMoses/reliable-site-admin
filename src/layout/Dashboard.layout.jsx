@@ -26,6 +26,8 @@ export function DashboardLayout({ children, hide }) {
 
   const sidebarData = useSidebarData();
 
+  const sidebarLinksLength = sidebarData?.length;
+
   const [hideSide, setHideSide] = useState(!!lessThanDesktop);
   const [hideNoti, setHideNoti] = useState(false);
 
@@ -75,7 +77,7 @@ export function DashboardLayout({ children, hide }) {
         setActiveInnerSub("");
       }
     }
-  }, [pathname]);
+  }, [pathname, user, sidebarLinksLength]);
 
   useEffect(() => {
     if (user) {

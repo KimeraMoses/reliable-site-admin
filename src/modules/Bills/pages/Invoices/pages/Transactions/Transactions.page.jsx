@@ -1,26 +1,27 @@
-import { useEffect, useState } from 'react';
-import { Button } from 'antd';
-import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import moment from 'moment';
-import { Formik, Form } from 'formik';
+import { useEffect, useState } from "react";
+import { Button } from "antd";
+import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import moment from "moment";
+import { Formik, Form } from "formik";
 
-import { checkModule } from 'lib/checkModule';
-import { getTransactions } from 'store';
-import { Table, DateRangePicker } from 'components';
-import { getName } from 'lib';
-import { Details } from './sections/Details.section';
+import { checkModule } from "lib/checkModule";
+import { getTransactions } from "store";
+import { Table, DateRangePicker } from "components";
+import { getName } from "lib";
+import { Details } from "./sections/Details.section";
 
 export const Transactions = () => {
-  const { t } = useTranslation('/Bills/ns');
+  const { t } = useTranslation("/Bills/ns");
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Invoices',
+    module: "Invoices",
     modules: userModules,
   });
 
   const dispatch = useDispatch();
+  const { settings } = useSelector((state) => state.appSettings);
   const { loading, transactions } = useSelector((state) => state?.transactions);
   useEffect(() => {
     (async () => {
@@ -31,16 +32,16 @@ export const Transactions = () => {
   // Set Columns
   const columns = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
       render: (text) => <>{text.substring(0, 6)}</>,
     },
     {
-      title: 'Client',
-      dataIndex: 'transactionBy',
-      key: 'transactionBy',
-      width: '20%',
+      title: "Client",
+      dataIndex: "transactionBy",
+      key: "transactionBy",
+      width: "20%",
       render: (text, record) => {
         const { fullName, userImagePath } = record;
         return (
@@ -62,56 +63,56 @@ export const Transactions = () => {
       },
     },
     {
-      title: 'Type',
-      dataIndex: 'transactionType',
-      key: 'transactionType',
+      title: "Type",
+      dataIndex: "transactionType",
+      key: "transactionType",
       render: (text) => (
         <div className="text-white text-center text-[12px] w-[fit-content] font-medium rounded-[4px] px-[8px] py-[4px] bg-[#323248]">
-          {text === 0 ? 'ORDER' : 'REFUND'}
+          {text === 0 ? "ORDER" : "REFUND"}
         </div>
       ),
     },
     {
-      title: 'Reference ID',
-      dataIndex: 'referenceId',
-      key: 'referenceId',
+      title: "Reference ID",
+      dataIndex: "referenceId",
+      key: "referenceId",
       render: (text) => <>{text.substring(0, 6)}</>,
     },
     {
-      title: 'Status',
-      dataIndex: 'transactionStatus',
-      key: 'transactionStatus',
+      title: "Status",
+      dataIndex: "transactionStatus",
+      key: "transactionStatus",
       render: (text) => (
         <div
           className={`${
             text === 0
-              ? 'text-[#FFA800] bg-[#392F28]'
+              ? "text-[#FFA800] bg-[#392F28]"
               : text === 1
-              ? 'text-[#0BB783] bg-[#1C3238]'
-              : 'text-[#F64E60] bg-[#3A2434]'
+              ? "text-[#0BB783] bg-[#1C3238]"
+              : "text-[#F64E60] bg-[#3A2434]"
           } px-[8px] py-[4px] text-center rounded-[4px] w-[fit-content] text-[12px] font-medium`}
         >
-          {text === 0 ? 'PENDING' : text === 1 ? 'COMPLETED' : 'CANCELLED'}
+          {text === 0 ? "PENDING" : text === 1 ? "COMPLETED" : "CANCELLED"}
         </div>
       ),
     },
     {
-      title: 'Total',
-      dataIndex: 'total',
-      key: 'total',
+      title: "Total",
+      dataIndex: "total",
+      key: "total",
       render: (text) => <>{Number(text).toFixed(2)} USD</>,
     },
     {
-      title: 'Date Added',
-      dataIndex: 'createdOn',
-      key: 'createdOn',
-      render: (text) => <>{moment(text).format('MM/DD/YYYY')}</>,
+      title: "Date Added",
+      dataIndex: "createdOn",
+      key: "createdOn",
+      render: (text) => <>{moment(text).format(settings?.dateFormat)}</>,
     },
     {
-      title: 'Date Modified',
-      dataIndex: 'lastModifiedOn',
-      key: 'lastModifiedOn',
-      render: (text) => <>{moment(text).format('MM/DD/YYYY')}</>,
+      title: "Date Modified",
+      dataIndex: "lastModifiedOn",
+      key: "lastModifiedOn",
+      render: (text) => <>{moment(text).format(settings?.dateFormat)}</>,
     },
   ];
 

@@ -160,15 +160,11 @@ export const AddEditOrder = () => {
               paymentType: Number(values.paymentType),
               billingCycle: Number(values.billingCycle),
               notes: values?.notes,
-              registrationDate: moment(values?.registrationDate)?.toISOString(),
-              nextDueDate: moment(values?.nextDueDate)?.toISOString(),
-              terminationDate: moment(values?.terminationDate)?.toISOString(),
-              overrideSuspensionDate: moment(
-                values?.overrideSuspensionDate
-              )?.toISOString(),
-              overrideTerminationDate: moment(
-                values?.overrideTerminationDate
-              )?.toISOString(),
+              registrationDate: moment()?.toISOString(),
+              nextDueDate: moment()?.toISOString(),
+              terminationDate: null,
+              overrideSuspensionDate: null,
+              overrideTerminationDate: null,
             },
           ],
           adminAssigned: order ? order?.adminAssigned : user?.id,

@@ -15,7 +15,7 @@ import { deleteOrderTemplateByID } from "store";
 export const OrderTemplates = () => {
   const { t } = useTranslation("/Bills/ns");
   const dispatch = useDispatch();
-
+  const { settings } = useSelector((state) => state.appSettings);
   useEffect(() => {
     (async () => {
       await dispatch(getOrderTemplates());
@@ -60,24 +60,26 @@ export const OrderTemplates = () => {
       title: "Created On",
       dataIndex: "createdOn",
       key: "createdOn",
-      render: (text) => moment(text).format("MM/DD/YYYY"),
+      render: (text) => moment(text).format(settings?.dateFormat),
     },
     {
       title: "Last Modified On",
       dataIndex: "lastModifiedOn",
       key: "lastModifiedOn",
-      render: (text) => moment(text).format("MM/DD/YYYY"),
+      render: (text) => moment(text).format(settings?.dateFormat),
     },
     {
       title: t("orderNotes"),
       dataIndex: "notes",
       key: "notes",
+
       render: (notes, record) => {
         return (
           <NavLink
             className="text-blue-500 text-uppercase"
             to="#"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               setNotes(record);
               setNoteModalShow(true);
             }}
@@ -107,6 +109,12 @@ export const OrderTemplates = () => {
           columns={columns}
           data={data}
           loading={loading}
+          pagination={{
+            defaultPageSize: 5,
+            showSizeChanger: true,
+            position: ["bottomRight"],
+            pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
+          }}
           fieldToFilter="templateName"
           permissions={permissions}
           onRow={(record) => {

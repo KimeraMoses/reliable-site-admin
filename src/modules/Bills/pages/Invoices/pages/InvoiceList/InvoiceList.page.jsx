@@ -10,6 +10,7 @@ import { getInvoices } from "store";
 import { statusList } from "lib";
 
 export const InvoiceList = () => {
+  const { settings } = useSelector((state) => state.appSettings);
   const navigate = useNavigate();
   const { t } = useTranslation("/Bills/ns");
 
@@ -47,13 +48,13 @@ export const InvoiceList = () => {
       title: t("issueDate"),
       dataIndex: "createdOn",
       key: "createdOn",
-      render: (createdOn) => moment(createdOn).format("DD/MM/YYYY"),
+      render: (createdOn) => moment(createdOn).format(settings?.dateFormat),
     },
     {
       title: t("dueDate"),
       dataIndex: "dueDate",
       key: "dueDate",
-      render: (dueDate) => moment(dueDate).format("DD/MM/YYYY"),
+      render: (dueDate) => moment(dueDate).format(settings?.dateFormat),
     },
     {
       title: t("issuedFor"),

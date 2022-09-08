@@ -141,7 +141,7 @@ export const LineItems = ({ isView }) => {
             Total - ${total.toFixed(2)}
           </div>
           <div className="text-[#3699FF] text-[14px]">
-            {values?.paymentType === 0 ? "One Time Payment" : "Monthly Payment"}
+            {values?.paymentType === 0 ? "One Time Payment" : "Payment"}
           </div>
         </div>
       </div>
