@@ -106,7 +106,7 @@ export const LineItems = () => {
     setTotal(sum);
   }, [values?.productLineItems]);
 
-  // console.log(values?.productLineItems);
+  const newLineItems = [...values?.productLineItems];
 
   return (
     <>
@@ -117,22 +117,24 @@ export const LineItems = () => {
             Add New Item
           </Button> */}
         </div>
-        {values?.productLineItems?.map((item, idx) => {
-          if (!item?.isDeleted) {
-            return (
-              <LineItem
-                key={`item-${idx}`}
-                item={item}
-                setDel={setDel}
-                setId={setId}
-                setEdit={setEdit}
-                setEditData={setEditData}
-              />
-            );
-          } else {
-            return null;
-          }
-        })}
+        {newLineItems
+          ?.sort((a, b) => (a?.id < b?.id ? -1 : 1))
+          ?.map((item, idx) => {
+            if (!item?.isDeleted) {
+              return (
+                <LineItem
+                  key={`item-${idx}`}
+                  item={item}
+                  setDel={setDel}
+                  setId={setId}
+                  setEdit={setEdit}
+                  setEditData={setEditData}
+                />
+              );
+            } else {
+              return null;
+            }
+          })}
         <div className="mt-[32px] rounded-[8px] border-[#3699FF] border-[1px] border-dashed bg-[#212E48] flex items-center justify-between p-[32px]">
           <div className="text-white text-[20px] font-medium">
             Total - ${total.toFixed(2)}

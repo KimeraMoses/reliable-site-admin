@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { getOnlineUsers } from "store";
+import { getCurrentOnlineUsers } from "store";
 import { getUsers } from "store";
 
 export const EditOrderSideBar = () => {
@@ -16,7 +16,7 @@ export const EditOrderSideBar = () => {
 
   useEffect(() => {
     dispatch(getUsers());
-    dispatch(getOnlineUsers());
+    dispatch(getCurrentOnlineUsers());
   }, []);
 
   useEffect(() => {
@@ -35,8 +35,8 @@ export const EditOrderSideBar = () => {
     });
 
     setAdminList(usersData);
-  }, [users]);
-  // console.log(onlineUsers, adminList);
+  }, [users, onlineUsers]);
+
   return (
     <div className="p-[32px] bg-[#1E1E2D] rounded-[8px]">
       <div className="flex justify-between items-center">

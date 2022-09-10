@@ -57,8 +57,6 @@ export const OTDetails = () => {
     })();
   }, []);
 
-  console.log("order template", orderTemplate);
-
   const initVal = {
     preview: orderTemplate ? orderTemplate?.base64Image : "",
     isActive: true,
@@ -178,7 +176,6 @@ export const OTDetails = () => {
       }}
     >
       {({ values }) => {
-        console.log("set notes", values);
         return (
           <Form>
             <div className="users">
