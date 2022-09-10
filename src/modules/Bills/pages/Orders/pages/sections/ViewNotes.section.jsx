@@ -6,7 +6,6 @@ export const ViewNotes = ({ show, setShow, notesValue }) => {
   const handleClose = () => {
     setShow(false);
   };
-  console.log("notes", notesValue);
   return (
     <BSModal show={show} onHide={handleClose} className={`custom-modal`}>
       <BSModal.Body className="modal__bg">

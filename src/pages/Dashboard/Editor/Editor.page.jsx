@@ -9,7 +9,7 @@ function EditorPage() {
 
   const onEditorStateChange = (state) => {
     setEditorState(state);
-    console.log(state);
+    // console.log(state);
   };
 
   return (
