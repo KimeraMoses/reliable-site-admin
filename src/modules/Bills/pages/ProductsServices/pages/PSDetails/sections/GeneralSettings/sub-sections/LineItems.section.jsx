@@ -106,7 +106,7 @@ export const LineItems = () => {
     setTotal(sum);
   }, [values?.productLineItems]);
 
-  const newLineItems = [...values?.productLineItems];
+  useEffect(() => {}, [values?.productLineItems]);
 
   return (
     <>
@@ -117,7 +117,8 @@ export const LineItems = () => {
             Add New Item
           </Button> */}
         </div>
-        {newLineItems
+        {values?.productLineItems
+          ?.slice()
           ?.sort((a, b) => (a?.id < b?.id ? -1 : 1))
           ?.map((item, idx) => {
             if (!item?.isDeleted) {

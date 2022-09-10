@@ -117,6 +117,7 @@ export const LineItems = () => {
           <Button onClick={() => setAdd(true)}>Add New Item</Button>
         </div>
         {values?.orderTemplateLineItems
+          ?.slice()
           ?.sort((a, b) => (a?.id < b?.id ? -1 : 1))
           ?.map((item, idx) => {
             if (!item?.isDeleted) {

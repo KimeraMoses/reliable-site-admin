@@ -3,7 +3,6 @@ import { Button } from "components";
 import { AddLineItem, DeleteItem, EditLineItem } from "./sections";
 import { useFormikContext } from "formik";
 import { toast } from "react-toastify";
-import moment from "moment";
 
 const LineItem = ({ item, setDel, setId, setEdit, setEditData }) => {
   return (
@@ -111,7 +110,6 @@ export const LineItems = ({ isView }) => {
     setTotal(sum);
   }, [values?.productLineItems]);
 
-  const newLineItems = [...values?.productLineItems];
   return (
     <>
       <div className="bg-[#1E1E2D] p-[32px] rounded-[8px] mt-[20px]">
@@ -122,7 +120,8 @@ export const LineItems = ({ isView }) => {
           )}
         </div>
         {values?.productLineItems?.length > 0 &&
-          newLineItems
+          values?.productLineItems
+            ?.slice()
             ?.sort((a, b) => (a?.id < b?.id ? -1 : 1))
             ?.map((item, idx) => {
               if (!item?.isDeleted) {
