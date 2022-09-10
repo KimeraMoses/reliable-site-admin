@@ -57,6 +57,8 @@ export const OTDetails = () => {
     })();
   }, []);
 
+  console.log("order template", orderTemplate);
+
   const initVal = {
     preview: orderTemplate ? orderTemplate?.base64Image : "",
     isActive: true,
