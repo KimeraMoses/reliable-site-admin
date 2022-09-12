@@ -120,7 +120,7 @@ export default function Logs() {
               defaultPageSize: 10,
               showSizeChanger: true,
               position: ["bottomRight"],
-              pageSizeOptions: ["10", "20", "50", "100", "200"],
+              pageSizeOptions: ["10", "20", "50", "100", "200", "500"],
               onChange: handlePageChange,
               total: totalCount,
             }}
