@@ -5,13 +5,16 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { checkModule } from "lib/checkModule";
-import { exportToExcel } from "lib";
-import { getLogs } from "store";
+import { axios, exportToExcel, getError, getLogsConfig } from "lib";
+import { getLogsSlice, setLogsLoading } from "store/Slices/logs";
+import { toast } from "react-toastify";
+import { token } from "store";
 
 export default function Logs() {
   const [data, setData] = useState([]);
   const { settings } = useSelector((state) => state.appSettings);
   const { t } = useTranslation("/Users/ns");
+  const [totalCount, setTotalCount] = useState(0);
 
   const { logs, loading } = useSelector((state) => state?.logs);
   const { userModules } = useSelector((state) => state?.modules);
@@ -21,8 +24,28 @@ export default function Logs() {
   });
   const dispatch = useDispatch();
 
+  const getLogs = (page, pageSize) => {
+    return async (dispatch) => {
+      if (token) {
+        dispatch(setLogsLoading(true));
+        try {
+          const { url, defaultData, config } = getLogsConfig(page, pageSize);
+          const res = await axios.post(url, defaultData, config);
+          setTotalCount(res?.data?.totalCount);
+          await dispatch(getLogsSlice(res?.data?.data));
+          dispatch(setLogsLoading(false));
+        } catch (e) {
+          toast.error(getError(e));
+          dispatch(setLogsLoading(false));
+        }
+      } else {
+        toast.error("You have no valid token, Please login again!");
+      }
+    };
+  };
+
   useEffect(() => {
-    dispatch(getLogs());
+    dispatch(getLogs(0, 10));
   }, []);
 
   const columns = [
@@ -74,6 +97,10 @@ export default function Logs() {
     setData(dataHolder);
   }, [logs]);
 
+  const handlePageChange = (page, pageSize) => {
+    dispatch(getLogs(page, pageSize));
+  };
+
   return (
     <div className="p-[40px]">
       <div className="bg-[#1E1E2D] rounded-[8px]">
@@ -94,10 +121,12 @@ export default function Logs() {
               },
             }}
             pagination={{
-              defaultPageSize: 5,
+              defaultPageSize: 10,
               showSizeChanger: true,
               position: ["bottomRight"],
-              pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
+              pageSizeOptions: ["10", "20", "50", "100", "200"],
+              onChange: handlePageChange,
+              total: totalCount,
             }}
             hideActions
             permissions={permissions}

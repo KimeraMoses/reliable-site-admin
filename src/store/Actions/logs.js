@@ -1,4 +1,4 @@
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
 import {
   getError,
@@ -6,17 +6,17 @@ import {
   getLogsConfig,
   getUserLoginSessions,
   getLogsByUserIDConfig,
-} from 'lib';
+} from "lib";
 import {
   getLogsSlice,
   getUserLogsSlice,
   setLogsLoading,
   setLoginSessionsLoading,
   getLoginSessionsSlice,
-} from 'store/Slices/logs';
+} from "store/Slices/logs";
 
-let token = '';
-const AuthToken = localStorage.getItem('AuthToken');
+export let token = "";
+const AuthToken = localStorage.getItem("AuthToken");
 if (AuthToken) {
   token = JSON.parse(AuthToken)?.token;
 }

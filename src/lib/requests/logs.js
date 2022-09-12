@@ -1,17 +1,18 @@
 // import { getConfig } from './getConfig';
 
 // Logs and Login History End-Points
-export const getLogsConfig = () => ({
-  url: '/api/v1/admin/auditlogs',
+export const getLogsConfig = (pageNumber, pageSize) => ({
+  url: "/api/v1/admin/auditlogs",
   defaultData: {
     advancedSearch: {
-      fields: [''],
-      keyword: '',
+      fields: [""],
+      keyword: "",
     },
-    keyword: '',
-    pageNumber: 0,
-    pageSize: 0,
-    orderBy: [''],
+    keyword: "",
+    pageNumber: pageNumber,
+    pageSize: pageSize,
+    orderBy: [""],
+    OrderType: 0,
   },
   // // config: getConfig({ module: 'Users', action: 'View' }),
 });
@@ -19,13 +20,13 @@ export const getLogsByUserIDConfig = (uid) => ({
   url: `/api/v1/admin/auditlogs/user/${uid}`,
   defaultData: {
     advancedSearch: {
-      fields: [''],
-      keyword: '',
+      fields: [""],
+      keyword: "",
     },
-    keyword: '',
+    keyword: "",
     pageNumber: 0,
     pageSize: 0,
-    orderBy: [''],
+    orderBy: [""],
   },
   // // config: getConfig({ module: 'Users', action: 'View' }),
 });
