@@ -15,7 +15,7 @@ import {
   getLoginSessionsSlice,
 } from "store/Slices/logs";
 
-export let token = "";
+let token = "";
 const AuthToken = localStorage.getItem("AuthToken");
 if (AuthToken) {
   token = JSON.parse(AuthToken)?.token;

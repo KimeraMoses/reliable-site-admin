@@ -26,20 +26,16 @@ export default function Logs() {
 
   const getLogs = (page, pageSize) => {
     return async (dispatch) => {
-      if (token) {
-        dispatch(setLogsLoading(true));
-        try {
-          const { url, defaultData, config } = getLogsConfig(page, pageSize);
-          const res = await axios.post(url, defaultData, config);
-          setTotalCount(res?.data?.totalCount);
-          await dispatch(getLogsSlice(res?.data?.data));
-          dispatch(setLogsLoading(false));
-        } catch (e) {
-          toast.error(getError(e));
-          dispatch(setLogsLoading(false));
-        }
-      } else {
-        toast.error("You have no valid token, Please login again!");
+      dispatch(setLogsLoading(true));
+      try {
+        const { url, defaultData, config } = getLogsConfig(page, pageSize);
+        const res = await axios.post(url, defaultData, config);
+        setTotalCount(res?.data?.totalCount);
+        await dispatch(getLogsSlice(res?.data?.data));
+        dispatch(setLogsLoading(false));
+      } catch (e) {
+        toast.error(getError(e));
+        dispatch(setLogsLoading(false));
       }
     };
   };
