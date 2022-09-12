@@ -1,31 +1,33 @@
-import { Button, Switch } from 'antd';
-import { Table } from 'components';
-import { checkModule } from 'lib/checkModule';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getAllPaymentGateways } from 'store';
+import { Button, Switch } from "antd";
+import { Table } from "components";
+import { checkModule } from "lib/checkModule";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllPaymentGateways } from "store";
 import {
   AddPaymentGateway,
   DeletePaymentGateway,
   EditPaymentGateway,
-} from './sections';
+} from "./sections";
 
 const columns = [
   {
-    title: 'Payment Gateway',
-    dataIndex: 'name',
-    key: 'name',
-    width: '20%',
+    title: "Payment Gateway",
+    dataIndex: "name",
+    key: "name",
+    width: "20%",
+    sorter: (a, b) => (a?.name < b?.name ? -1 : 1),
   },
   {
-    title: 'API Key',
-    dataIndex: 'apiKey',
-    key: 'apiKey',
+    title: "API Key",
+    dataIndex: "apiKey",
+    key: "apiKey",
+    sorter: (a, b) => (a?.apiKey < b?.apiKey ? -1 : 1),
   },
   {
-    title: 'Status',
-    dataIndex: 'status',
-    key: 'status',
+    title: "Status",
+    dataIndex: "status",
+    key: "status",
     render: (value) => <Switch checked={value} disabled={true} />,
   },
 ];
@@ -50,7 +52,7 @@ const PaymentGateways = () => {
   // Check for permissions Start
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'PaymentGateways',
+    module: "PaymentGateways",
     modules: userModules,
   });
   // Check for permissions End
@@ -89,7 +91,7 @@ const PaymentGateways = () => {
         loading={loading}
         fieldToFilter="name"
         btnData={{
-          text: 'Add Payment Gateway',
+          text: "Add Payment Gateway",
           onClick: () => setAddModalShow(true),
         }}
         editAction={(record) => (

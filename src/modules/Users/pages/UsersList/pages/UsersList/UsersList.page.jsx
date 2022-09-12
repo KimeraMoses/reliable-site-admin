@@ -113,21 +113,25 @@ export const UsersList = () => {
       title: "Username",
       dataIndex: "userName",
       key: "userName",
+      sorter: (a, b) => (a?.userName < b?.userName ? -1 : 1),
     },
     {
       title: t("adminName"),
       dataIndex: "name",
       key: "name",
+      sorter: (a, b) => (a?.name < b?.name ? -1 : 1),
     },
     {
       title: t("email"),
       dataIndex: "email",
       key: "email",
+      sorter: (a, b) => (a?.email < b?.email ? -1 : 1),
     },
     {
       title: t("createDate"),
       key: "createdOn",
       dataIndex: "createdOn",
+      sorter: (a, b) => (moment(a?.createdOn) < moment(b?.createdOn) ? -1 : 1),
       render: (text) =>
         moment(text)?.isValid()
           ? moment(text)?.format(settings?.dateFormat)

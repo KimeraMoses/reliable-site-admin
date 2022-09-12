@@ -122,12 +122,15 @@ export const AllOrders = () => {
       title: t("dateAdded"),
       dataIndex: "createdOn",
       key: "createdOn",
+      sorter: (a, b) => (moment(a?.createdOn) < moment(b?.createdOn) ? -1 : 1),
       render: (createdOn) => moment(createdOn).format(settings?.dateFormat),
     },
     {
       title: t("dateModified"),
       dataIndex: "lastModifiedOn",
       key: "lastModifiedOn",
+      sorter: (a, b) =>
+        moment(a?.lastModifiedOn) < moment(b?.lastModifiedOn) ? -1 : 1,
       render: (lastModifiedOn) =>
         moment(lastModifiedOn).format(settings?.dateFormat),
     },

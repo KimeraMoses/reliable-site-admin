@@ -37,12 +37,14 @@ export const CancellationRequests = () => {
       title: "ID",
       dataIndex: "id",
       key: "id",
+      sorter: (a, b) => (a?.id < b?.id ? -1 : 1),
       render: (text) => <>{text.substr(text.length - 5)}</>,
     },
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
+      sorter: (a, b) => (a?.name < b?.name ? -1 : 1),
     },
     {
       title: "Summary",
@@ -86,6 +88,7 @@ export const CancellationRequests = () => {
       title: "Total",
       dataIndex: "total",
       key: "total",
+      sorter: (a, b) => (a?.total < b?.total ? -1 : 1),
       render: (text, record) => {
         let sum = 0;
         record?.productLineItems?.forEach((item) => {
@@ -100,6 +103,7 @@ export const CancellationRequests = () => {
       title: "Client Name",
       dataIndex: "userId",
       key: "userId",
+      sorter: (a, b) => (a?.userId < b?.userId ? -1 : 1),
       render: (text) => {
         const client = clients?.find((client) => client?.id === text);
         // console.log("client", client, text);
@@ -145,6 +149,8 @@ export const CancellationRequests = () => {
       title: "Next Due Date",
       dataIndex: "nextDueDate",
       key: "nextDueDate",
+      sorter: (a, b) =>
+        moment(a?.nextDueDate) < moment(b?.nextDueDate) ? -1 : 1,
       render: (nextDueDate) => moment(nextDueDate).format("DD-MM-YYYY"),
     },
     {

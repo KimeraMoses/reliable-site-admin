@@ -19,7 +19,7 @@ import {
 
 export const NotificationTemplates = () => {
   const navigate = useNavigate();
-
+  const { settings } = useSelector((state) => state.appSettings);
   const { t } = useTranslation("/Bills/ns");
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
@@ -31,24 +31,28 @@ export const NotificationTemplates = () => {
       title: "ID",
       dataIndex: "id",
       key: "id",
+      sorter: (a, b) => (a?.id < b?.id ? -1 : 1),
       render: (text) => text.substring(0, 4),
     },
     {
       title: "Title",
       dataIndex: "title",
       key: "title",
+      sorter: (a, b) => (a?.title < b?.title ? -1 : 1),
     },
     {
       title: "Starts",
       dataIndex: "startDate",
       key: "startDate",
-      render: (key) => moment(key).format("MM/DD/YYYY"),
+      sorter: (a, b) => (moment(a?.startDate) < moment(b?.startDate) ? -1 : 1),
+      render: (key) => moment(key).format(settings?.dateFormat),
     },
     {
       title: "Ends",
       dataIndex: "endDate",
       key: "endDate",
-      render: (key) => moment(key).format("MM/DD/YYYY"),
+      sorter: (a, b) => (moment(a?.endDate) < moment(b?.endDate) ? -1 : 1),
+      render: (key) => moment(key).format(settings?.dateFormat),
     },
     {
       title: "status",

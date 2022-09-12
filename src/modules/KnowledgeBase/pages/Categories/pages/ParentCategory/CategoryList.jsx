@@ -1,18 +1,18 @@
-import { Button } from 'antd';
-import { useEffect, useState } from 'react';
-import moment from 'moment';
-import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { checkModule } from 'lib/checkModule';
-import { Table } from 'components';
-import { getAllArticleCategories } from 'store';
-import { AddCategory, Delete } from './sections';
-import { EditCategory } from './sections/EditCategory.section';
-import { getArticleCategoryByID } from 'store';
+import { Button } from "antd";
+import { useEffect, useState } from "react";
+import moment from "moment";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { checkModule } from "lib/checkModule";
+import { Table } from "components";
+import { getAllArticleCategories } from "store";
+import { AddCategory, Delete } from "./sections";
+import { EditCategory } from "./sections/EditCategory.section";
+import { getArticleCategoryByID } from "store";
 
 export const CategoryList = () => {
-  const { t } = useTranslation('/Bills/ns');
-
+  const { t } = useTranslation("/Bills/ns");
+  const { settings } = useSelector((state) => state.appSettings);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -27,15 +27,16 @@ export const CategoryList = () => {
   const { userModules } = useSelector((state) => state?.modules);
 
   const { permissions } = checkModule({
-    module: 'KnowledgeBase',
+    module: "KnowledgeBase",
     modules: userModules,
   });
 
   const columns = [
     {
-      title: 'Category ID',
-      dataIndex: 'id',
-      key: 'id',
+      title: "Category ID",
+      dataIndex: "id",
+      key: "id",
+      sorter: (a, b) => (a?.id < b?.id ? -1 : 1),
       render: (text) => {
         return (
           <div className="">
@@ -46,9 +47,10 @@ export const CategoryList = () => {
     },
 
     {
-      title: 'Category Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: "Category Name",
+      dataIndex: "name",
+      key: "name",
+      sorter: (a, b) => (a?.name < b?.name ? -1 : 1),
       width: 600,
       render: (text, record) => {
         return (
@@ -68,18 +70,19 @@ export const CategoryList = () => {
       },
     },
     {
-      title: 'Articles Under Category',
-      dataIndex: 'undercategory',
-      key: 'undercategory',
+      title: "Articles Under Category",
+      dataIndex: "undercategory",
+      key: "undercategory",
       render: () => {
         return <div className="text-sm">4 Articles</div>;
       },
     },
     {
-      title: 'Creation Date',
-      dataIndex: 'createdOn',
-      key: 'createdOn',
-      render: (createdOn) => moment(createdOn).format('DD/MM/YYYY'),
+      title: "Creation Date",
+      dataIndex: "createdOn",
+      key: "createdOn",
+      sorter: (a, b) => (moment(a?.createdOn) < moment(b?.createdOn) ? -1 : 1),
+      render: (createdOn) => moment(createdOn).format(settings?.dateFormat),
     },
   ];
 
@@ -91,7 +94,7 @@ export const CategoryList = () => {
     if (articleCategories.length) {
       let dataToSet = [];
       articleCategories?.forEach((b) => {
-        if (b?.parentCategoryId === '00000000-0000-0000-0000-000000000000') {
+        if (b?.parentCategoryId === "00000000-0000-0000-0000-000000000000") {
           dataToSet.push({ ...b, key: b?.id });
         }
       });
@@ -102,7 +105,7 @@ export const CategoryList = () => {
   // Edit Category
   const [edit, setEdit] = useState(false);
   const [del, setDel] = useState(false);
-  const [id, setId] = useState('');
+  const [id, setId] = useState("");
   return (
     <div className="mt-[20px]">
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
@@ -113,10 +116,14 @@ export const CategoryList = () => {
           columns={columns}
           data={data}
           loading={loading}
-          dateRageFilter={true}
-          fieldToFilter="billNo"
+          pagination={{
+            defaultPageSize: 5,
+            showSizeChanger: true,
+            position: ["bottomRight"],
+            pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
+          }}
           btnData={{
-            text: 'Add Category',
+            text: "Add Category",
             onClick: () => setAddModalShow(true),
           }}
           editAction={(record) => (

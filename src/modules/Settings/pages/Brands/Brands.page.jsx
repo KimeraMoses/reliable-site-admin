@@ -1,12 +1,12 @@
-import { Button } from 'antd';
-import { Table } from 'components';
-import { checkModule } from 'lib/checkModule';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getBrands, getClients } from 'store';
-import { useTranslation } from 'react-i18next';
-import { AddBrand, DeleteBrand, EditBrand, ClientsAssigned } from './sections';
-import { NavLink } from 'react-router-dom';
+import { Button } from "antd";
+import { Table } from "components";
+import { checkModule } from "lib/checkModule";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getBrands, getClients } from "store";
+import { useTranslation } from "react-i18next";
+import { AddBrand, DeleteBrand, EditBrand, ClientsAssigned } from "./sections";
+import { NavLink } from "react-router-dom";
 
 const Brands = () => {
   const [addModalShow, setAddModalShow] = useState(false);
@@ -28,26 +28,28 @@ const Brands = () => {
   const { brands, loading } = useSelector((state) => state.brands);
   const { clients } = useSelector((state) => state?.users);
 
-  const { t } = useTranslation('/Settings/ns');
+  const { t } = useTranslation("/Settings/ns");
 
   const columns = [
     {
-      title: t('name'),
-      dataIndex: 'name',
-      key: 'name',
+      title: t("name"),
+      dataIndex: "name",
+      key: "name",
+      sorter: (a, b) => (a?.name < b?.name ? -1 : 1),
     },
     {
-      title: t('companyName'),
-      dataIndex: 'companyName',
-      key: 'companyName',
+      title: t("companyName"),
+      dataIndex: "companyName",
+      key: "companyName",
+      sorter: (a, b) => (a?.companyName < b?.companyName ? -1 : 1),
     },
     {
-      title: t('logo'),
-      dataIndex: 'logo',
-      key: 'logo',
+      title: t("logo"),
+      dataIndex: "logo",
+      key: "logo",
       render: (logoUrl, record) => {
-        let name = '';
-        let userN = record.name.split(' ');
+        let name = "";
+        let userN = record.name.split(" ");
         if (userN.length < 2) {
           name = userN[0].charAt(0);
         } else {
@@ -67,35 +69,35 @@ const Brands = () => {
       },
     },
     {
-      title: t('clientAssignedTable'),
-      key: 'clientAssigned',
-      dataIndex: 'clientAssigned',
+      title: t("clientAssignedTable"),
+      key: "clientAssigned",
+      dataIndex: "clientAssigned",
       render: (clientAssigned, record) => {
         return (
           <NavLink
-            to={'#'}
+            to={"#"}
             onClick={() => {
               setEditValue(record);
               setClientsModalShow(true);
             }}
           >
-            {`${clientAssigned?.split(',')?.length} Clients Assigned`}
+            {`${clientAssigned?.split(",")?.length} Clients Assigned`}
           </NavLink>
         );
       },
     },
     {
-      title: t('status'),
-      key: 'status',
-      dataIndex: 'status',
+      title: t("status"),
+      key: "status",
+      dataIndex: "status",
       render: (status) =>
         status ? (
           <div className="bg-[#1C3238] px-[8px] py-[4px] text-[#0BB783] w-[fit-content] rounded-[4px]">
-            {'ENABLED'}
+            {"ENABLED"}
           </div>
         ) : (
           <div className="bg-[#3A2434] px-[8px] py-[4px] text-[#F64E60] w-[fit-content] rounded-[4px]">
-            {'DISABLED'}
+            {"DISABLED"}
           </div>
         ),
     },
@@ -104,7 +106,7 @@ const Brands = () => {
   // Check for permissions Start
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Brands',
+    module: "Brands",
     modules: userModules,
   });
   // Check for permissions End
@@ -150,7 +152,7 @@ const Brands = () => {
         loading={loading}
         fieldToFilter="name"
         btnData={{
-          text: t('addNewBrand'),
+          text: t("addNewBrand"),
           onClick: () => setAddModalShow(true),
         }}
         editAction={(record) => (

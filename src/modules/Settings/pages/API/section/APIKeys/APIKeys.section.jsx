@@ -1,19 +1,20 @@
-import { Button, Tooltip } from 'antd';
-import { Copy } from 'icons';
-import moment from 'moment';
-import { Table } from 'components';
-import './APIKeys.styles.scss';
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import { Add, Delete, EditAPIKey, EditPermissions } from './sections';
-import { checkModule } from 'lib/checkModule';
-import { useSelector, useDispatch } from 'react-redux';
-import { getAllAPIKeys } from 'store';
-import { getAPIKeyByID } from 'store';
-import { getUsers } from 'store';
+import { Button, Tooltip } from "antd";
+import { Copy } from "icons";
+import moment from "moment";
+import { Table } from "components";
+import "./APIKeys.styles.scss";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import { Add, Delete, EditAPIKey, EditPermissions } from "./sections";
+import { checkModule } from "lib/checkModule";
+import { useSelector, useDispatch } from "react-redux";
+import { getAllAPIKeys } from "store";
+import { getAPIKeyByID } from "store";
+import { getUsers } from "store";
 
 export const APIKeysList = () => {
   const [show, setShow] = useState(false);
+  const { settings } = useSelector((state) => state.appSettings);
   // const [selectedSort, setSelectedSort] = useState('label');
   const [data, setData] = useState([]);
   // Edit Modal State Start
@@ -28,32 +29,34 @@ export const APIKeysList = () => {
   const { users } = useSelector((state) => state?.users);
   const userLoading = useSelector((state) => state?.users?.loading);
   const { permissions } = checkModule({
-    module: 'SettingAPIKeys',
+    module: "SettingAPIKeys",
     modules: userModules,
   });
 
-  const { t } = useTranslation('/Users/ns');
+  const { t } = useTranslation("/Users/ns");
 
   const columns = [
     {
-      title: 'Number',
-      dataIndex: 'number',
-      key: 'number',
+      title: "Number",
+      dataIndex: "number",
+      key: "number",
+      sorter: (a, b) => (a?.number < b?.number ? -1 : 1),
     },
     {
-      title: 'User',
-      dataIndex: 'user',
-      key: 'user',
+      title: "User",
+      dataIndex: "user",
+      key: "user",
+      sorter: (a, b) => (a?.user < b?.user ? -1 : 1),
     },
     {
-      title: t('label'),
-      dataIndex: 'label',
-      key: 'label',
+      title: t("label"),
+      dataIndex: "label",
+      key: "label",
     },
     {
-      title: t('apiKey'),
-      dataIndex: 'apiKey',
-      key: 'apiKey',
+      title: t("apiKey"),
+      dataIndex: "apiKey",
+      key: "apiKey",
       render: (text) => {
         return (
           <div className="flex gap-[8px] items-center">
@@ -73,34 +76,40 @@ export const APIKeysList = () => {
       },
     },
     {
-      title: 'IP Address',
-      dataIndex: 'safeListIpAddresses',
-      key: 'safeListIpAddresses',
+      title: "IP Address",
+      dataIndex: "safeListIpAddresses",
+      key: "safeListIpAddresses",
     },
     {
-      title: t('createDate'),
-      key: 'createdAt',
-      dataIndex: 'createdAt',
+      title: t("createDate"),
+      key: "createdAt",
+      dataIndex: "createdAt",
+      sorter: (a, b) => (moment(a?.createdAt) < moment(b?.createdAt) ? -1 : 1),
+      render: (text) =>
+        moment(text)?.isValid()
+          ? moment(text)?.format(settings?.dateFormat)
+          : "N/A",
     },
     {
-      title: 'Expires',
-      key: 'validTill',
-      dataIndex: 'validTill',
-      render: (text) => moment(text).format('MMM Do, YYYY . hh:mm A'),
+      title: "Expires",
+      key: "validTill",
+      dataIndex: "validTill",
+      sorter: (a, b) => (moment(a?.validTill) < moment(b?.validTill) ? -1 : 1),
+      render: (text) => moment(text).format(settings?.dateFormat),
     },
     {
-      title: t('status'),
-      key: 'status',
-      dataIndex: 'status',
+      title: t("status"),
+      key: "status",
+      dataIndex: "status",
       render: (status) => (
         <div
           className={`${
             status
-              ? 'bg-[#1C3238] text-[#0BB783]'
-              : 'bg-[#3A2434] text-[#F64E60]'
+              ? "bg-[#1C3238] text-[#0BB783]"
+              : "bg-[#3A2434] text-[#F64E60]"
           } px-[8px] py-[4px] w-[fit-content] rounded-[4px]`}
         >
-          {status ? 'ENABLED' : 'DISABLED'}
+          {status ? "ENABLED" : "DISABLED"}
         </div>
       ),
     },
@@ -119,11 +128,11 @@ export const APIKeysList = () => {
         dataArr.push({
           key: key?.id,
           number: index + 1,
-          user: users.find((x) => x?.id === key?.userIds)?.fullName || 'N/A',
-          label: key?.label !== null ? key?.label : 'N/A',
+          user: users.find((x) => x?.id === key?.userIds)?.fullName || "N/A",
+          label: key?.label !== null ? key?.label : "N/A",
           apiKey: key?.applicationKey,
           safeListIpAddresses: key?.safeListIpAddresses,
-          createdAt: key?.createdAt ? key?.createdAt : 'N/A',
+          createdAt: key?.createdAt ? key?.createdAt : "N/A",
           status: key?.statusApi,
           validTill: key?.validTill,
           tenant: key?.tenant,
@@ -137,13 +146,19 @@ export const APIKeysList = () => {
     <div className="mt-[20px] bg-[#1E1E2D] rounded-[8px] pb-[32px]">
       <h6 className="text-white text-[16px] px-[32px] pt-[32px]">API Keys</h6>
       <div className="border-dashed border-t-[1px] h-[0px] border-[#323248] mt-[32px] mb-[32px]" />
-      <div className="up-api-keys__table">
+      <div className="up-api-keys__table p-4">
         <Table
           data={data}
           columns={columns}
           loading={loading || userLoading}
-          btnData={{ text: 'Add API Key', onClick: () => setShow(true) }}
+          btnData={{ text: "Add API Key", onClick: () => setShow(true) }}
           fieldToFilter="label"
+          pagination={{
+            defaultPageSize: 5,
+            showSizeChanger: true,
+            position: ["bottomRight"],
+            pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
+          }}
           editAction={(record) => (
             <>
               <Button

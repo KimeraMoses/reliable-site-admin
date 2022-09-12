@@ -229,16 +229,19 @@ export const QueueList = () => {
       title: "Subject",
       dataIndex: "ticketTitle",
       key: "ticketTitle",
+      sorter: (a, b) => (a?.ticketTitle < b?.ticketTitle ? -1 : 1),
     },
     {
       title: "Created By",
       dataIndex: "clientFullName",
       key: "clientFullName",
+      sorter: (a, b) => (a?.clientFullName < b?.clientFullName ? -1 : 1),
     },
     {
       title: "Department",
       dataIndex: "departmentId",
       key: "departmentId",
+      sorter: (a, b) => (a?.departmentId < b?.departmentId ? -1 : 1),
       render: (text) => {
         const department = departments?.find((dept) => dept?.id === text);
         return department?.name ? department?.name : "N/A";
@@ -248,6 +251,7 @@ export const QueueList = () => {
       title: "Assigned To",
       dataIndex: "assignedTo",
       key: "assignedTo",
+      sorter: (a, b) => (a?.assignedTo < b?.assignedTo ? -1 : 1),
       render: (text) => {
         const admin = users?.find((user) => user?.id === text);
         return admin?.fullName ? admin?.fullName : "N/A";

@@ -1,18 +1,18 @@
-import { Button } from 'antd';
-import { Table } from 'components';
-import { checkModule } from 'lib/checkModule';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getDepartments, getUsers } from 'store';
-import { useTranslation } from 'react-i18next';
-import { NavLink } from 'react-router-dom';
+import { Button } from "antd";
+import { Table } from "components";
+import { checkModule } from "lib/checkModule";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getDepartments, getUsers } from "store";
+import { useTranslation } from "react-i18next";
+import { NavLink } from "react-router-dom";
 import {
   AddDepartment,
   DeleteDepartment,
   EditDepartment,
   AdminAssigned,
-} from './sections';
-import { getBrands } from 'store';
+} from "./sections";
+import { getBrands } from "store";
 
 const Brands = () => {
   const [addModalShow, setAddModalShow] = useState(false);
@@ -36,36 +36,39 @@ const Brands = () => {
   const { brands } = useSelector((state) => state?.brands);
   const { users } = useSelector((state) => state?.users);
 
-  const { t } = useTranslation('/Settings/ns');
+  const { t } = useTranslation("/Settings/ns");
 
   const columns = [
     {
-      title: t('number'),
-      dataIndex: 'deptNumber',
-      key: 'deptNumber',
+      title: t("number"),
+      dataIndex: "deptNumber",
+      key: "deptNumber",
+      sorter: (a, b) => (a?.deptNumber < b?.deptNumber ? -1 : 1),
     },
     {
-      title: t('name'),
-      dataIndex: 'name',
-      key: 'name',
+      title: t("name"),
+      dataIndex: "name",
+      key: "name",
+      sorter: (a, b) => (a?.name < b?.name ? -1 : 1),
     },
     {
-      title: 'Brand',
-      dataIndex: 'brandId',
-      key: 'brandId',
+      title: "Brand",
+      dataIndex: "brandId",
+      key: "brandId",
+      sorter: (a, b) => (a?.brandId < b?.brandId ? -1 : 1),
       render: (text) => {
         const brand = brands?.find((brand) => brand?.id === text);
         return <>{brand?.name}</>;
       },
     },
     {
-      title: t('adminAssignedTable'),
-      key: 'departmentAdminsList',
-      dataIndex: 'departmentAdminsList',
+      title: t("adminAssignedTable"),
+      key: "departmentAdminsList",
+      dataIndex: "departmentAdminsList",
       render: (departmentAdmins, record) => {
         return (
           <NavLink
-            to={'#'}
+            to={"#"}
             className="text-[#3699FF]"
             onClick={() => {
               setEditValue(record);
@@ -78,17 +81,17 @@ const Brands = () => {
       },
     },
     {
-      title: t('status'),
-      key: 'deptStatus',
-      dataIndex: 'deptStatus',
+      title: t("status"),
+      key: "deptStatus",
+      dataIndex: "deptStatus",
       render: (status) =>
         status ? (
           <div className="bg-[#1C3238] px-[8px] py-[4px] text-[#0BB783] w-[fit-content] rounded-[4px]">
-            {'ENABLED'}
+            {"ENABLED"}
           </div>
         ) : (
           <div className="bg-[#3A2434] px-[8px] py-[4px] text-[#F64E60] w-[fit-content] rounded-[4px]">
-            {'DISABLED'}
+            {"DISABLED"}
           </div>
         ),
     },
@@ -97,7 +100,7 @@ const Brands = () => {
   // Check for permissions Start
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'Departments',
+    module: "Departments",
     modules: userModules,
   });
   // Check for permissions End
@@ -148,7 +151,7 @@ const Brands = () => {
         loading={loading}
         fieldToFilter="name"
         btnData={{
-          text: t('addNewDepartment'),
+          text: t("addNewDepartment"),
           onClick: () => setAddModalShow(true),
         }}
         editAction={(record) => (

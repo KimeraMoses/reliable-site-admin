@@ -324,9 +324,11 @@ export const Table = ({
               columns={tableColumns}
               rowKey={rowKey}
               rowClassName={rowClassName}
+              sortDirections={["ascend", "descend", "ascend"]}
+              showSorterTooltip={false}
               scroll={scroll}
               dataSource={
-                searchResults?.length > 0
+                search?.length > 0
                   ? searchResults
                   : searchData?.length > 0
                   ? searchData
@@ -341,9 +343,12 @@ export const Table = ({
               rowSelection={rowSelection}
               loading={permissions?.View ? loading || isLoading : false}
               locale={{
-                emptyText: permissions?.View
-                  ? emptyText || "No Data"
-                  : "You are not authorized to view this data.",
+                emptyText:
+                  search?.length > 0 && searchResults < 1
+                    ? "No data matching search query found"
+                    : permissions?.View
+                    ? emptyText || "No Data"
+                    : "You are not authorized to view this data.",
               }}
               onRow={onRow}
             />

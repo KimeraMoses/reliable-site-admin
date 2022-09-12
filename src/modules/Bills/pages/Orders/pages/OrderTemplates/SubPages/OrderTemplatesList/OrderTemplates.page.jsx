@@ -55,17 +55,21 @@ export const OrderTemplates = () => {
       title: "Template Name",
       dataIndex: "name",
       key: "name",
+      sorter: (a, b) => (a?.name < b?.name ? -1 : 1),
     },
     {
       title: "Created On",
       dataIndex: "createdOn",
       key: "createdOn",
+      sorter: (a, b) => (moment(a?.createdOn) < moment(b?.createdOn) ? -1 : 1),
       render: (text) => moment(text).format(settings?.dateFormat),
     },
     {
       title: "Last Modified On",
       dataIndex: "lastModifiedOn",
       key: "lastModifiedOn",
+      sorter: (a, b) =>
+        moment(a?.lastModifiedOn) < moment(b?.lastModifiedOn) ? -1 : 1,
       render: (text) => moment(text).format(settings?.dateFormat),
     },
     {
@@ -115,7 +119,6 @@ export const OrderTemplates = () => {
             position: ["bottomRight"],
             pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
           }}
-          fieldToFilter="templateName"
           permissions={permissions}
           onRow={(record) => {
             return {

@@ -58,15 +58,18 @@ export default function Logs() {
       title: t("url"),
       key: "url",
       dataIndex: "url",
+      sorter: (a, b) => (a?.url < b?.url ? -1 : 1),
     },
     {
       title: "User",
       key: "user",
       dataIndex: "user",
+      sorter: (a, b) => (a?.user < b?.user ? -1 : 1),
     },
     {
       title: t("reqDate"),
       key: "reqDate",
+      sorter: (a, b) => (moment(a?.reqDate) < moment(b?.reqDate) ? -1 : 1),
       dataIndex: "reqDate",
     },
     // {
@@ -84,7 +87,7 @@ export default function Logs() {
         key: log?.id,
         status: "200 OK",
         url: `${log?.type} ${log?.tableName}`,
-        user: log?.fullName ? log?.fullName : "N/A",
+        user: log?.fullName ? log?.fullName : "system",
         // description: log?.text,
         reqDate: moment(log?.dateTime)?.format(settings?.dateFormat),
       });

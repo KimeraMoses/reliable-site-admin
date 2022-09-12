@@ -1,47 +1,22 @@
-import { Button } from 'antd';
-import { Table } from 'components';
-import { checkModule } from 'lib/checkModule';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import { getAllSMTPs } from 'store';
-import { Delete } from './sections';
-
-const columns = [
-  {
-    title: 'Host',
-    dataIndex: 'host',
-    key: 'host',
-  },
-  {
-    title: 'Port',
-    dataIndex: 'port',
-    key: 'port',
-  },
-  {
-    title: 'Protocol',
-    dataIndex: 'httpsProtocol',
-    key: 'httpsProtocol',
-    render: (text) => (text ? 'HTTPS' : 'HTTP'),
-    width: '40%',
-  },
-  {
-    title: 'Created At',
-    dataIndex: 'createdAt',
-    render: (text) => (text ? text : 'N/A'),
-    key: 'createdAt',
-  },
-];
+import { Button } from "antd";
+import { Table } from "components";
+import { checkModule } from "lib/checkModule";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { getAllSMTPs } from "store";
+import { Delete } from "./sections";
+import moment from "moment";
 
 export const List = () => {
   const [show, setShow] = useState(false);
   const [record, setRecord] = useState(null);
   const navigate = useNavigate();
-
+  const { settings } = useSelector((state) => state.appSettings);
   // Check for permissions Start
   const { userModules } = useSelector((state) => state?.modules);
   const { permissions } = checkModule({
-    module: 'SMTP',
+    module: "SMTP",
     modules: userModules,
   });
   // Check for permissions End
@@ -66,6 +41,36 @@ export const List = () => {
     }
   }, [smtps]);
 
+  const columns = [
+    {
+      title: "Host",
+      dataIndex: "host",
+      key: "host",
+      sorter: (a, b) => (a?.host < b?.host ? -1 : 1),
+    },
+    {
+      title: "Port",
+      dataIndex: "port",
+      key: "port",
+      sorter: (a, b) => (a?.port < b?.port ? -1 : 1),
+    },
+    {
+      title: "Protocol",
+      dataIndex: "httpsProtocol",
+      key: "httpsProtocol",
+      sorter: (a, b) => (a?.httpsProtocol < b?.httpsProtocol ? -1 : 1),
+      render: (text) => (text ? "HTTPS" : "HTTP"),
+      width: "40%",
+    },
+    {
+      title: "Created At",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      sorter: (a, b) => (moment(a?.createdAt) < moment(b?.createdAt) ? -1 : 1),
+      render: (createdOn) => moment(createdOn).format(settings?.dateFormat),
+    },
+  ];
+
   return (
     <div className="m-[40px] p-[40px] bg-[#1E1E2D] rounded-[8px]">
       <Delete show={show} setShow={setShow} record={record} />
@@ -76,9 +81,9 @@ export const List = () => {
         permissions={permissions}
         fieldToFilter="host"
         btnData={{
-          text: 'Add New Configuration',
+          text: "Add New Configuration",
           onClick: () => {
-            navigate('/admin/dashboard/settings/smtp/configuration/add');
+            navigate("/admin/dashboard/settings/smtp/configuration/add");
           },
         }}
         // loading={loading}

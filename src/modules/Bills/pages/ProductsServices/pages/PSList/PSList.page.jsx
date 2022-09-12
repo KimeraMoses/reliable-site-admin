@@ -46,12 +46,14 @@ export const PSList = () => {
       title: "ID",
       dataIndex: "id",
       key: "id",
+      sorter: (a, b) => (a?.id < b?.id ? -1 : 1),
       render: (text) => <>{text.substr(text.length - 5)}</>,
     },
     {
       title: "Name",
       dataIndex: "name",
       key: "name",
+      sorter: (a, b) => (a?.name < b?.name ? -1 : 1),
     },
     {
       title: "Summary",
@@ -105,6 +107,7 @@ export const PSList = () => {
       title: "Total",
       dataIndex: "total",
       key: "total",
+      sorter: (a, b) => (a?.total < b?.total ? -1 : 1),
       render: (text, record) => {
         let sum = 0;
         record?.productLineItems?.forEach((item) => {
@@ -119,6 +122,7 @@ export const PSList = () => {
       title: "Client Name",
       dataIndex: "assignedClient",
       key: "assignedClient",
+      sorter: (a, b) => (a?.assignedClient < b?.assignedClient ? -1 : 1),
       // render: (text) => {
       //   const client = clients?.find((client) => client?.id === text);
       //   return client?.fullName ? client.fullName : "N/A";
@@ -163,6 +167,8 @@ export const PSList = () => {
       title: "Next Due Date",
       dataIndex: "nextDueDate",
       key: "nextDueDate",
+      sorter: (a, b) =>
+        moment(a?.nextDueDate) < moment(b?.nextDueDate) ? -1 : 1,
       render: (nextDueDate) => moment(nextDueDate).format(settings?.dateFormat),
       width: "70px",
     },

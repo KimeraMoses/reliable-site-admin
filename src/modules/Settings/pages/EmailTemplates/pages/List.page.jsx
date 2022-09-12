@@ -13,6 +13,7 @@ const columns = [
     dataIndex: "subject",
     key: "subject",
     width: "15%",
+    sorter: (a, b) => (a?.subject < b?.subject ? -1 : 1),
   },
   {
     title: "Configuration",
@@ -23,11 +24,13 @@ const columns = [
     title: "Event",
     dataIndex: "event",
     key: "event",
+    sorter: (a, b) => (a?.event < b?.event ? -1 : 1),
   },
   {
     title: "Added By",
     dataIndex: "addedBy",
     key: "addedBy",
+    sorter: (a, b) => (a?.addedBy < b?.addedBy ? -1 : 1),
   },
   {
     title: "Status",

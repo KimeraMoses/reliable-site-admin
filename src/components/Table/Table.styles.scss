@@ -87,6 +87,7 @@
     border-radius: 8px;
     border-color: #171723;
     min-width: 300px;
+    max-width: 500px;
     // Prefix Icon
     .ant-input-prefix {
       margin-right: 12px;
@@ -244,4 +245,8 @@
       }
     }
   }
+}
+
+.ant-table-thead th.ant-table-column-has-sorters:hover {
+  background: #383854 !important;
 }

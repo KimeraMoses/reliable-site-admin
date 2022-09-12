@@ -36,7 +36,7 @@ import { deleteTicket } from "store";
 export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
   const { t } = useTranslation("/Tickets/ns");
   const location = useLocation();
-
+  const { settings } = useSelector((state) => state.appSettings);
   const { allTickets, departmentTickets, loading } = useSelector(
     (state) => state?.tickets
   );
@@ -169,16 +169,19 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
       title: "Subject",
       dataIndex: "ticketTitle",
       key: "ticketTitle",
+      sorter: (a, b) => (a?.ticketTitle < b?.ticketTitle ? -1 : 1),
     },
     {
       title: "Created By",
       dataIndex: "clientFullName",
       key: "clientFullName",
+      sorter: (a, b) => (a?.clientFullName < b?.clientFullName ? -1 : 1),
     },
     {
       title: "Department",
       dataIndex: "departmentId",
       key: "departmentId",
+      sorter: (a, b) => (a?.departmentId < b?.departmentId ? -1 : 1),
       render: (text) => {
         const department = departments?.find((dept) => dept?.id === text);
         return department?.name ? department?.name : "N/A";
@@ -188,6 +191,7 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
       title: "Assigned To",
       dataIndex: "assignedTo",
       key: "assignedTo",
+      sorter: (a, b) => (a?.assignedTo < b?.assignedTo ? -1 : 1),
       render: (text) => {
         const admin = users?.find((user) => user?.id === text);
         return admin?.fullName ? admin?.fullName : "N/A";
@@ -197,7 +201,11 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
       title: "Follow-Up",
       dataIndex: "followUpOn",
       key: "followUpOn",
-      render: (text) => <>{text ? moment(text).format("MM/DD/YYYY") : "N/A"}</>,
+      sorter: (a, b) =>
+        moment(a?.followUpOn) < moment(b?.followUpOn) ? -1 : 1,
+      render: (text) => (
+        <>{text ? moment(text).format(settings?.dateFormat) : "N/A"}</>
+      ),
     },
     {
       title: "No. of Messages",

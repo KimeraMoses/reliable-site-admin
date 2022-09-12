@@ -1,66 +1,71 @@
-import moment from 'moment';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useSelector } from 'react-redux';
+import moment from "moment";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 
-import { Table } from 'components';
-import { checkModule } from 'lib/checkModule';
-import { getNotificationType } from 'lib';
+import { Table } from "components";
+import { checkModule } from "lib/checkModule";
+import { getNotificationType } from "lib";
 
 export const Notifications = () => {
   const navigate = useNavigate();
 
-  const { t } = useTranslation('/Bills/ns');
+  const { t } = useTranslation("/Bills/ns");
   const { userModules } = useSelector((state) => state?.modules);
+  const { settings } = useSelector((state) => state.appSettings);
   // const { permissions } = checkModule({
   //   module: 'Users',
   //   modules: userModules,
   // });
   const columns = [
     {
-      title: 'ID',
-      dataIndex: 'id',
-      key: 'id',
+      title: "ID",
+      dataIndex: "id",
+      key: "id",
+      sorter: (a, b) => (a?.id < b?.id ? -1 : 1),
       render: (text) => text.substring(0, 4),
     },
     {
-      title: 'Notification Type',
-      dataIndex: 'type',
-      key: 'type',
+      title: "Notification Type",
+      dataIndex: "type",
+      key: "type",
       render: (text) => getNotificationType({ type: text }),
     },
     {
-      title: 'Sent At',
-      dataIndex: 'sentAt',
-      key: 'sentAt',
-      render: (key) => moment(key).format('MM/DD/YYYY'),
+      title: "Sent At",
+      dataIndex: "sentAt",
+      key: "sentAt",
+      sorter: (a, b) => (moment(a?.sentAt) < moment(b?.sentAt) ? -1 : 1),
+      render: (key) => moment(key).format(settings?.dateFormat),
     },
     {
-      title: 'Sent To',
-      dataIndex: 'fullName',
-      key: 'fullName',
+      title: "Sent To",
+      dataIndex: "fullName",
+      key: "fullName",
+      sorter: (a, b) => (a?.fullName < b?.fullName ? -1 : 1),
     },
     {
-      title: 'status',
-      dataIndex: 'status',
-      key: 'status',
+      title: "status",
+      dataIndex: "status",
+      key: "status",
+      sorter: (a, b) => (a?.status < b?.status ? -1 : 1),
       render: (text) => {
         const getInfo = ({ type }) => {
           switch (type) {
             case 0:
               return {
-                styles: 'bg-[#392F28] text-[#FFA800]',
-                title: 'Sending...',
+                styles: "bg-[#392F28] text-[#FFA800]",
+                title: "Sending...",
               };
             case 1:
-              return { styles: 'bg-[#1C3238] text-[#0BB783]', title: 'Sent' };
+              return { styles: "bg-[#1C3238] text-[#0BB783]", title: "Sent" };
             case 2:
               return {
-                styles: 'bg-[#3A2434] text-[#F64E60]',
-                title: 'Failed',
+                styles: "bg-[#3A2434] text-[#F64E60]",
+                title: "Failed",
               };
             default:
-              return { styles: 'bg-[#1C3238] text-[#0BB783]', title: 'Active' };
+              return { styles: "bg-[#1C3238] text-[#0BB783]", title: "Active" };
           }
         };
 
@@ -89,12 +94,12 @@ export const Notifications = () => {
         loading={loading}
         fieldToFilter="title"
         btnData={{
-          text: 'Add New',
+          text: "Add New",
           onClick: () =>
             navigate(
-              '/admin/dashboard/billing/clients/show-notifications/client-notifications/add/new'
+              "/admin/dashboard/billing/clients/show-notifications/client-notifications/add/new"
             ),
-          customClass: 'w-[fit_content]',
+          customClass: "w-[fit_content]",
         }}
         hideActions
         permissions={{

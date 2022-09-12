@@ -39,21 +39,25 @@ export const ClientList = () => {
       title: "Client Name",
       dataIndex: "fullName",
       key: "fullName",
+      sorter: (a, b) => (a?.fullName < b?.fullName ? -1 : 1),
     },
     {
       title: "Email Address",
       dataIndex: "email",
       key: "email",
+      sorter: (a, b) => (a?.email < b?.email ? -1 : 1),
     },
     {
       title: "Company Name",
       dataIndex: "companyName",
       key: "companyName",
+      sorter: (a, b) => (a?.companyName < b?.companyName ? -1 : 1),
     },
     {
       title: "Created Date",
       dataIndex: "createdOn",
       key: "createdOn",
+      sorter: (a, b) => (moment(a?.createdOn) < moment(b?.createdOn) ? -1 : 1),
       render: (createdOn) => moment(createdOn).format(settings?.dateFormat),
     },
   ];

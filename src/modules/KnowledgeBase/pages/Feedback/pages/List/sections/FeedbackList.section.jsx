@@ -1,20 +1,20 @@
-import { Button } from 'antd';
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { checkModule } from 'lib/checkModule';
-import { Table } from 'components';
-import { Navigation } from './Navigation.section';
-import { getAllArticleFeedbacks } from 'store';
-import moment from 'moment';
-import { MarkAsReviewed } from '../../common-sections/MarkAsReviewed.section';
-import { getArticleFeedbackByID } from 'store';
+import { Button } from "antd";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+import { useDispatch, useSelector } from "react-redux";
+import { checkModule } from "lib/checkModule";
+import { Table } from "components";
+import { Navigation } from "./Navigation.section";
+import { getAllArticleFeedbacks } from "store";
+import moment from "moment";
+import { MarkAsReviewed } from "../../common-sections/MarkAsReviewed.section";
+import { getArticleFeedbackByID } from "store";
 
 export const FeedbackList = () => {
   const navigate = useNavigate();
-  const { t } = useTranslation('/Bills/ns');
-
+  const { t } = useTranslation("/Bills/ns");
+  const { settings } = useSelector((state) => state.appSettings);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -29,65 +29,66 @@ export const FeedbackList = () => {
   const { userModules } = useSelector((state) => state?.modules);
 
   const { permissions } = checkModule({
-    module: 'KnowledgeBase',
+    module: "KnowledgeBase",
     modules: userModules,
   });
 
   const columns = [
     {
-      title: 'Article Title',
-      dataIndex: 'articleTitle',
-      key: 'articleTitle',
+      title: "Article Title",
+      dataIndex: "articleTitle",
+      key: "articleTitle",
+      sorter: (a, b) => (a?.articleTitle < b?.articleTitle ? -1 : 1),
       render: (text, record) => <>{record?.article?.title}</>,
     },
     {
-      title: 'Article Description',
-      dataIndex: 'articleDescription',
-      key: 'articleDescription',
+      title: "Article Description",
+      dataIndex: "articleDescription",
+      key: "articleDescription",
       // bodyText
       render: (text, record) => (
         <p
           dangerouslySetInnerHTML={{
             __html: record?.article?.bodyText
               ? record?.article?.bodyText?.substring(0, 25)
-              : 'No Description',
+              : "No Description",
           }}
         />
       ),
     },
     {
-      title: 'Created By',
-      dataIndex: 'createdByName',
-      key: 'createdByName',
-      render: (text) => <>{text ? text : 'N/A'}</>,
+      title: "Created By",
+      dataIndex: "createdByName",
+      key: "createdByName",
+      sorter: (a, b) => (a?.createdByName < b?.createdByName ? -1 : 1),
+      render: (text) => <>{text ? text : "system"}</>,
     },
     {
-      title: 'Created At',
-      dataIndex: 'createdAt',
-      key: 'createdAt',
-      render: (text) => (
-        <>{moment(text).format('MM/DD/YYYY [at] hh:mm:ss a')}</>
-      ),
+      title: "Created At",
+      dataIndex: "createdAt",
+      key: "createdAt",
+      sorter: (a, b) => (moment(a?.createdAt) < moment(b?.createdAt) ? -1 : 1),
+      render: (text) => <>{moment(text).format(settings?.dateFormat)}</>,
     },
   ];
 
-  const [current, setCurrent] = useState('notReviewed');
+  const [current, setCurrent] = useState("notReviewed");
 
   const navData = [
-    { label: 'NOT REVIEWED', path: 'notReviewed' },
-    { label: 'REVIEWED', path: 'reviewed' },
+    { label: "NOT REVIEWED", path: "notReviewed" },
+    { label: "REVIEWED", path: "reviewed" },
   ];
 
   // Setting data properly
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    if (articlesFeedbacks?.length && current === 'notReviewed') {
+    if (articlesFeedbacks?.length && current === "notReviewed") {
       const finalData = articlesFeedbacks?.filter(
         (articleFeedback) => articleFeedback?.isReviewed === false
       );
       setData(finalData);
-    } else if (articlesFeedbacks?.length && current === 'reviewed') {
+    } else if (articlesFeedbacks?.length && current === "reviewed") {
       const finalData = articlesFeedbacks?.filter(
         (articleFeedback) => articleFeedback?.isReviewed === true
       );
@@ -109,6 +110,12 @@ export const FeedbackList = () => {
           data={data}
           loading={loading}
           field="name"
+          pagination={{
+            defaultPageSize: 5,
+            showSizeChanger: true,
+            position: ["bottomRight"],
+            pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
+          }}
           editAction={(record) => (
             <>
               <Button
@@ -128,8 +135,8 @@ export const FeedbackList = () => {
                   }}
                 >
                   {!record?.isReviewed
-                    ? 'Mark as Reviewed'
-                    : 'Mark as Not Reviewed'}
+                    ? "Mark as Reviewed"
+                    : "Mark as Not Reviewed"}
                 </Button>
               }
             </>

@@ -31,35 +31,39 @@ export const InvoiceList = () => {
   });
 
   const columns = [
-    {
-      title: "",
-      dataIndex: "id",
-      key: "id",
-      render: (id) => {
-        return <Checkbox></Checkbox>;
-      },
-    },
+    // {
+    //   title: "",
+    //   dataIndex: "id",
+    //   key: "id",
+    //   render: (id) => {
+    //     return <Checkbox></Checkbox>;
+    //   },
+    // },
     {
       title: t("invoiceId"),
       dataIndex: "billNo",
       key: "billNo",
+      sorter: (a, b) => (a?.billNo < b?.billNo ? -1 : 1),
     },
     {
       title: t("issueDate"),
       dataIndex: "createdOn",
       key: "createdOn",
+      sorter: (a, b) => (moment(a?.createdOn) < moment(b?.createdOn) ? -1 : 1),
       render: (createdOn) => moment(createdOn).format(settings?.dateFormat),
     },
     {
       title: t("dueDate"),
       dataIndex: "dueDate",
       key: "dueDate",
+      sorter: (a, b) => (moment(a?.dueDate) < moment(b?.dueDate) ? -1 : 1),
       render: (dueDate) => moment(dueDate).format(settings?.dateFormat),
     },
     {
       title: t("issuedFor"),
       dataIndex: "issuedFor",
       key: "issuedFor",
+      sorter: (a, b) => (a?.issuedFor < b?.issuedFor ? -1 : 1),
       render: (issuedFor, record) => {
         return (
           <div className="flex items-center gap-[12px]">
@@ -79,6 +83,7 @@ export const InvoiceList = () => {
       title: t("issuedBy"),
       dataIndex: "issuedBy",
       key: "issuedBy",
+      sorter: (a, b) => (a?.issuedBy < b?.issuedBy ? -1 : 1),
       render: (issuedBy, record) => {
         return (
           <div className="flex items-center gap-[12px]">
@@ -137,7 +142,7 @@ export const InvoiceList = () => {
           pagination={{
             defaultPageSize: 5,
             showSizeChanger: true,
-            position: ["bottomLeft"],
+            position: ["bottomRight"],
             pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
           }}
           data={data}

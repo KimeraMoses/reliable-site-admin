@@ -76,11 +76,13 @@ export const UsersGroups = () => {
       title: t("name"),
       dataIndex: "name",
       key: "name",
+      sorter: (a, b) => (a?.name < b?.name ? -1 : 1),
     },
     {
       title: t("numberOfUsers"),
       dataIndex: "userCount",
       key: "userCount",
+      sorter: (a, b) => (a?.userCount < b?.userCount ? -1 : 1),
     },
     {
       title: t("status"),
@@ -110,6 +112,7 @@ export const UsersGroups = () => {
       title: t("createDate"),
       key: "createdAt",
       dataIndex: "createdAt",
+      sorter: (a, b) => (moment(a?.createdAt) < moment(b?.createdAt) ? -1 : 1),
       render: (text) =>
         moment(text)?.isValid()
           ? moment(text)?.format(settings?.dateFormat)

@@ -150,11 +150,13 @@ export const YourOrders = ({ myOrders }) => {
       title: t("orderId"),
       dataIndex: "orderNo",
       key: "orderNo",
+      sorter: (a, b) => (a?.orderNo < b?.orderNo ? -1 : 1),
     },
     {
       title: t("client"),
       dataIndex: "clientFullName",
       key: "clientFullName",
+      sorter: (a, b) => (a?.clientFullName < b?.clientFullName ? -1 : 1),
       render: (fullName) => {
         // let name = "";
         // let userN = fullName?.split(" ");
@@ -189,6 +191,7 @@ export const YourOrders = ({ myOrders }) => {
       title: t("status"),
       dataIndex: "status",
       key: "status",
+      sorter: (a, b) => (a?.status < b?.status ? -1 : 1),
       render: (status) => {
         const statusValue = statusList(status);
         return (
@@ -204,6 +207,7 @@ export const YourOrders = ({ myOrders }) => {
       title: t("total"),
       dataIndex: "totalPrice",
       key: "totalPrice",
+      sorter: (a, b) => (a?.totalPrice < b?.totalPrice ? -1 : 1),
       render: (totalPrice) => {
         return <>{`${totalPrice} USD`}</>;
       },
@@ -212,12 +216,15 @@ export const YourOrders = ({ myOrders }) => {
       title: t("dateAdded"),
       dataIndex: "createdOn",
       key: "createdOn",
+      sorter: (a, b) => (moment(a?.createdOn) < moment(b?.createdOn) ? -1 : 1),
       render: (createdOn) => moment(createdOn).format(settings?.dateFormat),
     },
     {
       title: t("dateModified"),
       dataIndex: "lastModifiedOn",
       key: "lastModifiedOn",
+      sorter: (a, b) =>
+        moment(a?.lastModifiedOn) < moment(b?.lastModifiedOn) ? -1 : 1,
       render: (lastModifiedOn) =>
         moment(lastModifiedOn).format(settings?.dateFormat),
     },
@@ -226,7 +233,6 @@ export const YourOrders = ({ myOrders }) => {
   return (
     <div className="p-[40px]">
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
-        {/* <AddOrder show={showAdd} setShow={setShowAdd} record={record} /> */}
         <Delete
           show={showDelete}
           setShow={setShowDelete}
@@ -258,11 +264,6 @@ export const YourOrders = ({ myOrders }) => {
               },
             };
           }}
-          // loading={loading}
-          // dateRageFilter={true}
-          // statusFilter={statusList()}
-          // hideActions
-          fieldToFilter="orderNo"
           btnData={{
             text: "Add Order",
             onClick: () =>

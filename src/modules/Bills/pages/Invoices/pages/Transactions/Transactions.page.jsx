@@ -35,18 +35,20 @@ export const Transactions = () => {
       title: "ID",
       dataIndex: "id",
       key: "id",
+      sorter: (a, b) => (a?.id < b?.id ? -1 : 1),
       render: (text) => <>{text.substring(0, 6)}</>,
     },
     {
       title: "Client",
       dataIndex: "transactionBy",
       key: "transactionBy",
+      sorter: (a, b) => (a?.transactionBy < b?.transactionBy ? -1 : 1),
       width: "20%",
       render: (text, record) => {
         const { fullName, userImagePath } = record;
         return (
           <div className="flex items-center gap-[12px]">
-            {userImagePath ? (
+            {/* {userImagePath ? (
               <img
                 src={userImagePath}
                 alt={fullName}
@@ -56,8 +58,8 @@ export const Transactions = () => {
               <div className="bg-[#171723] h-[40px] w-[40px] rounded-[8px] text-[#0BB783] font-medium text-[20px] flex items-center justify-center">
                 {getName({ user: { fullName } })}
               </div>
-            )}
-            <div>{fullName}</div>
+            )} */}
+            <div>{fullName ? fullName : "N/A"}</div>
           </div>
         );
       },
@@ -76,6 +78,7 @@ export const Transactions = () => {
       title: "Reference ID",
       dataIndex: "referenceId",
       key: "referenceId",
+      sorter: (a, b) => (a?.referenceId < b?.referenceId ? -1 : 1),
       render: (text) => <>{text.substring(0, 6)}</>,
     },
     {
@@ -100,18 +103,22 @@ export const Transactions = () => {
       title: "Total",
       dataIndex: "total",
       key: "total",
+      sorter: (a, b) => (a?.total < b?.total ? -1 : 1),
       render: (text) => <>{Number(text).toFixed(2)} USD</>,
     },
     {
       title: "Date Added",
       dataIndex: "createdOn",
       key: "createdOn",
+      sorter: (a, b) => (moment(a?.createdOn) < moment(b?.createdOn) ? -1 : 1),
       render: (text) => <>{moment(text).format(settings?.dateFormat)}</>,
     },
     {
       title: "Date Modified",
       dataIndex: "lastModifiedOn",
       key: "lastModifiedOn",
+      sorter: (a, b) =>
+        moment(a?.lastModifiedOn) < moment(b?.lastModifiedOn) ? -1 : 1,
       render: (text) => <>{moment(text).format(settings?.dateFormat)}</>,
     },
   ];
@@ -164,6 +171,12 @@ export const Transactions = () => {
                   columns={columns}
                   data={filteredData.length ? filteredData : data}
                   loading={loading}
+                  pagination={{
+                    defaultPageSize: 5,
+                    showSizeChanger: true,
+                    position: ["bottomRight"],
+                    pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
+                  }}
                   fieldToFilter="name"
                   editAction={(record) => (
                     <>
