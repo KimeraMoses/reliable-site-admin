@@ -11,7 +11,7 @@ export const getLogsConfig = (pageNumber, pageSize) => ({
     keyword: "",
     pageNumber: pageNumber,
     pageSize: pageSize,
-    orderBy: [""],
+    orderBy: ["dateTime"],
     OrderType: 0,
   },
   // // config: getConfig({ module: 'Users', action: 'View' }),
