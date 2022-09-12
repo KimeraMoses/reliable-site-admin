@@ -8,7 +8,6 @@ import { checkModule } from "lib/checkModule";
 import { axios, exportToExcel, getError, getLogsConfig } from "lib";
 import { getLogsSlice, setLogsLoading } from "store/Slices/logs";
 import { toast } from "react-toastify";
-import { token } from "store";
 
 export default function Logs() {
   const [data, setData] = useState([]);

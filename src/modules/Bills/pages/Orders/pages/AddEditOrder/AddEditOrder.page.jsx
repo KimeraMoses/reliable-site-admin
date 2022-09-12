@@ -17,6 +17,11 @@ import {
   // getOrderTemplateByID,
 } from "store";
 import { getOrderDetails } from "store";
+import * as Yup from "yup";
+
+const validationSchema = Yup.object().shape({
+  assignedToClientId: Yup.string().required("Client is required"),
+});
 
 export const AddEditOrder = () => {
   // const [active, setActive] = useState('GENERAL SETTINGS');
@@ -106,6 +111,7 @@ export const AddEditOrder = () => {
   return (
     <Formik
       initialValues={initVal}
+      validationSchema={validationSchema}
       enableReinitialize
       onSubmit={async (values, { resetForm }) => {
         const img = await createServerImage(values.thumbnail);

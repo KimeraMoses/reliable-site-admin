@@ -58,7 +58,10 @@ export const SearchableField = ({
                     ? defaultValue
                     : searchTerm
                 }
-                onChange={keyWordHandler}
+                onChange={(e) => {
+                  if (!e?.target?.value) setFieldValue(name, "");
+                  keyWordHandler(e);
+                }}
               />
 
               {searchTerm.length > 1 && (
