@@ -240,29 +240,26 @@ export const getTimeDiff = (date) => {
 
   // calculate total duration
   const duration = moment.duration(endTime.diff(startTime));
+  // duration in days
+  const days = parseInt(duration.asDays());
+
   // duration in hours
-  const hours = parseInt(duration.asHours());
-  const seconds = parseInt(duration.asSeconds());
+  const hours = parseInt(duration.asHours()) % 24;
+
   // duration in minutes
   const minutes = parseInt(duration.asMinutes()) % 60;
-  // const minutes = parseInt(duration.asMinutes());
-  const newHrs =
-    hours === 0
-      ? ""
-      : hours === 1
-      ? `${hours} hr`
-      : hours > 0
-      ? `${hours} hrs`
-      : `${hours} hr`;
+
+  const seconds = parseInt(duration.asSeconds());
+
+  const newDays = days === 0 ? "" : days > 0 ? `${days}d` : "";
+
+  const newHrs = hours === 0 ? "" : hours > 0 ? `${hours}h` : "";
+
   const newMins =
-    minutes === 0
-      ? `${seconds} ${seconds === 1 ? "second" : "seconds"}`
-      : minutes === 1
-      ? `${minutes} min`
-      : minutes > 0
-      ? `${minutes} mins`
-      : `${minutes} min`;
-  let timeDiff = newHrs + " " + newMins;
+    minutes === 0 ? `${seconds}s` : minutes > 0 ? `${minutes}m` : "";
+
+  let timeDiff = newDays + " " + newHrs + " " + newMins;
+
   return timeDiff;
 };
 

@@ -154,7 +154,7 @@ export const Communication = () => {
 
   // Ticket Data
   const ticketData = [
-    { title: "Ticket #", value: ticket?.ticketNumber },
+    { title: "Ticket #", value: ticket?.id },
     {
       title: "Client Email",
       value: ticket?.clientEmail,
@@ -232,7 +232,9 @@ export const Communication = () => {
         {ticketData?.map((data) => {
           return (
             <div className="flex items-center gap-[12px]">
-              <div className="text-[16px] text-[#474761]">{data?.title}:</div>
+              <div className="text-[16px] text-[#474761] whitespace-nowrap">
+                {data?.title}:
+              </div>
               <div className={"text-[14px]"}>
                 {data?.value ? data?.value : "N/A"}
               </div>

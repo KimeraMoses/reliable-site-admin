@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Spin } from "antd";
 import { useParams } from "react-router-dom";
 import { Form, Formik } from "formik";
-
+import moment from "moment";
 import "../../../ProductsServices/pages/PSDetails/PSDetails.styles.scss";
 // import { getCategories } from "store";
 // import { getDepartments } from "store";
@@ -17,7 +17,7 @@ export const EditOrderDetails = () => {
   const dispatch = useDispatch();
   const { product } = useSelector((state) => state?.products);
   const { loading, order } = useSelector((state) => state?.orders);
-
+  const { settings } = useSelector((state) => state.appSettings);
   const { id } = useParams();
 
   useEffect(() => {
@@ -50,6 +50,8 @@ export const EditOrderDetails = () => {
       isDeleted: item?.isDeleted || false,
     })),
     assignedToClientId: order?.clientFullName,
+    createdOn: moment(order?.createdOn).format(settings?.dateFormat),
+    modifiedOn: moment(order?.lastModifiedOn).format(settings?.dateFormat),
   };
 
   return (

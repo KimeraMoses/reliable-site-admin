@@ -62,6 +62,20 @@ export const EditOrderSideBar = () => {
         className="mb-[20px]"
         disabled
       />
+      <Input
+        name="createdOn"
+        type="text"
+        label="Created On"
+        className="mb-[20px]"
+        disabled
+      />
+      <Input
+        name="modifiedOn"
+        type="text"
+        label="Last Modified On"
+        className="mb-[20px]"
+        disabled
+      />
 
       <Input
         name="assignedToClientId"
