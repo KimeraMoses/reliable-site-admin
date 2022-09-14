@@ -17,14 +17,13 @@ export const Delete = ({ show, setShow, id, type, record }) => {
 
   return (
     <Modal
-      heading={`${
+      heading={
         type === "order"
           ? "Delete Order"
           : type === "Cancel"
           ? "Confirm Cancel"
           : "Delete API Key"
-      }`}
-      // cancelButtonText={type === "Cancel" && "No"}
+      }
       customBody={
         <div className="mb-[32px]">
           {type === "Cancel"
@@ -39,8 +38,8 @@ export const Delete = ({ show, setShow, id, type, record }) => {
       initialValues={{ id: record?.id }}
       validationSchema={type === "Cancel" ? null : validationSchema}
       submitText={`${
-        type === "Delete order"
-          ? "Order"
+        type === "order"
+          ? "Delete Order"
           : type === "Cancel"
           ? "Cancel & Close"
           : "Delete API Key"

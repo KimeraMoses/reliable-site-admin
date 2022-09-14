@@ -2,7 +2,7 @@ import { Button, DatePicker } from "components";
 
 const fields = [
   { label: "Next Due Date", name: "nextDueDate", disabled: true },
-  { label: "Termination Date", name: "terminationDate", disabled: true },
+  { label: "Termination Date", name: "terminationDate", disabled: false },
   {
     label: "Override Suspension Date",
     name: "overrideSuspensionDate",

@@ -70,9 +70,18 @@ export const PSDetails = () => {
     paymentType: product?.paymentType,
     registrationDate: moment(product?.registrationDate),
     nextDueDate: moment(product?.nextDueDate),
-    terminationDate: moment(product?.terminationDate),
-    overrideSuspensionDate: moment(product?.overrideSuspensionDate),
-    overrideTerminationDate: moment(product?.overrideTerminationDate),
+    terminationDate:
+      product?.terminationDate?.split("-")[0] !== "0001"
+        ? moment(product?.terminationDate)
+        : "",
+    overrideTerminationDate:
+      product?.overrideTerminationDate?.split("-")[0] !== "0001"
+        ? moment(product?.overrideTerminationDate)
+        : "",
+    overrideSuspensionDate:
+      product?.overrideSuspensionDate?.split("-")[0] !== "0001"
+        ? moment(product?.overrideSuspensionDate)
+        : "",
     assignedToClientId: product?.assignedClient,
     billingCycle: product?.billingCycle,
   };
@@ -107,7 +116,7 @@ export const PSDetails = () => {
           // notes: values?.notes,
           // registrationDate: values?.registrationDate?.toISOString(),
           // nextDueDate: values?.nextDueDate?.toISOString(),
-          // terminationDate: values?.terminationDate?.toISOString(),
+          terminationDate: values?.terminationDate?.toISOString(),
           overrideSuspensionDate: values?.overrideSuspensionDate?.toISOString(),
           overrideTerminationDate:
             values?.overrideTerminationDate?.toISOString(),

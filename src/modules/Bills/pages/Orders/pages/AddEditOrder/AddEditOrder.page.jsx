@@ -84,21 +84,15 @@ export const AddEditOrder = () => {
     paymentType: order ? order?.products[0]?.paymentType : 0,
     billingCycle: order ? order?.products[0]?.billingCycle : 0,
     notes: order ? order?.products[0]?.notes : "",
-    registrationDate: order
-      ? moment(order?.products[0]?.registrationDate)
-      : moment(),
-    nextDueDate: order
-      ? moment(order?.products[0]?.registrationDate)
-      : moment(),
-    terminationDate: order
-      ? moment(order?.products[0]?.registrationDate)
-      : moment(),
+    registrationDate: order ? moment(order?.products[0]?.registrationDate) : "",
+    nextDueDate: order ? moment(order?.products[0]?.registrationDate) : "",
+    terminationDate: order ? moment(order?.products[0]?.registrationDate) : "",
     overrideSuspensionDate: order
       ? moment(order?.products[0]?.registrationDate)
-      : moment(),
+      : "",
     overrideTerminationDate: order
       ? moment(order?.products[0]?.registrationDate)
-      : moment(),
+      : "",
     adminAssigned: order ? order?.adminAssigned : "",
     orderForClientId: order ? order?.orderForClientId : "",
     assignedToClientId: order ? order?.assignedClient : "",

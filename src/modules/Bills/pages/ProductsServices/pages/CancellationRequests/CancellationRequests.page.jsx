@@ -4,12 +4,10 @@ import { Input, Table } from "components";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { checkModule } from "lib/checkModule";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { getProducts } from "store";
 import { Form, Formik } from "formik";
-// import { Add, Delete } from './sections';
 import { getCategories } from "store";
-// import { getCancelledProducts } from "store";
 import moment from "moment";
 export const CancellationRequests = () => {
   // const [showAdd, setShowAdd] = useState(false);
@@ -185,26 +183,19 @@ export const CancellationRequests = () => {
   const { products, loading } = useSelector((state) => state?.products);
   const categoriesLoading = useSelector((state) => state?.categories?.loading);
 
-  // const [showAdd, setShowAdd] = useState(false);
-  const [showDelete, setShowDelete] = useState(false);
-  const [record, setRecord] = useState(null);
+  // const [showDelete, setShowDelete] = useState(false);
+  // const [record, setRecord] = useState(null);
   return (
     <div className="p-[40px]">
-      {/* <Add show={showAdd} setShow={setShowAdd} />
-      <Delete show={showDelete} setShow={setShowDelete} record={record} /> */}
       <div className="p-[40px] pb-[24px] bg-[#1E1E2D] rounded-[8px]">
         <Formik initialValues={{ selectFilter: "name" }}>
           {({ values }) => (
             <Form>
               <Table
                 columns={columns}
-                data={products}
+                data={products?.filter((product) => product?.status === 6)}
                 loading={categoriesLoading || loading}
                 fieldToFilter={values?.selectFilter}
-                // btnData={{
-                //   onClick: () => setShowAdd(true),
-                //   text: 'Add New Product',
-                // }}
                 onRow={(record) => {
                   return {
                     onClick: () => {
@@ -227,10 +218,10 @@ export const CancellationRequests = () => {
                 )}
                 deleteAction={(record) => (
                   <Button
-                    onClick={() => {
-                      setRecord(record);
-                      setShowDelete(true);
-                    }}
+                  // onClick={() => {
+                  //   // setRecord(record);
+                  //   // setShowDelete(true);
+                  // }}
                   >
                     Delete
                   </Button>
