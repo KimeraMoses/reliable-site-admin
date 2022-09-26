@@ -18,6 +18,7 @@ import { getCategories } from "store";
 import { updateProductByID } from "store";
 import { getClients } from "store";
 import { getDepartments } from "store";
+import { createServerImage } from "lib";
 
 export const PSDetails = () => {
   const [active, setActive] = useState("GENERAL SETTINGS");
@@ -73,59 +74,76 @@ export const PSDetails = () => {
     terminationDate:
       product?.terminationDate?.split("-")[0] !== "0001"
         ? moment(product?.terminationDate)
-        : "",
+        : null,
     overrideTerminationDate:
       product?.overrideTerminationDate?.split("-")[0] !== "0001"
         ? moment(product?.overrideTerminationDate)
-        : "",
+        : null,
     overrideSuspensionDate:
       product?.overrideSuspensionDate?.split("-")[0] !== "0001"
         ? moment(product?.overrideSuspensionDate)
-        : "",
-    assignedToClientId: product?.assignedClient,
+        : null,
+    assignedToClientId: product?.assignedToClientId,
     billingCycle: product?.billingCycle,
+    dedicatedIP: product?.dedicatedIP,
   };
 
+  // console.log("product", product);
   return (
     <Formik
       initialValues={initVal}
       enableReinitialize
       onSubmit={async (values) => {
-        // const img = await createServerImage(values.thumbnail);
+        // console.log(values);
+        const img = await createServerImage(values.thumbnail);
         const newValues = {
-          // thumbnail: img,
-          // status: Number(values?.status),
+          thumbnail: img,
+          status: Number(values?.status),
           // productCategories: values?.productCategories?.map((item) => ({
           //   categoryId: item,
           // })),
           // productDepartments: values?.productDepartments?.map((item) => ({
           //   departmentId: item,
           // })),
-          // paymentType: Number(values?.paymentType),
-          // billingCycle: Number(values?.billingCycle),
-          // tags: `${values?.tags}`,
-          // name: values?.name,
-          // description: values?.description,
-          // productLineItems: values?.productLineItems?.map((item) => ({
-          //   id: item?.id,
-          //   lineItem: item?.lineItem,
-          //   price: item?.price,
-          //   isDeleted: item?.isDeleted,
-          //   priceType: item?.priceType,
-          // })),
-          // notes: values?.notes,
-          // registrationDate: values?.registrationDate?.toISOString(),
-          // nextDueDate: values?.nextDueDate?.toISOString(),
-          terminationDate: values?.terminationDate?.toISOString(),
-          overrideSuspensionDate: values?.overrideSuspensionDate?.toISOString(),
-          overrideTerminationDate:
-            values?.overrideTerminationDate?.toISOString(),
+          // productCategories: null,
+          // productDepartments: null,
+          assignedToClientId: values?.assignedToClientId,
+          dedicatedIP: values?.dedicatedIP,
+          paymentType: Number(values?.paymentType),
+          billingCycle: Number(values?.billingCycle),
+          tags: null,
+          name: values?.name,
+          description: values?.description,
+          productLineItems: values?.productLineItems?.map((item) => ({
+            id: item?.id,
+            lineItem: item?.lineItem,
+            price: item?.price,
+            isDeleted: item?.isDeleted,
+            priceType: item?.priceType,
+          })),
+          notes: values?.notes,
+          registrationDate: values?.registrationDate
+            ? values?.registrationDate?.toISOString()
+            : null,
+          nextDueDate: values?.nextDueDate
+            ? values?.nextDueDate?.toISOString()
+            : null,
+          terminationDate: values?.terminationDate
+            ? values?.terminationDate?.toISOString()
+            : null,
+          overrideSuspensionDate: values?.overrideSuspensionDate
+            ? values?.overrideSuspensionDate?.toISOString()
+            : null,
+          overrideTerminationDate: values?.overrideTerminationDate
+            ? values?.overrideTerminationDate?.toISOString()
+            : null,
         };
+        // console.log("here", newValues);
         await dispatch(updateProductByID(id, newValues));
         // console.log(newValues);
       }}
     >
-      {() => {
+      {({ values }) => {
         // console.log("Form values", values);
         return (
           <Form>
@@ -144,10 +162,27 @@ export const PSDetails = () => {
                   <>
                     <div className="admin-details__left">
                       {/* THUMBNAIL + STATUS + PRODUCT DETAILS */}
-                      <Sidebar defaulValue={initVal?.assignedToClientId} />
+                      <Sidebar defaulValue={product?.assignedClient} />
                     </div>
                     <div className="admin-details__right">
-                      <Navigation active={active} links={links} />
+                      <Navigation
+                        active={active}
+                        links={links}
+                        actionLink={[
+                          {
+                            link: product?.orderId
+                              ? `/admin/dashboard/billing/orders/all-orders/list/edit/${product?.orderId}`
+                              : "#",
+                            text: "View Order",
+                          },
+                          // {
+                          //   link: product?.invoiceId
+                          //     ? `/admin/dashboard/billing/orders/all-orders/list/edit/${product?.invoiceId}`
+                          //     : "#",
+                          //   text: "View Invoice",
+                          // },
+                        ]}
+                      />
                       {active === "GENERAL SETTINGS" ? (
                         <GeneralSettings />
                       ) : (

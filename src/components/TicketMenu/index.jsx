@@ -3,7 +3,7 @@ import { Priority } from "components";
 import { AssignTicket, FollowUp, Status } from "components/TicketModals";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { deleteTicket } from "store";
 import {
   getTicketsByAdminID,
@@ -21,6 +21,7 @@ export const TicketMenu = ({ visible, options, record, x, y }) => {
   const [assign, setAssign] = useState(false);
   const [followup, setFollowUp] = useState(false);
   const [status, setStatus] = useState(false);
+  const { deptId } = useParams();
 
   const dispatch = useDispatch();
   const location = useLocation();
@@ -63,7 +64,7 @@ export const TicketMenu = ({ visible, options, record, x, y }) => {
         if (location?.pathname.includes("show-all")) {
           await dispatch(getTickets());
         } else if (location?.pathname?.includes("by-department")) {
-          getTicketsByDepartmentId({ id: location?.state?.departmentId });
+          getTicketsByDepartmentId({ id: deptId });
         } else {
           await dispatch(getTicketsByAdminID({ id: user?.id }));
         }

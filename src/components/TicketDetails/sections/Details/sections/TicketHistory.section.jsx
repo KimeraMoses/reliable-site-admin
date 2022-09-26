@@ -15,7 +15,7 @@ export const TicketHistory = () => {
     module: "Support",
     modules: userModules,
   });
-
+  const { settings } = useSelector((state) => state.appSettings);
   const { ticket, ticketHistory } = useSelector((state) => state?.tickets);
   const { commentLoading } = useSelector((state) => state?.ticketComments);
 
@@ -35,7 +35,7 @@ export const TicketHistory = () => {
       title: "Event Date",
       dataIndex: "createdOn",
       key: "createdOn",
-      render: (text) => moment(text).format("DD/MM/YYYY [at] HH:mm:ss A"),
+      render: (text) => moment(text).format(settings?.dateFormat),
     },
     {
       title: "User",
@@ -89,7 +89,7 @@ export const TicketHistory = () => {
       dataIndex: "followUpOn",
       key: "followUpOn",
       render: (text) =>
-        text ? moment(text).format("DD/MM/YYYY [at] hh:mm:ss A") : "N/A",
+        text ? moment(text).format(settings?.dateFormat) : "N/A",
     },
   ];
 

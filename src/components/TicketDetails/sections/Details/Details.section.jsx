@@ -11,8 +11,9 @@ import {
   Comments,
   Drafts,
 } from "./sections";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { getUsersByDepartmentID } from "store";
+import moment from "moment";
 
 export function useQuery() {
   const { search } = useLocation();
@@ -24,8 +25,9 @@ export const Details = () => {
   const { detailsLoading, ticket, ticketHistory } = useSelector(
     (state) => state?.tickets
   );
+  const { settings } = useSelector((state) => state.appSettings);
   const { usersLoading } = useSelector((state) => state?.departments);
-  const { users } = useSelector((state) => state?.users);
+  const { users, clients } = useSelector((state) => state?.users);
   let search = window.location.search;
   let params = new URLSearchParams(search);
   let repliesId = params.get("id");
@@ -36,7 +38,6 @@ export const Details = () => {
   // const createdByClient = clients?.find(
   //   (user) => user?.id === ticket?.createdBy
   // );
-
   useEffect(() => {
     (async () => {
       if (id) {
@@ -100,7 +101,7 @@ export const Details = () => {
     };
   });
 
-  // console.log("active ticket", ticket);
+  const ticketStatus = ticket?.ticketStatus;
 
   return (
     <>
@@ -123,8 +124,37 @@ export const Details = () => {
                 </div>
                 <div className="ml-[20px]">
                   <h3 className={"text-[24px] text-[#fff]"}>
-                    {ticket?.ticketTitle}
+                    {ticket?.ticketTitle} -
+                    <span
+                      className={
+                        ticketStatus === 0
+                          ? "text-[#0BB783]"
+                          : ticketStatus === 1
+                          ? "text-[#FFA400]"
+                          : "text-[#DD3224]"
+                      }
+                    >
+                      {ticketStatus === 0
+                        ? "Active"
+                        : ticketStatus === 1
+                        ? "Waiting"
+                        : ticketStatus === 2
+                        ? "Closed"
+                        : "Closed and Locked"}
+                    </span>
                   </h3>
+                  <div className="flex items-center  my-[12px]">
+                    <p className="text-[14px] text-[#474761]">
+                      {moment(ticket?.createdOn)?.format(settings?.dateFormat)}{" "}
+                      -
+                    </p>
+                    <p className="text-[14px] text-[#6D6D80] bg-[#323248] px-2 rounded-sm mx-2">
+                      {`Duration ${getTimeDiff(ticket?.createdOn)}`}
+                    </p>
+                    <p className="text-[14px] text-[#6D6D80] bg-[#323248] px-2 rounded-sm mr-2">
+                      {`Idle ${getTimeDiff(ticket?.lastModifiedOn)}`}
+                    </p>
+                  </div>
                   <div
                     className={
                       "mt-[8px] text-[#474761] flex items-center gap-[12px]"
@@ -138,7 +168,17 @@ export const Details = () => {
                         ? ticket?.clientFullName
                         : "N/A"}
                     </p>{" "}
-                    <p
+                    <Link
+                      to={
+                        !ticket?.incomingFromClient && createdByAdmin?.fullName
+                          ? `/admin/dashboard/settings/users/list/admin-details/${createdByAdmin?.id}`
+                          : `/admin/dashboard/billing/clients/list/details/${
+                              clients?.find(
+                                (client) =>
+                                  client?.fullName === ticket?.clientFullName
+                              )?.id
+                            }`
+                      }
                       className={`${
                         !ticket?.incomingFromClient && createdByAdmin?.fullName
                           ? "bg-[#1C3238] text-[#0BB783]"
@@ -150,11 +190,8 @@ export const Details = () => {
                         : ticket?.clientFullName
                         ? "Client"
                         : "N/A"}
-                    </p>
+                    </Link>
                   </div>
-                  <p className="text-[14px] mt-[12px] text-[#474761]">
-                    {`Created ${getTimeDiff(ticket?.createdOn)} ago`}
-                  </p>
                 </div>
               </div>
               {/* navigation */}

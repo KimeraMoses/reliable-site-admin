@@ -53,7 +53,6 @@ export const EditOrderDetails = () => {
     createdOn: moment(order?.createdOn).format(settings?.dateFormat),
     modifiedOn: moment(order?.lastModifiedOn).format(settings?.dateFormat),
   };
-
   return (
     <Formik
       initialValues={initVal}
@@ -86,7 +85,17 @@ export const EditOrderDetails = () => {
                       {/* <ProductDetails /> */}
                     </div>
                     <div className="admin-details__right">
-                      <GS isView />
+                      <GS
+                        isView
+                        actionLink={[
+                          {
+                            link: order?.bill?.id
+                              ? `/admin/dashboard/billing/invoices/list/details/${order?.bill?.id}`
+                              : "#",
+                            text: "View Invoice",
+                          },
+                        ]}
+                      />
                       <LineItems isView />
                     </div>
                   </>

@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import moment from "moment";
 import { getTicketById, addTicketComments } from "store";
 import { Button as CustomButton, Input } from "components";
-import { genrateFirstLetterName, getDifference } from "lib";
+import { genrateFirstLetterName, getDifference, getTimeDiff } from "lib";
 import { updateTicketComments } from "store";
 import { setTicketCommentLoading } from "store";
 import { deleteComment } from "store";
@@ -21,7 +21,7 @@ const validationSchema = Yup.object().shape({
 export const Comments = () => {
   const { commentLoading } = useSelector((state) => state?.ticketComments);
   const dispatch = useDispatch();
-
+  const { settings } = useSelector((state) => state.appSettings);
   const { ticket } = useSelector((state) => state?.tickets);
 
   const commentSource = ticket?.ticketComments?.filter(
@@ -152,13 +152,18 @@ export const Comments = () => {
                         <span className="text-[#fff] text-[16px]">
                           {item?.userFullName}
                         </span>
-                      </div>
-                      <div className="text-[#474761] text-[14px]">
-                        {`${getDifference(
-                          new Date(item?.createdOn)
-                        )} - ${moment(item?.createdOn).format(
-                          "MMMM Do, YYYY h:m A"
-                        )}`}
+                        <div className="flex items-center ml-3">
+                          <p className="text-[14px] text-[#474761]">
+                            -{" "}
+                            {moment(item?.createdOn)?.format(
+                              settings?.dateFormat
+                            )}{" "}
+                            -
+                          </p>
+                          <p className="text-[14px] text-[#6D6D80] bg-[#323248] px-2 rounded-sm mx-2">
+                            {`${getTimeDiff(item?.createdOn)} ago`}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>

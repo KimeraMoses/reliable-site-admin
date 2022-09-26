@@ -148,13 +148,13 @@ export const LineItems = () => {
 
       <AddLineItem show={false} setShow={setAdd} handleAdd={addLineItem} />
       <EditLineItem
-        show={false}
+        show={edit}
         setShow={setEdit}
         handleEdit={editLineItem}
         editValue={editData}
       />
       <DeleteItem
-        show={false}
+        show={del}
         setShow={setDel}
         handleDelete={deleteLineItem}
         id={id}

@@ -252,9 +252,9 @@ export const WaitingList = () => {
     },
     {
       title: "No. of Messages",
-      dataIndex: "ticketComments",
-      key: "ticketComments",
-      render: (text) => text?.length || "0",
+      dataIndex: "ticketCommentsCount",
+      key: "ticketCommentsCount",
+      // render: (text) => text || "0",
     },
     {
       title: "Idle Time",

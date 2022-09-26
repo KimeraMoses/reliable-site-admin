@@ -33,14 +33,13 @@ export const Note = () => {
         Admin Notes
       </h6>
       <p className="text-[14px] text-[#474761] mb-[32px]">{values?.notes}</p>
-      {/* <Button
-        disabled
+      <Button
         type="ghost"
         className="h-[52px] px-[32px]"
         onClick={() => setShow(true)}
       >
         Edit Notes
-      </Button> */}
+      </Button>
     </div>
   );
 };

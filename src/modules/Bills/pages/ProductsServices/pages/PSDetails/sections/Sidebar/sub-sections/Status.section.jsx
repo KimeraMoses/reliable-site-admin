@@ -20,20 +20,20 @@ export const Status = ({ defaulValue }) => {
         label="Client"
         data={clients}
         defaultValue={defaulValue}
-        disabled
+        // disabled
       />
       <Input
-        name="IpAddress"
+        name="dedicatedIP"
         placeholder="154.227.25.101"
         type="text"
         label="Customer IP"
-        disabled={true}
+        // disabled={true}
         className="mb-[20px]"
         value="154.227.25.101"
       />
       <Input
         name="status"
-        disabled={true}
+        // disabled={true}
         placeholder="Status"
         type="select"
         label="Status"
@@ -50,7 +50,7 @@ export const Status = ({ defaulValue }) => {
       />
       <Input
         name="paymentType"
-        disabled={true}
+        // disabled={true}
         placeholder="Payment Type"
         type="select"
         label="Payment Type"
@@ -62,7 +62,7 @@ export const Status = ({ defaulValue }) => {
       />
       <Input
         name="billingCycle"
-        disabled={true}
+        // disabled={true}
         placeholder="Billing Cycle"
         type="select"
         label="Billing Cycle"

@@ -209,9 +209,9 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
     },
     {
       title: "No. of Messages",
-      dataIndex: "ticketComments",
-      key: "ticketComments",
-      render: (text) => text?.length || "0",
+      dataIndex: "ticketCommentsCount",
+      key: "ticketCommentsCount",
+      // render: (text) => text || "0",
     },
     {
       title: "Idle Time",
@@ -297,7 +297,11 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
           : t("active")
       }`
     );
-  }, [tickets]);
+    handleActive(
+      active === "Active" ? 0 : active === "Waiting" ? 1 : 2,
+      active
+    );
+  }, [allTickets]);
 
   const handleActive = (v, text) => {
     setActive(text);
@@ -360,15 +364,18 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
   const links = [
     {
       label: t("active"),
-      count: activeTicket ? activeTicket[0]?.length : 0,
+      count:
+        activeTicket && Object.keys(activeTicket)?.includes("0")
+          ? activeTicket[0] && activeTicket[0]?.length
+          : 0,
       showCount: true,
       onClick: () => handleActive(0, t("active")),
     },
     {
       label: t("waiting"),
       count:
-        activeTicket && Object.keys(activeTicket)?.length > 1
-          ? activeTicket[1].length
+        activeTicket && Object.keys(activeTicket)?.includes("1")
+          ? activeTicket[1] && activeTicket[1].length
           : 0,
       showCount: true,
       onClick: () => handleActive(1, t("waiting")),
@@ -376,8 +383,8 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
     {
       label: t("closed"),
       count:
-        activeTicket && Object.keys(activeTicket)?.length > 1
-          ? activeTicket[1].length
+        activeTicket && Object.keys(activeTicket)?.includes("2")
+          ? activeTicket[2] && activeTicket[2].length
           : 0,
       showCount: false,
       onClick: () => handleActive(2, t("closed")),
@@ -411,7 +418,6 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
     const { url } = getTicketsConfig();
     const res = await axios.post(url, defaultData);
     setIsLoading(false);
-    // console.log(res);
     if (res.status === 200) {
       setSearchResults(res?.data?.data?.length);
       setData(res?.data?.data);
@@ -459,12 +465,6 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
               data={data}
               fieldToFilter="id"
               permissions={permissions}
-              pagination={{
-                defaultPageSize: 5,
-                showSizeChanger: true,
-                position: ["bottomRight"],
-                pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
-              }}
               rowClassName={(record) =>
                 record?.id === ticket_id ? "isActive" : ""
               }

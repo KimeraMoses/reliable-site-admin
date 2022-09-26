@@ -415,10 +415,10 @@ export const useSidebarData = () => {
               name: "Add New Article",
               path: "/admin/dashboard/knowledge-base/articles/add/new",
             },
-            {
-              name: "Edit Article",
-              path: "/admin/dashboard/knowledge-base/articles/edit/:id",
-            },
+            // {
+            //   name: "Edit Article",
+            //   path: "/admin/dashboard/knowledge-base/articles/edit/:id",
+            // },
           ],
         },
         {
@@ -428,10 +428,10 @@ export const useSidebarData = () => {
           showTop: true,
           showSide: false,
           subLinks: [
-            {
-              name: "Feedback Details",
-              path: "/admin/dashboard/knowledge-base/feedback/view/:id",
-            },
+            // {
+            //   name: "Feedback Details",
+            //   path: "/admin/dashboard/knowledge-base/feedback/view/:id",
+            // },
           ],
         },
         {
@@ -578,10 +578,10 @@ export const useSidebarData = () => {
           count: data?.adminsCount > 0 ? data?.adminsCount : null,
           path: "/admin/dashboard/settings/users/list",
           subLinks: [
-            {
-              name: "Admin Details",
-              path: "/admin/dashboard/settings/users/list/admin-details/:id",
-            },
+            // {
+            //   name: "Admin Details",
+            //   path: "/admin/dashboard/settings/users/list/admin-details/:id",
+            // },
           ],
         },
         {

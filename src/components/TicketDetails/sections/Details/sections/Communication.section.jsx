@@ -1,5 +1,4 @@
-import { NavLink, useParams } from "react-router-dom";
-// import { Ticket as TicketIcon } from 'icons';
+import { useParams } from "react-router-dom";
 import { Reply as ReplyIcon } from "icons";
 import { Formik, Form, Field } from "formik";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,6 +18,7 @@ import { deleteComment } from "store";
 import { setTicketCommentLoading } from "store";
 import { updateTicketComments } from "store";
 import { getCurrentOnlineUsers } from "store";
+import moment from "moment";
 
 const CustomSelectUpdate = ({
   label,
@@ -75,19 +75,16 @@ const validationSchemaReplies = Yup.object().shape({
 
 export const Communication = () => {
   const { t } = useTranslation("/Tickets/ns");
+  const { settings } = useSelector((state) => state.appSettings);
   const [selected, setSelected] = useState([]);
   const { users, onlineUsers } = useSelector((state) => state?.users);
   const { commentLoading } = useSelector((state) => state?.ticketComments);
   const { repliesLoading } = useSelector((state) => state?.ticketReplies);
   const isSelected = (id) => selected.indexOf(id) !== -1;
-  // const { departmentUsers } = useSelector((state) => state?.departments);
   const { id } = useParams();
   const dispatch = useDispatch();
-  // console.log(departmentUsers);
-
   const { ticket } = useSelector((state) => state?.tickets);
 
-  // console.log("ticket", ticket);
   useEffect(() => {
     dispatch(getCurrentOnlineUsers());
   }, []);
@@ -166,8 +163,6 @@ export const Communication = () => {
     { title: "Product / Service", value: ticket?.product },
     { title: "Brand", value: ticket?.brand?.name },
     { title: "Department", value: ticket?.department?.name },
-    // { title: "Idle", value: ticket?.idleTime },
-    // { title: "Duration", value: ticket?.duration },
     {
       title: "Idle",
       value: `${getTimeDiff(ticket?.lastModifiedOn)} since modified`,
@@ -185,8 +180,7 @@ export const Communication = () => {
       value: ticket?.ticketComments?.length || "0",
     },
   ];
-  // Ticket Data
-  // console.log("selected ticket", ticket);
+
   const handleReplyInput = (id) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
@@ -402,26 +396,49 @@ export const Communication = () => {
                         <span className="text-[#fff] text-[16px]">
                           {item?.userFullName}
                         </span>
+                        <span
+                          className={`${
+                            users?.find((user) => user?.id === item.createdBy)
+                              ? "bg-[#1C3238] text-[#0BB783]"
+                              : "bg-[#2F264F] text-[#8950FC]"
+                          } rounded-[4px] text-[14px] px-[8px] py-[4px] ml-3`}
+                        >
+                          {users?.find((user) => user?.id === item.createdBy)
+                            ? "Admin"
+                            : "Client"}
+                        </span>
+
                         {item.createdBy === ticket.createdBy && (
-                          <span className="bg-[#3A2434] p-[4px] text-[#F64E60] text-[10px] rounded-[4px] ml-[16px]">
+                          <span className="bg-[#3A2434] p-[4px] text-[#F64E60] rounded-[4px] text-[14px] px-[8px] py-[4px] ml-2">
                             AUTHOR
                           </span>
                         )}
-                      </div>
-                      <div className="text-[#474761] text-[14px]">
-                        {getTimeDiff(item?.createdOn)}
+
+                        <div className="flex items-center  ml-3">
+                          <p className="text-[14px] text-[#474761]">
+                            -{" "}
+                            {moment(item?.createdOn)?.format(
+                              settings?.dateFormat
+                            )}{" "}
+                            -
+                          </p>
+                          <p className="text-[14px] text-[#6D6D80] bg-[#323248] px-2 rounded-sm mx-2">
+                            {`${getTimeDiff(item?.createdOn)} ago`}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   </div>
                   {ticket?.ticketStatus === 0 && (
                     <div className="flex items-center gap-[12px] text-[16px] absolute right-5 top-1">
-                      <NavLink
-                        to="#"
+                      <span
                         onClick={() => handleReplyInput(item.id)}
-                        className={"text-[#474761]"}
+                        className={
+                          "text-[#474761] cursor-pointer hover:text-[#40a9ff]"
+                        }
                       >
                         Reply
-                      </NavLink>
+                      </span>
                       <Popconfirm
                         okButtonProps={{
                           className: "bg-[#40a9ff]",
@@ -442,7 +459,7 @@ export const Communication = () => {
                           Delete
                         </div>
                       </Popconfirm>
-                      <NavLink
+                      <span
                         to="#"
                         onClick={async () => {
                           await dispatch(
@@ -457,12 +474,12 @@ export const Communication = () => {
                           await dispatch(getTicketById(ticket?.id, true));
                           dispatch(setTicketCommentLoading(false));
                         }}
-                        className={
-                          item?.isSticky ? "text-[#40a9ff]" : "text-[#474761]"
-                        }
+                        className={`cursor-pointer ${
+                          item?.isSticky ? " text-[#40a9ff]" : " text-[#474761]"
+                        }`}
                       >
                         {item?.isSticky ? "Unpin" : "Pin"}
-                      </NavLink>
+                      </span>
                     </div>
                   )}
                 </div>
@@ -487,7 +504,7 @@ export const Communication = () => {
                         })();
                       }}
                     >
-                      {({ errors, touched, values }) => {
+                      {({ errors, touched }) => {
                         return (
                           <Form>
                             <div className={"relative"}>
@@ -545,25 +562,50 @@ export const Communication = () => {
                             <span className="text-[#fff] text-[16px]">
                               {data?.userFullName}
                             </span>
-                            <span className="bg-[#3A2434] p-[4px] text-[#F64E60] text-[10px] rounded-[4px] ml-[16px]">
-                              AUTHOR
+                            <span
+                              className={`${
+                                users?.find(
+                                  (user) => user?.id === data.createdBy
+                                )
+                                  ? "bg-[#1C3238] text-[#0BB783]"
+                                  : "bg-[#2F264F] text-[#8950FC]"
+                              } rounded-[4px] text-[14px] px-[8px] py-[4px] ml-3`}
+                            >
+                              {users?.find(
+                                (user) => user?.id === data.createdBy
+                              )
+                                ? "Admin"
+                                : "Client"}
                             </span>
-                          </div>
-                          <div className="text-[#474761] text-[14px]">
-                            1 Hour
+                            {data.createdBy === ticket.createdBy && (
+                              <span className="bg-[#3A2434] p-[4px] text-[#F64E60] rounded-[4px] text-[14px] px-[8px] py-[4px] ml-2">
+                                AUTHOR
+                              </span>
+                            )}
+                            <div className="flex items-center  ml-3">
+                              <p className="text-[14px] text-[#474761]">
+                                -{" "}
+                                {moment(data?.createdOn)?.format(
+                                  settings?.dateFormat
+                                )}{" "}
+                                -
+                              </p>
+                              <p className="text-[14px] text-[#6D6D80] bg-[#323248] px-2 rounded-sm mx-2">
+                                {`${getTimeDiff(data?.createdOn)} ago`}
+                              </p>
+                            </div>
                           </div>
                         </div>
                       </div>
                       {ticket?.ticketStatus === 0 && (
-                        <NavLink
-                          to="#"
-                          onClick={() => handleReplyInput(item.id)}
+                        <span
+                          onClick={() => handleReplyInput(data.id)}
                           className={
-                            "text-[#474761] text-[16px] absolute right-5 top-1"
+                            "text-[#474761] text-[16px] absolute right-5 top-1 cursor-pointer hover:text-[#40a9ff]"
                           }
                         >
                           Reply
-                        </NavLink>
+                        </span>
                       )}
                     </div>
                     <div className="text-[16px] text-[#92928F] mt-[20px] leading-7">

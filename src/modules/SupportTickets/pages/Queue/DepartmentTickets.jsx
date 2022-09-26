@@ -136,7 +136,11 @@ export const DepartmentList = () => {
           : t("active")
       }`
     );
-  }, [tickets]);
+    handleActive(
+      active === "Active" ? 0 : active === "Waiting" ? 1 : 2,
+      active
+    );
+  }, [allTickets]);
 
   const handleActive = (v, text) => {
     setActive(text);
@@ -266,9 +270,9 @@ export const DepartmentList = () => {
     },
     {
       title: "No. of Messages",
-      dataIndex: "ticketComments",
-      key: "ticketComments",
-      render: (text) => text?.length || "0",
+      dataIndex: "ticketCommentsCount",
+      key: "ticketCommentsCount",
+      // render: (text) => text,
     },
     {
       title: "Idle Time",
@@ -447,8 +451,6 @@ export const DepartmentList = () => {
                   onMouseLeave: (event) => {}, // mouse leave row
                 };
               }}
-              // headingTitle={}
-              // t={t}
             />
             {<TicketMenu {...popup} visible={visible} />}
           </div>

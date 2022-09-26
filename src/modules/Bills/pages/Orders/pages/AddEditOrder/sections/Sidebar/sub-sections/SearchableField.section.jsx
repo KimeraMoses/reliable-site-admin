@@ -45,7 +45,7 @@ export const SearchableField = ({
                 </label>
               ) : null}
               <Field
-                placeholder={placeholder}
+                placeholder={defaultValue ? defaultValue : placeholder}
                 type="search"
                 disabled={disabled}
                 name={name}
@@ -54,9 +54,9 @@ export const SearchableField = ({
                   isSelected
                     ? data.filter((client) => client.id === values[name])[0]
                         ?.fullName
-                    : defaultValue
-                    ? defaultValue
                     : searchTerm
+                  // : data.filter((client) => client.id === defaultValue)[0]
+                  //     ?.fullName
                 }
                 onChange={(e) => {
                   if (!e?.target?.value) setFieldValue(name, "");

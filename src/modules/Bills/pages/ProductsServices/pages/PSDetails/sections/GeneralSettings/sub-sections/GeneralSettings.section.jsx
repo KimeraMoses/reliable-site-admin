@@ -36,7 +36,7 @@ export const GS = () => {
         placeholder="Product Name"
         label="Product Name"
         className="mb-[20px]"
-        disabled
+        // disabled
       />
       <Input
         name="description"
@@ -44,7 +44,7 @@ export const GS = () => {
         label="Product Description"
         type="textarea"
         rows={8}
-        disabled
+        // disabled
       />
       {/* <div className="bg-[#1E1E2D] rounded-[8px]">
         <ConfigurationEditor

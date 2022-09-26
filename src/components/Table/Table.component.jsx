@@ -335,11 +335,12 @@ export const Table = ({
                   : dataSource
               }
               size={size}
-              pagination={
-                pagination !== undefined && pagination !== null
-                  ? pagination
-                  : { position: ["bottomLeft"], showSizeChanger: false }
-              }
+              pagination={{
+                defaultPageSize: 5,
+                showSizeChanger: true,
+                position: ["bottomRight"],
+                pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
+              }}
               rowSelection={rowSelection}
               loading={permissions?.View ? loading || isLoading : false}
               locale={{

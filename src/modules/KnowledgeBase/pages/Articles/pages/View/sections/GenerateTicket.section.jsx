@@ -10,6 +10,14 @@ import { getClients } from "store";
 import { createTicket } from "store";
 import { Checkbox } from "antd";
 import { getCurrentOnlineUsers } from "store";
+import * as Yup from "yup";
+
+const validationSchema = Yup.object().shape({
+  ticketTitle: Yup.string().required("Ticket title is required"),
+  description: Yup.string().required("Ticket description is required"),
+  departmentId: Yup.string().required("Department is required"),
+  clientId: Yup.string().required("Client is required"),
+});
 
 export const GenerateTicket = ({ isAdmin }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -28,26 +36,6 @@ export const GenerateTicket = ({ isAdmin }) => {
     dispatch(getCurrentOnlineUsers());
   }, []);
 
-  let usersData = [{ label: "Any", value: "" }];
-  users?.forEach((user) => {
-    const isOnline = onlineUsers?.find((admin) => admin?.userId === user?.id)
-      ? true
-      : false;
-    usersData.push({
-      value: user?.id,
-      label: user?.fullName
-        ? `${user?.fullName}${isOnline ? "   (Online)" : ""}`
-        : "N/A",
-      isActive: isOnline ? true : false,
-    });
-  });
-  // let clientsData = [{ value: "", label: "Select Client" }];
-  // clients?.forEach((user) => {
-  //   clientsData.push({
-  //     value: user?.id,
-  //     label: user?.fullName,
-  //   });
-  // });
   let departmentsData = [{ value: "", label: "Select Department" }];
   departments?.forEach((departments) => {
     departmentsData.push({
@@ -55,6 +43,7 @@ export const GenerateTicket = ({ isAdmin }) => {
       label: departments?.name,
     });
   });
+
   return (
     <div className="bg-[#1E1E2D] mt-[32px] p-[32px] rounded-[8px]">
       <h6 className="text-white text-[20px]">
@@ -62,10 +51,11 @@ export const GenerateTicket = ({ isAdmin }) => {
       </h6>
       <Spin spinning={loading || departmentLoading}>
         <Formik
+          validationSchema={validationSchema}
           initialValues={{
             assignTo: "",
             status: 0,
-            priority: 0,
+            priority: 1,
             ticketTitle: "",
             description: "",
             departmentId: "",
@@ -76,7 +66,6 @@ export const GenerateTicket = ({ isAdmin }) => {
           onSubmit={
             async (values) => {
               setIsLoading(true);
-              // if (values?.assignTo) {
               const final = {
                 assignedTo: values?.assignTo,
                 ticketStatus: Number(values?.status),
@@ -101,6 +90,31 @@ export const GenerateTicket = ({ isAdmin }) => {
           }
         >
           {({ setFieldValue, values }) => {
+            let usersData = [{ label: "Any", value: "" }];
+            if (values?.departmentId) {
+              users
+                ?.filter((user) =>
+                  user?.departmentIds?.includes(values?.departmentId)
+                )
+                ?.forEach((user) => {
+                  const isOnline = onlineUsers?.find(
+                    (admin) => admin?.userId === user?.id
+                  )
+                    ? true
+                    : false;
+                  usersData.push({
+                    value: user?.id,
+                    label: user?.fullName
+                      ? `${user?.fullName}${isOnline ? "   (Online)" : ""}`
+                      : "N/A",
+                    isActive: isOnline ? true : false,
+                  });
+                });
+            } else {
+              usersData = [
+                { label: "Please select department first", value: "" },
+              ];
+            }
             return (
               <Form>
                 <div className="mt-[40px] grid grid-cols-3 gap-[16px]">
@@ -117,18 +131,17 @@ export const GenerateTicket = ({ isAdmin }) => {
                     label="Description"
                   />
                   <Input
-                    options={usersData?.sort((a, b) =>
-                      a?.isActive === b?.isActive ? 0 : a?.isActive ? -1 : 1
-                    )}
-                    placeholder="Select Admin"
+                    options={departmentsData}
                     type="select"
-                    name="assignTo"
-                    label="Assign To"
+                    name="departmentId"
+                    label="Select Department"
                   />
                   <Input
                     options={[
                       { label: "Active", value: 0 },
                       { label: "Waiting", value: 1 },
+                      { label: "Closed", value: 2 },
+                      { label: "Closed and Locked", value: 3 },
                     ]}
                     type="select"
                     name="status"
@@ -144,11 +157,15 @@ export const GenerateTicket = ({ isAdmin }) => {
                     name="priority"
                     label="Priority"
                   />
+
                   <Input
-                    options={departmentsData}
+                    options={usersData?.sort((a, b) =>
+                      a?.isActive === b?.isActive ? 0 : a?.isActive ? -1 : 1
+                    )}
+                    placeholder="Select Admin"
                     type="select"
-                    name="departmentId"
-                    label="Select Department"
+                    name="assignTo"
+                    label="Assign To"
                   />
                   <SearchableField
                     name="clientId"
