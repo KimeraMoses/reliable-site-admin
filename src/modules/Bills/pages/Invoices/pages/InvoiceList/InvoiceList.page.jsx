@@ -30,8 +30,6 @@ export const InvoiceList = () => {
     modules: userModules,
   });
 
-  console.log("Invoices", invoices);
-
   const columns = [
     // {
     //   title: "",

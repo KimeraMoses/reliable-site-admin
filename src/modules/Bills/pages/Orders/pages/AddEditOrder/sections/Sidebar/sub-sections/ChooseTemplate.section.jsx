@@ -38,7 +38,6 @@ export const ChooseTemplate = () => {
       const template = orderTemplates?.find(
         (template) => template?.id === selected
       );
-      console.log(template);
       setFieldValue("preview", template?.base64Image);
       setFieldValue("name", template?.productName);
       setFieldValue("description", template?.productDescription);
