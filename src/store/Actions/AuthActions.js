@@ -91,12 +91,10 @@ export const changePassword = (values) => {
 // Update User Profile
 export const updateUserProfile = (id, profile) => {
   return async function (dispatch) {
-    console.log("profile", profile);
     dispatch(initAuthenticationPending());
     try {
       const { url } = updateUserProfileByIDConfig(id);
       const res = await axios.put(url, profile);
-      console.log(res);
       const profileConfig = getUserProfileByIDConfig(id);
       const profileRes = await axios.get(profileConfig?.url);
       dispatch(
