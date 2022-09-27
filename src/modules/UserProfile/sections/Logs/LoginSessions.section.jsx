@@ -57,11 +57,13 @@ export const LoginSessions = () => {
   );
   const dispatch = useDispatch();
   // get data from api
+
   useEffect(() => {
     if (user) {
       dispatch(getLoginSessions(user?.id));
     }
   }, [user, dispatch]);
+
   // set table data
   useEffect(() => {
     if (loginSessions) {

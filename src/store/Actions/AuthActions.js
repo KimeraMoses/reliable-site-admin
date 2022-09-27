@@ -94,7 +94,7 @@ export const updateUserProfile = (id, profile) => {
     dispatch(initAuthenticationPending());
     try {
       const { url } = updateUserProfileByIDConfig(id);
-      const res = await axios.put(url, profile);
+      await axios.put(url, profile);
       const profileConfig = getUserProfileByIDConfig(id);
       const profileRes = await axios.get(profileConfig?.url);
       dispatch(

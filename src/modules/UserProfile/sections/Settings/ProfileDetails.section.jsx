@@ -16,10 +16,13 @@ const fields = [
     placeholder: "Select records to display",
     type: "select",
     options: [
-      { label: "05", value: 5 },
+      { label: "5", value: 5 },
       { label: "10", value: 10 },
       { label: "20", value: 20 },
       { label: "30", value: 30 },
+      { label: "50", value: 50 },
+      { label: "100", value: 100 },
+      { label: "200", value: 200 },
     ],
   },
 ];
@@ -29,6 +32,7 @@ const validationSchema = Yup.object().shape({
 });
 export const ProfileDetails = () => {
   const { user, isLoading } = useSelector((state) => state.auth);
+  console.log("user details", user);
   const initialValues = {
     image: user?.imageUrl,
     preview: user?.base64Image,

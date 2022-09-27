@@ -3,6 +3,7 @@ import { Dropdown as DropdownIcon } from "icons";
 import { Search } from "icons";
 import { axios, getOrdersConfig } from "lib";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import SearchComponent from "./SearchComponent";
 import "./Table.styles.scss";
 
@@ -51,6 +52,7 @@ export const Table = ({
   rowClassName,
   AdvancedSearchOptions,
 }) => {
+  const { user } = useSelector((state) => state.auth);
   const [dataSource, setDataSource] = useState([]);
   const [tableColumns, setTableColumns] = useState([]);
   const [filtered, setFiltered] = useState([]);
@@ -336,7 +338,7 @@ export const Table = ({
               }
               size={size}
               pagination={{
-                defaultPageSize: 5,
+                defaultPageSize: user && user?.recordsToDisplay,
                 showSizeChanger: true,
                 position: ["bottomRight"],
                 pageSizeOptions: ["5", "10", "20", "50", "100", "200"],

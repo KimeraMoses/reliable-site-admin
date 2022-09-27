@@ -1,5 +1,5 @@
 // import { useTranslation } from 'react-i18next';
-import { useState } from 'react';
+import { useState } from "react";
 import {
   Navigation,
   ProfileDetails,
@@ -7,22 +7,22 @@ import {
   APIKeys,
   Logs,
   LoginSessions,
-} from './sections';
-import './style.scss';
+} from "./sections";
+import "./style.scss";
 
 export const UserProfile = () => {
-  const [tab, setTab] = useState('Settings');
+  const [tab, setTab] = useState("Settings");
   // const { t } = useTranslation('/UserProfile/ns');
 
   const items = [
-    { name: 'Settings', onClick: () => setTab('Settings') },
-    { name: 'API Keys', onClick: () => setTab('API Keys') },
-    { name: 'Logs', onClick: () => setTab('Logs') },
+    { name: "Settings", onClick: () => setTab("Settings") },
+    { name: "API Keys", onClick: () => setTab("API Keys") },
+    { name: "Logs", onClick: () => setTab("Logs") },
   ];
 
   let Component = () => <></>;
   switch (tab) {
-    case 'Settings':
+    case "Settings":
       Component = () => (
         <>
           <ProfileDetails />
@@ -30,10 +30,10 @@ export const UserProfile = () => {
         </>
       );
       break;
-    case 'API Keys':
+    case "API Keys":
       Component = () => <APIKeys />;
       break;
-    case 'Logs':
+    case "Logs":
       Component = () => (
         <>
           <LoginSessions />
