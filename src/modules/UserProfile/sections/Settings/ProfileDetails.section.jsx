@@ -1,15 +1,27 @@
-import { Formik, Form } from 'formik';
-import * as Yup from 'yup';
-import { Button, ImageUpload, Input } from 'components';
-import { createServerImage, deepEqual } from 'lib';
-import { useDispatch, useSelector } from 'react-redux';
-import { updateUserProfile } from 'store';
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
+import { Button, ImageUpload, Input } from "components";
+import { createServerImage, deepEqual } from "lib";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUserProfile } from "store";
 
 const fields = [
-  { name: 'image', label: 'Avatar', type: 'image' },
-  { name: 'fullName', label: 'Full Name', type: 'text' },
-  { name: 'status', label: 'Status', type: 'switch' },
-  { name: 'ipAddress', label: 'IP Address', type: 'text' },
+  { name: "image", label: "Avatar", type: "image" },
+  { name: "fullName", label: "Full Name", type: "text" },
+  { name: "status", label: "Status", type: "switch" },
+  { name: "ipAddress", label: "IP Address", type: "text" },
+  {
+    name: "recordsToDisplay",
+    label: "Records To Display",
+    placeholder: "Select records to display",
+    type: "select",
+    options: [
+      { label: "05", value: 5 },
+      { label: "10", value: 10 },
+      { label: "20", value: 20 },
+      { label: "30", value: 30 },
+    ],
+  },
 ];
 
 const validationSchema = Yup.object().shape({
@@ -23,6 +35,7 @@ export const ProfileDetails = () => {
     fullName: user?.fullName,
     status: user?.status,
     ipAddress: user?.restrictAccessIPAddress,
+    recordsToDisplay: user?.recordsToDisplay,
   };
 
   const dispatch = useDispatch();
@@ -42,12 +55,12 @@ export const ProfileDetails = () => {
           onSubmit={async (values) => {
             const img = await createServerImage(values?.image);
             const newValues = {
-              image: Object.keys(img).length ? img : undefined,
+              image: img && Object.keys(img).length ? img : undefined,
               fullName: values?.fullName,
               status: values?.status,
               ipAddress: values?.ipAddress,
+              recordsToDisplay: Number(values?.recordsToDisplay),
             };
-            // console.log(newValues);
             dispatch(updateUserProfile(user?.id, newValues));
           }}
         >
@@ -68,13 +81,14 @@ export const ProfileDetails = () => {
                         >
                           {field?.label}
                         </label>
-                        {field?.type === 'image' ? (
+                        {field?.type === "image" ? (
                           <ImageUpload name={field?.name} />
                         ) : (
                           <Input
                             placeholder={field?.placeholder}
                             name={field?.name}
                             type={field?.type}
+                            options={field?.options}
                           />
                         )}
                       </div>

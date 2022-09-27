@@ -18,7 +18,6 @@ export const EditDepartment = ({ show, setShow, editValue, users }) => {
   editValue?.departmentAdmins?.map((b) => {
     return departmentAdmins.push(b?.adminUserId);
   });
-  console.log(editValue);
 
   const initialValues = {
     id: editValue.id,

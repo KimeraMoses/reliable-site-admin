@@ -1,15 +1,18 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import SideLinks from "./SideLinks.component";
 import "./SideBar.styles.scss";
 // import { useSelector } from 'react-redux';
 import { useSidebarData } from "./data";
 // import { checkModule } from 'lib/checkModule';
 import { Spin } from "antd";
+import { useLocation } from "react-router-dom";
 
 export function SideBar({ hideSide }) {
   // const userLevelModules = useSelector((state) => state?.modules?.userModules);
+  const { pathname } = useLocation();
 
   const sidebarData = useSidebarData();
+  useEffect(() => {}, [pathname]);
 
   return (
     <Spin spinning={sidebarData?.length === 0}>

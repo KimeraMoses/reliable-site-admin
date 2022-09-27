@@ -47,8 +47,8 @@ function App() {
   );
 
   //Set Timeout in seconds here
-  const Timeout = 1000 * 900;
-  // const Timeout = 2000; //test with 1s
+  // const Timeout = 1000 * 900;
+  const Timeout = 10000; //test with 1s
   const idleTimer = useRef(null);
 
   const OnIdle = () => {

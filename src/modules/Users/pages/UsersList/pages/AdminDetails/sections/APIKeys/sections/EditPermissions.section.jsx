@@ -21,7 +21,6 @@ export const EditPermissions = ({ show, setShow }) => {
           permissionDetail: JSON.parse(module && module?.permissionDetail),
         };
       });
-      console.log([...filtered, ...currentModules]);
       const final = [...filtered, ...currentModules];
       final.sort((a, b) => (a.name > b.name ? 1 : b.name > a.name ? -1 : 0));
       return final;

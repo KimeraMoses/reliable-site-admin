@@ -83,32 +83,32 @@ export function GeneralSettings() {
       type: "select",
       options: countriesData,
     },
-    {
-      name: "termsOfServiceURL",
-      label: "Terms of Service",
-      type: "text",
-    },
+    // {
+    //   name: "termsOfServiceURL",
+    //   label: "Terms of Service",
+    //   type: "text",
+    // },
     {
       name: "companyName",
       label: "Company Name",
       type: "text",
     },
-    {
-      name: "termsOfServiceAgreement",
-      label: "Terms of Service Agreement",
-      type: "switch",
-    },
-    {
-      name: "recordsToDisplay",
-      label: "Records To Display",
-      type: "select",
-      options: [
-        { label: "05", value: 5 },
-        { label: "10", value: 10 },
-        { label: "20", value: 20 },
-        { label: "30", value: 30 },
-      ],
-    },
+    // {
+    //   name: "termsOfServiceAgreement",
+    //   label: "Terms of Service Agreement",
+    //   type: "switch",
+    // },
+    // {
+    //   name: "recordsToDisplay",
+    //   label: "Records To Display",
+    //   type: "select",
+    //   options: [
+    //     { label: "05", value: 5 },
+    //     { label: "10", value: 10 },
+    //     { label: "20", value: 20 },
+    //     { label: "30", value: 30 },
+    //   ],
+    // },
     {
       name: "autoRefreshInterval",
       label: "Auto Refresh Interval",

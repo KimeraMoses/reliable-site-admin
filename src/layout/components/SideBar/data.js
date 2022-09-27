@@ -15,9 +15,10 @@ export const useSidebarData = () => {
   const { departments } = useSelector((state) => state?.departments);
   const { allTickets } = useSelector((state) => state?.tickets);
   const { data } = useSelector((state) => state?.count);
-  const isSuperAdmin = useSelector(
+  const isAdmin = useSelector(
     (state) => state?.auth?.user?.userRolesResponse?.userRoles
-  )[1]?.enabled;
+  );
+  const isSuperAdmin = isAdmin && isAdmin[1]?.enabled;
   const { userModules } = useSelector((state) => state?.modules);
   const departmentsLoading = useSelector(
     (state) => state?.departments?.loading

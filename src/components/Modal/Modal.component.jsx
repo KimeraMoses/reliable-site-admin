@@ -78,6 +78,7 @@ export function Modal({
                             users,
                             subText,
                             mode,
+                            ...props
                           },
                           index
                         ) => {
@@ -199,7 +200,7 @@ export function Modal({
                                     }) => {
                                       const finalOptions = [
                                         ...options,
-                                        { label: placeholder, value: "" },
+                                        // { label: placeholder, value: "" },
                                       ];
                                       return (
                                         <div className="w-full">
@@ -207,12 +208,14 @@ export function Modal({
                                             value={values[name]}
                                             disabled={disabled}
                                             placeholder={placeholder}
-                                            onChange={(e) =>
+                                            onChange={(e) => {
                                               setFieldValue(
                                                 name,
                                                 e.target.value
-                                              )
-                                            }
+                                              );
+                                              props?.action &&
+                                                props?.action(e.target.value);
+                                            }}
                                             className="form-select appearance-none block w-full px-[16px] h-[52px] text-base font-normal text-[#92928f] bg-[#171723] bg-clip-padding bg-no-repeat border-none rounded-[8px] transition ease-in-out m-0 focus:bg-[#171723] focus:border-none focus:outline-none"
                                           >
                                             {finalOptions?.map((option) => (
