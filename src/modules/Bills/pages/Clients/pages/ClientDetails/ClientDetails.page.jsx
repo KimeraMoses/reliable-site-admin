@@ -17,16 +17,14 @@ import {
   Logs,
   LoginSessions,
 } from "./sections";
-// import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from "react-redux";
 import { Spin } from "antd";
 import { useParams } from "react-router-dom";
 import { getUserById } from "store";
 import { getUserModulesById } from "store";
+import { Brands } from "./sections/Brand.section";
 
 export const ClientDetails = () => {
-  // const { t } = useTranslation('/Bills/ns');
-
   const [active, setActive] = useState("OVERVIEW");
 
   const links = [
@@ -63,6 +61,9 @@ export const ClientDetails = () => {
             <div className="admin-details__left">
               {/* USER PROFILE CARD */}
               <UserProfileCard />
+              <div className="mt-4">
+                <Brands />
+              </div>
               <div className="mt-4">
                 <SubUsers />
               </div>

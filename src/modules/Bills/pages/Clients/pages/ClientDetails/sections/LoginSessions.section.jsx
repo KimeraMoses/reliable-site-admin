@@ -55,7 +55,7 @@ export const LoginSessions = () => {
   const { loginSessions, loginSessionsLoading } = useSelector(
     (state) => state.logs
   );
-  console.log("login sessions", loginSessions);
+
   const dispatch = useDispatch();
   // get data from api
   useEffect(() => {
@@ -89,8 +89,6 @@ export const LoginSessions = () => {
       // console.log(dataHolder);
     }
   }, [loginSessions]);
-
-  console.log("data", data);
 
   return (
     <div className="mt-[20px] bg-[#1E1E2D] rounded-[8px]">
