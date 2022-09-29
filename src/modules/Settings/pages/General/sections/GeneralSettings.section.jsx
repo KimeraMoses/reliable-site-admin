@@ -167,6 +167,8 @@ export function GeneralSettings() {
       name: "vat",
       label: "VAT",
       type: "number",
+      min: 0,
+      max: 100,
     },
     {
       name: "enableClientRecaptcha",
@@ -233,6 +235,8 @@ export function GeneralSettings() {
                   placeholder={field.placeholder}
                   type={field.type}
                   options={field.options}
+                  min={field?.min}
+                  max={field?.max}
                 />
               </div>
             ))}

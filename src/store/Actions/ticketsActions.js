@@ -157,9 +157,10 @@ export const editTicket = ({ data }) => {
     try {
       const { url, config } = editTicketConfig({ id: data?.id });
       const response = await axios.put(url, data, config);
+      dispatch(getTickets());
       if (response?.status === 200) {
         toast.success("Ticket Updated Successfully");
-        dispatch(getTickets());
+        // dispatch(getTickets());
         dispatch(getTicketsByAdminID(data?.assignedTo));
         dispatch(getTicketHistoryByID(data?.id));
       }

@@ -113,9 +113,10 @@ export const DepartmentList = () => {
 
   let activeTicket = tickets ? groupBy(tickets, "ticketStatus") : {};
 
-  const selectedTicket = tickets?.find(
-    (ticket) => ticket?.id === ticket_id
-  )?.ticketStatus;
+  // const selectedTicket = tickets?.find(
+  //   (ticket) => ticket?.id === ticket_id
+  // )?.ticketStatus;
+  const selectedTicket = tickets && tickets[0]?.ticketStatus;
   const [active, setActive] = useState(
     `${
       selectedTicket === 1

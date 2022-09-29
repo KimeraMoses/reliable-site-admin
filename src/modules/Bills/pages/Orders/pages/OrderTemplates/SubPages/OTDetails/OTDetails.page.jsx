@@ -178,7 +178,6 @@ export const OTDetails = () => {
       }}
     >
       {({ values }) => {
-        console.log("line values", values?.orderTemplateLineItems);
         return (
           <Form>
             <div className="users">

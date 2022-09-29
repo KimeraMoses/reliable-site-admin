@@ -13,6 +13,7 @@ const InputType = ({
   disabled,
   rows,
   customOnChange,
+  ...props
 }) => {
   switch (type) {
     case "switch":
@@ -71,6 +72,7 @@ const InputType = ({
           value={values[name]}
           type={type}
           disabled={disabled}
+          {...props}
         />
       );
   }
@@ -86,6 +88,7 @@ export const Input = ({
   rows,
   className,
   customOnChange,
+  ...props
 }) => {
   return (
     <Field name={name}>
@@ -107,6 +110,7 @@ export const Input = ({
             disabled={disabled}
             rows={rows}
             customOnChange={customOnChange}
+            {...props}
           />
           {meta.touched && meta.error && (
             <div className="error mt-[8px]">{meta.error}</div>

@@ -274,9 +274,10 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
     })();
   }, [dispatch]);
 
-  const selectedTicket = tickets?.find(
-    (ticket) => ticket?.id === ticket_id
-  )?.ticketStatus;
+  // const selectedTicket = tickets?.find(
+  //   (ticket) => ticket?.id === ticket_id
+  // )?.ticketStatus;
+  const selectedTicket = tickets && tickets[0]?.ticketStatus;
   const [active, setActive] = useState(
     `${
       selectedTicket === 1
@@ -305,6 +306,7 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
 
   const handleActive = (v, text) => {
     setActive(text);
+    setData([]);
     if (tickets?.length) {
       const dataToSet = tickets
         ?.filter(function (el) {

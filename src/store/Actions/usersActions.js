@@ -30,7 +30,7 @@ import {
 import { getUserSettingsSlice } from "store/Slices/usersSlice";
 
 import { getDataCounts } from "./count";
-import { getDepartments } from "./departmentsActions";
+// import { getDepartments } from "./departmentsActions";
 
 // Get All Admin Users
 export const getUsers = () => {
@@ -301,8 +301,8 @@ export const findSpecificUsers = (data) => {
 
 export const AutoRefreshApp = () => {
   return async (dispatch) => {
-    dispatch(getDepartments(true));
-    dispatch(getClients(true));
-    dispatch(getCurrentOnlineUsers(true));
+    // dispatch(getDepartments(true));
+    // dispatch(getClients(true));
+    // dispatch(getCurrentOnlineUsers(true));
   };
 };

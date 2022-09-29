@@ -120,6 +120,9 @@ export const AssignTicket = ({ show, setShow, id }) => {
           ticketStatus: Number(values?.ticketStatus),
           ticketPriority: Number(values?.ticketPriority),
           assignedTo: values?.assignedTo,
+          assignedToFullName: values?.assignedTo
+            ? ticket?.assignedToFullName
+            : "",
         };
         // Edit Ticket Assigned To
         await dispatch(editTicket({ data: finalTicketValues }));

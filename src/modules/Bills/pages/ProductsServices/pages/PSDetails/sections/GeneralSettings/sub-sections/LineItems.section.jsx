@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { AddLineItem, DeleteItem, EditLineItem } from "./sections";
 import { useFormikContext } from "formik";
 import { toast } from "react-toastify";
+import { Button } from "components";
 
 const LineItem = ({ item, setDel, setId, setEdit, setEditData }) => {
   return (
@@ -113,29 +114,24 @@ export const LineItems = () => {
       <div className="bg-[#1E1E2D] p-[32px] rounded-[8px] mt-[20px]">
         <div className="flex items-center justify-between mb-[16px]">
           <h6 className="text-white text-[16px]">Line Items & Price</h6>
-          {/* <Button onClick={() => setAdd(true)} disabled>
-            Add New Item
-          </Button> */}
+          <Button onClick={() => setAdd(true)}>Add New Item</Button>
         </div>
-        {values?.productLineItems
-          ?.slice()
-          ?.sort((a, b) => (a?.id < b?.id ? -1 : 1))
-          ?.map((item, idx) => {
-            if (!item?.isDeleted) {
-              return (
-                <LineItem
-                  key={`item-${idx}`}
-                  item={item}
-                  setDel={setDel}
-                  setId={setId}
-                  setEdit={setEdit}
-                  setEditData={setEditData}
-                />
-              );
-            } else {
-              return null;
-            }
-          })}
+        {values?.productLineItems?.map((item, idx) => {
+          if (!item?.isDeleted) {
+            return (
+              <LineItem
+                key={`item-${idx}`}
+                item={item}
+                setDel={setDel}
+                setId={setId}
+                setEdit={setEdit}
+                setEditData={setEditData}
+              />
+            );
+          } else {
+            return null;
+          }
+        })}
         <div className="mt-[32px] rounded-[8px] border-[#3699FF] border-[1px] border-dashed bg-[#212E48] flex items-center justify-between p-[32px]">
           <div className="text-white text-[20px] font-medium">
             Total - ${total.toFixed(2)}
@@ -146,7 +142,7 @@ export const LineItems = () => {
         </div>
       </div>
 
-      <AddLineItem show={false} setShow={setAdd} handleAdd={addLineItem} />
+      <AddLineItem show={add} setShow={setAdd} handleAdd={addLineItem} />
       <EditLineItem
         show={edit}
         setShow={setEdit}

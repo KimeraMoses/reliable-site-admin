@@ -45,7 +45,7 @@ export const GenerateTicket = ({ isAdmin }) => {
   });
 
   return (
-    <div className="bg-[#1E1E2D] mt-[32px] p-[32px] rounded-[8px]">
+    <div className="bg-[#1E1E2D] mt-[32px] p-[32px] rounded-[8px] ">
       <h6 className="text-white text-[20px]">
         Generate Ticket For {isAdmin ? "Client" : "This Article"}
       </h6>
@@ -90,8 +90,9 @@ export const GenerateTicket = ({ isAdmin }) => {
           }
         >
           {({ setFieldValue, values }) => {
-            let usersData = [{ label: "Any", value: "" }];
+            let usersData = [{ label: "Auto Assign", value: "" }];
             if (values?.departmentId) {
+              usersData = [];
               users
                 ?.filter((user) =>
                   user?.departmentIds?.includes(values?.departmentId)
@@ -162,7 +163,7 @@ export const GenerateTicket = ({ isAdmin }) => {
                     options={usersData?.sort((a, b) =>
                       a?.isActive === b?.isActive ? 0 : a?.isActive ? -1 : 1
                     )}
-                    placeholder="Select Admin"
+                    placeholder="Auto Assign"
                     type="select"
                     name="assignTo"
                     label="Assign To"

@@ -11,6 +11,7 @@ import { statusList } from "lib";
 
 export const InvoiceDetails = () => {
   const { t } = useTranslation("/Bills/ns");
+  const { settings } = useSelector((state) => state.appSettings);
   const { id } = useParams();
   const dispatch = useDispatch();
 
@@ -19,7 +20,6 @@ export const InvoiceDetails = () => {
       await dispatch(getInvoiceById(id));
     })();
   }, []);
-
   const { loading, invoice } = useSelector((state) => state?.invoices);
 
   return (
@@ -39,13 +39,13 @@ export const InvoiceDetails = () => {
               <div className="mt-[40px]">
                 <h6 className="text-[#474761] text-[14px]">{t("issueDate")}</h6>
                 <p className="text-[#fff]  text-[14px] mt-[4px]">
-                  {moment(invoice?.createdOn).format("DD MMM YYYY")}
+                  {moment(invoice?.createdOn).format(settings?.dateFormat)}
                 </p>
               </div>
               <div className="mt-[20px]">
                 <h6 className="text-[#474761] text-[14px]">{t("dueDate")}</h6>
                 <p className="text-[#fff]  text-[14px] mt-[4px]">
-                  {moment(invoice?.dueDate).format("DD MMM YYYY")}
+                  {moment(invoice?.dueDate).format(settings?.dateFormat)}
                   {`${
                     moment(invoice?.dueDate).isSame(moment(), "day")
                       ? ' . <span className="text-[#F64E60] inline-block">Due Today</span>'
