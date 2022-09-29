@@ -79,7 +79,6 @@ export const getLoginSessions = (id) => {
     try {
       const { url } = getUserLoginSessions(id);
       const res = await axios.get(url);
-      console.log("sessn logs", res);
       await dispatch(getLoginSessionsSlice(res?.data?.data));
     } catch (e) {
       toast.error(getError(e));

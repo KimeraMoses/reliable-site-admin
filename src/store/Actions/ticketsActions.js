@@ -25,19 +25,19 @@ import { getDataCounts } from "./count";
 import { getCurrentOnlineUsers } from "./usersActions";
 
 // Get All Admin Ticket
-export const getTickets = (params = []) => {
+export const getTickets = (params = [], isInterval) => {
   return async (dispatch) => {
-    dispatch(setTicketLoading(true));
+    !isInterval && dispatch(setTicketLoading(true));
     try {
       const { url, defaultData, config } = getTicketsConfig();
       const res = await axios.post(url, defaultData, config);
       dispatch(getAllTickets(res?.data?.data));
-      dispatch(setTicketLoading(false));
+      !isInterval && dispatch(setTicketLoading(false));
       dispatch(getDataCounts());
       // console.log("ticket list res", res);
     } catch (e) {
       toast.error(getError(e));
-      dispatch(setTicketLoading(false));
+      !isInterval && dispatch(setTicketLoading(false));
       // console.log(e);
     }
   };

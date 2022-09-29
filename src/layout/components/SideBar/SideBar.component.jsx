@@ -8,10 +8,9 @@ import { Spin } from "antd";
 import { useLocation } from "react-router-dom";
 
 export function SideBar({ hideSide }) {
-  // const userLevelModules = useSelector((state) => state?.modules?.userModules);
   const { pathname } = useLocation();
 
-  const sidebarData = useSidebarData();
+  let sidebarData = useSidebarData();
   useEffect(() => {}, [pathname]);
 
   return (

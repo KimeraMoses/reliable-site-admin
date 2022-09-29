@@ -8,13 +8,15 @@ import { useDispatch, useSelector } from "react-redux";
 import { useSidebarData } from "./components/SideBar/data";
 import { getDepartments } from "store";
 import { getAllTickets } from "store";
+import { AutoRefreshApp } from "store";
 
 export function DashboardLayout({ children, hide }) {
+  const { settings } = useSelector((state) => state?.appSettings);
   const [active, setActive] = useState("");
   const [activeSub, setActiveSub] = useState("");
   const [activeInnerSub, setActiveInnerSub] = useState("");
   const [activeDeepInnerSub, setActiveDeepInnerSub] = useState("");
-  const user = useSelector((state) => state.auth.user);
+  const { user, isLoggedIn } = useSelector((state) => state.auth);
   const { departments } = useSelector((state) => state?.departments);
   const { allTickets } = useSelector((state) => state?.tickets);
   const { pathname } = useLocation();
@@ -98,11 +100,11 @@ export function DashboardLayout({ children, hide }) {
     dispatch(getAllTickets());
   }, []);
 
-  // setInterval(() => {
-  //   console.log("Interval triggered");
-  //   dispatch(getDepartments(true));
-  //   // dispatch(getAllTickets());
-  // }, 5000);
+  setInterval(() => {
+    if (settings?.autoRefreshInterval && isLoggedIn) {
+      dispatch(AutoRefreshApp());
+    }
+  }, settings?.autoRefreshInterval * 10000);
 
   // Setting Departments
   const ticketsWithDepartmentName = allTickets?.map((ticket) => ({

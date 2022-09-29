@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "components";
+import moment from "moment";
 import { AddLineItem, DeleteItem, EditLineItem } from "./sections";
 import { useFormikContext } from "formik";
 import { toast } from "react-toastify";
@@ -51,6 +52,8 @@ export const LineItems = () => {
   const [total, setTotal] = useState(0);
 
   const { values, setFieldValue } = useFormikContext();
+
+  // console.log(values?.orderTemplateLineItems);
 
   const addLineItem = (item) => {
     const currentLineItems = values?.orderTemplateLineItems;
@@ -114,22 +117,27 @@ export const LineItems = () => {
           <h6 className="text-white text-[16px]">Line Items & Price</h6>
           <Button onClick={() => setAdd(true)}>Add New Item</Button>
         </div>
-        {values?.orderTemplateLineItems?.map((item, idx) => {
-          if (!item?.isDeleted) {
-            return (
-              <LineItem
-                key={`item-${idx}`}
-                item={item}
-                setDel={setDel}
-                setId={setId}
-                setEdit={setEdit}
-                setEditData={setEditData}
-              />
-            );
-          } else {
-            return null;
-          }
-        })}
+        {values?.orderTemplateLineItems
+          ?.slice()
+          ?.sort((a, b) =>
+            moment(a?.createdOn) < moment(b?.createdOn) ? -1 : 1
+          )
+          ?.map((item, idx) => {
+            if (!item?.isDeleted) {
+              return (
+                <LineItem
+                  key={`item-${idx}`}
+                  item={item}
+                  setDel={setDel}
+                  setId={setId}
+                  setEdit={setEdit}
+                  setEditData={setEditData}
+                />
+              );
+            } else {
+              return null;
+            }
+          })}
         <div className="mt-[32px] rounded-[8px] border-[#3699FF] border-[1px] border-dashed bg-[#212E48] flex items-center justify-between p-[32px]">
           <div className="text-white text-[20px] font-medium">
             Total - ${total.toFixed(2)}

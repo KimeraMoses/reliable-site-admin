@@ -32,7 +32,6 @@ const validationSchema = Yup.object().shape({
 });
 export const ProfileDetails = () => {
   const { user, isLoading } = useSelector((state) => state.auth);
-  console.log("user details", user);
   const initialValues = {
     image: user?.imageUrl,
     preview: user?.base64Image,

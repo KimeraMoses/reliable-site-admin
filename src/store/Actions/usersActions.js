@@ -30,6 +30,7 @@ import {
 import { getUserSettingsSlice } from "store/Slices/usersSlice";
 
 import { getDataCounts } from "./count";
+import { getDepartments } from "./departmentsActions";
 
 // Get All Admin Users
 export const getUsers = () => {
@@ -50,34 +51,37 @@ export const getUsers = () => {
 };
 
 // Get Online Users
-export const getCurrentOnlineUsers = () => {
+export const getCurrentOnlineUsers = (isInterval) => {
   return async (dispatch) => {
-    dispatch(setUserLoading(true));
+    !isInterval && dispatch(setUserLoading(true));
     try {
       const { url } = getOnlineUsersConfig();
       const res = await axios.get(url);
       // console.log(res);
-      dispatch(getOnlineUsers(res?.data));
-      dispatch(setUserLoading(false));
+      !isInterval && dispatch(getOnlineUsers(res?.data));
+      if (isInterval && res?.data?.length > 0) {
+        dispatch(getOnlineUsers(res?.data));
+      }
+      isInterval && dispatch(setUserLoading(false));
     } catch (e) {
-      toast.error(getError(e));
-      dispatch(setUserLoading(false));
+      !isInterval && toast.error(getError(e));
+      !isInterval && dispatch(setUserLoading(false));
     }
   };
 };
 
 // Get All Client Users
-export const getClients = () => {
+export const getClients = (isInterval) => {
   return async (dispatch) => {
-    dispatch(setUserLoading(true));
+    !isInterval && dispatch(setUserLoading(true));
     try {
       const { url, config } = getClientsConfig();
       const res = await axios.get(url, config);
       dispatch(getClientsDispatch(res?.data?.data));
-      dispatch(setUserLoading(false));
+      !isInterval && dispatch(setUserLoading(false));
     } catch (e) {
       toast.error(getError(e));
-      dispatch(setUserLoading(false));
+      !isInterval && dispatch(setUserLoading(false));
     }
   };
 };
@@ -292,5 +296,13 @@ export const findSpecificUsers = (data) => {
     } finally {
       dispatch(setUserLoading(false));
     }
+  };
+};
+
+export const AutoRefreshApp = () => {
+  return async (dispatch) => {
+    dispatch(getDepartments(true));
+    dispatch(getClients(true));
+    dispatch(getCurrentOnlineUsers(true));
   };
 };

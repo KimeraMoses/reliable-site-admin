@@ -32,18 +32,17 @@ export const getNotificationTemplates = () => {
   };
 };
 
-export const getAllNotifications = () => {
+export const getAllNotifications = (isInterval) => {
   return async (dispatch) => {
-    dispatch(setNTLoading(true));
+    !isInterval && dispatch(setNTLoading(true));
     try {
       const { url, defaultData, config } = getNotificationsConfig();
       const response = await axios.post(url, defaultData, config);
       dispatch(getNotifications(response?.data?.data));
-      console.log("notifications", response);
     } catch (error) {
       toast.error(getError(error));
     } finally {
-      dispatch(setNTLoading(false));
+      !isInterval && dispatch(setNTLoading(false));
     }
   };
 };

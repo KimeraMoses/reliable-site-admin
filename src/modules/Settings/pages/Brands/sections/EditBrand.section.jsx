@@ -14,7 +14,6 @@ const validationSchema = Yup.object().shape({
 });
 
 export const EditBrand = ({ show, setShow, editValue, users }) => {
-  console.log("edit values", editValue);
   const initialValues = {
     id: editValue.id,
     name: editValue.name,
