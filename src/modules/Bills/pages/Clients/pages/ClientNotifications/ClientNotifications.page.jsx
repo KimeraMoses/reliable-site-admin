@@ -1,8 +1,8 @@
-import { Button } from 'components';
-import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { getNotificationTemplates, getAllNotifications } from 'store';
-import { NotificationTemplates, Notifications } from './sections';
+import { Button } from "components";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { getNotificationTemplates, getAllNotifications } from "store";
+import { NotificationTemplates, Notifications } from "./sections";
 
 export const ClientNotifications = () => {
   const dispatch = useDispatch();
@@ -14,7 +14,7 @@ export const ClientNotifications = () => {
     })();
   }, []);
 
-  const [defaultView, setDefaultView] = useState('notificationTemplates');
+  const [defaultView, setDefaultView] = useState("notificationTemplates");
   return (
     <div className="p-[40px]">
       <div className="mb-[20px]">
@@ -22,24 +22,24 @@ export const ClientNotifications = () => {
           type="ghost"
           htmlType="button"
           onClick={() => {
-            if (defaultView === 'notifications') {
-              setDefaultView('notificationTemplates');
-            } else if (defaultView === 'notificationTemplates') {
-              setDefaultView('notifications');
+            if (defaultView === "notifications") {
+              setDefaultView("notificationTemplates");
+            } else if (defaultView === "notificationTemplates") {
+              setDefaultView("notifications");
             }
           }}
         >
-          {defaultView === 'notifications'
-            ? 'Show Notification Templates'
-            : 'Show Notifications'}
+          {defaultView === "notifications"
+            ? "Show Notification Templates"
+            : "Show Notifications"}
         </Button>
       </div>
-      {defaultView === 'notificationTemplates' ? (
+      {defaultView === "notificationTemplates" ? (
         <NotificationTemplates />
       ) : (
         <></>
       )}
-      {defaultView === 'notifications' ? <Notifications /> : <></>}
+      {defaultView === "notifications" ? <Notifications /> : <></>}
     </div>
   );
 };

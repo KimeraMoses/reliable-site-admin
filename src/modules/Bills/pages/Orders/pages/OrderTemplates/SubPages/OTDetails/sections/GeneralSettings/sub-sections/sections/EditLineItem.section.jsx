@@ -1,24 +1,24 @@
-import { Modal } from 'components';
-import * as Yup from 'yup';
+import { Modal } from "components";
+import * as Yup from "yup";
 
 const fields = [
   {
-    type: 'input',
-    name: 'lineItem',
-    placeholder: 'Enter Line Item Name',
-    title: 'Line Item Name',
+    type: "input",
+    name: "lineItem",
+    placeholder: "Enter Line Item Name",
+    title: "Line Item Name",
   },
   {
-    type: 'number',
-    name: 'price',
-    placeholder: 'Enter Price',
-    title: 'Price',
+    type: "number",
+    name: "price",
+    placeholder: "Enter Price",
+    title: "Price",
   },
 ];
 
 const validationSchema = Yup.object().shape({
-  lineItem: Yup.string().required('This field is required!'),
-  price: Yup.number().required('This field is required!'),
+  lineItem: Yup.string().required("This field is required!"),
+  price: Yup.number().required("This field is required!"),
 });
 
 export const EditLineItem = ({ show, setShow, editValue, handleEdit }) => {

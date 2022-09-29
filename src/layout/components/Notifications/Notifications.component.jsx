@@ -1,23 +1,23 @@
-import { useOutside } from 'hooks';
-import { useSelector, useDispatch } from 'react-redux';
-import React, { useEffect, useState, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import './Notifications.styles.scss';
-import { Spin } from 'antd';
-import {
-  NewUserRegistered,
-  TicketCreated,
-  TickedUpdated,
-  OrderCreated,
-  OrderUpdated,
-  TicketNewComments,
-  TicketNewReply,
-  CategoryGenerator,
-  Bills,
-} from './sections';
-import moment from 'moment';
-import { getNotificationLink, getNotificationType, groupBy } from 'lib';
-import { Bell } from 'icons/Notifications';
+import { useOutside } from "hooks";
+import { useSelector } from "react-redux";
+import React, { useEffect, useState, useRef } from "react";
+import { Link } from "react-router-dom";
+import "./Notifications.styles.scss";
+import { Spin } from "antd";
+// import {
+//   NewUserRegistered,
+//   TicketCreated,
+//   TickedUpdated,
+//   OrderCreated,
+//   OrderUpdated,
+//   TicketNewComments,
+//   TicketNewReply,
+//   CategoryGenerator,
+//   Bills,
+// } from './sections';
+import moment from "moment";
+import { getNotificationLink, getNotificationType, groupBy } from "lib";
+import { Bell } from "icons/Notifications";
 //import { getNotifications } from 'store';
 
 export function Notifications({ toggleNotification }) {
@@ -55,7 +55,7 @@ export function Notifications({ toggleNotification }) {
           <div className={`pl-[60px] pt-[13px] pb-[13px] relative text-center`}>
             <Spin
               size="large"
-              style={{ gridColumn: '1/3', alignSelf: 'center' }}
+              style={{ gridColumn: "1/3", alignSelf: "center" }}
             />
           </div>
         ) : (
@@ -67,7 +67,7 @@ export function Notifications({ toggleNotification }) {
                     className={`notification-block pl-[60px] pt-[13px] relative`}
                   >
                     <div className={`noti-icon`}>
-                      <Bell fill={'#fff'} />
+                      <Bell fill={"#fff"} />
                     </div>
                     <div className={`noti-content`}>
                       <div className="flex justify-between">
@@ -76,8 +76,8 @@ export function Notifications({ toggleNotification }) {
                           to={getNotificationLink({ type: notification?.type })}
                         >
                           {notification?.body
-                            .replace('[[firstName]]', user.fullName)
-                            .replace('[[fullName]]', user.fullName)}
+                            .replace("[[firstName]]", user.fullName)
+                            .replace("[[fullName]]", user.fullName)}
                         </Link>
                         <div className={`flex`}>
                           {notification?.userImage && (
@@ -90,7 +90,7 @@ export function Notifications({ toggleNotification }) {
                           <div className={`text-[#474761] ml-2`}>{`${
                             notification?.fullName
                           } added at ${moment(notification?.sentAt).format(
-                            'hh:mm A'
+                            "hh:mm A"
                           )}`}</div>
                         </div>
                       </div>

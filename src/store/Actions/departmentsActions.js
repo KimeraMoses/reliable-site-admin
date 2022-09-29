@@ -21,17 +21,17 @@ import {
 } from "store/Slices";
 
 // Get All Departments
-export const getDepartments = () => {
+export const getDepartments = (isInterval) => {
   return async (dispatch) => {
-    dispatch(setDepartmentsLoading(true));
+    !isInterval && dispatch(setDepartmentsLoading(true));
     try {
       const { url, defaultData, config } = getDepartmentsConfig();
       const res = await axios.post(url, defaultData, config);
       dispatch(getDepartmentsDispatch(res?.data?.data));
-      dispatch(setDepartmentsLoading(false));
+      !isInterval && dispatch(setDepartmentsLoading(false));
     } catch (e) {
       toast.error(getError(e));
-      dispatch(setDepartmentsLoading(false));
+      !isInterval && dispatch(setDepartmentsLoading(false));
     }
   };
 };

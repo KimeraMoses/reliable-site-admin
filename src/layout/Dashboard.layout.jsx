@@ -98,6 +98,12 @@ export function DashboardLayout({ children, hide }) {
     dispatch(getAllTickets());
   }, []);
 
+  // setInterval(() => {
+  //   console.log("Interval triggered");
+  //   dispatch(getDepartments(true));
+  //   // dispatch(getAllTickets());
+  // }, 5000);
+
   // Setting Departments
   const ticketsWithDepartmentName = allTickets?.map((ticket) => ({
     ...ticket,

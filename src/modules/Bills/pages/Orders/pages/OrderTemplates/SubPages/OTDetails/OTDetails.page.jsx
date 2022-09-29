@@ -126,6 +126,7 @@ export const OTDetails = () => {
               if (item?.isNew) {
                 return {
                   lineItem: item?.lineItem,
+                  isNew: true,
                   price: item?.price,
                   isDeleted: item?.isDeleted ? true : false,
                   priceType: Number(values?.paymentType),
@@ -143,6 +144,7 @@ export const OTDetails = () => {
               if (item?.isNew) {
                 return {
                   lineItem: item?.lineItem,
+                  isNew: true,
                   price: item?.price,
                   isDeleted: item?.isDeleted ? true : false,
                   priceType: Number(values?.paymentType),
@@ -176,6 +178,7 @@ export const OTDetails = () => {
       }}
     >
       {({ values }) => {
+        console.log("line values", values?.orderTemplateLineItems);
         return (
           <Form>
             <div className="users">
