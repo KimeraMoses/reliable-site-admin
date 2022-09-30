@@ -7,6 +7,7 @@ import { getBrands, getClients } from "store";
 import { useTranslation } from "react-i18next";
 import { AddBrand, DeleteBrand, EditBrand, ClientsAssigned } from "./sections";
 import { NavLink } from "react-router-dom";
+import { useQuery } from "components/TicketDetails/sections/Details/Details.section";
 
 const Brands = () => {
   const [addModalShow, setAddModalShow] = useState(false);
@@ -15,7 +16,8 @@ const Brands = () => {
   const [clientsModalShow, setClientsModalShow] = useState(false);
   const [deleteModalShow, setDeleteModalShow] = useState(false);
   const [deleteID, setDeleteID] = useState(null);
-
+  const query = useQuery();
+  const brandId = query.get("brandId");
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -155,6 +157,7 @@ const Brands = () => {
           text: t("addNewBrand"),
           onClick: () => setAddModalShow(true),
         }}
+        rowClassName={(record) => (record?.id === brandId ? "isActive" : "")}
         editAction={(record) => (
           <Button
             onClick={() => {

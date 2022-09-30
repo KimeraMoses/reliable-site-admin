@@ -18,6 +18,7 @@ import {
 } from "store";
 import { getOrderDetails } from "store";
 import * as Yup from "yup";
+import { useQuery } from "components/TicketDetails/sections/Details/Details.section";
 
 const validationSchema = Yup.object().shape({
   assignedToClientId: Yup.string().required("Client is required"),
@@ -36,13 +37,9 @@ export const AddEditOrder = () => {
 
   const dispatch = useDispatch();
   const { loading, order } = useSelector((state) => state?.orders);
-  // const categoriesLoading = useSelector((state) => state?.categories?.loading);
-  // const usersLoading = useSelector((state) => state?.users?.loading);
-  // const departmentsLoading = useSelector(
-  //   (state) => state?.departments?.loading
-  // );
-
   const { id } = useParams();
+  const query = useQuery();
+  const clientId = query.get("client");
 
   useEffect(() => {
     (async () => {
@@ -63,7 +60,6 @@ export const AddEditOrder = () => {
     isActive: true,
     name: order ? order?.products[0]?.name : "",
     description: order ? order?.products[0]?.description : "",
-    // summary: order ? order?.products[0]?.summary : '',
     thumbnail: order ? order?.products[0]?.thumbnail : "",
     status: order ? order?.products[0]?.status : 0,
     productCategories: order
@@ -95,11 +91,14 @@ export const AddEditOrder = () => {
       : "",
     adminAssigned: order ? order?.adminAssigned : "",
     orderForClientId: order ? order?.orderForClientId : "",
-    assignedToClientId: order ? order?.assignedClient : "",
+    assignedToClientId: clientId
+      ? clientId
+      : order
+      ? order?.assignedClient
+      : "",
     orderNotes: order ? order?.notes : "",
     orderTenant: order ? order?.tenant : "admin",
   };
-
   const { user } = useSelector((state) => state?.auth);
 
   return (

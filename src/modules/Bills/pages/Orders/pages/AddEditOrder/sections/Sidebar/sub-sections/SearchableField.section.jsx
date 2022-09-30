@@ -10,6 +10,7 @@ export const SearchableField = ({
   disabled,
 }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [defaultV, setDefaultV] = useState(defaultValue);
   const [isSelected, setIsSelected] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
 
@@ -28,8 +29,7 @@ export const SearchableField = ({
       setSearchResults(Results);
     }
   };
-  // console.log(data);
-  // console.log(data.filter((client) => client.id === defaultValue)[0]);
+
   return (
     <Field name={name}>
       {({ field, meta, form: { setFieldValue, values } }) => {
@@ -45,7 +45,7 @@ export const SearchableField = ({
                 </label>
               ) : null}
               <Field
-                placeholder={defaultValue ? defaultValue : placeholder}
+                placeholder={placeholder}
                 type="search"
                 disabled={disabled}
                 name={name}
@@ -55,10 +55,11 @@ export const SearchableField = ({
                     ? data.filter((client) => client.id === values[name])[0]
                         ?.fullName
                     : searchTerm
-                  // : data.filter((client) => client.id === defaultValue)[0]
-                  //     ?.fullName
+                    ? searchTerm
+                    : defaultV
                 }
                 onChange={(e) => {
+                  setDefaultV("");
                   if (!e?.target?.value) setFieldValue(name, "");
                   keyWordHandler(e);
                 }}

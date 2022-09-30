@@ -5,7 +5,7 @@ import { checkModule } from "lib/checkModule";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getProductsByClientID } from "store";
 
 // const PS = ({
@@ -65,6 +65,7 @@ import { getProductsByClientID } from "store";
 export const ProductsServices = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     (async () => {
       await dispatch(getProductsByClientID({ clientId: id }));
@@ -130,6 +131,20 @@ export const ProductsServices = () => {
       },
     },
     {
+      title: "",
+      dataIndex: "orderId",
+      key: "orderId",
+      render: (id) => (
+        <Link
+          to={`/admin/dashboard/billing/orders/all-orders/list/edit/${id}`}
+          onClick={(event) => event.stopPropagation()}
+          className="text-[#3699FF] hover:text-[#0BB783]"
+        >
+          View Order
+        </Link>
+      ),
+    },
+    {
       title: "Actions",
       dataIndex: "id",
       key: "id",
@@ -183,6 +198,13 @@ export const ProductsServices = () => {
               hideActions
               permissions={permissions}
               t={t}
+              btnData={{
+                text: "Create Order",
+                onClick: () =>
+                  navigate(
+                    `/admin/dashboard/billing/orders/all-orders/list/add/new?client=${id}`
+                  ),
+              }}
             />
           ) : (
             <h4 className="text-white mt-[16px] text-center w-full">
