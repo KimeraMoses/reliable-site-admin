@@ -57,7 +57,11 @@ function SideLinks({
                   link?.showSide && (
                     <li>
                       <NavLink
-                        onClick={() => dispatch(setSupport(false))}
+                        onClick={() =>
+                          (name = "My Tickets"
+                            ? dispatch(setSupport(true))
+                            : dispatch(setSupport(false)))
+                        }
                         to={link?.path}
                         className={({ isActive }) =>
                           (isActive ? `text-[#3699FF] ` : "text-gray-500 ") +
