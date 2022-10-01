@@ -185,15 +185,14 @@ export const ProductsServices = () => {
   return (
     <div className="mt-4 p-[32px] bg-[#1E1E2D] rounded-lg">
       <Spin spinning={loading}>
-        <h6 className="text-white mb-[32px] text-[16px]">
-          Products &#38; Services
-        </h6>
+        <h6 className="text-white mb-[32px] text-[16px]">Products/Services</h6>
         <div className="flex flex-col gap-[16px] justify-center">
           {products?.length ? (
             <Table
               columns={columns}
               rowKey={(record) => record?.id}
               data={data}
+              searchText="Search products here"
               loading={loading}
               hideActions
               permissions={permissions}

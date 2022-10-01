@@ -1,5 +1,7 @@
 import { Spin } from "antd";
-import { Button, Input } from "components";
+import { EditorState, convertToRaw } from "draft-js";
+import { convertToHTML } from "draft-convert";
+import { Button, ConfigurationEditor, Input } from "components";
 import { Form, Formik } from "formik";
 import { SearchableField } from "modules/Bills/pages/Orders/pages/AddEditOrder/sections/Sidebar/sub-sections";
 import { useEffect, useState } from "react";
@@ -11,6 +13,7 @@ import { createTicket } from "store";
 import { Checkbox } from "antd";
 import { getCurrentOnlineUsers } from "store";
 import * as Yup from "yup";
+import { useQuery } from "components/TicketDetails/sections/Details/Details.section";
 
 const validationSchema = Yup.object().shape({
   ticketTitle: Yup.string().required("Ticket title is required"),
@@ -24,6 +27,8 @@ export const GenerateTicket = ({ isAdmin }) => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const query = useQuery();
+  const clientId = query.get("client");
   const { loading, users, onlineUsers, clients } = useSelector(
     (state) => state?.users
   );
@@ -58,8 +63,9 @@ export const GenerateTicket = ({ isAdmin }) => {
             priority: 1,
             ticketTitle: "",
             description: "",
+            bodyHolder: EditorState.createEmpty(),
             departmentId: "",
-            clientId: "",
+            clientId: clientId ? clientId : "",
             incomingFromClient: false,
           }}
           enableReinitialize
@@ -89,7 +95,7 @@ export const GenerateTicket = ({ isAdmin }) => {
             // }
           }
         >
-          {({ setFieldValue, values }) => {
+          {({ values, errors, touched, setFieldValue, setFieldTouched }) => {
             let usersData = [{ label: "Auto Assign", value: "" }];
             if (values?.departmentId) {
               usersData = [];
@@ -126,16 +132,14 @@ export const GenerateTicket = ({ isAdmin }) => {
                     label="Title"
                   />
                   <Input
-                    type="text"
-                    name="description"
-                    placeholder="Enter Short Description..."
-                    label="Description"
-                  />
-                  <Input
-                    options={departmentsData}
+                    options={[
+                      { label: "Low", value: 0 },
+                      { label: "Normal", value: 1 },
+                      { label: "High", value: 2 },
+                    ]}
                     type="select"
-                    name="departmentId"
-                    label="Select Department"
+                    name="priority"
+                    label="Priority"
                   />
                   <Input
                     options={[
@@ -149,14 +153,10 @@ export const GenerateTicket = ({ isAdmin }) => {
                     label="Status"
                   />
                   <Input
-                    options={[
-                      { label: "Low", value: 0 },
-                      { label: "Normal", value: 1 },
-                      { label: "High", value: 2 },
-                    ]}
+                    options={departmentsData}
                     type="select"
-                    name="priority"
-                    label="Priority"
+                    name="departmentId"
+                    label="Select Department"
                   />
 
                   <Input
@@ -173,7 +173,16 @@ export const GenerateTicket = ({ isAdmin }) => {
                     placeholder="Search client"
                     label="Client"
                     data={clients}
+                    defaultValue={
+                      clients?.filter((client) => client.id === clientId)[0]
+                        ?.fullName
+                    }
                   />
+                </div>
+                <div className="flex justify-between items-center pr-5 pt-4">
+                  <label className="ml-2 text-white text-[14px]">
+                    Description
+                  </label>
                   <div className="flex items-center">
                     <Checkbox
                       name="incomingFromClient"
@@ -187,6 +196,40 @@ export const GenerateTicket = ({ isAdmin }) => {
                     </label>
                   </div>
                 </div>
+                <ConfigurationEditor
+                  editorState={values.bodyHolder}
+                  placeholder="Enter Short Description..."
+                  onBlur={() => setFieldTouched("description", true)}
+                  onEditorStateChange={(state) => {
+                    setFieldValue("bodyHolder", state);
+                    const currentContentAsHTML = convertToHTML({
+                      entityToHTML: (entity, originalText) => {
+                        if (entity.type === "IMAGE") {
+                          return `<img src="${entity.data.src}" />`;
+                        }
+                        if (entity.type === "LINK") {
+                          return ` <a href="${entity.data.url}">${originalText}</a> `;
+                        }
+                        return originalText;
+                      },
+                    })(state.getCurrentContent());
+                    if (
+                      convertToRaw(state.getCurrentContent()).blocks.length ===
+                        1 &&
+                      convertToRaw(state.getCurrentContent()).blocks[0].text ===
+                        ""
+                    ) {
+                      setFieldValue("description", "");
+                    } else {
+                      setFieldValue("description", currentContentAsHTML);
+                    }
+                  }}
+                />
+                {touched["description"] && errors["description"] && (
+                  <div className="error whitespace-nowrap ml-[32px] mb-[16px] w-[20%]">
+                    {errors["description"]}
+                  </div>
+                )}
                 <div className="flex items-center gap-[12px]">
                   <Button
                     type="primary"

@@ -202,6 +202,7 @@ export const Add = () => {
           articleStatus: values?.articleStatus,
           brandIds: values?.brandIds,
         };
+        console.log("final values", finalValues);
         await dispatch(createArticle(finalValues));
         navigate("/admin/dashboard/knowledge-base/articles");
       }}
@@ -237,11 +238,15 @@ export const Add = () => {
                       editorState={values.bodyHolder}
                       onBlur={() => setFieldTouched("bodyText", true)}
                       onEditorStateChange={(state) => {
+                        console.log("editor state", state);
                         setFieldValue("bodyHolder", state);
                         const currentContentAsHTML = convertToHTML({
                           entityToHTML: (entity, originalText) => {
                             if (entity.type === "IMAGE") {
                               return `<img src="${entity.data.src}" />`;
+                            }
+                            if (entity.type === "LINK") {
+                              return ` <a href="${entity.data.url}">${originalText}</a> `;
                             }
                             return originalText;
                           },

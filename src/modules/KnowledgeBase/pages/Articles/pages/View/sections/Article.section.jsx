@@ -1,10 +1,10 @@
-import { Dropdown, Spin } from 'antd';
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
-import { getArticleByID } from 'store';
-import './Article.styles.scss';
-import { Delete } from './Delete.section';
+import { Dropdown, Spin } from "antd";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import { getArticleByID } from "store";
+import "./Article.styles.scss";
+import { Delete } from "./Delete.section";
 
 export const Article = () => {
   const { id } = useParams();
@@ -20,22 +20,24 @@ export const Article = () => {
 
   const { article, loading } = useSelector((state) => state?.articles);
   const [imgError, setImgError] = useState(false);
+
+  console.log("selected article", article);
   return (
     <Spin spinning={loading}>
       <div>
         <Delete show={showDel} setShow={setShowDel} id={id} />
         <div className="flex flex-row justify-between items-center ">
           <h5 className="font-medium text-[24px] text-white">
-            {article?.title ? article?.title : 'No Title Found'}
+            {article?.title ? article?.title : "No Title Found"}
           </h5>
           <div className="flex gap-[8px]">
             <div className="px-[8px] py-[4px] bg-[#323248] rounded-[4px] text-white font-medium text-[10px] uppercase">
-              {article?.visibility ? 'Public Article' : 'Private Articlew'}
+              {article?.visibility ? "Public Article" : "Private Articlew"}
             </div>
             <div className="px-[8px] py-[4px] bg-[#2F264F] rounded-[4px] text-[#8950FC] font-medium text-[10px] uppercase">
               {article?.articleCategories?.length
                 ? article?.articleCategories[0]?.category?.name
-                : 'N/A'}
+                : "N/A"}
             </div>
           </div>
         </div>

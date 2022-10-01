@@ -408,10 +408,10 @@ export const useSidebarData = () => {
           showTop: true,
           showSide: false,
           subLinks: [
-            {
-              name: "Article Detail",
-              path: "/admin/dashboard/knowledge-base/articles/view/:id",
-            },
+            // {
+            //   name: "Article Detail",
+            //   path: "/admin/dashboard/knowledge-base/articles/view/:id",
+            // },
             {
               name: "Add New Article",
               path: "/admin/dashboard/knowledge-base/articles/add/new",

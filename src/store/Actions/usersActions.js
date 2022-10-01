@@ -16,6 +16,8 @@ import {
   getSpecificConfig,
   updateUserPasswordConfig,
   getOnlineUsersConfig,
+  deleteClientConfig,
+  deactivateClientConfig,
 } from "lib";
 import { toast } from "react-toastify";
 import {
@@ -82,6 +84,49 @@ export const getClients = (isInterval) => {
     } catch (e) {
       toast.error(getError(e));
       !isInterval && dispatch(setUserLoading(false));
+    }
+  };
+};
+
+// Delete User By ID
+export const deleteUserById = (id, isClient = false) => {
+  return async (dispatch) => {
+    dispatch(setUserLoading(true));
+    try {
+      const { url } = deleteClientConfig(id);
+      const res = await axios.delete(url);
+      if (res?.status === 200) {
+        dispatch(getClients());
+      }
+      toast.success("Client deleted successfuly");
+      dispatch(setUserLoading(false));
+    } catch (e) {
+      toast.error(getError(e));
+      dispatch(setUserLoading(false));
+    }
+  };
+};
+
+// Delete User By ID
+export const userStatusChangeById = (id, type) => {
+  return async (dispatch) => {
+    // dispatch(setUserLoading(true));
+    try {
+      const { url } = deactivateClientConfig(id, type);
+      const res = await axios.put(url);
+      if (res?.status === 200) {
+        dispatch(getClients());
+        dispatch(getUserById(id, true));
+      }
+      toast.success(
+        `Client ${
+          type === "activate" ? "activated" : "deactivated"
+        } successfuly`
+      );
+      // dispatch(setUserLoading(false));
+    } catch (e) {
+      toast.error(getError(e));
+      // dispatch(setUserLoading(false));
     }
   };
 };

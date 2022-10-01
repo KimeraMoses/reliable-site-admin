@@ -16,6 +16,8 @@ import {
   APIKeys,
   Logs,
   LoginSessions,
+  Invoices,
+  OtherActions,
 } from "./sections";
 import { useDispatch, useSelector } from "react-redux";
 import { Spin } from "antd";
@@ -46,7 +48,9 @@ export const ClientDetails = () => {
   useEffect(() => {
     dispatch(getUserById(id, true));
     dispatch(getUserModulesById(id));
-  }, []);
+  }, [id]);
+
+  // console.log("client", user);
 
   return (
     <div className="users">
@@ -62,6 +66,9 @@ export const ClientDetails = () => {
               {/* USER PROFILE CARD */}
               <UserProfileCard />
               <div className="mt-4">
+                <OtherActions />
+              </div>
+              <div className="mt-4">
                 <Brands />
               </div>
               <div className="mt-4">
@@ -74,6 +81,7 @@ export const ClientDetails = () => {
                 <>
                   <ProductsServices />
                   <AssignedTickets />
+                  <Invoices />
                   {/* TODO: Show it when mass email integration is done */}
                   {/* <PastEmails /> */}
                 </>

@@ -31,14 +31,6 @@ export const InvoiceList = () => {
   });
 
   const columns = [
-    // {
-    //   title: "",
-    //   dataIndex: "id",
-    //   key: "id",
-    //   render: (id) => {
-    //     return <Checkbox></Checkbox>;
-    //   },
-    // },
     {
       title: t("invoiceId"),
       dataIndex: "billNo",

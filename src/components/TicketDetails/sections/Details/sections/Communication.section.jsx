@@ -219,6 +219,7 @@ export const Communication = () => {
   };
   // Follow-Up Modal
   const [showFollowUp, setShowFollowUp] = useState(false);
+
   return (
     <>
       <FollowUp show={showFollowUp} setShow={setShowFollowUp} />
@@ -239,7 +240,10 @@ export const Communication = () => {
       <div className={"text-[14px] mt-[40px] mb-[40px]"}>
         <div className="flex items-center gap-[12px]">
           <div className="text-[16px] text-[#474761]">Description:</div>
-          <div className={"text-[14px]"}>{ticket?.description}</div>
+          <div
+            className={"text-[14px]"}
+            dangerouslySetInnerHTML={{ __html: ticket?.description }}
+          ></div>
         </div>
       </div>
       <div className={`form ticket-form `}>

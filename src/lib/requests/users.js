@@ -1,11 +1,11 @@
-import { getConfig } from "lib";
+// import { getConfig } from "lib";
+// const AdminUsers = "AdminUsers";
+// const Clients = "Clients";
+// const adminConfig = (action) => getConfig({ module: AdminUsers, action });
+// const clientConfig = (action) => getConfig({ module: Clients, action });
 
-const AdminUsers = "AdminUsers";
-const Clients = "Clients";
-const adminConfig = (action) => getConfig({ module: AdminUsers, action });
-const clientConfig = (action) => getConfig({ module: Clients, action });
 // Users
-const Users = "Users";
+// const Users = "Users";
 export const getUsersConfig = () => ({
   url: `/api/users/getallusersbyrolename/admin`,
   // config: adminConfig('View'),
@@ -25,4 +25,10 @@ export const getClientsConfig = () => ({
 });
 export const getSpecificConfig = () => ({
   url: `/api/users/find/specific`,
+});
+export const deleteClientConfig = (id) => ({
+  url: `/api/users/${id}/delete`,
+});
+export const deactivateClientConfig = (id, type) => ({
+  url: `/api/users/${id}/${type}`,
 });

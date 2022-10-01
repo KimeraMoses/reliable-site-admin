@@ -1,6 +1,7 @@
 import { Modal } from "components";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import { addClientUser } from "store";
 import { useCountries } from "use-react-countries";
 import * as Yup from "yup";
@@ -34,6 +35,8 @@ export const AddClientUser = ({ show, setShow }) => {
   const { countries } = useCountries();
   const { brands } = useSelector((state) => state?.brands);
   const brandsLoading = useSelector((state) => state?.brands?.loading);
+  const { id } = useParams();
+
   const initialValues = {
     fullName: "",
     email: "",
@@ -49,7 +52,7 @@ export const AddClientUser = ({ show, setShow }) => {
     state_region: "",
     zipCode: "",
     country: "",
-    // parentID: "",
+    parentID: id ? id : "",
   };
 
   const addFields = [

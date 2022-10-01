@@ -51,6 +51,7 @@ export const Table = ({
   onRow,
   rowClassName,
   AdvancedSearchOptions,
+  ...props
 }) => {
   const { user } = useSelector((state) => state.auth);
   const [dataSource, setDataSource] = useState([]);
@@ -220,7 +221,11 @@ export const Table = ({
                             <>
                               {!AdvancedSearchOptions && (
                                 <Input
-                                  placeholder={"Search Here"}
+                                  placeholder={
+                                    props?.searchText
+                                      ? props?.searchText
+                                      : "Search Here"
+                                  }
                                   prefix={<Search />}
                                   className="custom-table__input"
                                   onChange={keyWordHandler}

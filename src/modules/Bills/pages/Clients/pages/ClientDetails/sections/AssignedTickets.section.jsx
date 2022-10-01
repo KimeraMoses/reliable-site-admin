@@ -5,7 +5,7 @@ import { checkModule } from "lib/checkModule";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { getTicketsByClientID } from "store";
 
 // const Ticket = ({ title, description, id }) => {
@@ -48,6 +48,7 @@ export const AssignedTickets = () => {
 
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   useEffect(() => {
     dispatch(getTicketsByClientID({ id }));
   }, []);
@@ -131,9 +132,17 @@ export const AssignedTickets = () => {
             columns={columns}
             rowKey={(record) => record?.id}
             data={data}
+            searchText="Search tickets here"
             loading={loading}
             hideActions
             permissions={permissions}
+            btnData={{
+              text: "Generate Ticket",
+              onClick: () =>
+                navigate(
+                  `/admin/dashboard/support/tickets/show-all/list/generate-ticket?client=${id}`
+                ),
+            }}
           />
         ) : (
           <h4 className="text-white mt-[16px] text-center w-full">
