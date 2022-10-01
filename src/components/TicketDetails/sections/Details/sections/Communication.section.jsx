@@ -379,7 +379,11 @@ export const Communication = () => {
             <List.Item key={item.id} actions={""} extra={""}>
               <div
                 id={item.id}
-                className="p-[20px] border-[1px] rounded-[8px] border-[#323248]"
+                className={`${
+                  users?.find((user) => user?.id === item.createdBy)
+                    ? " border-[#8950FC]/70"
+                    : " border-[#FFA800]/70"
+                } p-[20px] border-[1px] rounded-[8px]`}
               >
                 <div className={"w-full relative"}>
                   <div className="flex">
@@ -403,8 +407,8 @@ export const Communication = () => {
                         <span
                           className={`${
                             users?.find((user) => user?.id === item.createdBy)
-                              ? "bg-[#1C3238] text-[#0BB783]"
-                              : "bg-[#2F264F] text-[#8950FC]"
+                              ? "bg-[#2F264F] text-[#8950FC]"
+                              : "bg-[#392F28] text-[#FFA800]"
                           } rounded-[4px] text-[14px] px-[8px] py-[4px] ml-3`}
                         >
                           {users?.find((user) => user?.id === item.createdBy)
@@ -412,11 +416,11 @@ export const Communication = () => {
                             : "Client"}
                         </span>
 
-                        {item.createdBy === ticket.createdBy && (
+                        {/* {item.createdBy === ticket.createdBy && (
                           <span className="bg-[#3A2434] p-[4px] text-[#F64E60] rounded-[4px] text-[14px] px-[8px] py-[4px] ml-2">
                             AUTHOR
                           </span>
-                        )}
+                        )} */}
 
                         <div className="flex items-center  ml-3">
                           <p className="text-[14px] text-[#474761]">
@@ -545,7 +549,11 @@ export const Communication = () => {
                   <div
                     key={i}
                     id={data?.id}
-                    className="p-[20px] border-[1px] rounded-[8px] mt-[20px] border-[#323248]"
+                    className={`${
+                      users?.find((user) => user?.id === item.createdBy)
+                        ? " border-[#8950FC]/70"
+                        : " border-[#FFA800]/70"
+                    } p-[20px] border-[1px] rounded-[8px] mt-[20px]`}
                   >
                     <div className={"w-full relative"}>
                       <div className="flex">
@@ -569,10 +577,10 @@ export const Communication = () => {
                             <span
                               className={`${
                                 users?.find(
-                                  (user) => user?.id === data.createdBy
+                                  (user) => user?.id === item.createdBy
                                 )
-                                  ? "bg-[#1C3238] text-[#0BB783]"
-                                  : "bg-[#2F264F] text-[#8950FC]"
+                                  ? "bg-[#2F264F] text-[#8950FC]"
+                                  : "bg-[#392F28] text-[#FFA800]"
                               } rounded-[4px] text-[14px] px-[8px] py-[4px] ml-3`}
                             >
                               {users?.find(
@@ -581,11 +589,11 @@ export const Communication = () => {
                                 ? "Admin"
                                 : "Client"}
                             </span>
-                            {data.createdBy === ticket.createdBy && (
+                            {/* {data.createdBy === ticket.createdBy && (
                               <span className="bg-[#3A2434] p-[4px] text-[#F64E60] rounded-[4px] text-[14px] px-[8px] py-[4px] ml-2">
                                 AUTHOR
                               </span>
-                            )}
+                            )} */}
                             <div className="flex items-center  ml-3">
                               <p className="text-[14px] text-[#474761]">
                                 -{" "}

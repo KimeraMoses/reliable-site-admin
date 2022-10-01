@@ -2,6 +2,8 @@ import React from "react";
 import { string } from "prop-types";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import Badge from "react-bootstrap/Badge";
+import { useDispatch } from "react-redux";
+import { setSupport } from "store/Slices/ticketsSlice";
 
 function SideLinks({
   name,
@@ -13,6 +15,7 @@ function SideLinks({
   subLinks,
 }) {
   const { pathname } = useLocation();
+  const dispatch = useDispatch();
   const isActive =
     name === "Dashboard" ? pathname === path : pathname.includes(path);
   return (
@@ -21,6 +24,11 @@ function SideLinks({
         <li>
           <Link
             to={path}
+            onClick={() =>
+              (name = "Support"
+                ? dispatch(setSupport(true))
+                : dispatch(setSupport(false)))
+            }
             className={`${
               isActive ? "bg-[#1B1B28] text-white" : ""
             } pt-3 pb-2 flex text-gray-500 no-underline hover:text-white hover:bg-black/[.2] ease-in duration-100 px-4`}
@@ -49,6 +57,7 @@ function SideLinks({
                   link?.showSide && (
                     <li>
                       <NavLink
+                        onClick={() => dispatch(setSupport(false))}
                         to={link?.path}
                         className={({ isActive }) =>
                           (isActive ? `text-[#3699FF] ` : "text-gray-500 ") +

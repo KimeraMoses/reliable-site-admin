@@ -181,8 +181,8 @@ export const Details = () => {
                       }
                       className={`${
                         !ticket?.incomingFromClient && createdByAdmin?.fullName
-                          ? "bg-[#1C3238] text-[#0BB783]"
-                          : "bg-[#2F264F] text-[#8950FC]"
+                          ? "bg-[#2F264F] text-[#8950FC]"
+                          : "bg-[#392F28] text-[#FFA800]"
                       } rounded-[4px] text-[14px] px-[8px] py-[4px]`}
                     >
                       {!ticket?.incomingFromClient && createdByAdmin?.fullName

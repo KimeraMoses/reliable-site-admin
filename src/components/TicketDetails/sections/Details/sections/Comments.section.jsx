@@ -6,7 +6,7 @@ import * as Yup from "yup";
 import moment from "moment";
 import { getTicketById, addTicketComments } from "store";
 import { Button as CustomButton, Input } from "components";
-import { genrateFirstLetterName, getDifference, getTimeDiff } from "lib";
+import { genrateFirstLetterName, getTimeDiff } from "lib";
 import { updateTicketComments } from "store";
 import { setTicketCommentLoading } from "store";
 import { deleteComment } from "store";
@@ -23,14 +23,13 @@ export const Comments = () => {
   const dispatch = useDispatch();
   const { settings } = useSelector((state) => state.appSettings);
   const { ticket } = useSelector((state) => state?.tickets);
-
+  const { users, clients } = useSelector((state) => state?.users);
   const commentSource = ticket?.ticketComments?.filter(
     (comment) => comment?.ticketCommentType === 1 && !comment?.isDraft
   );
   const finalComments = commentSource?.sort(
     (a, b) => Number(b?.isSticky) - Number(a?.isSticky)
   );
-
   return (
     <>
       <div className={`form ticket-form mt-[20px]`}>
@@ -131,7 +130,11 @@ export const Comments = () => {
             <List.Item key={item.id} actions={""} extra={""}>
               <div
                 id={item.id}
-                className="p-[20px] border-[1px] rounded-[8px] border-[#323248]"
+                className={`${
+                  clients?.find((client) => client?.id === item.userId)
+                    ? " border-[#FFA800]/70"
+                    : " border-[#8950FC]/70"
+                } p-[20px] border-[1px] rounded-[8px] mt-[20px]`}
               >
                 <div className={"w-full relative"}>
                   <div className="flex">
@@ -152,7 +155,23 @@ export const Comments = () => {
                         <span className="text-[#fff] text-[16px]">
                           {item?.userFullName}
                         </span>
-                        <div className="flex items-center ml-3">
+                        <span
+                          className={`${
+                            users?.find((user) => user?.id === item.createdBy)
+                              ? "bg-[#2F264F] text-[#8950FC]"
+                              : "bg-[#392F28] text-[#FFA800]"
+                          } rounded-[4px] text-[14px] px-[8px] py-[4px] ml-3`}
+                        >
+                          {users?.find((user) => user?.id === item.createdBy)
+                            ? "Admin"
+                            : "Client"}
+                        </span>
+                        {/* {item.createdBy === ticket.createdBy && (
+                              <span className="bg-[#3A2434] p-[4px] text-[#F64E60] rounded-[4px] text-[14px] px-[8px] py-[4px] ml-2">
+                                AUTHOR
+                              </span>
+                            )} */}
+                        <div className="flex items-center  ml-3">
                           <p className="text-[14px] text-[#474761]">
                             -{" "}
                             {moment(item?.createdOn)?.format(

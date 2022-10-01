@@ -21,7 +21,6 @@ export const Article = () => {
   const { article, loading } = useSelector((state) => state?.articles);
   const [imgError, setImgError] = useState(false);
 
-  console.log("selected article", article);
   return (
     <Spin spinning={loading}>
       <div>

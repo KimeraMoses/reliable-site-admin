@@ -37,7 +37,7 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
   const { t } = useTranslation("/Tickets/ns");
   const location = useLocation();
   const { settings } = useSelector((state) => state.appSettings);
-  const { allTickets, departmentTickets, loading } = useSelector(
+  const { allTickets, departmentTickets, loading, isSupport } = useSelector(
     (state) => state?.tickets
   );
   const userTickets = useSelector((state) => state?.tickets?.tickets);
@@ -74,7 +74,11 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
   useEffect(() => {
     setData([]);
     if (tickets?.length) {
-      const dataToSet = tickets?.map((b) => {
+      const dataToSet = (
+        isSupport
+          ? tickets?.filter((ticket) => ticket?.ticketStatus === 0)
+          : tickets
+      )?.map((b) => {
         return {
           ...b,
           key: b?.id,
@@ -277,7 +281,7 @@ export const RelatedList = ({ queueList, isSearch, AdvancedSearchOptions }) => {
   // const selectedTicket = tickets?.find(
   //   (ticket) => ticket?.id === ticket_id
   // )?.ticketStatus;
-  const selectedTicket = tickets && tickets[0]?.ticketStatus;
+  const selectedTicket = isSupport ? 0 : tickets && tickets[0]?.ticketStatus;
   const [active, setActive] = useState(
     `${
       selectedTicket === 1

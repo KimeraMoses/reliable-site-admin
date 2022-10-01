@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   tickets: [],
@@ -8,14 +8,18 @@ const initialState = {
   ticket: null,
   allTickets: [],
   ticketHistory: [],
+  isSupport: false,
 };
 
 const ticketsSlice = createSlice({
-  name: 'tickets',
+  name: "tickets",
   initialState,
   reducers: {
     getTickets: (state, { payload }) => {
       state.tickets = payload;
+    },
+    setSupport: (state, { payload }) => {
+      state.isSupport = payload;
     },
     getAllTickets: (state, { payload }) => {
       state.allTickets = payload;
@@ -47,6 +51,7 @@ export const {
   getDepartmentTickets,
   setDetailsLoading,
   getTicketHistory,
+  setSupport,
 } = actions;
 
 export default reducer;
