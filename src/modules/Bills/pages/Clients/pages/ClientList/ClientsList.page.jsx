@@ -67,6 +67,7 @@ export const ClientList = () => {
 
   //   return dateAndTime[0].split("-").reverse().join("-");
   // };
+  // console.log(clients);
 
   return (
     <div className="p-[40px]">
@@ -86,7 +87,7 @@ export const ClientList = () => {
             pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
           }}
           rowKey={(record) => record?.id}
-          data={clients}
+          data={clients?.filter((client) => client?.isDeleted === false)}
           loading={loading || brandsLoading}
           fieldToFilter="fullName"
           btnData={{

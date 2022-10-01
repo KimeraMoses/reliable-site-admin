@@ -15,7 +15,9 @@ export const SubUsers = () => {
   const { loading, clients } = useSelector((state) => state?.users);
 
   const { id } = useParams();
-  const subUsers = clients?.filter((user) => user?.parentID === id);
+  const subUsers = clients?.filter(
+    (user) => user?.parentID === id && user?.isDeleted === false
+  );
 
   return (
     <div className="bg-[#1E1E2D] rounded-lg admin-details__user-card px-8">
