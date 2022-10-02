@@ -5,13 +5,13 @@ import { checkModule } from "lib/checkModule";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { getInvoices } from "store";
 import { statusList } from "lib";
 
 export const Invoices = () => {
   const { settings } = useSelector((state) => state.appSettings);
-  //   const { id } = useParams();
+  const { id } = useParams();
   const { t } = useTranslation("/Bills/ns");
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ export const Invoices = () => {
     modules: userModules,
   });
 
-  // console.log(invoices);
+  const userInvoices = invoices?.filter((invoice) => invoice?.userId === id);
 
   const columns = [
     {
@@ -124,8 +124,8 @@ export const Invoices = () => {
   const [data, setData] = useState([]);
   useEffect(() => {
     setData([]);
-    if (invoices?.length) {
-      const dataToSet = invoices?.map((b) => {
+    if (userInvoices?.length) {
+      const dataToSet = userInvoices?.map((b) => {
         return {
           ...b,
           key: b?.id,
@@ -151,38 +151,38 @@ export const Invoices = () => {
           <Button type="ghost">Manage Credit</Button>
           <Button type="ghost">Generate Due Invoices</Button>
         </div>
-
-        {invoices?.length ? (
-          <Table
-            columns={columns}
-            rowKey={(record) => record?.id}
-            data={data}
-            searchText="Search invoices here"
-            loading={loading}
-            hideActions
-            permissions={permissions}
-            btnData={{
-              text: "Create Invoice",
-              //   onClick: () =>
-              //     navigate(
-              //       `/admin/dashboard/support/tickets/show-all/list/generate-ticket?client=${id}`
-              //     ),
-            }}
-            onRow={(record) => {
-              return {
-                onClick: () => {
-                  navigate(
-                    `/admin/dashboard/billing/invoices/list/details/${record.id}`
-                  );
-                },
-              };
-            }}
-          />
-        ) : (
-          <h4 className="text-white mt-[16px] text-center w-full">
-            No Invoices issued Yet!
-          </h4>
-        )}
+        {/* {userInvoices?.length ? ( */}
+        <Table
+          columns={columns}
+          rowKey={(record) => record?.id}
+          data={data}
+          emptyText="No Invoices issued Yet"
+          searchText="Search invoices here"
+          loading={loading}
+          hideActions
+          permissions={permissions}
+          btnData={{
+            text: "Create Invoice",
+            //   onClick: () =>
+            //     navigate(
+            //       `/admin/dashboard/support/tickets/show-all/list/generate-ticket?client=${id}`
+            //     ),
+          }}
+          onRow={(record) => {
+            return {
+              onClick: () => {
+                navigate(
+                  `/admin/dashboard/billing/invoices/list/details/${record.id}`
+                );
+              },
+            };
+          }}
+        />
+        {/* ) : (
+        <h4 className="text-white mt-[16px] text-center w-full">
+          No Invoices issued Yet!
+        </h4>
+        )} */}
       </Spin>
     </div>
   );

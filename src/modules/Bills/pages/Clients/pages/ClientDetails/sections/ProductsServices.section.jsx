@@ -187,29 +187,24 @@ export const ProductsServices = () => {
       <Spin spinning={loading}>
         <h6 className="text-white mb-[32px] text-[16px]">Products/Services</h6>
         <div className="flex flex-col gap-[16px] justify-center">
-          {products?.length ? (
-            <Table
-              columns={columns}
-              rowKey={(record) => record?.id}
-              data={data}
-              searchText="Search products here"
-              loading={loading}
-              hideActions
-              permissions={permissions}
-              t={t}
-              btnData={{
-                text: "Create Order",
-                onClick: () =>
-                  navigate(
-                    `/admin/dashboard/billing/orders/all-orders/list/add/new?client=${id}`
-                  ),
-              }}
-            />
-          ) : (
-            <h4 className="text-white mt-[16px] text-center w-full">
-              No Products Assigned!
-            </h4>
-          )}
+          <Table
+            columns={columns}
+            rowKey={(record) => record?.id}
+            data={data}
+            emptyText="No Products Assigned"
+            searchText="Search products here"
+            loading={loading}
+            hideActions
+            permissions={permissions}
+            t={t}
+            btnData={{
+              text: "Create Order",
+              onClick: () =>
+                navigate(
+                  `/admin/dashboard/billing/orders/all-orders/list/add/new?client=${id}`
+                ),
+            }}
+          />
         </div>
       </Spin>
     </div>

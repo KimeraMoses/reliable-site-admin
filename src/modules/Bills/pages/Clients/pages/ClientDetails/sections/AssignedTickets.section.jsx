@@ -127,28 +127,29 @@ export const AssignedTickets = () => {
           {t("supportTickets")}
         </h6>
 
-        {tickets?.length ? (
-          <Table
-            columns={columns}
-            rowKey={(record) => record?.id}
-            data={data}
-            searchText="Search tickets here"
-            loading={loading}
-            hideActions
-            permissions={permissions}
-            btnData={{
-              text: "Generate Ticket",
-              onClick: () =>
-                navigate(
-                  `/admin/dashboard/support/tickets/show-all/list/generate-ticket?client=${id}`
-                ),
-            }}
-          />
-        ) : (
+        {/* {tickets?.length ? ( */}
+        <Table
+          columns={columns}
+          rowKey={(record) => record?.id}
+          emptyText="No Tickets Created Yet"
+          data={data}
+          searchText="Search tickets here"
+          loading={loading}
+          hideActions
+          permissions={permissions}
+          btnData={{
+            text: "Generate Ticket",
+            onClick: () =>
+              navigate(
+                `/admin/dashboard/support/tickets/show-all/list/generate-ticket?client=${id}`
+              ),
+          }}
+        />
+        {/* ) : (
           <h4 className="text-white mt-[16px] text-center w-full">
             No Tickets Created Yet!
           </h4>
-        )}
+        )} */}
       </Spin>
     </div>
   );
