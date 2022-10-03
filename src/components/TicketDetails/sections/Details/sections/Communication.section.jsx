@@ -90,11 +90,13 @@ export const Communication = () => {
   }, []);
 
   const commentSource = ticket?.ticketComments?.filter(
-    (comment) => comment?.ticketCommentType === 0 && !comment?.isDraft
+    (comment) => !comment?.isDraft
   );
-  const finalComments = commentSource?.sort(
-    (a, b) => Number(b?.isSticky) - Number(a?.isSticky)
-  );
+
+  const finalComments = commentSource
+    ?.sort((a, b) => (moment(a?.createdOn) < moment(b?.createdOn) ? -1 : 1))
+    .sort((a, b) => Number(b?.isSticky) - Number(a?.isSticky));
+
   const fields = [
     {
       name: "assignedTo",
@@ -380,9 +382,15 @@ export const Communication = () => {
               <div
                 id={item.id}
                 className={`${
+                  item?.ticketCommentType === 1 &&
                   users?.find((user) => user?.id === item.createdBy)
-                    ? " border-[#8950FC]/70"
-                    : " border-[#FFA800]/70"
+                    ? "border-[#0BB783]/30"
+                    : item?.ticketCommentType === 1 &&
+                      users?.find((user) => user?.id !== item.createdBy)
+                    ? "border-[#FFA800]/50"
+                    : users?.find((user) => user?.id === item.createdBy)
+                    ? " border-[#8950FC]/50"
+                    : " border-[#FFA800]/50"
                 } p-[20px] border-[1px] rounded-[8px]`}
               >
                 <div className={"w-full relative"}>
@@ -415,6 +423,21 @@ export const Communication = () => {
                             ? "Admin"
                             : "Client"}
                         </span>
+                        {item?.ticketCommentType === 1 && (
+                          <span
+                            className={`bg-[#1C3238]/50 text-[#0BB783]/70 rounded-[4px] text-[14px] px-[8px] py-[4px] ml-3`}
+                          >
+                            {item?.ticketCommentAction === 0
+                              ? "GENERAL COMMENT"
+                              : item?.ticketCommentAction === 1
+                              ? "TRANSFER COMMENT"
+                              : item?.ticketCommentAction === 2
+                              ? "FOLLOW-UP COMMENT"
+                              : item?.ticketCommentAction === 3
+                              ? "PRIORITY COMMENT"
+                              : ""}
+                          </span>
+                        )}
 
                         {/* {item.createdBy === ticket.createdBy && (
                           <span className="bg-[#3A2434] p-[4px] text-[#F64E60] rounded-[4px] text-[14px] px-[8px] py-[4px] ml-2">
@@ -515,7 +538,14 @@ export const Communication = () => {
                       {({ errors, touched }) => {
                         return (
                           <Form>
-                            <div className={"relative"}>
+                            <div
+                              className={`relative  ${
+                                ticket?.ticketStatus > 0 ||
+                                ticket?.assignedTo === ""
+                                  ? "pointer-events-none opacity-30"
+                                  : ""
+                              }`}
+                            >
                               <Field
                                 className="modal__form-el-field"
                                 key="commentText"
@@ -545,7 +575,7 @@ export const Communication = () => {
                 )}
               </div>
               <div className="ml-[40px]">
-                {item?.ticketCommentReplies.map((data, i) => (
+                {item?.ticketCommentReplies?.map((data, i) => (
                   <div
                     key={i}
                     id={data?.id}
@@ -609,7 +639,7 @@ export const Communication = () => {
                           </div>
                         </div>
                       </div>
-                      {ticket?.ticketStatus === 0 && (
+                      {/* {ticket?.ticketStatus === 0 && (
                         <span
                           onClick={() => handleReplyInput(data.id)}
                           className={
@@ -618,7 +648,7 @@ export const Communication = () => {
                         >
                           Reply
                         </span>
-                      )}
+                      )} */}
                     </div>
                     <div className="text-[16px] text-[#92928F] mt-[20px] leading-7">
                       {data?.commentText}

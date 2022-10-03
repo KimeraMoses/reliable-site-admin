@@ -132,8 +132,8 @@ export const Comments = () => {
                 id={item.id}
                 className={`${
                   clients?.find((client) => client?.id === item.userId)
-                    ? " border-[#FFA800]/70"
-                    : " border-[#8950FC]/70"
+                    ? " border-[#FFA800]/50"
+                    : " border-[#0BB783]/30"
                 } p-[20px] border-[1px] rounded-[8px] mt-[20px]`}
               >
                 <div className={"w-full relative"}>
@@ -165,6 +165,19 @@ export const Comments = () => {
                           {users?.find((user) => user?.id === item.createdBy)
                             ? "Admin"
                             : "Client"}
+                        </span>
+                        <span
+                          className={`bg-[#1C3238]/50 text-[#0BB783]/70 rounded-[4px] text-[14px] px-[8px] py-[4px] ml-3`}
+                        >
+                          {item?.ticketCommentAction === 0
+                            ? "GENERAL COMMENT"
+                            : item?.ticketCommentAction === 1
+                            ? "TRANSFER COMMENT"
+                            : item?.ticketCommentAction === 2
+                            ? "FOLLOW-UP COMMENT"
+                            : item?.ticketCommentAction === 3
+                            ? "PRIORITY COMMENT"
+                            : ""}
                         </span>
                         {/* {item.createdBy === ticket.createdBy && (
                               <span className="bg-[#3A2434] p-[4px] text-[#F64E60] rounded-[4px] text-[14px] px-[8px] py-[4px] ml-2">

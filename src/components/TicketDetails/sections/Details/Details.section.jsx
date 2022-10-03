@@ -63,7 +63,7 @@ export const Details = () => {
   };
 
   const communication = ticket?.ticketComments?.filter(
-    (comment) => comment?.ticketCommentType === 0 && !comment?.isDraft
+    (comment) => !comment?.isDraft
   );
   const comments = ticket?.ticketComments?.filter(
     (comment) => comment?.ticketCommentType === 1 && !comment?.isDraft
