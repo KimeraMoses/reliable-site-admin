@@ -45,18 +45,18 @@ export const OtherActions = () => {
           <Button type="ghost" onClick={() => setShowEdit(true)}>
             Reset and Send Password
           </Button>
-          <Button type="ghost" onClick={() => setShowDelete(true)}>
-            Delete client's account
-          </Button>
           {userStatus ? (
-            <Button type="ghost" onClick={handleDisableClient}>
+            <Button type="deactivate" onClick={handleDisableClient}>
               {isLoading ? "Deactivating Client..." : "Deactivate Client"}
             </Button>
           ) : (
-            <Button type="ghost" onClick={handleDisableClient}>
+            <Button type="activate" onClick={handleDisableClient}>
               {isLoading ? "Activating Client..." : "Activate Client"}
             </Button>
           )}
+          <Button type="delete" onClick={() => setShowDelete(true)}>
+            Delete client's account
+          </Button>
         </div>
       </Spin>
     </div>

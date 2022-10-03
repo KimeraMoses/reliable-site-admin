@@ -46,11 +46,14 @@ export const InvoiceDetails = () => {
                 <h6 className="text-[#474761] text-[14px]">{t("dueDate")}</h6>
                 <p className="text-[#fff]  text-[14px] mt-[4px]">
                   {moment(invoice?.dueDate).format(settings?.dateFormat)}
-                  {`${
-                    moment(invoice?.dueDate).isSame(moment(), "day")
-                      ? ' . <span className="text-[#F64E60] inline-block">Due Today</span>'
-                      : ""
-                  }`}{" "}
+                  {moment(invoice?.dueDate).isSame(new Date(), "day")}{" "}
+                  {moment(invoice?.dueDate).isSame(new Date(), "day") ? (
+                    <span className="text-[#F64E60] inline-block">
+                      Due Today
+                    </span>
+                  ) : (
+                    ""
+                  )}
                 </p>
               </div>
               <div className="mt-[20px]">

@@ -19,6 +19,7 @@ import { setTicketCommentLoading } from "store";
 import { updateTicketComments } from "store";
 import { getCurrentOnlineUsers } from "store";
 import moment from "moment";
+import { deleteTicketReplies } from "store";
 
 const CustomSelectUpdate = ({
   label,
@@ -77,6 +78,7 @@ export const Communication = () => {
   const { t } = useTranslation("/Tickets/ns");
   const { settings } = useSelector((state) => state.appSettings);
   const [selected, setSelected] = useState([]);
+  const user = useSelector((state) => state.auth.user);
   const { users, onlineUsers } = useSelector((state) => state?.users);
   const { commentLoading } = useSelector((state) => state?.ticketComments);
   const { repliesLoading } = useSelector((state) => state?.ticketReplies);
@@ -462,34 +464,41 @@ export const Communication = () => {
                   </div>
                   {ticket?.ticketStatus === 0 && (
                     <div className="flex items-center gap-[12px] text-[16px] absolute right-5 top-1">
-                      <span
-                        onClick={() => handleReplyInput(item.id)}
-                        className={
-                          "text-[#474761] cursor-pointer hover:text-[#40a9ff]"
-                        }
-                      >
-                        Reply
-                      </span>
-                      <Popconfirm
-                        okButtonProps={{
-                          className: "bg-[#40a9ff]",
-                        }}
-                        title="Are you sure you want to delete this comment?"
-                        onConfirm={async () => {
-                          await dispatch(deleteComment({ id: item?.id }));
-                          dispatch(setTicketCommentLoading(true));
-                          await dispatch(getTicketById(ticket?.id, true));
-                          dispatch(setTicketCommentLoading(false));
-                        }}
-                      >
-                        <div
+                      {item?.ticketCommentType !== 1 && (
+                        <span
+                          onClick={() => handleReplyInput(item.id)}
                           className={
                             "text-[#474761] cursor-pointer hover:text-[#40a9ff]"
                           }
                         >
-                          Delete
-                        </div>
-                      </Popconfirm>
+                          Reply
+                        </span>
+                      )}
+                      {item?.createdBy === user?.id ? (
+                        <Popconfirm
+                          okButtonProps={{
+                            className: "bg-[#40a9ff]",
+                          }}
+                          title="Are you sure you want to delete this comment?"
+                          onConfirm={async () => {
+                            await dispatch(deleteComment({ id: item?.id }));
+                            dispatch(setTicketCommentLoading(true));
+                            await dispatch(getTicketById(ticket?.id, true));
+                            dispatch(setTicketCommentLoading(false));
+                          }}
+                        >
+                          <div
+                            className={
+                              "text-[#474761] cursor-pointer hover:text-[#F64E60]"
+                            }
+                          >
+                            Delete
+                          </div>
+                        </Popconfirm>
+                      ) : (
+                        <></>
+                      )}
+
                       <span
                         to="#"
                         onClick={async () => {
@@ -639,16 +648,44 @@ export const Communication = () => {
                           </div>
                         </div>
                       </div>
-                      {/* {ticket?.ticketStatus === 0 && (
-                        <span
-                          onClick={() => handleReplyInput(data.id)}
-                          className={
-                            "text-[#474761] text-[16px] absolute right-5 top-1 cursor-pointer hover:text-[#40a9ff]"
-                          }
-                        >
-                          Reply
-                        </span>
-                      )} */}
+                      {ticket?.ticketStatus === 0 && (
+                        <div className="flex items-center gap-[12px] text-[16px] absolute right-5 top-1">
+                          {data?.ticketCommentType !== 1 && (
+                            <span
+                              onClick={() => handleReplyInput(data.id)}
+                              className={
+                                "text-[#474761] cursor-pointer hover:text-[#40a9ff]"
+                              }
+                            >
+                              Reply
+                            </span>
+                          )}
+                          {data?.createdBy === user?.id ? (
+                            <Popconfirm
+                              okButtonProps={{
+                                className: "bg-[#40a9ff]",
+                              }}
+                              title="Are you sure you want to delete this reply?"
+                              onConfirm={async () => {
+                                await dispatch(deleteTicketReplies(data?.id));
+                                dispatch(setTicketCommentLoading(true));
+                                await dispatch(getTicketById(ticket?.id, true));
+                                dispatch(setTicketCommentLoading(false));
+                              }}
+                            >
+                              <span
+                                className={
+                                  "text-[#474761] cursor-pointer hover:text-[#F64E60]"
+                                }
+                              >
+                                Delete
+                              </span>
+                            </Popconfirm>
+                          ) : (
+                            <></>
+                          )}
+                        </div>
+                      )}
                     </div>
                     <div className="text-[16px] text-[#92928F] mt-[20px] leading-7">
                       {data?.commentText}

@@ -343,7 +343,8 @@ export const Table = ({
               }
               size={size}
               pagination={{
-                defaultPageSize: user && user?.recordsToDisplay,
+                defaultPageSize:
+                  user?.recordsToDisplay > 0 ? user?.recordsToDisplay : 5,
                 showSizeChanger: true,
                 position: ["bottomRight"],
                 pageSizeOptions: ["5", "10", "20", "50", "100", "200"],
